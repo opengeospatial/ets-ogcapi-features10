@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.opengis.cite</groupId>
     <artifactId>ets-common</artifactId>
-    <version>7</version>
+    <version>9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opengis.cite</groupId>
@@ -47,7 +47,7 @@
 
   <properties>
     <ets-code>wfs30</ets-code>
-    <spec-version>1.0</spec-version>
+    <spec-version>3.0</spec-version>
   </properties>
 
   <dependencies>
