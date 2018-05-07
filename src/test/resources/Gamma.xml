@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Gamma xmlns="http://www.example.net/gamma" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.example.net/gamma xsd/gamma.xsd">
+  <intProperty>20111107</intProperty>
+  <boolProperty>FALSE</boolProperty>
+</Gamma>

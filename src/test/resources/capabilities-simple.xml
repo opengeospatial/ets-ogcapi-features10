@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wfs:WFS_Capabilities version="2.0.0" 
+  xmlns="http://www.opengis.net/ows/1.1"
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:wfs="http://www.opengis.net/wfs/2.0"
+  xmlns:ows="http://www.opengis.net/ows/1.1" 
+  xmlns:fes="http://www.opengis.net/fes/2.0">
+
+  <ServiceIdentification>
+    <ServiceType codeSpace="http://www.opengeospatial.org/standards/">wfs</ServiceType>
+    <ServiceTypeVersion>2.0.0</ServiceTypeVersion>
+  </ServiceIdentification>
+  <ServiceProvider>
+    <ProviderName>ACME Corp</ProviderName>
+    <ServiceContact>
+      <IndividualName>Phileas Fogg</IndividualName>
+    </ServiceContact>
+  </ServiceProvider>
+  <OperationsMetadata>
+    <Operation name="GetCapabilities">
+      <DCP>
+        <HTTP>
+          <Get xlink:href="http://localhost/wfs2/capabilities?"/>
+          <Post xlink:href="http://localhost/wfs2/capabilities"/>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="DescribeFeatureType">
+      <DCP>
+        <HTTP>
+          <Get xlink:href="http://localhost/wfs2"/>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="ListStoredQueries">
+      <DCP>
+        <HTTP>
+          <Get xlink:href="http://localhost/wfs2"/>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="DescribeStoredQueries">
+      <DCP>
+        <HTTP>
+          <Get xlink:href="http://localhost/wfs2"/>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="GetFeature">
+      <DCP>
+        <HTTP>
+          <Get xlink:href="http://localhost/wfs2"/>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Constraint name="ImplementsSimpleWFS">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>TRUE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsBasicWFS">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsTransactionalWFS">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsLockingWFS">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="KVPEncoding">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>TRUE</DefaultValue>
+    </Constraint>
+    <Constraint name="XMLEncoding">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="SOAPEncoding">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsInheritance">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsRemoteResolve">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsResultPaging">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsStandardJoins">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsSpatialJoins">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsTemporalJoins">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ImplementsFeatureVersioning">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <Constraint name="ManageStoredQueries">
+      <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+      <DefaultValue>FALSE</DefaultValue>
+    </Constraint>
+    <ExtendedCapabilities>
+      <wadl:application xmlns:wadl="http://wadl.dev.java.net/2009/02">
+        <wadl:resources base="http://localhost:1999/">
+          <wadl:resource path="/helloworld">
+            <wadl:method name="GET" id="getClichedMessage">
+              <wadl:response>
+                <wadl:representation mediaType="text/plain"/>
+              </wadl:response>
+            </wadl:method>
+          </wadl:resource>
+        </wadl:resources>
+      </wadl:application>
+    </ExtendedCapabilities>
+  </OperationsMetadata>
+  <wfs:FeatureTypeList xmlns:tns="http://example.org/ns1">
+    <wfs:FeatureType>
+      <wfs:Name>tns:Alpha</wfs:Name>
+      <wfs:DefaultCRS>urn:ogc:def:crs:EPSG::4326</wfs:DefaultCRS>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>-5.90 35.00</ows:LowerCorner>
+        <ows:UpperCorner>32.19 71.96</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+    </wfs:FeatureType>
+  </wfs:FeatureTypeList>
+  <fes:Filter_Capabilities>
+    <fes:Conformance>
+      <fes:Constraint name="ImplementsQuery">
+        <ValuesReference ows:reference="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <DefaultValue>true</DefaultValue>
+      </fes:Constraint>
+    </fes:Conformance>
+  </fes:Filter_Capabilities>
+
+</wfs:WFS_Capabilities>

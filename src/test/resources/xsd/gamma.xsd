@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.example.net/gamma"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.example.net/gamma"
+    elementFormDefault="qualified" version="201206">
+
+    <xs:element name="Gamma" type="tns:GammaType"/>
+    <xs:complexType name="GammaType">
+        <xs:sequence>
+            <xs:element name="intProperty" type="xs:integer"/>
+            <xs:element name="boolProperty" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>org.opengis.cite</groupId>
+    <artifactId>ets-common</artifactId>
+    <version>7</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opengis.cite</groupId>
+  <artifactId>ets-wfs30</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Test suite: ets-wfs30</name>
+  <description>Describe purpose of test suite.</description>
+  <url>http://opengeospatial.github.io/ets-wfs30/</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://opensource.org/licenses/Apache-2.0</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Open Geospatial Consortium</name>
+    <url>http://www.opengeospatial.org/</url>
+  </organization>
+  <scm>
+    <connection>scm:git:https://github.com/opengeospatial/ets-wfs30.git</connection>
+    <developerConnection>scm:git:git@github.com:opengeospatial/ets-wfs30.git</developerConnection>
+    <url>https://github.com/opengeospatial/ets-wfs30</url>
+    <tag>HEAD</tag>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issue Tracker</system>
+    <url>https://github.com/opengeospatial/ets-wfs30/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <name>Alpha Beta</name>
+      <url>https://github.com/</url>
+      <timezone>UTC</timezone>
+    </developer>
+  </developers>
+
+  <properties>
+    <ets-code>wfs30</ets-code>
+    <spec-version>1.0</spec-version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.opengis.cite.teamengine</groupId>
+      <artifactId>teamengine-spi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opengis.cite</groupId>
+      <artifactId>schema-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+        <configuration>
+          <docfilessubdirs>true</docfilessubdirs>
+          <show>package</show>
+          <links>
+            <link>http://testng.org/javadocs/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.opengis.cite.wfs30.TestNGController</mainClass>
+            </manifest>
+          </archive>
+          <descriptors>
+            <descriptor>${basedir}/src/assembly/deps.xml</descriptor>
+            <descriptor>${basedir}/src/assembly/ctl-scripts.xml</descriptor>
+            <descriptor>${basedir}/src/assembly/aio.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

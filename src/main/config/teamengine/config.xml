@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Unpack the *-ctl-scripts.zip archive in the TE_BASE/scripts directory -->
+<!-- Add this entry to TE_BASE/config.xml (//organization/standard) -->
+<organization>
+  <name>OGC</name>
+  <standard>
+    <name>Test suite: ets-wfs30</name>
+    <version>
+      <name>${spec-version}</name>
+      <suite>
+        <namespace-uri>http://www.opengis.net/cite/wfs30</namespace-uri>
+        <prefix>tns</prefix>
+        <local-name>ets-wfs30-${version}</local-name>
+        <title>Test suite ets-wfs30</title>
+        <description>Describe scope of testing.</description>
+      </suite>
+      <revision>
+        <name>${version}</name>
+        <status>Beta</status>
+        <sources>
+          <source>wfs30/${spec-version}/ctl</source>
+        </sources>
+        <webdir>wfs30/${spec-version}/site</webdir>
+      </revision>
+    </version>
+  </standard>
+</organization>

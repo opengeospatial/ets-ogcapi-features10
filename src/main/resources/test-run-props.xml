@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+    <comment>Sample test run arguments</comment>
+    <entry key="iut">http://www.w3schools.com/xml/note.xml</entry>
+    <entry key="ics">class-A,class-B</entry>
+</properties>

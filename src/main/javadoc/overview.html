@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>Test suite: ets-wfs30</title>
+    <meta charset="UTF-8" />
+    <style type="text/css">
+body {
+  color: black;
+  background: white;
+  font-family: Georgia, serif;
+}
+h1, h2, h3 {
+  font-family: Verdana, sans-serif;
+  color: #000099;
+  text-align: left;
+}
+h1 {
+  font-size: 1.4em;
+  margin-top: 2em;
+}
+h2 {
+  font-size: 1.2em;
+}
+h3 {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}
+table {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+}
+td, th {
+  padding: 0.25em;
+  border: 1px solid black;
+}
+caption, figcaption {
+  font-weight: bold;
+  text-align: left;
+  margin: 0.25em;
+}
+th {
+  font-weight: bold;
+  font-family: Verdana, sans-serif;
+  text-align: left;
+  vertical-align: top;
+  background: #eeeeee;
+  color: #000099;
+}
+dt {
+  margin-top: 0.5em;
+  font-weight: bold;
+}
+    </style>
+  </head>
+  <body>
+  <h1>Test suite: ets-wfs30</h1>
+	<p>This executable test suite (ETS) verifies the conformance of the implementation 
+	under test (IUT) with respect to all relevant specifications. Conformance testing 
+  is a kind of "black box" testing that examines externally visible characteristics 
+  or behaviors of the IUT and is independent of any implementation details.</p>
+
+	<p>The test run arguments are summarized in the following table. The <em>Obligation</em> 
+	descriptor can have the following values: M (mandatory), O (optional), or C 
+	(conditional).</p>
+
+	<table border="1" style="border-collapse: collapse;">
+	  <caption>Test run arguments</caption>
+	  <thead>
+      <tr>
+        <th>Name</th>
+        <th>Value domain</th>
+		    <th>Obligation</th>
+		    <th>Description</th>
+      </tr>
+      </thead>
+	  <tbody>
+      <tr>
+        <td>iut</td>
+        <td>URI</td>
+		<td>M</td>
+		<td>A URI that refers to the implementation under test or metadata about it.
+    Ampersand ('&amp;') characters must be percent-encoded as '%26'.</td>
+      </tr>
+	  <tr>
+      <td>ics</td>
+      <td>A comma-separated list of string values.</td>
+      <td>O</td>
+      <td>An implementation conformance statement that indicates which conformance 
+      classes or options are supported.</td>
+    </tr>
+	  </tbody>
+  </table>
+
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog
+  PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+         "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+  <!-- The uri entries correspond to target namespaces -->
+  <group id="w3.org">
+    <system systemId="http://www.w3.org/2009/01/xml.xsd" uri="./xsd/w3c/2009/01/xml.xsd" />
+    <system systemId="http://www.w3.org/2001/xml.xsd" uri="./xsd/w3c/2009/01/xml.xsd" />
+    <system systemId="http://www.w3.org/XML/2008/06/xlink.xsd"
+      uri="./xsd/w3c/2008/06/xlink.xsd" />
+    <system systemId="http://www.w3.org/1999/xlink.xsd" uri="./xsd/w3c/2008/06/xlink.xsd" />
+    <uri name="http://www.w3.org/XML/1998/namespace" uri="./xsd/w3c/2009/01/xml.xsd" />
+    <uri name="http://www.w3.org/1999/xlink" uri="./xsd/w3c/2008/06/xlink.xsd" />
+  </group>
+  <group id="opengis.net">
+    <system systemId="http://schemas.opengis.net/gml/3.2.1/gml.xsd"
+      uri="./xsd/opengis/gml/3.2.1/gml-3.2.1.xsd" />
+    <uri name="http://www.opengis.net/gml/3.2" uri="./xsd/opengis/gml/3.2.1/gml-3.2.1.xsd" />
+  </group>
+  <group id="isotc211.org">
+    <system systemId="http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd"
+      uri="./xsd/iso/19139/2007/gmd-2007.xsd" />
+    <system systemId="http://schemas.opengis.net/iso/19139/20070417/gco/gco.xsd"
+      uri="./xsd/iso/19139/2007/gco-2007.xsd" />
+    <system systemId="http://schemas.opengis.net/iso/19139/20070417/gts/gts.xsd"
+      uri="./xsd/iso/19139/2007/gts-2007.xsd" />
+    <system systemId="http://schemas.opengis.net/iso/19139/20070417/gss/gss.xsd"
+      uri="./xsd/iso/19139/2007/gss-2007.xsd" />
+    <system systemId="http://schemas.opengis.net/iso/19139/20070417/gsr/gsr.xsd"
+      uri="./xsd/iso/19139/2007/gsr-2007.xsd" />
+    <uri name="http://www.isotc211.org/2005/gmd" uri="./xsd/iso/19139/2007/gmd-2007.xsd" />
+    <uri name="http://www.isotc211.org/2005/gco" uri="./xsd/iso/19139/2007/gco-2007.xsd" />
+    <uri name="http://www.isotc211.org/2005/gts" uri="./xsd/iso/19139/2007/gts-2007.xsd" />
+    <uri name="http://www.isotc211.org/2005/gss" uri="./xsd/iso/19139/2007/gss-2007.xsd" />
+    <uri name="http://www.isotc211.org/2005/gsr" uri="./xsd/iso/19139/2007/gsr-2007.xsd" />
+  </group>
+
+  <nextCatalog catalog="./schematron-catalog.xml" />
+</catalog>
