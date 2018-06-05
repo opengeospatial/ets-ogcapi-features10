@@ -71,6 +71,7 @@ public class SuiteFixtureListener implements ISuiteListener {
         TestSuiteLogger.log(Level.FINE, String.format("Wrote test subject to file: %s (%d bytes)",
                 entityFile.getAbsolutePath(), entityFile.length()));
         suite.setAttribute(SuiteAttribute.TEST_SUBJ_FILE.getName(), entityFile);
+        /*
         Document iutDoc = null;
         try {
             iutDoc = URIUtils.parseURI(entityFile.toURI());
@@ -84,6 +85,7 @@ public class SuiteFixtureListener implements ISuiteListener {
             logMsg.append(XMLUtils.writeNodeToString(iutDoc));
             TestSuiteLogger.log(Level.FINE, logMsg.toString());
         }
+        */
     }
 
     /**

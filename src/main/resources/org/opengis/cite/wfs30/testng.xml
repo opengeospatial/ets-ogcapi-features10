@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="wfs30-${version}" verbose="0" configfailurepolicy="continue">
-  <parameter name="iut"  value=""/>
-  <parameter name="ics"  value=""/>
+  <parameter name="iut" value="" />
+  <parameter name="ics" value="" />
 
   <listeners>
     <listener class-name="org.opengis.cite.wfs30.TestRunListener" />
@@ -11,9 +11,12 @@
   </listeners>
 
   <test name="Core">
+    <packages>
+      <package name="org.opengis.cite.wfs30.apidescription" />
+    </packages>
     <classes>
       <class name="org.opengis.cite.wfs30.SuitePreconditions" />
     </classes>
   </test>
-  <!-- Add test sets for other conformance classes/levels -->
+
 </suite>

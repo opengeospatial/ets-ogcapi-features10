@@ -20,7 +20,7 @@ public enum SuiteAttribute {
     /**
      * A DOM Document that represents the test subject or metadata about it.
      */
-    TEST_SUBJECT("testSubject", Document.class),
+    //TEST_SUBJECT("testSubject", Document.class),
     /**
      * A File containing the test subject or a description of it.
      */
