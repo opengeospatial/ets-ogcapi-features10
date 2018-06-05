@@ -4,18 +4,21 @@
 <organization>
   <name>OGC</name>
   <standard>
-    <name>Test suite: ets-wfs30</name>
+    <name>Web Feature Service (WFS)</name>
     <version>
       <name>${spec-version}</name>
       <suite>
         <namespace-uri>http://www.opengis.net/cite/wfs30</namespace-uri>
         <prefix>tns</prefix>
-        <local-name>ets-wfs30-${version}</local-name>
-        <title>Test suite ets-wfs30</title>
-        <description>Describe scope of testing.</description>
+        <local-name>ets-${ets-code}-${version}</local-name>
+        <title>WFS 3.0 Conformance Test Suite</title>
+        <description>Checks WFS 3.0 implementations for conformance to ISO 19142:2010.</description>
+        <BasicConformanceClasses>
+          <conformanceClass>Core</conformanceClass>
+        </BasicConformanceClasses>
       </suite>
       <revision>
-        <name>${version}</name>
+        <name>${project.version}</name>
         <status>Beta</status>
         <sources>
           <source>wfs30/${spec-version}/ctl</source>
