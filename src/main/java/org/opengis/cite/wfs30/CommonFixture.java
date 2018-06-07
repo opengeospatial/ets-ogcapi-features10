@@ -1,9 +1,11 @@
 package org.opengis.cite.wfs30;
 
+import static io.restassured.RestAssured.given;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 
-import io.restassured.specification.RequestSpecification;
 import org.opengis.cite.wfs30.util.ClientUtils;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
@@ -11,8 +13,7 @@ import org.testng.annotations.BeforeMethod;
 
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
-
-import static io.restassured.RestAssured.given;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * A supporting base class that sets up a common test fixture. These configuration methods are invoked before those
@@ -28,6 +29,8 @@ public class CommonFixture {
 
     protected ResponseLoggingFilter responseLoggingFilter;
 
+    protected URI rootUri;
+
     /**
      * Initializes the common test fixture with a client component for interacting with HTTP endpoints.
      *
@@ -36,6 +39,8 @@ public class CommonFixture {
      */
     @BeforeClass
     public void initCommonFixture( ITestContext testContext ) {
+        Object obj = testContext.getSuite().getAttribute( SuiteAttribute.TEST_SUBJ_FILE.getName() );
+
         /*
          * Object obj = testContext.getSuite().getAttribute( SuiteAttribute.CLIENT.getName() ); if ( null != obj ) {
          * this.client = Client.class.cast( obj ); } obj = testContext.getSuite().getAttribute(
@@ -49,13 +54,13 @@ public class CommonFixture {
         // LogConfig logConfig = new LogConfig( printStream, true );
         // RestAssured.config = RestAssuredConfig.config().logConfig( logConfig );
 
+        rootUri = (URI) testContext.getSuite().getAttribute( SuiteAttribute.IUT.getName() );
     }
 
     @BeforeMethod
     public void clearMessages() {
         initLogging();
     }
-
 
     public String getRequest() {
         return requestOutputStream.toString();
@@ -66,7 +71,7 @@ public class CommonFixture {
     }
 
     protected RequestSpecification init() {
-        return given().filters( requestLoggingFilter, responseLoggingFilter ).log().all().baseUri( "https://www.ldproxy.nrw.de/rest/services/kataster/" );
+        return given().filters( requestLoggingFilter, responseLoggingFilter ).log().all();
     }
 
     /**
