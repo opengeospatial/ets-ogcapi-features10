@@ -1,12 +1,17 @@
 package org.opengis.cite.wfs30.apidescription;
 
 import static io.restassured.http.Method.GET;
+import static org.testng.Assert.assertTrue;
 
-import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.testng.annotations.Test;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
@@ -14,7 +19,7 @@ import io.restassured.response.Response;
  */
 public class LandingPage extends CommonFixture {
 
-    private String response;
+    private JsonPath response;
 
     /**
      * A.4.2.1. Landing Page Retrieval
@@ -43,12 +48,7 @@ public class LandingPage extends CommonFixture {
     public void landingPageRetrieval() {
         Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
         request.then().statusCode( 200 );
-        response = request.asString();
-    }
-
-    @Test(description = "Implements A.4.2.1. (Requirement 1: API Landing Page Operation)")
-    public void landingPageRetrievalFail() {
-        init().when().request( GET, "/" ).then().statusCode( 400 );
+        response = request.jsonPath();
     }
 
     /**
@@ -73,8 +73,26 @@ public class LandingPage extends CommonFixture {
      * d) References: Requirement 2
      */
     @Test(description = "Implements A.4.2.2. (Requirement 2: API Landing Page Validation)", dependsOnMethods = "landingPageRetrieval")
-    public void landingPageValidation()
-                            throws MalformedURLException {
+    public void landingPageValidation() {
+        List<Object> links = response.getList( "links" );
+        Set<String> linkTypes = collectLinkTypes( links );
+
+        boolean expectedLinkTypesExists = linkTypes.contains( "service" ) && linkTypes.contains( "conformance" )
+                                          && linkTypes.contains( "data" );
+        assertTrue( expectedLinkTypesExists,
+                    "The landing page must include at least links with relation type 'service', 'conformance' and 'data', but contains "
+                                            + linkTypes );
+
+    }
+
+    private Set<String> collectLinkTypes( List<Object> links ) {
+        Set<String> linkTypes = new HashSet<>();
+        for ( Object link : links ) {
+            Map<String, Object> linkMap = (Map<String, Object>) link;
+            Object linkType = linkMap.get( "rel" );
+            linkTypes.add( (String) linkType );
+        }
+        return linkTypes;
     }
 
 }
