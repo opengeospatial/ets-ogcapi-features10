@@ -36,6 +36,7 @@ public class ApiDefinitionIT {
                             throws Exception {
         ApiDefinition apiDefinition = new ApiDefinition();
         apiDefinition.initCommonFixture( testContext );
+        apiDefinition.retrieveApiUrl();
         apiDefinition.apiDefinitionRetrieval();
         apiDefinition.apiDefinitionValidation();
     }

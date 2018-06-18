@@ -1,6 +1,7 @@
 package org.opengis.cite.wfs30.apidescription;
 
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.WFS3.OPEN_API_MIME_TYPE;
 import static org.testng.Assert.assertTrue;
 
 import java.net.MalformedURLException;
@@ -9,8 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.opengis.cite.wfs30.CommonFixture;
+import org.testng.SkipException;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.reprezen.kaizen.oasparser.OpenApi3Parser;
@@ -19,6 +23,7 @@ import com.reprezen.kaizen.oasparser.model3.Path;
 import com.reprezen.kaizen.oasparser.model3.Server;
 import com.reprezen.kaizen.oasparser.val.ValidationResults;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
@@ -26,9 +31,20 @@ import io.restassured.response.Response;
  */
 public class ApiDefinition extends CommonFixture {
 
+    private static final Logger LOG = Logger.getLogger( ApiDefinition.class.getName() );
+
     private String response;
 
-    private final String apiUrl = "http://www.ldproxy.nrw.de/rest/services/kataster/api";
+    private String apiUrl;
+
+    @BeforeClass(dependsOnMethods = "initCommonFixture")
+    public void retrieveApiUrl() {
+        Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
+        JsonPath jsonPath = request.jsonPath();
+
+        this.apiUrl = parseApiUrl( jsonPath );
+
+    }
 
     /**
      * A.4.2.3. OpenAPI Document Retrieval
@@ -55,6 +71,8 @@ public class ApiDefinition extends CommonFixture {
      */
     @Test(description = "Implements A.4.2.3. (Requirement 3+4: OpenAPI Document Retrieval)")
     public void apiDefinitionRetrieval() {
+        if ( apiUrl == null || apiUrl.isEmpty() )
+            throw new SkipException( "Api URL could not be parsed from the landing page" );
         Response request = init().baseUri( apiUrl ).params( "f", "json" ).when().request( GET, "/" );
         request.then().statusCode( 200 );
         response = request.asString();
@@ -70,14 +88,14 @@ public class ApiDefinition extends CommonFixture {
      * c) Test Method:
      * 
      * Validate the API Definition document against the OpenAPI 3.0 schema
-     * 
+     *
      * Identify the Test Points as described in test A.4.3
      * 
      * Process the API Definition document as described in test A.4.4
      * 
      * d) References: Requirement 4
      */
-    @Test(description = "Implements A.4.2.3. (Requirement 4: OpenAPI Document Retrieval)")
+    @Test(description = "Implements A.4.2.4. (Requirement 4: API Definition Validation)")
     public void apiDefinitionValidation()
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();
@@ -101,6 +119,17 @@ public class ApiDefinition extends CommonFixture {
 
         for ( String testP : testPoints )
             System.out.println( testP );
+    }
+
+    private String parseApiUrl( JsonPath jsonPath ) {
+        for ( Object link : jsonPath.getList( "links" ) ) {
+            Map<String, Object> linkMap = (Map<String, Object>) link;
+            Object rel = linkMap.get( "rel" );
+            Object type = linkMap.get( "type" );
+            if ( "service".equals( rel ) && OPEN_API_MIME_TYPE.equals( type ) )
+                return (String) linkMap.get( "href" );
+        }
+        return null;
     }
 
     private String createValidationMsg( OpenApi3 model ) {
