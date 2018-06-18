@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.testng.SkipException;
@@ -30,8 +29,6 @@ import io.restassured.response.Response;
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class ApiDefinition extends CommonFixture {
-
-    private static final Logger LOG = Logger.getLogger( ApiDefinition.class.getName() );
 
     private String response;
 

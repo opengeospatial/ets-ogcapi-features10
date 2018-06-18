@@ -39,21 +39,7 @@ public class CommonFixture {
      */
     @BeforeClass
     public void initCommonFixture( ITestContext testContext ) {
-        Object obj = testContext.getSuite().getAttribute( SuiteAttribute.TEST_SUBJ_FILE.getName() );
-
-        /*
-         * Object obj = testContext.getSuite().getAttribute( SuiteAttribute.CLIENT.getName() ); if ( null != obj ) {
-         * this.client = Client.class.cast( obj ); } obj = testContext.getSuite().getAttribute(
-         * SuiteAttribute.TEST_SUBJECT.getName() ); if ( null == obj ) { throw new SkipException(
-         * "Test subject not found in ITestContext." ); }
-         */
-
         initLogging();
-
-        // PrintStream printStream = new PrintStream( requestPrintStream, true ); // true: autoflush must be set!
-        // LogConfig logConfig = new LogConfig( printStream, true );
-        // RestAssured.config = RestAssuredConfig.config().logConfig( logConfig );
-
         rootUri = (URI) testContext.getSuite().getAttribute( SuiteAttribute.IUT.getName() );
     }
 
@@ -92,12 +78,6 @@ public class CommonFixture {
      * Builds an HTTP request message that uses the GET method. This convenience method wraps a static method call to
      * facilitate unit testing (Mockito workaround).
      *
-     * @param endpoint
-     *            A URI indicating the target resource.
-     * @param qryParams
-     *            A Map containing query parameters (may be null);
-     * @param mediaTypes
-     *            A list of acceptable media types; if not specified, generic XML ("application/xml") is preferred.
      * @return A ClientRequest object.
      *
      * @see ClientUtils#buildGetRequest public ClientRequest buildGetRequest( URI endpoint, Map<String, String>
@@ -113,4 +93,5 @@ public class CommonFixture {
         requestLoggingFilter = new RequestLoggingFilter( requestPrintStream );
         responseLoggingFilter = new ResponseLoggingFilter( responsePrintStream );
     }
+
 }
