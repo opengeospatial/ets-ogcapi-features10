@@ -6,9 +6,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
@@ -18,8 +15,6 @@ import org.testng.annotations.Test;
 
 import com.reprezen.kaizen.oasparser.OpenApi3Parser;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
-import com.reprezen.kaizen.oasparser.model3.Path;
-import com.reprezen.kaizen.oasparser.model3.Server;
 import com.reprezen.kaizen.oasparser.val.ValidationResults;
 
 import io.restassured.path.json.JsonPath;
@@ -92,30 +87,13 @@ public class ApiDefinition extends CommonFixture {
      * 
      * d) References: Requirement 4
      */
-    @Test(description = "Implements A.4.2.4. (Requirement 4: API Definition Validation)")
+    @Test(description = "Implements A.4.2.4. (Requirement 4: API Definition Validation)", dependsOnMethods = "apiDefinitionRetrieval")
     public void apiDefinitionValidation()
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        OpenApi3 model = parser.parse( response, new URL( apiUrl ), true );
-        assertTrue( model.isValid(), createValidationMsg( model ) );
-
-        List<String> testPoints = new ArrayList<>();
-
-        Collection<Server> servers = model.getServers();
-        Map<String, Path> paths = model.getPaths();
-        for ( Path path : paths.values() ) {
-            String pathString = path.getPathString();
-            if ( pathString.startsWith( "/api" ) || pathString.startsWith( "/conformance" )
-                 || pathString.startsWith( "/collections" ) ) {
-                for ( Server server : servers ) {
-                    testPoints.add( server.getUrl() + pathString );
-                }
-            }
-        }
-
-        for ( String testP : testPoints )
-            System.out.println( testP );
+        OpenApi3 apiModel = parser.parse( response, new URL( apiUrl ), true );
+        assertTrue( apiModel.isValid(), createValidationMsg( apiModel ) );
     }
 
     private String parseApiUrl( JsonPath jsonPath ) {
