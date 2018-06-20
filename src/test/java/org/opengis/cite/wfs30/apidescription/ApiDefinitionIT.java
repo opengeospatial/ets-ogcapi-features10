@@ -38,7 +38,7 @@ public class ApiDefinitionIT {
         apiDefinition.initCommonFixture( testContext );
         apiDefinition.retrieveApiUrl();
         apiDefinition.apiDefinitionRetrieval();
-        apiDefinition.apiDefinitionValidation();
+        apiDefinition.apiDefinitionValidation( testContext );
     }
 
 }

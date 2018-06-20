@@ -44,7 +44,7 @@ public class LandingPage extends CommonFixture {
      *
      * d) References: Requirement 1
      */
-    @Test(description = "Implements A.4.2.1. (Requirement 1: API Landing Page Operation)")
+    @Test(description = "Implements A.4.2.1. (Requirement 1: API Landing Page Operation)", groups = "landingpage")
     public void landingPageRetrieval() {
         Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
         request.then().statusCode( 200 );
@@ -72,7 +72,7 @@ public class LandingPage extends CommonFixture {
      *
      * d) References: Requirement 2
      */
-    @Test(description = "Implements A.4.2.2. (Requirement 2: API Landing Page Validation)", dependsOnMethods = "landingPageRetrieval")
+    @Test(description = "Implements A.4.2.2. (Requirement 2: API Landing Page Validation)", groups = "landingpage", dependsOnMethods = "landingPageRetrieval")
     public void landingPageValidation() {
         List<Object> links = response.getList( "links" );
         Set<String> linkTypes = collectLinkTypes( links );
