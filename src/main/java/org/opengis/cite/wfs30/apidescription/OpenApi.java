@@ -28,7 +28,7 @@ import io.restassured.response.Response;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ApiDefinition extends CommonFixture {
+public class OpenApi extends CommonFixture {
 
     private String response;
 
@@ -40,7 +40,6 @@ public class ApiDefinition extends CommonFixture {
         JsonPath jsonPath = request.jsonPath();
 
         this.apiUrl = parseApiUrl( jsonPath );
-
     }
 
     /**
@@ -66,8 +65,8 @@ public class ApiDefinition extends CommonFixture {
      *
      * d) References: Requirements 3 and 4
      */
-    @Test(description = "Implements A.4.2.3. (Requirement 3+4: OpenAPI Document Retrieval)")
-    public void apiDefinitionRetrieval() {
+    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3 + 4)")
+    public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
             throw new SkipException( "Api URL could not be parsed from the landing page" );
         Response request = init().baseUri( apiUrl ).params( "f", "json" ).when().request( GET, "/" );
@@ -92,7 +91,7 @@ public class ApiDefinition extends CommonFixture {
      * 
      * d) References: Requirement 4
      */
-    @Test(description = "Implements A.4.2.4. (Requirement 4: API Definition Validation)")
+    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)")
     public void apiDefinitionValidation()
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();

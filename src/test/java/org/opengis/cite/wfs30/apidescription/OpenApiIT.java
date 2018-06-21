@@ -14,7 +14,7 @@ import org.testng.ITestContext;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ApiDefinitionIT {
+public class OpenApiIT {
 
     private static ITestContext testContext;
 
@@ -32,13 +32,13 @@ public class ApiDefinitionIT {
     }
 
     @Test
-    public void testApiDefinition()
+    public void testOpenApi()
                             throws Exception {
-        ApiDefinition apiDefinition = new ApiDefinition();
-        apiDefinition.initCommonFixture( testContext );
-        apiDefinition.retrieveApiUrl();
-        apiDefinition.apiDefinitionRetrieval();
-        apiDefinition.apiDefinitionValidation();
+        OpenApi openApi = new OpenApi();
+        openApi.initCommonFixture( testContext );
+        openApi.retrieveApiUrl();
+        openApi.openapiDocumentRetrieval();
+        openApi.apiDefinitionValidation();
     }
 
 }
