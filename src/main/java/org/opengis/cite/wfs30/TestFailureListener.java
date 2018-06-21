@@ -32,8 +32,8 @@ public class TestFailureListener extends TestListenerAdapter {
         Object instance = result.getInstance();
         if (CommonFixture.class.isInstance(instance)) {
             CommonFixture fixture = CommonFixture.class.cast(instance);
-            result.setAttribute("request", getRequestMessageInfo(fixture.request));
-            result.setAttribute("response", getResponseMessageInfo(fixture.response));
+            result.setAttribute("request", fixture.getRequest());
+            result.setAttribute("response", fixture.getResponse());
         }
     }
 
