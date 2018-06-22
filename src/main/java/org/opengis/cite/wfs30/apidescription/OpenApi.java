@@ -91,7 +91,7 @@ public class OpenApi extends CommonFixture {
      * 
      * d) References: Requirement 4
      */
-    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)")
+    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)", dependsOnMethods = "openapiDocumentRetrieval")
     public void apiDefinitionValidation()
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();
