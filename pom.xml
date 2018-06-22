@@ -49,6 +49,7 @@
   <properties>
     <ets-code>wfs30</ets-code>
     <spec-version>3.0</spec-version>
+    <docker.teamengine.version>5.3</docker.teamengine.version>
   </properties>
 
   <dependencies>
@@ -177,6 +178,114 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.26.0</version>
+            <configuration>
+              <images>
+                <image>
+                  <name>opengeospatial/${project.artifactId}</name>
+                  <build>
+                    <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                    <tags>
+                      <tag>${project.version}-teamengine-${docker.teamengine.version}</tag>
+                    </tags>
+                    <assembly>
+                      <inline>
+                        <fileSets>
+                          <fileSet>
+                            <directory>${project.build.directory}</directory>
+                            <outputDirectory>.</outputDirectory>
+                            <includes>
+                              <include>dependency/*teamengine-*.war</include>
+                              <include>dependency/*teamengine-*.zip</include>
+                              <include>*ets-*.zip</include>
+                            </includes>
+                          </fileSet>
+                        </fileSets>
+                      </inline>
+                    </assembly>
+                  </build>
+                  <run>
+                    <ports>
+                      <port>8081:8080</port>
+                    </ports>
+                    <wait>
+                      <http>
+                        <url>http://localhost:8081/teamengine</url>
+                      </http>
+                      <time>120000</time>
+                    </wait>
+                  </run>
+                </image>
+              </images>
+            </configuration>
+            <executions>
+              <execution>
+                <id>start</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                  <goal>remove</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>build</id>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.opengis.cite.teamengine</groupId>
+          <artifactId>teamengine-web</artifactId>
+          <version>${docker.teamengine.version}</version>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.opengis.cite.teamengine</groupId>
+          <artifactId>teamengine-web</artifactId>
+          <version>${docker.teamengine.version}</version>
+          <classifier>common-libs</classifier>
+          <type>zip</type>
+        </dependency>
+        <dependency>
+          <groupId>org.opengis.cite.teamengine</groupId>
+          <artifactId>teamengine-console</artifactId>
+          <version>${docker.teamengine.version}</version>
+          <classifier>base</classifier>
+          <type>zip</type>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 </project>
