@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.apidescription;
 
+import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.WFS3.OPEN_API_MIME_TYPE;
 import static org.testng.Assert.assertTrue;
@@ -36,7 +37,7 @@ public class OpenApi extends CommonFixture {
 
     @BeforeClass(dependsOnMethods = "initCommonFixture")
     public void retrieveApiUrl() {
-        Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
+        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
         JsonPath jsonPath = request.jsonPath();
 
         this.apiUrl = parseApiUrl( jsonPath );
@@ -69,7 +70,7 @@ public class OpenApi extends CommonFixture {
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
             throw new SkipException( "Api URL could not be parsed from the landing page" );
-        Response request = init().baseUri( apiUrl ).params( "f", "json" ).when().request( GET, "/" );
+        Response request = init().baseUri( apiUrl ).accept( JSON ).when().request( GET, "/" );
         request.then().statusCode( 200 );
         response = request.asString();
     }

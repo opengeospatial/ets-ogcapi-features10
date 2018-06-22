@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.apidescription;
 
+import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.testng.Assert.assertTrue;
 
@@ -46,7 +47,7 @@ public class LandingPage extends CommonFixture {
      */
     @Test(description = "Implements A.4.2.1. Landing Page Retrieval (Requirement 1)")
     public void landingPageRetrieval() {
-        Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
+        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
         request.then().statusCode( 200 );
         response = request.jsonPath();
     }
