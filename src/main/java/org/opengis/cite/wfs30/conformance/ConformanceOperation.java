@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.conformance;
 
+import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.PATH.CONFORMANCE;
@@ -63,7 +64,7 @@ public class ConformanceOperation extends CommonFixture {
      */
     private Response validateConformanceOperation( TestPoint testPoint ) {
         String testPointUri = testPoint.createUri();
-        return init().baseUri( testPointUri ).params( "f", "json" ).when().request( GET );
+        return init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
     }
 
     /**
