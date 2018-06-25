@@ -12,6 +12,7 @@
 
   <test name="Core">
     <packages>
+      <package name="org.opengis.cite.wfs30.general" />
       <package name="org.opengis.cite.wfs30.apidescription" />
       <package name="org.opengis.cite.wfs30.conformance" />
     </packages>
