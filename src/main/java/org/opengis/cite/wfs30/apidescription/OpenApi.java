@@ -2,6 +2,7 @@ package org.opengis.cite.wfs30.apidescription;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.OPEN_API_MIME_TYPE;
 import static org.testng.Assert.assertTrue;
 
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
+import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -61,7 +63,7 @@ public class OpenApi extends CommonFixture {
      *
      * d) References: Requirements 3 and 4
      */
-    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3 + 4)")
+    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3, 4)", groups = "apidefinition", dependsOnGroups = "landingpage")
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
             throw new SkipException( "Api URL could not be parsed from the landing page" );
@@ -87,13 +89,15 @@ public class OpenApi extends CommonFixture {
      * 
      * d) References: Requirement 4
      */
-    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)", dependsOnMethods = "openapiDocumentRetrieval")
-    public void apiDefinitionValidation()
+    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)", groups = "apidefinition", dependsOnMethods = "openapiDocumentRetrieval")
+    public void apiDefinitionValidation( ITestContext testContext )
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         OpenApi3 apiModel = parser.parse( response, new URL( apiUrl ), true );
         assertTrue( apiModel.isValid(), createValidationMsg( apiModel ) );
+
+        testContext.getSuite().setAttribute( API_MODEL.getName(), apiModel );
     }
 
     private String parseApiUrl( JsonPath jsonPath ) {

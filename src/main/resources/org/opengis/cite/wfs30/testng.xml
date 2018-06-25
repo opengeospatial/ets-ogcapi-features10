@@ -13,6 +13,7 @@
   <test name="Core">
     <packages>
       <package name="org.opengis.cite.wfs30.apidescription" />
+      <package name="org.opengis.cite.wfs30.conformance" />
     </packages>
     <classes>
       <class name="org.opengis.cite.wfs30.SuitePreconditions" />

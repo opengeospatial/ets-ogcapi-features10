@@ -2,6 +2,8 @@ package org.opengis.cite.wfs30.openapi3;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.opengis.cite.wfs30.WFS3.PATH.API;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
 
 import java.net.URL;
 import java.util.List;
@@ -22,18 +24,18 @@ public class OpenApiUtilsTest {
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = OpenApiUtils.retrieveTestPoints( apiModel );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel );
 
         assertThat( testPoints.size(), is( 12 ) );
     }
 
     @Test
-    public void testRetrieveTestPoints_morComplex() {
+    public void testRetrieveTestPoints_moreComplex() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_moreComplex.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = OpenApiUtils.retrieveTestPoints( apiModel );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel );
 
         assertThat( testPoints.size(), is( 4 ) );
 
@@ -55,6 +57,17 @@ public class OpenApiUtilsTest {
         assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().size(), is( 2 ) );
         assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().get( "index" ), is( "10" ) );
         assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().get( "enum" ), is( "drei" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPoints_API() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, API );
+
+        assertThat( testPoints.size(), is( 1 ) );
     }
 
 }

@@ -11,4 +11,20 @@ public class WFS3 {
     }
 
     public static final String OPEN_API_MIME_TYPE = "application/openapi+json;version=3.0";
+
+    public enum PATH {
+
+        API( "/api" ), CONFORMANCE( "/conformance" ), COLLECTIONS( "/collections" );
+
+        private String pathItem;
+
+        PATH( String pathItem ) {
+
+            this.pathItem = pathItem;
+        }
+
+        public String getPathItem() {
+            return pathItem;
+        }
+    }
 }

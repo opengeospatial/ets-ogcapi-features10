@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.opengis.cite.wfs30.WFS3.PATH;
+
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
@@ -40,6 +42,22 @@ public class OpenApiUtils {
     }
 
     /**
+     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
+     * Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @param path
+     *            the path the test points shuold be assigned to, never <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
+        List<Path> pathItemObjects = identifyTestPoints( apiModel, path );
+        List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
+        return processServerObjects( pathItemAndServers );
+    }
+
+    /**
      * A.4.3.1. Identify Test Points:
      *
      * a) Purpose: To identify the test points associated with each Path in the OpenAPI document
@@ -64,16 +82,28 @@ public class OpenApiUtils {
      *            never <code>null</code>
      */
     private static List<Path> identifyTestPoints( OpenApi3 apiModel ) {
+        return identifyTestPoints( apiModel, PATH.values() );
+    }
+
+    private static List<Path> identifyTestPoints( OpenApi3 apiModel, PATH... path ) {
+
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
         for ( Path pathItemObject : pathItemObjects.values() ) {
             String pathString = pathItemObject.getPathString();
-            if ( pathString.startsWith( "/api" ) || pathString.startsWith( "/conformance" )
-                 || pathString.startsWith( "/collections" ) ) {
+            if ( isRequestedPath( pathString, path ) ) {
                 pathItems.add( pathItemObject );
             }
         }
         return pathItems;
+    }
+
+    private static boolean isRequestedPath( String pathString, PATH... path ) {
+        for ( PATH pathRequested : path ) {
+            if ( pathString.startsWith( pathRequested.getPathItem() ) )
+                return true;
+        }
+        return false;
     }
 
     /**
