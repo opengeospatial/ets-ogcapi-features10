@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.apidescription;
 
+import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.testng.Assert.assertTrue;
 
@@ -44,9 +45,9 @@ public class LandingPage extends CommonFixture {
      *
      * d) References: Requirement 1
      */
-    @Test(description = "Implements A.4.2.1. (Requirement 1: API Landing Page Operation)")
+    @Test(description = "Implements A.4.2.1. Landing Page Retrieval (Requirement 1)")
     public void landingPageRetrieval() {
-        Response request = init().baseUri( rootUri.toString() ).params( "f", "json" ).when().request( GET, "/" );
+        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
         request.then().statusCode( 200 );
         response = request.jsonPath();
     }
@@ -72,7 +73,7 @@ public class LandingPage extends CommonFixture {
      *
      * d) References: Requirement 2
      */
-    @Test(description = "Implements A.4.2.2. (Requirement 2: API Landing Page Validation)", dependsOnMethods = "landingPageRetrieval")
+    @Test(description = "Implements A.4.2.2. Landing Page Validation (Requirement 2)", dependsOnMethods = "landingPageRetrieval")
     public void landingPageValidation() {
         List<Object> links = response.getList( "links" );
         Set<String> linkTypes = collectLinkTypes( links );
