@@ -38,7 +38,7 @@ public class ConformanceOperation extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.2. (Requirement 5: Conformance Class Operation) and A.4.4.3. (Requirement 6: Conformance Class Response) ", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
+    @Test(description = "Implements A.4.4.2. Validate Conformance Operation (Requirement 5) and A.4.4.3. Validate Conformance Operation Response (Requirement 6) ", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
         Response response = validateConformanceOperation( testPoint );
         validateConformanceOperationResponse( testPoint, response );

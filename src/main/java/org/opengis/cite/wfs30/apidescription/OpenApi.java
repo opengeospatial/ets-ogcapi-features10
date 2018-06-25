@@ -63,7 +63,7 @@ public class OpenApi extends CommonFixture {
      *
      * d) References: Requirements 3 and 4
      */
-    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3 + 4)", groups = "apidefinition", dependsOnGroups = "landingpage")
+    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3, 4)", groups = "apidefinition", dependsOnGroups = "landingpage")
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
             throw new SkipException( "Api URL could not be parsed from the landing page" );
