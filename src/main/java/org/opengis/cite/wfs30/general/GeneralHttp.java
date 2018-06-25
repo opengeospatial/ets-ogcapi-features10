@@ -28,7 +28,7 @@ public class GeneralHttp extends CommonFixture {
      *
      * d) References: Requirement 7
      */
-    @Test(description = "Implements  A.4.1.1. (Requirement 7: HTTP 1.1)")
+    @Test(description = "Implements A.4.1.1. HTTP 1.1 (Requirement 7)")
     public void http11() {
         Response response = init().baseUri( rootUri.toString() ).when().request( GET, "/" );
         response.then().statusLine( containsString( "HTTP/1.1" ) );
