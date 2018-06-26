@@ -14,7 +14,7 @@ public class WFS3 {
 
     public enum PATH {
 
-        API( "/api" ), CONFORMANCE( "/conformance" ), COLLECTIONS( "/collections" );
+        API( "api" ), CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
 
         private String pathItem;
 

@@ -9,10 +9,12 @@ import java.util.Map;
 
 import org.opengis.cite.wfs30.WFS3.PATH;
 
+import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
 import com.reprezen.kaizen.oasparser.model3.Path;
+import com.reprezen.kaizen.oasparser.model3.Response;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 import com.reprezen.kaizen.oasparser.model3.Server;
 import com.sun.jersey.api.uri.UriTemplate;
@@ -86,7 +88,6 @@ public class OpenApiUtils {
     }
 
     private static List<Path> identifyTestPoints( OpenApi3 apiModel, PATH... path ) {
-
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
         for ( Path pathItemObject : pathItemObjects.values() ) {
@@ -100,7 +101,7 @@ public class OpenApiUtils {
 
     private static boolean isRequestedPath( String pathString, PATH... path ) {
         for ( PATH pathRequested : path ) {
-            if ( pathString.startsWith( pathRequested.getPathItem() ) )
+            if ( pathString.matches( "\\/" + pathRequested.getPathItem() + "(\\/?)" ) )
                 return true;
         }
         return false;
@@ -219,19 +220,22 @@ public class OpenApiUtils {
     private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer ) {
         String pathString = pathItemAndServer.pathItemObject.getPathString();
         UriTemplate uriTemplate = new UriTemplate( pathItemAndServer.serverUrl + pathString );
+        Response response = pathItemAndServer.operationObject.getResponse( "200" );
+        Map<String, MediaType> contentMediaTypes = response.getContentMediaTypes();
 
         if ( uriTemplate.getNumberOfTemplateVariables() == 0 ) {
-            TestPoint testPoint = new TestPoint( uriTemplate );
+            TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
             uris.add( testPoint );
         } else {
             List<Map<String, String>> templateReplacements = collectTemplateReplacements( pathItemAndServer,
                                                                                           uriTemplate );
+
             if ( templateReplacements.isEmpty() ) {
-                TestPoint testPoint = new TestPoint( uriTemplate );
+                TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
                 uris.add( testPoint );
             } else {
                 for ( Map<String, String> templateReplacement : templateReplacements ) {
-                    TestPoint testPoint = new TestPoint( uriTemplate, templateReplacement );
+                    TestPoint testPoint = new TestPoint( uriTemplate, templateReplacement, contentMediaTypes );
                     uris.add( testPoint );
                 }
             }
