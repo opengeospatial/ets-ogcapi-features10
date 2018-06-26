@@ -104,8 +104,8 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, Requirement 10)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
-    public void validateFeatureCollectionsMetadataOperation( TestPoint testPoint ) {
+    @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, 10)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
+    public void validateFeatureCollectionsMetadataOperation(TestPoint testPoint ) {
         String testPointUri = testPoint.createUri();
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         response.then().statusCode( 200 );
@@ -216,7 +216,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *            the collection to test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
-    public void validateCollectionsMetadataResponse_Links( TestPoint testPoint, Map<String, Object> collection ) {
+    public void validateCollectionsMetadataDocument_Links(TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
                                                                                         collectionName );
@@ -258,7 +258,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *            the collection to test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 14)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
-    public void validateCollectionsMetadataResponse_Extent( TestPoint testPoint, Map<String, Object> collection ) {
+    public void validateCollectionsMetadataDocument_Extent(TestPoint testPoint, Map<String, Object> collection ) {
         // TODO: validate the extent property
     }
 
@@ -272,7 +272,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *            the collection to test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.7. Validate the Feature Collection Metadata Operation (Requirement 15) and A.4.4.8. Validate the Feature Collection Metadata Operation Response (Requirement 16)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
-    public void validateFeatureCollectionMetadataOperation( TestPoint testPoint, Map<String, Object> collection ) {
+    public void validateTheFeatureCollectionMetadataOperationAndResponse(TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
                                                                                         collectionName );
@@ -280,7 +280,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );
 
-        Response response = validateFeatureCollectionMetadataOperation( testPointsForNamedCollection.get( 0 ) );
+        Response response = validateTheFeatureCollectionMetadataOperationAndResponse( testPointsForNamedCollection.get( 0 ) );
         validateFeatureCollectionMetadataOperationResponse( response, collection );
     }
 
@@ -308,7 +308,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param testPoint
      *            to test, never <code>null</code>
      */
-    private Response validateFeatureCollectionMetadataOperation( TestPoint testPoint ) {
+    private Response validateTheFeatureCollectionMetadataOperationAndResponse(TestPoint testPoint ) {
         String testPointUri = testPoint.createUri();
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         response.then().statusCode( 200 );

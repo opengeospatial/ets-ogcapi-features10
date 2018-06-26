@@ -62,9 +62,9 @@ public class FeatureCollectionsMetadataOperationIT {
         for ( Object[] object : collections ) {
             TestPoint tp = (TestPoint) object[0];
             Map<String, Object> collection = (Map<String, Object>) object[1];
-            featureCollectionsMetadataOperation.validateCollectionsMetadataResponse_Links( tp, collection );
-            featureCollectionsMetadataOperation.validateCollectionsMetadataResponse_Extent( tp, collection );
-            featureCollectionsMetadataOperation.validateFeatureCollectionMetadataOperation( tp, collection );
+            featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Links( tp, collection );
+            featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Extent( tp, collection );
+            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( tp, collection );
         }
     }
 
