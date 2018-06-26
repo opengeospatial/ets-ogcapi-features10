@@ -2,7 +2,9 @@ package org.opengis.cite.wfs30.openapi3;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.sun.jersey.api.uri.UriTemplate;
 
 /**
@@ -18,14 +20,18 @@ public class TestPoint {
 
     private List<String> requirementClasses;
 
+    private Map<String, MediaType> contentMediaTypes;
+
     /**
      * Instantiates a TestPoint with UriTemplate but without defined replacements.
      * 
      * @param uriTemplate
      *            never <code>null</code>
+     * @param contentMediaTypes
+     *            the content media types for the GET operation with response "200", may be <code>null</code>
      */
-    public TestPoint( UriTemplate uriTemplate ) {
-        this.uriTemplate = uriTemplate;
+    public TestPoint( UriTemplate uriTemplate, Map<String, MediaType> contentMediaTypes ) {
+        this( uriTemplate, null, contentMediaTypes );
     }
 
     /**
@@ -35,10 +41,14 @@ public class TestPoint {
      *            never <code>null</code>
      * @param templateReplacement
      *            may be <code>null</code>
+     * @param contentMediaTypes
+     *            the content media types for the GET operation with response "200", may be <code>null</code>
      */
-    public TestPoint( UriTemplate uriTemplate, Map<String, String> templateReplacement ) {
+    public TestPoint( UriTemplate uriTemplate, Map<String, String> templateReplacement,
+                      Map<String, MediaType> contentMediaTypes ) {
         this.uriTemplate = uriTemplate;
         this.templateReplacement = templateReplacement;
+        this.contentMediaTypes = contentMediaTypes;
     }
 
     /**
@@ -74,6 +84,13 @@ public class TestPoint {
     }
 
     /**
+     * @return the content media types for the GET operation with response "200", may be <code>null</code>
+     */
+    public Map<String, MediaType> getContentMediaTypes() {
+        return contentMediaTypes;
+    }
+
+    /**
      * Creates an URI from the template with the replacement.
      * 
      * @return the URI created from the template, never <code>null</code>
@@ -85,5 +102,23 @@ public class TestPoint {
     @Override
     public String toString() {
         return "Pattern: " + uriTemplate.getPattern() + ", Replacements: " + templateReplacement;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o )
+            return true;
+        if ( o == null || getClass() != o.getClass() )
+            return false;
+        TestPoint testPoint = (TestPoint) o;
+        return Objects.equals( uriTemplate, testPoint.uriTemplate )
+               && Objects.equals( templateReplacement, testPoint.templateReplacement )
+               && Objects.equals( requirementClasses, testPoint.requirementClasses )
+               && Objects.equals( contentMediaTypes, testPoint.contentMediaTypes );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( uriTemplate, templateReplacement, requirementClasses, contentMediaTypes );
     }
 }

@@ -9,10 +9,12 @@ import java.util.Map;
 
 import org.opengis.cite.wfs30.WFS3.PATH;
 
+import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
 import com.reprezen.kaizen.oasparser.model3.Path;
+import com.reprezen.kaizen.oasparser.model3.Response;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 import com.reprezen.kaizen.oasparser.model3.Server;
 import com.sun.jersey.api.uri.UriTemplate;
@@ -48,11 +50,34 @@ public class OpenApiUtils {
      * @param apiModel
      *            never <code>null</code>
      * @param path
-     *            the path the test points shuold be assigned to, never <code>null</code>
+     *            the path the test points should be assigned to, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
-        List<Path> pathItemObjects = identifyTestPoints( apiModel, path );
+        return retrieveTestPoints( apiModel, path, null );
+    }
+
+    /**
+     * Parse the test points with the passed path including the extended path from the passed OpenApi3 document as
+     * described in A.4.3. Identify the Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @param path
+     *            the path the test points should be assigned to, never <code>null</code>
+     * @param extendedPath
+     *            the extended path, may be <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path, String extendedPath ) {
+        StringBuilder requestedPath = new StringBuilder();
+        requestedPath.append( path.getPathItem() );
+        if ( extendedPath != null ) {
+            if ( !extendedPath.startsWith( "/" ) )
+                requestedPath.append( "/" );
+            requestedPath.append( extendedPath );
+        }
+        List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath.toString() );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
@@ -82,11 +107,17 @@ public class OpenApiUtils {
      *            never <code>null</code>
      */
     private static List<Path> identifyTestPoints( OpenApi3 apiModel ) {
-        return identifyTestPoints( apiModel, PATH.values() );
+        List<String> paths = new ArrayList<>();
+        for ( PATH path : PATH.values() )
+            paths.add( path.getPathItem() );
+        return identifyTestPoints( apiModel, paths );
     }
 
-    private static List<Path> identifyTestPoints( OpenApi3 apiModel, PATH... path ) {
+    private static List<Path> identifyTestPoints( OpenApi3 apiModel, String path ) {
+        return identifyTestPoints( apiModel, Collections.singletonList( path ) );
+    }
 
+    private static List<Path> identifyTestPoints( OpenApi3 apiModel, List<String> path ) {
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
         for ( Path pathItemObject : pathItemObjects.values() ) {
@@ -98,9 +129,9 @@ public class OpenApiUtils {
         return pathItems;
     }
 
-    private static boolean isRequestedPath( String pathString, PATH... path ) {
-        for ( PATH pathRequested : path ) {
-            if ( pathString.startsWith( pathRequested.getPathItem() ) )
+    private static boolean isRequestedPath( String pathString, List<String> path ) {
+        for ( String pathRequested : path ) {
+            if ( pathString.matches( "\\/" + pathRequested + "(\\/?)" ) )
                 return true;
         }
         return false;
@@ -219,19 +250,22 @@ public class OpenApiUtils {
     private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer ) {
         String pathString = pathItemAndServer.pathItemObject.getPathString();
         UriTemplate uriTemplate = new UriTemplate( pathItemAndServer.serverUrl + pathString );
+        Response response = pathItemAndServer.operationObject.getResponse( "200" );
+        Map<String, MediaType> contentMediaTypes = response.getContentMediaTypes();
 
         if ( uriTemplate.getNumberOfTemplateVariables() == 0 ) {
-            TestPoint testPoint = new TestPoint( uriTemplate );
+            TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
             uris.add( testPoint );
         } else {
             List<Map<String, String>> templateReplacements = collectTemplateReplacements( pathItemAndServer,
                                                                                           uriTemplate );
+
             if ( templateReplacements.isEmpty() ) {
-                TestPoint testPoint = new TestPoint( uriTemplate );
+                TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
                 uris.add( testPoint );
             } else {
                 for ( Map<String, String> templateReplacement : templateReplacements ) {
-                    TestPoint testPoint = new TestPoint( uriTemplate, templateReplacement );
+                    TestPoint testPoint = new TestPoint( uriTemplate, templateReplacement, contentMediaTypes );
                     uris.add( testPoint );
                 }
             }

@@ -3,14 +3,18 @@ package org.opengis.cite.wfs30.openapi3;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.opengis.cite.wfs30.WFS3.PATH.API;
+import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.reprezen.kaizen.oasparser.OpenApi3Parser;
+import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 /**
@@ -26,9 +30,11 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel );
 
-        assertThat( testPoints.size(), is( 12 ) );
+        assertThat( testPoints.size(), is( 3 ) );
+
     }
 
+    @Ignore
     @Test
     public void testRetrieveTestPoints_moreComplex() {
         OpenApi3Parser parser = new OpenApi3Parser();
@@ -68,6 +74,36 @@ public class OpenApiUtilsTest {
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, API );
 
         assertThat( testPoints.size(), is( 1 ) );
+    }
+
+    @Test
+    public void testRetrieveTestPoints_COLLECTIONS() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+
+        assertThat( testPoints.size(), is( 1 ) );
+        Map<String, MediaType> contentMediaTypes = testPoints.get( 0 ).getContentMediaTypes();
+        assertThat( contentMediaTypes.size(), is( 2 ) );
+    }
+
+    @Test
+    public void testRetrieveTestPoints_COLLECTIONS_WithExtendedPath() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS, "flurstueck" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        assertThat( testPoint.createUri(),
+                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck" ) );
+        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
+        assertThat( contentMediaTypes.size(), is( 2 ) );
     }
 
 }
