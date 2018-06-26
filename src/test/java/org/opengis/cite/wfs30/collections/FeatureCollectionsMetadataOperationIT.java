@@ -64,6 +64,7 @@ public class FeatureCollectionsMetadataOperationIT {
             Map<String, Object> collection = (Map<String, Object>) object[1];
             featureCollectionsMetadataOperation.validateCollectionsMetadataResponse_Links( tp, collection );
             featureCollectionsMetadataOperation.validateCollectionsMetadataResponse_Extent( tp, collection );
+            featureCollectionsMetadataOperation.validateFeatureCollectionMetadataOperation( tp, collection );
         }
     }
 

@@ -5,6 +5,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -259,6 +260,83 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 14)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateCollectionsMetadataResponse_Extent( TestPoint testPoint, Map<String, Object> collection ) {
         // TODO: validate the extent property
+    }
+
+    /**
+     * A.4.4.7. Validate the Feature Collection Metadata Operation and A.4.4.8. Validate the Feature Collection Metadata
+     * Operation Response
+     * 
+     * @param testPoint
+     *            the test point to test, never <code>null</code>
+     * @param collection
+     *            the collection to test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.7. Validate the Feature Collection Metadata Operation (Requirement 15) and A.4.4.8. Validate the Feature Collection Metadata Operation Response (Requirement 16)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    public void validateFeatureCollectionMetadataOperation( TestPoint testPoint, Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
+                                                                                        collectionName );
+        if ( testPointsForNamedCollection.isEmpty() )
+            throw new SkipException( "Could not find collection with name " + collectionName
+                                     + " in the OpenAPI document" );
+
+        Response response = validateFeatureCollectionMetadataOperation( testPointsForNamedCollection.get( 0 ) );
+        validateFeatureCollectionMetadataOperationResponse( response, collection );
+    }
+
+    /**
+     * A.4.4.7. Validate the Feature Collection Metadata Operation
+     *
+     * a) Test Purpose: Validate that the Feature Collection Metadata Operation behaves as required
+     *
+     * b) Pre-conditions:
+     *
+     * A feature collection name is provided by test A.4.4.6
+     *
+     * Path = /collections/{name}
+     *
+     * c) Test Method:
+     *
+     * DO FOR each /collections{name} test point
+     *
+     * Issue an HTTP GET request using the test point URI
+     *
+     * Go to test A.4.4.8
+     *
+     * d) References: Requirement 15
+     * 
+     * @param testPoint
+     *            to test, never <code>null</code>
+     */
+    private Response validateFeatureCollectionMetadataOperation( TestPoint testPoint ) {
+        String testPointUri = testPoint.createUri();
+        Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
+        response.then().statusCode( 200 );
+        return response;
+    }
+
+    /**
+     * A.4.4.8. Validate the Feature Collection Metadata Operation Response
+     * 
+     * a) Test Purpose: Validate that response to the Feature Collection Metadata Operation. b) Pre-conditions: A
+     * Feature Collection Metadata document has been retrieved
+     *
+     * c) Test Method:
+     *
+     * Validate the retrieved document against the collectionInfo.yaml schema.
+     *
+     * Validate that this is the same document as that processed in Test A.4.4.6
+     *
+     * d) References: Requirement 16
+     *
+     * @param response
+     *            the response for 'collection/{name}', never <code>null</code>
+     * @param collection
+     *            the expected collection, never <code>null</code>
+     */
+    private void validateFeatureCollectionMetadataOperationResponse( Response response, Map<String, Object> collection ) {
+        JsonPath jsonPath = response.jsonPath();
+        assertEquals( collection, jsonPath.get() );
     }
 
     private List<String> findMissingCollectionNames( List<Object> collections ) {
