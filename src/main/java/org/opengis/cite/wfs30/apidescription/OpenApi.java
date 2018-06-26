@@ -88,6 +88,11 @@ public class OpenApi extends CommonFixture {
      * Process the API Definition document as described in test A.4.4
      * 
      * d) References: Requirement 4
+     *
+     * @param testContext
+     *            never <code>null</code>
+     * @throws MalformedURLException
+     *             if the apiUrl is malformed
      */
     @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)", groups = "apidefinition", dependsOnMethods = "openapiDocumentRetrieval")
     public void apiDefinitionValidation( ITestContext testContext )
