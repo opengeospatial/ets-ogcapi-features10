@@ -34,18 +34,31 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
     private final Map<TestPoint, Response> testPointAndResponses = new HashMap<>();
 
-    private final List<String> collectionNames = new ArrayList<>();
+    private final List<String> collectionNamesFromLandingPage = new ArrayList<>();
+
+    private Object[][] testPointsData;
 
     @DataProvider(name = "collectionsUris")
     public Object[][] collectionsUris( ITestContext testContext ) {
-        OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
-        return new Object[][] { testPoints.toArray() };
+        if ( this.testPointsData == null ) {
+            OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
+            List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+            this.testPointsData = new Object[][] { testPoints.toArray() };
+        }
+        return testPointsData;
     }
 
     @BeforeClass
     public void parseRequiredMetadata( ITestContext testContext ) {
-        OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
+        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
+        JsonPath jsonPath = request.jsonPath();
+
+        List<Object> collections = jsonPath.getList( "collections" );
+        for ( Object collectionObject : collections ) {
+            Map<String, Object> collection = (Map<String, Object>) collectionObject;
+            String collectionName = (String) collection.get( "name" );
+            this.collectionNamesFromLandingPage.add( collectionName );
+        }
     }
 
     /**
@@ -57,7 +70,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *
      * c) Test Method:
      *
-     * DO FOR each /collections test point < Issue an HTTP GET request using the test point URI
+     * DO FOR each /collections test point - Issue an HTTP GET request using the test point URI
      *
      * Go to test A.4.4.5
      *
@@ -65,7 +78,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *
      * @param testPoint
      *            the test point to test, never <code>null</code>
-     * @return the response of the collections operation, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, Requirement 10)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
     public void validateFeatureCollectionsMetadataOperation( TestPoint testPoint ) {
@@ -89,7 +101,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *
      * Validate that each link includes a rel and type parameter
      *
-     * d) References: Requirements 11
+     * d) References: Requirement 11
      * 
      * @param testPoint
      *            the test point to test, never <code>null</code>
@@ -133,7 +145,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *
      * Validate that the returned document includes a collections property for each collection in the dataset.
      *
-     * d) References: Requirements 12
+     * d) References: Requirement 12
      *
      * @param testPoint
      *            the test point to test, never <code>null</code>
@@ -143,7 +155,23 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
             throw new SkipException( "Could not find a response for test point " + testPoint );
-        // TODO:
+        JsonPath jsonPath = response.jsonPath();
+
+        List<String> missingCollectionNames = findMissingCollectionNames( jsonPath );
+        assertTrue( missingCollectionNames.isEmpty(),
+                    "Feature Collection Metadata document must include a collections property for each collection in the dataset. Missing collection properties "
+                                            + missingCollectionNames );
+    }
+
+    private List<String> findMissingCollectionNames( JsonPath jsonPath ) {
+        List<String> missingCollectionNames = new ArrayList<>();
+        List<Object> collections = jsonPath.getList( "collections" );
+        for ( String collectionNameFromLandingPage : this.collectionNamesFromLandingPage ) {
+            boolean isInCollections = isInCollections( collectionNameFromLandingPage, collections );
+            if ( !isInCollections )
+                missingCollectionNames.add( collectionNameFromLandingPage );
+        }
+        return missingCollectionNames;
     }
 
     private Map<String, Object> findLinkToItself( JsonPath jsonPath ) {
@@ -209,6 +237,16 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         Object type = link.get( "type" );
         if ( rel != null && type != null )
             return true;
+        return false;
+    }
+
+    private boolean isInCollections( String collectionNameFromLandingPage, List<Object> collections ) {
+        for ( Object collectionObject : collections ) {
+            Map<String, Object> collection = (Map<String, Object>) collectionObject;
+            Object collectionName = collection.get( "name" );
+            if ( collectionNameFromLandingPage.equals( collectionName ) )
+                return true;
+        }
         return false;
     }
 
