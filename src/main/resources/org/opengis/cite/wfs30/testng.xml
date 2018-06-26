@@ -15,6 +15,7 @@
       <package name="org.opengis.cite.wfs30.general" />
       <package name="org.opengis.cite.wfs30.apidescription" />
       <package name="org.opengis.cite.wfs30.conformance" />
+      <package name="org.opengis.cite.wfs30.collections" />
     </packages>
     <classes>
       <class name="org.opengis.cite.wfs30.SuitePreconditions" />

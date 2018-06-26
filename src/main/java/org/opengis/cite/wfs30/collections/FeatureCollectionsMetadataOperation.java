@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
+import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -34,7 +35,11 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
     private final Map<TestPoint, Response> testPointAndResponses = new HashMap<>();
 
+    private final Map<TestPoint, List<Map<String, Object>>> testPointAndCollections = new HashMap<>();
+
     private final List<String> collectionNamesFromLandingPage = new ArrayList<>();
+
+    private OpenApi3 apiModel;
 
     private Object[][] testPointsData;
 
@@ -48,6 +53,20 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         return testPointsData;
     }
 
+    @DataProvider(name = "collections")
+    public Object[][] collections( ITestContext testContext ) {
+        int length = 0;
+        for ( List<Map<String, Object>> collections : testPointAndCollections.values() )
+            length += collections.size();
+        Object[][] objects = new Object[length][];
+        int i = 0;
+        for ( Map.Entry<TestPoint, List<Map<String, Object>>> testPointAndCollection : testPointAndCollections.entrySet() ) {
+            for ( Map<String, Object> collection : testPointAndCollection.getValue() )
+                objects[i++] = new Object[] { testPointAndCollection.getKey(), collection };
+        }
+        return objects;
+    }
+
     @BeforeClass
     public void parseRequiredMetadata( ITestContext testContext ) {
         Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
@@ -59,6 +78,11 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
             String collectionName = (String) collection.get( "name" );
             this.collectionNamesFromLandingPage.add( collectionName );
         }
+    }
+
+    @BeforeClass
+    public void openApiDocument( ITestContext testContext ) {
+        this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
     }
 
     /**
@@ -121,9 +145,11 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
         // Validate that the retrieved document includes links for: Itself, Alternate encodings of this document in
         // every other media type as identified by the compliance classes for this server.
-        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
-        List<Map<String, Object>> alternateLinks = findAlternateLinks( jsonPath, linkToSelf, contentMediaTypes );
-        List<String> typesWithoutLink = findLinksWithoutTypes( alternateLinks, linkToSelf, contentMediaTypes );
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPoint, linkToSelf );
+        List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( jsonPath.getList( "links" ),
+                                                                                         mediaTypesToSupport,
+                                                                                         "alternate" );
+        List<String> typesWithoutLink = findLinksWithoutTypes( alternateLinks, mediaTypesToSupport );
         assertTrue( typesWithoutLink.isEmpty(),
                     "Feature Collection Metadata document must include links for alternate encodings. Missing links for types "
                                             + typesWithoutLink );
@@ -156,19 +182,90 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         if ( response == null )
             throw new SkipException( "Could not find a response for test point " + testPoint );
         JsonPath jsonPath = response.jsonPath();
+        List<Object> collections = jsonPath.getList( "collections" );
 
-        List<String> missingCollectionNames = findMissingCollectionNames( jsonPath );
+        List<String> missingCollectionNames = findMissingCollectionNames( collections );
         assertTrue( missingCollectionNames.isEmpty(),
                     "Feature Collection Metadata document must include a collections property for each collection in the dataset. Missing collection properties "
                                             + missingCollectionNames );
+        this.testPointAndCollections.put( testPoint, createCollectionsMap( collections ) );
     }
 
-    private List<String> findMissingCollectionNames( JsonPath jsonPath ) {
+    /**
+     * A.4.4.6. Validate a Collections Metadata document (Part 1)
+     *
+     * a) Test Purpose: Validate a Collections Metadata document.
+     *
+     * b) Pre-conditions: A Collection metadata document has been retrieved.
+     *
+     * c) Test Method:
+     *
+     * Validate the collection metadata against the collectionInfo.yaml schema
+     *
+     * Validate that the collection metadata document includes links for: Itself, Alternate encodings of this document
+     * in every other media type as identified by the compliance classes for this server.
+     *
+     * Validate that each link includes a rel and type parameter
+     *
+     * d) References: Requirement 13
+     *
+     * @param testPoint
+     *            the test point to test, never <code>null</code>
+     * @param collection
+     *            the collection to test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    public void validateCollectionsMetadataResponse_Links( TestPoint testPoint, Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
+                                                                                        collectionName );
+        if ( testPointsForNamedCollection.isEmpty() )
+            throw new SkipException( "Could not find collection with name " + collectionName
+                                     + " in the OpenAPI document" );
+
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPointsForNamedCollection.get( 0 ), null );
+        List<Object> links = (List<Object>) collection.get( "links" );
+
+        List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport,
+                                                                                         "item" );
+        List<String> typesWithoutLink = findLinksWithoutTypes( alternateLinks, mediaTypesToSupport );
+        assertTrue( typesWithoutLink.isEmpty(),
+                    "Collections Metadata document must include links with relation 'item' for each supported encodings. Missing links for types "
+                                            + typesWithoutLink );
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( alternateLinks );
+        assertTrue( linksWithoutRelOrType.isEmpty(),
+                    "Links with relation 'item' for encodings must include a rel and type parameter. Missing for links "
+                                            + linksWithoutRelOrType );
+    }
+
+    /**
+     * A.4.4.6. Validate a Collections Metadata document (Part 2)
+     *
+     * a) Test Purpose: Validate a Collections Metadata document.
+     *
+     * b) Pre-conditions: A Collection metadata document has been retrieved.
+     *
+     * c) Test Method:
+     *
+     * Validate the extent property if it is provided
+     *
+     * d) References: Requirement 14
+     *
+     * @param testPoint
+     *            the test point to test, never <code>null</code>
+     * @param collection
+     *            the collection to test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 14)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    public void validateCollectionsMetadataResponse_Extent( TestPoint testPoint, Map<String, Object> collection ) {
+        // TODO: validate the extent property
+    }
+
+    private List<String> findMissingCollectionNames( List<Object> collections ) {
         List<String> missingCollectionNames = new ArrayList<>();
-        List<Object> collections = jsonPath.getList( "collections" );
         for ( String collectionNameFromLandingPage : this.collectionNamesFromLandingPage ) {
-            boolean isInCollections = isInCollections( collectionNameFromLandingPage, collections );
-            if ( !isInCollections )
+            Map<String, Object> collection = findCollectionByName( collectionNameFromLandingPage, collections );
+            if ( collection == null )
                 missingCollectionNames.add( collectionNameFromLandingPage );
         }
         return missingCollectionNames;
@@ -185,31 +282,27 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         return null;
     }
 
-    private List<Map<String, Object>> findAlternateLinks( JsonPath jsonPath, Map<String, Object> linkToSelf,
-                                                          Map<String, MediaType> contentMediaTypes ) {
-        Object typeOfSelf = linkToSelf.get( "type" );
+    private List<Map<String, Object>> findLinksWithSupportedMediaTypeByRel( List<Object> links,
+                                                                            List<String> mediaTypesToSupport,
+                                                                            String expectedRel ) {
         List<Map<String, Object>> alternateLinks = new ArrayList<>();
-        List<Object> links = jsonPath.getList( "links" );
         for ( Object link : links ) {
             Map<String, Object> linkItem = (Map<String, Object>) link;
             Object type = linkItem.get( "type" );
             Object rel = linkItem.get( "rel" );
-            if ( !typeOfSelf.equals( type ) && "alternate".equals( rel )
-                 && isSupportedMediaType( type, contentMediaTypes ) )
+            if ( expectedRel.equals( rel ) && isSupportedMediaType( type, mediaTypesToSupport ) )
                 alternateLinks.add( linkItem );
         }
         return alternateLinks;
     }
 
     private List<String> findLinksWithoutTypes( List<Map<String, Object>> alternateLinks,
-                                                Map<String, Object> linkToSelf, Map<String, MediaType> contentMediaTypes ) {
+                                                List<String> mediaTypesToSuppport ) {
         List<String> missingLinksForType = new ArrayList<>();
-        for ( String contentMediaType : contentMediaTypes.keySet() ) {
-            if ( !contentMediaType.equals( linkToSelf.get( "type" ) ) ) {
-                boolean hasLinkForContentType = hasLinkForContentType( alternateLinks, contentMediaType );
-                if ( !hasLinkForContentType )
-                    missingLinksForType.add( contentMediaType );
-            }
+        for ( String contentMediaType : mediaTypesToSuppport ) {
+            boolean hasLinkForContentType = hasLinkForContentType( alternateLinks, contentMediaType );
+            if ( !hasLinkForContentType )
+                missingLinksForType.add( contentMediaType );
         }
         return missingLinksForType;
     }
@@ -240,21 +333,38 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         return false;
     }
 
-    private boolean isInCollections( String collectionNameFromLandingPage, List<Object> collections ) {
+    private Map<String, Object> findCollectionByName( String collectionNameFromLandingPage, List<Object> collections ) {
         for ( Object collectionObject : collections ) {
             Map<String, Object> collection = (Map<String, Object>) collectionObject;
             Object collectionName = collection.get( "name" );
             if ( collectionNameFromLandingPage.equals( collectionName ) )
-                return true;
+                return collection;
         }
-        return false;
+        return null;
     }
 
-    private boolean isSupportedMediaType( Object type, Map<String, MediaType> contentMediaTypes ) {
-        for ( String contentMediaType : contentMediaTypes.keySet() ) {
+    private boolean isSupportedMediaType( Object type, List<String> contentMediaTypes ) {
+        for ( String contentMediaType : contentMediaTypes ) {
             if ( contentMediaType.equals( type ) )
                 return true;
         }
         return false;
     }
+
+    private List<Map<String, Object>> createCollectionsMap( List<Object> collections ) {
+        List<Map<String, Object>> collectionsMap = new ArrayList<>();
+        for ( Object collection : collections )
+            collectionsMap.add( (Map<String, Object>) collection );
+        return collectionsMap;
+    }
+
+    private List<String> createListOfMediaTypesToSupport( TestPoint testPoint, Map<String, Object> linkToSelf ) {
+        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
+        List<String> mediaTypesToSupport = new ArrayList<>();
+        mediaTypesToSupport.addAll( contentMediaTypes.keySet() );
+        if ( linkToSelf != null )
+            mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
+        return mediaTypesToSupport;
+    }
+
 }

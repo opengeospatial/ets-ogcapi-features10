@@ -89,4 +89,21 @@ public class OpenApiUtilsTest {
         assertThat( contentMediaTypes.size(), is( 2 ) );
     }
 
+    @Test
+    public void testRetrieveTestPoints_COLLECTIONS_WithExtendedPath() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS, "flurstueck" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        assertThat( testPoint.createUri(),
+                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck" ) );
+        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
+        assertThat( contentMediaTypes.size(), is( 2 ) );
+    }
+
 }
