@@ -2,6 +2,7 @@ package org.opengis.cite.wfs30.openapi3;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.sun.jersey.api.uri.UriTemplate;
@@ -101,5 +102,23 @@ public class TestPoint {
     @Override
     public String toString() {
         return "Pattern: " + uriTemplate.getPattern() + ", Replacements: " + templateReplacement;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o )
+            return true;
+        if ( o == null || getClass() != o.getClass() )
+            return false;
+        TestPoint testPoint = (TestPoint) o;
+        return Objects.equals( uriTemplate, testPoint.uriTemplate )
+               && Objects.equals( templateReplacement, testPoint.templateReplacement )
+               && Objects.equals( requirementClasses, testPoint.requirementClasses )
+               && Objects.equals( contentMediaTypes, testPoint.contentMediaTypes );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( uriTemplate, templateReplacement, requirementClasses, contentMediaTypes );
     }
 }

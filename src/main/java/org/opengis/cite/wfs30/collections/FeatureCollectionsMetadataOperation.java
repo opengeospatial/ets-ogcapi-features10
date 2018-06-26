@@ -9,12 +9,14 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -30,6 +32,10 @@ import io.restassured.response.Response;
  */
 public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
+    private final Map<TestPoint, Response> testPointAndResponses = new HashMap<>();
+
+    private final List<String> collectionNames = new ArrayList<>();
+
     @DataProvider(name = "collectionsUris")
     public Object[][] collectionsUris( ITestContext testContext ) {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
@@ -40,19 +46,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     @BeforeClass
     public void parseRequiredMetadata( ITestContext testContext ) {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-
-    }
-
-    /**
-     * Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response.
-     *
-     * @param testPoint
-     *            the test point to test, never <code>null</code>
-     */
-    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 9)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
-    public void validateFeatureCollectionsMetadataOperationResponse( TestPoint testPoint ) {
-        Response response = validateFeatureCollectionsMetadataOperation( testPoint );
-        validateFeatureCollectionsMetadataOperationResponse( testPoint, response );
     }
 
     /**
@@ -69,18 +62,21 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * Go to test A.4.4.5
      *
      * d) References: Requirement 9
-     * 
+     *
      * @param testPoint
      *            the test point to test, never <code>null</code>
      * @return the response of the collections operation, never <code>null</code>
      */
-    private Response validateFeatureCollectionsMetadataOperation( TestPoint testPoint ) {
+    @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, Requirement 10)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
+    public void validateFeatureCollectionsMetadataOperation( TestPoint testPoint ) {
         String testPointUri = testPoint.createUri();
-        return init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
+        Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
+        response.then().statusCode( 200 );
+        this.testPointAndResponses.put( testPoint, response );
     }
 
     /**
-     * A.4.4.5. Validate the Feature Collections Metadata Operation Response
+     * A.4.4.5. Validate the Feature Collections Metadata Operation Response (Part 1)
      *
      * a) Test Purpose: Validate that response to the Feature Collection Metadata Operation.
      *
@@ -88,26 +84,21 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *
      * c) Test Method:
      *
-     * Validate the retrieved document against the content.yaml schema.
-     *
      * Validate that the retrieved document includes links for: Itself, Alternate encodings of this document in every
      * other media type as identified by the compliance classes for this server.
      *
      * Validate that each link includes a rel and type parameter
      *
-     * Validate that the returned document includes a collections property for each collection in the dataset.
-     *
-     * For each collections property, validate the metadata for that collection using test A.4.4.6
-     *
-     * d) References: Requirements 10, 11, and 12
+     * d) References: Requirements 11
      * 
      * @param testPoint
      *            the test point to test, never <code>null</code>
-     * @param response
-     *            the response of the test point, never <code>null</code>
      */
-    private void validateFeatureCollectionsMetadataOperationResponse( TestPoint testPoint, Response response ) {
-        response.then().statusCode( 200 );
+    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 11)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
+    public void validateFeatureCollectionsMetadataOperationResponse_Links( TestPoint testPoint ) {
+        Response response = testPointAndResponses.get( testPoint );
+        if ( response == null )
+            throw new SkipException( "Could not find a response for test point " + testPoint );
 
         JsonPath jsonPath = response.jsonPath();
 
@@ -129,8 +120,30 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links for alternate encodings must include a rel and type parameter. Missing for links "
                                             + linksWithoutRelOrType );
+    }
 
-        // TODO: Validate that the returned document includes a collections property for each collection in the dataset.
+    /**
+     * A.4.4.5. Validate the Feature Collections Metadata Operation Response (Part 1)
+     *
+     * a) Test Purpose: Validate that response to the Feature Collection Metadata Operation.
+     *
+     * b) Pre-conditions: A Feature Collection Metadata document has been retrieved
+     *
+     * c) Test Method:
+     *
+     * Validate that the returned document includes a collections property for each collection in the dataset.
+     *
+     * d) References: Requirements 12
+     *
+     * @param testPoint
+     *            the test point to test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 12)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
+    public void validateFeatureCollectionsMetadataOperationResponse_Collections( TestPoint testPoint ) {
+        Response response = testPointAndResponses.get( testPoint );
+        if ( response == null )
+            throw new SkipException( "Could not find a response for test point " + testPoint );
+        // TODO:
     }
 
     private Map<String, Object> findLinkToItself( JsonPath jsonPath ) {

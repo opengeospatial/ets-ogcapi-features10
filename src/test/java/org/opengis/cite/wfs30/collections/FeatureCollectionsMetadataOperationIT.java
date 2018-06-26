@@ -42,9 +42,12 @@ public class FeatureCollectionsMetadataOperationIT {
     public void testValidateFeatureCollectionsMetadataOperationResponse() {
         FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
+        featureCollectionsMetadataOperation.parseRequiredMetadata( testContext );
         UriTemplate conformanceUri = new UriTemplate( "https://www.ldproxy.nrw.de/kataster/collections" );
         TestPoint testPoint = new TestPoint( conformanceUri, mediaTypes() );
-        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse( testPoint );
+        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
+        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
+        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections( testPoint );
     }
 
     private Map<String, MediaType> mediaTypes() {
