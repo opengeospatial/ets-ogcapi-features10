@@ -111,7 +111,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         // every other media type as identified by the compliance classes for this server.
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         List<Map<String, Object>> alternateLinks = findAlternateLinks( jsonPath, linkToSelf, contentMediaTypes );
-        List<String> typesWithoutLink = findLinksWithoutTypes( alternateLinks, contentMediaTypes );
+        List<String> typesWithoutLink = findLinksWithoutTypes( alternateLinks, linkToSelf, contentMediaTypes );
         assertTrue( typesWithoutLink.isEmpty(),
                     "Feature Collection Metadata document must include links for alternate encodings. Missing links for types "
                                             + typesWithoutLink );
@@ -174,13 +174,14 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     }
 
     private List<String> findLinksWithoutTypes( List<Map<String, Object>> alternateLinks,
-                                                Map<String, MediaType> contentMediaTypes ) {
+                                                Map<String, Object> linkToSelf, Map<String, MediaType> contentMediaTypes ) {
         List<String> missingLinksForType = new ArrayList<>();
         for ( String contentMediaType : contentMediaTypes.keySet() ) {
-            boolean hasLinkForContentType = hasLinkForContentType( alternateLinks, contentMediaType );
-            if ( !hasLinkForContentType )
-                missingLinksForType.add( contentMediaType );
-
+            if ( !contentMediaType.equals( linkToSelf.get( "type" ) ) ) {
+                boolean hasLinkForContentType = hasLinkForContentType( alternateLinks, contentMediaType );
+                if ( !hasLinkForContentType )
+                    missingLinksForType.add( contentMediaType );
+            }
         }
         return missingLinksForType;
     }
