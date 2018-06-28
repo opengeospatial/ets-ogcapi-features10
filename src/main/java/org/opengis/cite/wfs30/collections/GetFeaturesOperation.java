@@ -336,7 +336,7 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     /**
-     * .4.4.12. Bounding Box Parameter (Test method 1)
+     * A.4.4.12. Bounding Box Parameter (Test method 1)
      *
      * a) Test Purpose:Validate the proper handling of the bbox parameter.
      *
@@ -366,18 +366,18 @@ public class GetFeaturesOperation extends CommonFixture {
      */
     @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateBboxParameter() {
-        Parameter limit = apiModel.getParameter( "bbox" );
-        assertNotNull( limit, "Required bbox parameter in OpenAPI document is missing" );
+        Parameter bbox = apiModel.getParameter( "bbox" );
+        assertNotNull( bbox, "Required bbox parameter in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
 
-        assertEquals( limit.getName(), "bbox", String.format( msg, "name", "limit", limit.getName() ) );
-        assertEquals( limit.getIn(), "query", String.format( msg, "in", "query", limit.getIn() ) );
-        assertFalse( limit.getRequired(), String.format( msg, "required", "false", limit.getRequired() ) );
-        assertEquals( limit.getStyle(), "form", String.format( msg, "style", "form", limit.getStyle() ) );
-        assertFalse( limit.getExplode(), String.format( msg, "explode", "false", limit.getExplode() ) );
+        assertEquals( bbox.getName(), "bbox", String.format( msg, "name", "bbox", bbox.getName() ) );
+        assertEquals( bbox.getIn(), "query", String.format( msg, "in", "query", bbox.getIn() ) );
+        assertFalse( bbox.getRequired(), String.format( msg, "required", "false", bbox.getRequired() ) );
+        assertEquals( bbox.getStyle(), "form", String.format( msg, "style", "form", bbox.getStyle() ) );
+        assertFalse( bbox.getExplode(), String.format( msg, "explode", "false", bbox.getExplode() ) );
 
-        Schema schema = limit.getSchema();
+        Schema schema = bbox.getSchema();
         assertEquals( schema.getType(), "array", String.format( msg, "schema -> type", "array", schema.getType() ) );
         assertEquals( schema.getMinItems().intValue(), 4,
                       String.format( msg, "schema -> minItems", "4", schema.getMinItems() ) );
@@ -386,6 +386,48 @@ public class GetFeaturesOperation extends CommonFixture {
 
         String itemsType = schema.getItemsSchema().getType();
         assertEquals( itemsType, "number", String.format( msg, "schema -> items -> type", "number", itemsType ) );
+    }
+
+    /**
+     * A.4.4.13. Time Parameter (Test method 1)
+     *
+     * a) Test Purpose: Validate the proper handling of the time parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Verify that the OpenAPI document correctly describes the time parameter for the Get Features operation.
+     *
+     * d) References: Requirement 22
+     *
+     * Expected parameter:
+     *
+     * <pre>
+     * name: time
+     * in: query
+     * required: false
+     * schema:
+     *   type: string
+     * style: form
+     * explode: false
+     * </pre>
+     */
+    @Test(description = "Implements A.4.4.13. Time (Requirement 22)", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateTimeParameter() {
+        Parameter time = apiModel.getParameter( "time" );
+        assertNotNull( time, "Required time parameter in OpenAPI document is missing" );
+
+        String msg = "Expected property '%s' with value '%s' but was '%s'";
+
+        assertEquals( time.getName(), "time", String.format( msg, "name", "time", time.getName() ) );
+        assertEquals( time.getIn(), "query", String.format( msg, "in", "query", time.getIn() ) );
+        assertFalse( time.getRequired(), String.format( msg, "required", "false", time.getRequired() ) );
+        assertEquals( time.getStyle(), "form", String.format( msg, "style", "form", time.getStyle() ) );
+        assertFalse( time.getExplode(), String.format( msg, "explode", "false", time.getExplode() ) );
+
+        Schema schema = time.getSchema();
+        assertEquals( schema.getType(), "string", String.format( msg, "schema -> type", "string", schema.getType() ) );
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {

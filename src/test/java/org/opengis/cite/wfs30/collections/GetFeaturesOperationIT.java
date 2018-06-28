@@ -72,6 +72,7 @@ public class GetFeaturesOperationIT {
         }
         getFeaturesOperation.validateLimitParameter();
         // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
+        getFeaturesOperation.validateTimeParameter();
     }
 
 }
