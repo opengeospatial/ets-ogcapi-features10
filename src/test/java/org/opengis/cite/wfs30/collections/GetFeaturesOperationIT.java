@@ -73,6 +73,30 @@ public class GetFeaturesOperationIT {
             // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
             // fails (parameter is missing): getFeaturesOperation.validateTimeParameter( parameter );
         }
+
+        Object[][] collectionsWithLimits = getFeaturesOperation.collectionItemUrisWithLimits( testContext );
+        for ( Object[] collection : collectionsWithLimits ) {
+            Map<String, Object> parameter = (Map<String, Object>) collection[0];
+            int limit = (int) collection[1];
+            // skipped (parameter missing):
+            // getFeaturesOperation.validateLimitParameter_requests( parameter, limit );
+        }
+
+        Object[][] collectionsWithBboxes = getFeaturesOperation.collectionItemUrisWithBboxes( testContext );
+        for ( Object[] collection : collectionsWithBboxes ) {
+            Map<String, Object> parameter = (Map<String, Object>) collection[0];
+            String bbox = (String) collection[1];
+            // fails: response is empty
+            // getFeaturesOperation.validateBboxParameter_requests( parameter, bbox );
+        }
+
+        Object[][] collectionsWithTimes = getFeaturesOperation.collectionItemUrisWithTimes( testContext );
+        for ( Object[] collection : collectionsWithTimes ) {
+            Map<String, Object> parameter = (Map<String, Object>) collection[0];
+            String time = (String) collection[1];
+            // skipped (parameter missing):
+            // getFeaturesOperation.validateTimeParameter_requests( parameter, time );
+        }
     }
 
 }

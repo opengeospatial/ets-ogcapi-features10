@@ -66,6 +66,47 @@ public class GetFeaturesOperation extends CommonFixture {
         return collectionsData;
     }
 
+    @DataProvider(name = "collectionItemUrisWithLimit")
+    public Object[][] collectionItemUrisWithLimits( ITestContext testContext ) {
+        // TODO: find values between min and max described in OpenApi document (per collection)
+        Object[][] collectionsData = new Object[collections.size() * 3][];
+        int i = 0;
+        for ( Map<String, Object> collection : collections ) {
+            collectionsData[i++] = new Object[] { collection, 5 };
+            collectionsData[i++] = new Object[] { collection, 100 };
+            collectionsData[i++] = new Object[] { collection, 1000 };
+        }
+        return collectionsData;
+    }
+
+    @DataProvider(name = "collectionItemUrisWithBboxes")
+    public Object[][] collectionItemUrisWithBboxes( ITestContext testContext ) {
+        // TODO: find values
+        Object[][] collectionsData = new Object[collections.size()][];
+        int i = 0;
+        for ( Map<String, Object> collection : collections ) {
+            // Example 5. The bounding box of the New Zealand Exclusive Economic Zone
+            collectionsData[i++] = new Object[] { collection, "160.6,-55.95,-170,-25.89" };
+        }
+        return collectionsData;
+    }
+
+    @DataProvider(name = "collectionItemUrisWithTimes")
+    public Object[][] collectionItemUrisWithTimes( ITestContext testContext ) {
+        // TODO: find values
+        Object[][] collectionsData = new Object[collections.size() * 3][];
+        int i = 0;
+        for ( Map<String, Object> collection : collections ) {
+            // Example 6. A date-time
+            collectionsData[i++] = new Object[] { collection, "2018-02-12T23%3A20%3A50Z" };
+            // Example 7. A period using a start and end time
+            collectionsData[i++] = new Object[] { collection, "2018-02-12T00%3A00%3A00Z%2F2018-03-18T12%3A31%3A12Z" };
+            // Example 8. A period using start time and a duration
+            collectionsData[i++] = new Object[] { collection, "2018-02-12T00%3A00%3A00Z%2FP1M6DT12H31M12S" };
+        }
+        return collectionsData;
+    }
+
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
@@ -195,19 +236,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        String timeStamp = jsonPath.getString( "timeStamp" );
-        if ( timeStamp == null )
-            throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
-
-        Date date = parseAsDate( timeStamp );
-        assertTrue( date.before( response.timeStampAfterResponse ),
-                    "timeStamp in response must be before the request was send ("
-                                            + DATE_FORMAT.format( response.timeStampAfterResponse ) + ") but was '"
-                                            + timeStamp + "'" );
-        assertTrue( date.after( response.timeStampBeforeResponse ),
-                    "timeStamp in response must be after the request was send ("
-                                            + DATE_FORMAT.format( response.timeStampBeforeResponse ) + ") but was '"
-                                            + timeStamp + "'" );
+        assertTimeStamp( collectionName, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse );
     }
 
     /**
@@ -236,15 +265,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        if ( !hasProperty( "numberReturned", jsonPath ) ) {
-            throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName + "'" );
-        }
-        int numberReturned = jsonPath.getInt( "numberReturned" );
-
-        int numberOfFeatures = jsonPath.getList( "features" ).size();
-        assertEquals( numberReturned, numberOfFeatures, "Value of numberReturned (" + numberReturned
-                                                        + ") does not match the number of features in the response ("
-                                                        + numberOfFeatures + ")" );
+        assertNumberReturned( collectionName, jsonPath );
     }
 
     /**
@@ -278,15 +299,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        if ( !hasProperty( "numberMatched", jsonPath ) ) {
-            throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName + "'" );
-        }
-        int numberMatched = jsonPath.getInt( "numberMatched" );
-        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
-        assertEquals( numberMatched, numberOfAllReturnedFeatures,
-                      "Value of numberReturned (" + numberMatched
-                                              + ") does not match the number of features in all responses ("
-                                              + numberOfAllReturnedFeatures + ")" );
+        assertNumberMatched( collectionName, jsonPath );
     }
 
     /**
@@ -316,6 +329,10 @@ public class GetFeaturesOperation extends CommonFixture {
      * style: form
      * explode: false
      * </pre>
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     * 
      */
     @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateLimitParameter( Map<String, Object> collection ) {
@@ -338,6 +355,50 @@ public class GetFeaturesOperation extends CommonFixture {
         assertEquals( schema.getMinimum(), 1, String.format( msg, "schema -> minimum", "1", schema.getMinimum() ) );
         assertIntegerGreaterZero( schema.getMinimum(), "schema -> minimum" );
         assertIntegerGreaterZero( schema.getDefault(), "schema -> default" );
+    }
+
+    /**
+     * A.4.4.11. Limit Parameter (Test method 2, 3)
+     *
+     * a) Test Purpose: Validate the proper handling of the limit parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Repeat Test A.4.4.9 using different values for the limit parameter.
+     *
+     * For each execution of Test A.4.4.9, repeat Test A.4.4.10 to validate the results.
+     *
+     * d) References: Requirement 19
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @throws URISyntaxException
+     *             if the creation of a uri fails
+     */
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 19)", dataProvider = "collectionItemUrisWithLimit", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateLimitParameter_requests( Map<String, Object> collection, int limit )
+                            throws URISyntaxException {
+        String collectionName = (String) collection.get( "name" );
+
+        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        if ( getFeaturesUrl.isEmpty() )
+            throw new SkipException( "Could not find url for collection with name " + collectionName
+                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+        Date timeStampBeforeResponse = new Date();
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "limit", limit ).when().request( GET );
+        response.then().statusCode( 200 );
+        Date timeStampAfterResponse = new Date();
+
+        JsonPath jsonPath = response.jsonPath();
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
+        assertNumberReturned( collectionName, jsonPath );
+        assertNumberMatched( collectionName, jsonPath );
+
+        // TODO: assert returned features
     }
 
     /**
@@ -368,6 +429,9 @@ public class GetFeaturesOperation extends CommonFixture {
      * style: form
      * explode: false
      * </pre>
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateBboxParameter( Map<String, Object> collection ) {
@@ -397,6 +461,50 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     /**
+     * A.4.4.12. Bounding Box Parameter (Test method 1)
+     *
+     * a) Test Purpose:Validate the proper handling of the bbox parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Repeat Test A.4.4.9 using different values for the limit parameter.
+     *
+     * For each execution of Test A.4.4.9, repeat Test A.4.4.10 to validate the results.
+     *
+     * d) References: Requirement 21
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
+     * @throws URISyntaxException
+     *             if the creation of a uri fails
+     */
+    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 21)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateBboxParameter_requests( Map<String, Object> collection, String bbox )
+                            throws URISyntaxException {
+        String collectionName = (String) collection.get( "name" );
+
+        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        if ( getFeaturesUrl.isEmpty() )
+            throw new SkipException( "Could not find url for collection with name " + collectionName
+                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+        Date timeStampBeforeResponse = new Date();
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "bbox", bbox ).when().request( GET );
+        response.then().statusCode( 200 );
+        Date timeStampAfterResponse = new Date();
+
+        JsonPath jsonPath = response.jsonPath();
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
+        assertNumberReturned( collectionName, jsonPath );
+        assertNumberMatched( collectionName, jsonPath );
+
+        // TODO: assert returned features
+    }
+
+    /**
      * A.4.4.13. Time Parameter (Test method 1)
      *
      * a) Test Purpose: Validate the proper handling of the time parameter.
@@ -420,6 +528,9 @@ public class GetFeaturesOperation extends CommonFixture {
      * style: form
      * explode: false
      * </pre>
+     * 
+     * @param collection
+     *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.13. Time (Requirement 22)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateTimeParameter( Map<String, Object> collection ) {
@@ -439,6 +550,92 @@ public class GetFeaturesOperation extends CommonFixture {
 
         Schema schema = time.getSchema();
         assertEquals( schema.getType(), "string", String.format( msg, "schema -> type", "string", schema.getType() ) );
+    }
+
+    /**
+     * A.4.4.13. Time Parameter (Test method 2, 3)
+     *
+     * a) Test Purpose:Validate the proper handling of the bbox parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Repeat Test A.4.4.9 using different values for the limit parameter.
+     *
+     * For each execution of Test A.4.4.9, repeat Test A.4.4.10 to validate the results.
+     *
+     * d) References: Requirement 23
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     * @param time
+     *            time parameter to request, never <code>null</code>
+     * @throws URISyntaxException
+     *             if the creation of a uri fails
+     *
+     */
+    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 23)", dataProvider = "collectionItemUrisWithTimes", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateTimeParameter_requests( Map<String, Object> collection, String time )
+                            throws URISyntaxException {
+        String collectionName = (String) collection.get( "name" );
+
+        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        if ( getFeaturesUrl.isEmpty() )
+            throw new SkipException( "Could not find url for collection with name " + collectionName
+                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+        Date timeStampBeforeResponse = new Date();
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "time", time ).when().request( GET );
+        response.then().statusCode( 200 );
+        Date timeStampAfterResponse = new Date();
+
+        JsonPath jsonPath = response.jsonPath();
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
+        assertNumberReturned( collectionName, jsonPath );
+        assertNumberMatched( collectionName, jsonPath );
+
+        // TODO: assert returned features
+    }
+
+    private void assertTimeStamp( String collectionName, JsonPath jsonPath, Date timeStampBeforeResponse,
+                                  Date timeStampAfterResponse ) {
+        String timeStamp = jsonPath.getString( "timeStamp" );
+        if ( timeStamp == null )
+            throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+
+        Date date = parseAsDate( timeStamp );
+        assertTrue( date.before( timeStampAfterResponse ),
+                    "timeStamp in response must be before the request was send ("
+                                            + DATE_FORMAT.format( timeStampAfterResponse ) + ") but was '" + timeStamp
+                                            + "'" );
+        assertTrue( date.after( timeStampBeforeResponse ), "timeStamp in response must be after the request was send ("
+                                                           + DATE_FORMAT.format( timeStampBeforeResponse )
+                                                           + ") but was '" + timeStamp + "'" );
+    }
+
+    private void assertNumberReturned( String collectionName, JsonPath jsonPath ) {
+        if ( !hasProperty( "numberReturned", jsonPath ) ) {
+            throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName + "'" );
+        }
+        int numberReturned = jsonPath.getInt( "numberReturned" );
+
+        int numberOfFeatures = jsonPath.getList( "features" ).size();
+        assertEquals( numberReturned, numberOfFeatures, "Value of numberReturned (" + numberReturned
+                                                        + ") does not match the number of features in the response ("
+                                                        + numberOfFeatures + ")" );
+    }
+
+    private void assertNumberMatched( String collectionName, JsonPath jsonPath )
+                            throws URISyntaxException {
+        if ( !hasProperty( "numberMatched", jsonPath ) ) {
+            throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName + "'" );
+        }
+        int numberMatched = jsonPath.getInt( "numberMatched" );
+        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
+        assertEquals( numberMatched, numberOfAllReturnedFeatures,
+                      "Value of numberReturned (" + numberMatched
+                                              + ") does not match the number of features in all responses ("
+                                              + numberOfAllReturnedFeatures + ")" );
     }
 
     private Parameter findParameterByName( String collectionName, String name ) {
