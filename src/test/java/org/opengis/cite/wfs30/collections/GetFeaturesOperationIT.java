@@ -67,6 +67,7 @@ public class GetFeaturesOperationIT {
             //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
             //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
         }
+        getFeaturesOperation.validateLimitParameter();
     }
 
 }

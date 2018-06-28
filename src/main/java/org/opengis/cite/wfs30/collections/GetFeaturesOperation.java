@@ -11,6 +11,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -35,6 +36,8 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
+import com.reprezen.kaizen.oasparser.model3.Parameter;
+import com.reprezen.kaizen.oasparser.model3.Schema;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -91,7 +94,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.9. Validate the Get Features Operation (Requirement 17, 24)", dataProvider = "collectionItemUris", dependsOnGroups = "collections")
+    @Test(description = "Implements A.4.4.9. Validate the Get Features Operation (Requirement 17, 24)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections")
     public void validateGetFeaturesOperation( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
 
@@ -127,7 +130,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -181,7 +184,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -222,7 +225,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -259,10 +262,11 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     *
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
@@ -281,6 +285,54 @@ public class GetFeaturesOperation extends CommonFixture {
                       "Value of numberReturned (" + numberMatched
                                               + ") does not match the number of features in all responses ("
                                               + numberOfAllReturnedFeatures + ")" );
+    }
+
+    /**
+     * A.4.4.11. Limit Parameter (Test method 1)
+     *
+     * a) Test Purpose: Validate the proper handling of the limit parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Verify that the OpenAPI document correctly describes the limit parameter for the Get Features operation.
+     *
+     * d) References: Requirements 18 and 19
+     *
+     * Expected parameter:
+     * 
+     * <pre>
+     * name: limit
+     * in: query
+     * required: false
+     * schema:
+     *   type: integer
+     *   minimum: 1
+     *   maximum: 10000
+     *   default: 10
+     * style: form
+     * explode: false
+     * </pre>
+     */
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18, 19)", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateLimitParameter() {
+        Parameter limit = apiModel.getParameter( "limit" );
+        assertNotNull( limit, "Required limit parameter in OpenAPI document is missing" );
+
+        String msg = "Expected property '%s' with value '%s' but was '%s'";
+
+        assertEquals( limit.getName(), "limit", String.format( msg, "name", "limit", limit.getName() ) );
+        assertEquals( limit.getIn(), "query", String.format( msg, "in", "query", limit.getIn() ) );
+        assertFalse( limit.getRequired(), String.format( msg, "required", "false", limit.getRequired() ) );
+        assertEquals( limit.getStyle(), "form", String.format( msg, "style", "form", limit.getStyle() ) );
+        assertFalse( limit.getExplode(), String.format( msg, "explode", "false", limit.getExplode() ) );
+
+        Schema schema = limit.getSchema();
+        assertEquals( schema.getType(), "integer", String.format( msg, "schema -> type", "integer", schema.getType() ) );
+        assertEquals( schema.getMinimum(), 1, String.format( msg, "schema -> minimum", "1", schema.getMinimum() ) );
+        assertIntegerGreaterZero( schema.getMinimum(), "schema -> minimum" );
+        assertIntegerGreaterZero( schema.getDefault(), "schema -> default" );
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
@@ -305,12 +357,29 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     private Date parseAsDate( String timeStamp ) {
-
         try {
             return DATE_FORMAT.parse( timeStamp );
         } catch ( ParseException e ) {
             throw new AssertionError( "timeStamp " + timeStamp + "is not a valid date" );
         }
+    }
+
+    private void assertIntegerGreaterZero( Object value, String propertyName ) {
+        if ( value instanceof Number )
+            assertIntegerGreaterZero( ( (Number) value ).intValue(), propertyName );
+        else if ( value instanceof String )
+            try {
+                int valueAsInt = Integer.parseInt( (String) value );
+                assertIntegerGreaterZero( valueAsInt, propertyName );
+            } catch ( NumberFormatException e ) {
+                String msg = "Expected property '%s' to be an integer, but was '%s'";
+                throw new AssertionError( String.format( msg, propertyName, value ) );
+            }
+    }
+
+    private void assertIntegerGreaterZero( int value, String propertyName ) {
+        String msg = "Expected property '%s' to be an integer greater than 0, but was '%s'";
+        assertTrue( value > 0, String.format( msg, propertyName, value ) );
     }
 
     private class ResponseData {
