@@ -4,14 +4,20 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
-import static org.opengis.cite.wfs30.util.JsonUtils.findLinkToItself;
+import static org.opengis.cite.wfs30.util.JsonUtils.collectNumberOfAllReturnedFeatures;
+import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
+import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
@@ -37,7 +44,9 @@ import io.restassured.response.Response;
  */
 public class GetFeaturesOperation extends CommonFixture {
 
-    private final Map<String, Response> collectionNameAndResponse = new HashMap<>();
+    private static final ISO8601DateFormat DATE_FORMAT = new ISO8601DateFormat();
+
+    private final Map<String, ResponseData> collectionNameAndResponse = new HashMap<>();
 
     private List<Map<String, Object>> collections;
 
@@ -91,13 +100,16 @@ public class GetFeaturesOperation extends CommonFixture {
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
+        Date timeStampBeforeResponse = new Date();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
-        collectionNameAndResponse.put( collectionName, response );
+        Date timeStampAfterResponse = new Date();
+        ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
+        collectionNameAndResponse.put( collectionName, responseData );
     }
 
     /**
-     * A.4.4.10. Validate the Get Features Operation Response (Part 1)
+     * A.4.4.10. Validate the Get Features Operation Response (Test method 2, 3)
      *
      * a) Test Purpose: Validate the Get Feature Operation Response.
      *
@@ -118,7 +130,7 @@ public class GetFeaturesOperation extends CommonFixture {
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
-        Response response = collectionNameAndResponse.get( collectionName );
+        ResponseData response = collectionNameAndResponse.get( collectionName );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
@@ -133,7 +145,7 @@ public class GetFeaturesOperation extends CommonFixture {
         List<Map<String, Object>> links = jsonPath.getList( "links" );
 
         // Validate that the retrieved document includes links for: Itself
-        Map<String, Object> linkToSelf = findLinkToItself( links );
+        Map<String, Object> linkToSelf = findLinkByRel( links, "self" );
         assertNotNull( linkToSelf, "Feature Collection Metadata document must include a link for itself" );
 
         // Validate that the retrieved document includes links for: Alternate encodings of this document in
@@ -154,18 +166,90 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     /**
-     * A.4.4.10. Validate the Get Features Operation Response (Part 2)
+     * A.4.4.10. Validate the Get Features Operation Response (Test method 4)
      *
      * a) Test Purpose: Validate the Get Feature Operation Response.
      *
      * b) Pre-conditions: A collection of Features has been retrieved
      *
      * c) Test Method:
-     * 
+     *
      * If a property timeStamp is included in the response, validate that it is close to the current time.
+     *
+     * d) References: Requirements 27, 28 and 29
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        ResponseData response = collectionNameAndResponse.get( collectionName );
+        if ( response == null )
+            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+
+        JsonPath jsonPath = response.jsonPath();
+
+        String timeStamp = jsonPath.getString( "timeStamp" );
+        if ( timeStamp == null )
+            throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+
+        Date date = parseAsDate( timeStamp );
+        assertTrue( date.before( response.timeStampAfterResponse ),
+                    "timeStamp in response must be before the request was send ("
+                                            + DATE_FORMAT.format( response.timeStampAfterResponse ) + ") but was '"
+                                            + timeStamp + "'" );
+        assertTrue( date.after( response.timeStampBeforeResponse ),
+                    "timeStamp in response must be after the request was send ("
+                                            + DATE_FORMAT.format( response.timeStampBeforeResponse ) + ") but was '"
+                                            + timeStamp + "'" );
+    }
+
+    /**
+     * A.4.4.10. Validate the Get Features Operation Response (Test method 5)
+     *
+     * a) Test Purpose: Validate the Get Feature Operation Response.
+     *
+     * b) Pre-conditions: A collection of Features has been retrieved
+     *
+     * c) Test Method:
      *
      * If a property numberReturned is included in the response, validate that the number is equal to the number of
      * features in the response.
+     *
+     * d) References: Requirements 27, 28 and 29
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     */
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        ResponseData response = collectionNameAndResponse.get( collectionName );
+        if ( response == null )
+            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+
+        JsonPath jsonPath = response.jsonPath();
+
+        if ( !hasProperty( "numberReturned", jsonPath ) ) {
+            throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName + "'" );
+        }
+        int numberReturned = jsonPath.getInt( "numberReturned" );
+
+        int numberOfFeatures = jsonPath.getList( "features" ).size();
+        assertEquals( numberReturned, numberOfFeatures, "Value of numberReturned (" + numberReturned
+                                                        + ") does not match the number of features in the response ("
+                                                        + numberOfFeatures + ")" );
+    }
+
+    /**
+     * A.4.4.10. Validate the Get Features Operation Response (Test method 6)
+     *
+     * a) Test Purpose: Validate the Get Feature Operation Response.
+     *
+     * b) Pre-conditions: A collection of Features has been retrieved
+     *
+     * c) Test Method:
      *
      * If a property numberMatched is included in the response, iteratively follow the next links until no next link is
      * included and count the aggregated number of features returned in all responses during the iteration. Validate
@@ -175,15 +259,28 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @throws URISyntaxException
+     *             if the creation of a uri fails
      */
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateGetFeaturesOperationResponse_Properties( Map<String, Object> collection ) {
+    public void validateGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
+                            throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
-        Response response = collectionNameAndResponse.get( collectionName );
+        ResponseData response = collectionNameAndResponse.get( collectionName );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
-        // TODO
+        JsonPath jsonPath = response.jsonPath();
+
+        if ( !hasProperty( "numberMatched", jsonPath ) ) {
+            throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName + "'" );
+        }
+        int numberMatched = jsonPath.getInt( "numberMatched" );
+        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
+        assertEquals( numberMatched, numberOfAllReturnedFeatures,
+                      "Value of numberReturned (" + numberMatched
+                                              + ") does not match the number of features in all responses ("
+                                              + numberOfAllReturnedFeatures + ")" );
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
@@ -205,5 +302,33 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( linkToSelf != null )
             mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
         return mediaTypesToSupport;
+    }
+
+    private Date parseAsDate( String timeStamp ) {
+
+        try {
+            return DATE_FORMAT.parse( timeStamp );
+        } catch ( ParseException e ) {
+            throw new AssertionError( "timeStamp " + timeStamp + "is not a valid date" );
+        }
+    }
+
+    private class ResponseData {
+
+        private final Response response;
+
+        private final Date timeStampBeforeResponse;
+
+        private final Date timeStampAfterResponse;
+
+        public ResponseData( Response response, Date timeStampBeforeResponse, Date timeStampAfterResponse ) {
+            this.response = response;
+            this.timeStampBeforeResponse = timeStampBeforeResponse;
+            this.timeStampAfterResponse = timeStampAfterResponse;
+        }
+
+        public JsonPath jsonPath() {
+            return response.jsonPath();
+        }
     }
 }

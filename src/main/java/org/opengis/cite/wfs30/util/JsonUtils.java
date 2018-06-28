@@ -1,8 +1,18 @@
 package org.opengis.cite.wfs30.util;
 
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -77,12 +87,14 @@ public class JsonUtils {
      *
      * @param links
      *            list of links to search in, never <code>null</code>
+     * @param expectedRel
+     *            the expected value of the property 'rel', never <code>null</code>
      * @return the link to itself or <code>null</code> if no such link exists
      */
-    public static Map<String, Object> findLinkToItself( List<Map<String, Object>> links ) {
+    public static Map<String, Object> findLinkByRel( List<Map<String, Object>> links, String expectedRel ) {
         for ( Map<String, Object> link : links ) {
             Object rel = link.get( "rel" );
-            if ( "self".equals( rel ) )
+            if ( expectedRel.equals( rel ) )
                 return link;
         }
         return null;
@@ -101,6 +113,61 @@ public class JsonUtils {
         if ( rel != null && type != null )
             return true;
         return false;
+    }
+
+    /**
+     * Checks if a property with the passed name exists in the jsonPath.
+     * 
+     * @param propertyName
+     *            name of the property to check, never <code>null</code>
+     * @param jsonPath
+     *            to check, never <code>null</code>
+     * @return <code>true</code> if the property exists, <code>false</code> otherwise
+     */
+    public static boolean hasProperty( String propertyName, JsonPath jsonPath ) {
+        return jsonPath.get( propertyName ) != null;
+    }
+
+    /**
+     * Collects the number of all returned features by iterating over all 'next' links and summarizing the size of
+     * features in 'features' array property.
+     * 
+     * @param jsonPath
+     *            the initial collection, never <code>null</code>
+     * @return the number of all returned features
+     * @throws URISyntaxException
+     *             if the creation of a uri fails
+     */
+    public static int collectNumberOfAllReturnedFeatures( JsonPath jsonPath )
+                            throws URISyntaxException {
+        int numberOfAllReturnedFeatures = jsonPath.getList( "features" ).size();
+        Map<String, Object> nextLink = findLinkByRel( jsonPath.getList( "links" ), "next" );
+        while ( nextLink != null ) {
+            String nextUrl = (String) nextLink.get( "href" );
+            URI uri = new URI( nextUrl );
+
+            RequestSpecification accept = given().log().all().baseUri( nextUrl ).accept( GEOJSON_MIME_TYPE );
+            String[] pairs = uri.getQuery().split( "&" );
+            for ( String pair : pairs ) {
+                int idx = pair.indexOf( "=" );
+                String key = pair.substring( 0, idx );
+                String value = pair.substring( idx + 1 );
+                accept.param( key, value );
+            }
+
+            Response response = accept.when().request( GET );
+            response.then().statusCode( 200 );
+
+            JsonPath nextJsonPath = response.jsonPath();
+            int features = nextJsonPath.getList( "features" ).size();
+            if ( features > 0 ) {
+                numberOfAllReturnedFeatures += features;
+                nextLink = findLinkByRel( nextJsonPath.getList( "links" ), "next" );
+            } else {
+                nextLink = null;
+            }
+        }
+        return numberOfAllReturnedFeatures;
     }
 
     private static boolean hasLinkForContentType( List<Map<String, Object>> alternateLinks, String mediaType ) {

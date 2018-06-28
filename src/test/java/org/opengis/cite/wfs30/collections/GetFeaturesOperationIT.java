@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,9 @@ import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.testng.ISuite;
 import org.testng.ITestContext;
+
+import com.reprezen.kaizen.oasparser.OpenApi3Parser;
+import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
 
@@ -28,6 +33,10 @@ public class GetFeaturesOperationIT {
     @BeforeClass
     public static void initTestFixture()
                             throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+        URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+
         InputStream json = GetFeaturesOperationIT.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
@@ -38,11 +47,13 @@ public class GetFeaturesOperationIT {
 
         URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
+        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
         when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
     }
 
     @Test
-    public void testGetFeatureOperations() {
+    public void testGetFeatureOperations()
+                            throws URISyntaxException {
         GetFeaturesOperation getFeaturesOperation = new GetFeaturesOperation();
         getFeaturesOperation.initCommonFixture( testContext );
         getFeaturesOperation.retrieveRequiredInformationFromTestContext( testContext );
@@ -52,7 +63,9 @@ public class GetFeaturesOperationIT {
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             getFeaturesOperation.validateGetFeaturesOperation( parameter );
             getFeaturesOperation.validateGetFeaturesOperationResponse_Links( parameter );
-            getFeaturesOperation.validateGetFeaturesOperationResponse_Properties( parameter );
+            //skipped: getFeaturesOperation.validateGetFeaturesOperationResponse_property_timeStamp( parameter );
+            //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
+            //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
         }
     }
 

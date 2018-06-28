@@ -2,9 +2,10 @@ package org.opengis.cite.wfs30.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.opengis.cite.wfs30.util.JsonUtils.findLinkToItself;
+import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
+import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
 
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class JsonUtilsTest {
     @Test
     public void testFindLinkToItself() {
         List<Map<String, Object>> links = jsonPath.getList( "links" );
-        Map<String, Object> linkToItself = findLinkToItself( links );
+        Map<String, Object> linkToItself = findLinkByRel( links, "self" );
 
         assertThat( linkToItself.get( "href" ),
                     is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/?f=json" ) );
@@ -45,7 +46,7 @@ public class JsonUtilsTest {
     @Test
     public void testLinkIncludesRelAndType() {
         List<Map<String, Object>> links = jsonPath.getList( "links" );
-        Map<String, Object> linkToItself = findLinkToItself( links );
+        Map<String, Object> linkToItself = findLinkByRel( links, "self" );
         boolean includesRelAndType = linkIncludesRelAndType( linkToItself );
 
         assertThat( includesRelAndType, is( true ) );
@@ -67,6 +68,18 @@ public class JsonUtilsTest {
                                                                                               "alternate" );
 
         assertThat( linksWithMediaTypes.size(), is( 1 ) );
+    }
+
+    @Test
+    public void testHasProperty_true() {
+        boolean hasProperty = hasProperty( "links", jsonPath );
+        assertThat( hasProperty, is( true ) );
+    }
+
+    @Test
+    public void testHasProperty_false() {
+        boolean hasProperty = hasProperty( "doesNotExist", jsonPath );
+        assertThat( hasProperty, is( false ) );
     }
 
 }

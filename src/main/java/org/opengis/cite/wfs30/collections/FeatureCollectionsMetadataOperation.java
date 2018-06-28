@@ -5,7 +5,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
-import static org.opengis.cite.wfs30.util.JsonUtils.findLinkToItself;
+import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
@@ -157,7 +157,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         List<Map<String, Object>> links = jsonPath.getList( "links" );
 
         // Validate that the retrieved document includes links for: Itself,
-        Map<String, Object> linkToSelf = findLinkToItself( links );
+        Map<String, Object> linkToSelf = findLinkByRel( links, "self" );
         assertNotNull( linkToSelf, "Feature Collection Metadata document must include a link for itself" );
         assertTrue( linkIncludesRelAndType( linkToSelf ), "Link to itself must include a rel and type parameter" );
 
