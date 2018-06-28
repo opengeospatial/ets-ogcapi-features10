@@ -69,10 +69,10 @@ public class GetFeaturesOperationIT {
             // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
             // skipped (parameter missing):
             // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
+            getFeaturesOperation.validateLimitParameter( parameter );
+            // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
+            // fails (parameter is missing): getFeaturesOperation.validateTimeParameter( parameter );
         }
-        getFeaturesOperation.validateLimitParameter();
-        // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
-        getFeaturesOperation.validateTimeParameter();
     }
 
 }

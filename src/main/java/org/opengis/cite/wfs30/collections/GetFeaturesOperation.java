@@ -36,7 +36,9 @@ import org.testng.annotations.Test;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
+import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
+import com.reprezen.kaizen.oasparser.model3.Path;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 
 import io.restassured.path.json.JsonPath;
@@ -315,10 +317,13 @@ public class GetFeaturesOperation extends CommonFixture {
      * explode: false
      * </pre>
      */
-    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateLimitParameter() {
-        Parameter limit = apiModel.getParameter( "limit" );
-        assertNotNull( limit, "Required limit parameter in OpenAPI document is missing" );
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateLimitParameter( Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        Parameter limit = findParameterByName( collectionName, "limit" );
+
+        assertNotNull( limit, "Required limit parameter for collections item with name '" + collectionName
+                              + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
 
@@ -364,10 +369,13 @@ public class GetFeaturesOperation extends CommonFixture {
      * explode: false
      * </pre>
      */
-    @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateBboxParameter() {
-        Parameter bbox = apiModel.getParameter( "bbox" );
-        assertNotNull( bbox, "Required bbox parameter in OpenAPI document is missing" );
+    @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateBboxParameter( Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        Parameter bbox = findParameterByName( collectionName, "bbox" );
+
+        assertNotNull( bbox, "Required bbox parameter for collections item with name '" + collectionName
+                             + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
 
@@ -413,10 +421,13 @@ public class GetFeaturesOperation extends CommonFixture {
      * explode: false
      * </pre>
      */
-    @Test(description = "Implements A.4.4.13. Time (Requirement 22)", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateTimeParameter() {
-        Parameter time = apiModel.getParameter( "time" );
-        assertNotNull( time, "Required time parameter in OpenAPI document is missing" );
+    @Test(description = "Implements A.4.4.13. Time (Requirement 22)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateTimeParameter( Map<String, Object> collection ) {
+        String collectionName = (String) collection.get( "name" );
+        Parameter time = findParameterByName( collectionName, "time" );
+
+        assertNotNull( time, "Required time parameter for collections item with name '" + collectionName
+                             + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
 
@@ -428,6 +439,21 @@ public class GetFeaturesOperation extends CommonFixture {
 
         Schema schema = time.getSchema();
         assertEquals( schema.getType(), "string", String.format( msg, "schema -> type", "string", schema.getType() ) );
+    }
+
+    private Parameter findParameterByName( String collectionName, String name ) {
+        String collectionItemPath = "/" + COLLECTIONS.getPathItem() + "/" + collectionName + "/items";
+        Path path = apiModel.getPath( collectionItemPath );
+        if ( path != null ) {
+            for ( Parameter parameter : path.getParameters() )
+                if ( name.equals( parameter.getName() ) )
+                    return parameter;
+            Operation get = path.getOperation( "get" );
+            for ( Parameter parameter : get.getParameters() )
+                if ( name.equals( parameter.getName() ) )
+                    return parameter;
+        }
+        return null;
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
