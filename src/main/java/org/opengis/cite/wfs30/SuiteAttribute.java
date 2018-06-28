@@ -2,6 +2,7 @@ package org.opengis.cite.wfs30;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.sun.jersey.api.client.Client;
@@ -27,7 +28,15 @@ public enum SuiteAttribute {
      */
     TEST_SUBJ_FILE( "testSubjectFile", File.class ),
 
-    API_MODEL( "apiModel", OpenApi3.class );
+    /**
+     * Parsed OpenApi3 document resource /api; Added during execution.
+     */
+    API_MODEL( "apiModel", OpenApi3.class ),
+
+    /**
+     * Parsed collections from resource /collections; Added during execution.
+     */
+    COLLECTIONS( "collections", List.class );
 
     private final Class attrType;
 

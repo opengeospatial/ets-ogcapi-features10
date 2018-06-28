@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
+import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -86,6 +88,15 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
     }
 
+    @AfterClass
+    public void storeCollectionsInTestContext( ITestContext testContext ) {
+        List<Map<String, Object>> collections = new ArrayList<>();
+        for ( List<Map<String, Object>> testPointAndCollection : testPointAndCollections.values() ) {
+            collections.addAll( testPointAndCollection );
+        }
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTIONS.getName(), collections );
+    }
+
     /**
      * A.4.4.4. Validate the Feature Collections Metadata Operation
      *
@@ -104,7 +115,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, 10)", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
+    @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, 10)", groups = "collections", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
     public void validateFeatureCollectionsMetadataOperation(TestPoint testPoint ) {
         String testPointUri = testPoint.createUri();
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
@@ -131,7 +142,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 11)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
+    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 11)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
     public void validateFeatureCollectionsMetadataOperationResponse_Links( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
@@ -177,7 +188,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 12)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
+    @Test(description = "Implements A.4.4.5. Validate the Feature Collections Metadata Operation Response (Requirement 12)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation")
     public void validateFeatureCollectionsMetadataOperationResponse_Collections( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
@@ -215,7 +226,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param collection
      *            the collection to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateCollectionsMetadataDocument_Links(TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
@@ -257,7 +268,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param collection
      *            the collection to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 14)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 14)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateCollectionsMetadataDocument_Extent(TestPoint testPoint, Map<String, Object> collection ) {
         // TODO: validate the extent property
     }
@@ -271,7 +282,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * @param collection
      *            the collection to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.7. Validate the Feature Collection Metadata Operation (Requirement 15) and A.4.4.8. Validate the Feature Collection Metadata Operation Response (Requirement 16)", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
+    @Test(description = "Implements A.4.4.7. Validate the Feature Collection Metadata Operation (Requirement 15) and A.4.4.8. Validate the Feature Collection Metadata Operation Response (Requirement 16)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateTheFeatureCollectionMetadataOperationAndResponse(TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
