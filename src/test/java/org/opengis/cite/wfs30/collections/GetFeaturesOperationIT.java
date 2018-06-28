@@ -63,11 +63,15 @@ public class GetFeaturesOperationIT {
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             getFeaturesOperation.validateGetFeaturesOperation( parameter );
             getFeaturesOperation.validateGetFeaturesOperationResponse_Links( parameter );
-            //skipped: getFeaturesOperation.validateGetFeaturesOperationResponse_property_timeStamp( parameter );
-            //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
-            //getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
+            // skipped (parameter missing):
+            // getFeaturesOperation.validateGetFeaturesOperationResponse_property_timeStamp( parameter );
+            // skipped (parameter missing):
+            // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
+            // skipped (parameter missing):
+            // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
         }
         getFeaturesOperation.validateLimitParameter();
+        // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
     }
 
 }

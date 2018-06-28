@@ -298,7 +298,7 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * Verify that the OpenAPI document correctly describes the limit parameter for the Get Features operation.
      *
-     * d) References: Requirements 18 and 19
+     * d) References: Requirement 18
      *
      * Expected parameter:
      * 
@@ -309,13 +309,13 @@ public class GetFeaturesOperation extends CommonFixture {
      * schema:
      *   type: integer
      *   minimum: 1
-     *   maximum: 10000
-     *   default: 10
+     *   maximum: 10000 (example)
+     *   default: 10 (example)
      * style: form
      * explode: false
      * </pre>
      */
-    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18, 19)", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateLimitParameter() {
         Parameter limit = apiModel.getParameter( "limit" );
         assertNotNull( limit, "Required limit parameter in OpenAPI document is missing" );
@@ -333,6 +333,59 @@ public class GetFeaturesOperation extends CommonFixture {
         assertEquals( schema.getMinimum(), 1, String.format( msg, "schema -> minimum", "1", schema.getMinimum() ) );
         assertIntegerGreaterZero( schema.getMinimum(), "schema -> minimum" );
         assertIntegerGreaterZero( schema.getDefault(), "schema -> default" );
+    }
+
+    /**
+     * .4.4.12. Bounding Box Parameter (Test method 1)
+     *
+     * a) Test Purpose:Validate the proper handling of the bbox parameter.
+     *
+     * b) Pre-conditions: Tests A.4.4.9 and A.4.4.10 have completed successfully.
+     *
+     * c) Test Method:
+     *
+     * Verify that the OpenAPI document correctly describes the bbox parameter for the Get Features operation.
+     *
+     * d) References: Requirement 20
+     *
+     * Expected parameter:
+     *
+     * <pre>
+     * name: bbox
+     * in: query
+     * required: false
+     * schema:
+     *   type: array
+     *   minItems: 4
+     *   maxItems: 6
+     *   items:
+     *     type: number
+     * style: form
+     * explode: false
+     * </pre>
+     */
+    @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dependsOnMethods = "validateGetFeaturesOperation")
+    public void validateBboxParameter() {
+        Parameter limit = apiModel.getParameter( "bbox" );
+        assertNotNull( limit, "Required bbox parameter in OpenAPI document is missing" );
+
+        String msg = "Expected property '%s' with value '%s' but was '%s'";
+
+        assertEquals( limit.getName(), "bbox", String.format( msg, "name", "limit", limit.getName() ) );
+        assertEquals( limit.getIn(), "query", String.format( msg, "in", "query", limit.getIn() ) );
+        assertFalse( limit.getRequired(), String.format( msg, "required", "false", limit.getRequired() ) );
+        assertEquals( limit.getStyle(), "form", String.format( msg, "style", "form", limit.getStyle() ) );
+        assertFalse( limit.getExplode(), String.format( msg, "explode", "false", limit.getExplode() ) );
+
+        Schema schema = limit.getSchema();
+        assertEquals( schema.getType(), "array", String.format( msg, "schema -> type", "array", schema.getType() ) );
+        assertEquals( schema.getMinItems().intValue(), 4,
+                      String.format( msg, "schema -> minItems", "4", schema.getMinItems() ) );
+        assertEquals( schema.getMaxItems().intValue(), 6,
+                      String.format( msg, "schema -> maxItems", "6", schema.getMaxItems() ) );
+
+        String itemsType = schema.getItemsSchema().getType();
+        assertEquals( itemsType, "number", String.format( msg, "schema -> items -> type", "number", itemsType ) );
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
