@@ -176,12 +176,12 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * If a property timeStamp is included in the response, validate that it is close to the current time.
      *
-     * d) References: Requirements 27, 28 and 29
+     * d) References: Requirement 27
      *
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -217,12 +217,12 @@ public class GetFeaturesOperation extends CommonFixture {
      * If a property numberReturned is included in the response, validate that the number is equal to the number of
      * features in the response.
      *
-     * d) References: Requirements 27, 28 and 29
+     * d) References: Requirement 29
      *
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -255,14 +255,14 @@ public class GetFeaturesOperation extends CommonFixture {
      * included and count the aggregated number of features returned in all responses during the iteration. Validate
      * that the value is identical to the numberReturned stated in the initial response.
      *
-     * d) References: Requirements 27, 28 and 29
+     * d) References: Requirement 28
      *
      * @param collection
      *            the collection under test, never <code>null</code>
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27, 28, 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
