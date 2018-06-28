@@ -51,7 +51,8 @@ public class GetFeaturesOperationIT {
         for ( Object[] collection : collections ) {
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             getFeaturesOperation.validateGetFeaturesOperation( parameter );
-            getFeaturesOperation.validateGetFeaturesOperationResponse( parameter );
+            getFeaturesOperation.validateGetFeaturesOperationResponse_Links( parameter );
+            getFeaturesOperation.validateGetFeaturesOperationResponse_Properties( parameter );
         }
     }
 
