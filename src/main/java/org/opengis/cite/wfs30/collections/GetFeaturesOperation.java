@@ -80,12 +80,20 @@ public class GetFeaturesOperation extends CommonFixture {
 
     @DataProvider(name = "collectionItemUrisWithBboxes")
     public Object[][] collectionItemUrisWithBboxes( ITestContext testContext ) {
-        // TODO: find values
-        Object[][] collectionsData = new Object[collections.size()][];
+        // TODO: find example with values in extend
+        Object[][] collectionsData = new Object[collections.size() * 5][];
         int i = 0;
         for ( Map<String, Object> collection : collections ) {
-            // Example 5. The bounding box of the New Zealand Exclusive Economic Zone
-            collectionsData[i++] = new Object[] { collection, "160.6,-55.95,-170,-25.89" };
+            // These should include test cases which cross the
+            // meridian,
+            collectionsData[i++] = new Object[] { collection, new BBox( -1.5, 50.0, 1.5, 53.0 ) };
+            // equator,
+            collectionsData[i++] = new Object[] { collection, new BBox( -80.0, -5.0, -70.0, 5.0 ) };
+            // 180 longitude,
+            collectionsData[i++] = new Object[] { collection, new BBox( 177.0, 65.0, -177.0, 70.0 ) };
+            // and polar regions.
+            collectionsData[i++] = new Object[] { collection, new BBox( -70.0, -20.0, -70.0, 160.0 ) };
+            collectionsData[i++] = new Object[] { collection, new BBox( 70.0, -20.0, 70.0, 160.0 ) };
         }
         return collectionsData;
     }
@@ -484,7 +492,7 @@ public class GetFeaturesOperation extends CommonFixture {
      *             if the creation of a uri fails
      */
     @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 21)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateBboxParameter_requests( Map<String, Object> collection, String bbox )
+    public void validateBboxParameter_requests( Map<String, Object> collection, BBox bbox )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
@@ -493,7 +501,8 @@ public class GetFeaturesOperation extends CommonFixture {
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         Date timeStampBeforeResponse = new Date();
-        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "bbox", bbox ).when().request( GET );
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "bbox",
+                                                                                                bbox.asQueryParameter() ).when().request( GET );
         response.then().statusCode( 200 );
         Date timeStampAfterResponse = new Date();
 
@@ -717,6 +726,32 @@ public class GetFeaturesOperation extends CommonFixture {
 
         public JsonPath jsonPath() {
             return response.jsonPath();
+        }
+    }
+
+    private class BBox {
+        double minX;
+
+        double minY;
+
+        double maxX;
+
+        double maxY;
+
+        private BBox( double minX, double minY, double maxX, double maxY ) {
+            this.minX = minX;
+            this.minY = minY;
+            this.maxX = maxX;
+            this.maxY = maxY;
+        }
+
+        private String asQueryParameter() {
+            StringBuilder sb = new StringBuilder();
+            sb.append( minX ).append( "," );
+            sb.append( minY ).append( "," );
+            sb.append( maxX ).append( "," );
+            sb.append( maxY );
+            return sb.toString();
         }
     }
 }
