@@ -6,6 +6,10 @@ import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +27,95 @@ public class JsonUtils {
     }
 
     /**
-     * Parses the extent from the passed collection.
+     * Parses the temporal extent from the passed collection.
+     *
+     * @param collection
+     *            the collection containing the extent to parse, never <code>null</code>
+     * @return the parsed temporal extent, <code>null</code> if no extent exists
+     * @throws IllegalArgumentException
+     *             if the number of items in the extent invalid
+     *
+     */
+    public static TemporalExtent parseTemporalExtent( Map<String, Object> collection ) {
+        Object extent = collection.get( "extent" );
+        if ( extent == null || !( extent instanceof Map ) )
+            return null;
+        Object spatial = ( (Map<String, Object>) extent ).get( "temporal" );
+        if ( spatial == null || !( spatial instanceof List ) )
+            return null;
+        List<Object> coords = (List<Object>) spatial;
+        if ( coords.size() == 2 ) {
+            ZonedDateTime begin = parseAsDate( (String) coords.get( 0 ) );
+            ZonedDateTime end = parseAsDate( (String) coords.get( 1 ) );
+            return new TemporalExtent( begin, end );
+        }
+        throw new IllegalArgumentException( "Temporal extent with " + coords.size() + " items is invalid" );
+    }
+
+    /**
+     * Parses the passed string as ISO 8601 date.
+     * 
+     * @param dateTime
+     *            the dateTime to parse, never <code>null</code>
+     * @return the parsed date, never <code>null</code>
+     */
+    public static ZonedDateTime parseAsDate( String dateTime ) {
+        return ZonedDateTime.parse( dateTime );
+    }
+
+    /**
+     * Formats the passed string as ISO 8601 date. Example: "2018-02-12T23:20:50Z"
+     *
+     * @param dateTime
+     *            the dateTime to format, never <code>null</code>
+     * @return the formatted date, never <code>null</code>
+     */
+    public static String formatDate( ZonedDateTime dateTime ) {
+        return DateTimeFormatter.ISO_INSTANT.format( dateTime );
+    }
+
+    /**
+     * Formats the passed string as ISO 8601 date. Example: "2018-02-12"
+     *
+     * @param date
+     *            the dateTime to format, never <code>null</code>
+     * @return the formatted date, never <code>null</code>
+     */
+    public static String formatDate( LocalDate date ) {
+        return DateTimeFormatter.ISO_DATE.format( date );
+    }
+
+    /**
+     * Formats the passed string as a period using a start and end time. Example:
+     * "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+     *
+     * @param beginDateTime
+     *            the begin dateTime to format, never <code>null</code>
+     * @param endDateTime
+     *            the end dateTime to format, never <code>null</code>
+     * @return the formatted date, never <code>null</code>
+     */
+    public static String formatDateRange( ZonedDateTime beginDateTime, ZonedDateTime endDateTime ) {
+        return formatDate( beginDateTime ) + "/" + formatDate( endDateTime );
+    }
+
+    /**
+     * Formats the passed string as a period using start time and a duration. Example:
+     * "2018-02-12T00:00:00Z/P1M6DT12H31M12S"
+     *
+     * @param beginDate
+     *            the begin date to format, never <code>null</code>
+     * @param endDate
+     *            the end date to format, never <code>null</code>
+     * @return the formatted date, never <code>null</code>
+     */
+    public static String formatDateRangeWithDuration( LocalDate beginDate, LocalDate endDate ) {
+        Period betweenDate = Period.between( beginDate, endDate );
+        return formatDate( beginDate ) + "/" + betweenDate;
+    }
+
+    /**
+     * Parses the spatial extent from the passed collection.
      *
      * @param collection
      *            the collection containing the extent to parse, never <code>null</code>
@@ -32,7 +124,7 @@ public class JsonUtils {
      *             if the number of items in the extent invalid
      *
      */
-    public static BBox parseExtent( Map<String, Object> collection ) {
+    public static BBox parseSpatialExtent( Map<String, Object> collection ) {
         Object extent = collection.get( "extent" );
         if ( extent == null || !( extent instanceof Map ) )
             return null;

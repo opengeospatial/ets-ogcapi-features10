@@ -9,17 +9,23 @@ import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRange;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRangeWithDuration;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
-import static org.opengis.cite.wfs30.util.JsonUtils.parseExtent;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.net.URISyntaxException;
-import java.text.ParseException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,13 +36,13 @@ import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.util.BBox;
+import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
@@ -51,8 +57,6 @@ import io.restassured.response.Response;
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class GetFeaturesOperation extends CommonFixture {
-
-    private static final ISO8601DateFormat DATE_FORMAT = new ISO8601DateFormat();
 
     private final Map<String, ResponseData> collectionNameAndResponse = new HashMap<>();
 
@@ -84,9 +88,8 @@ public class GetFeaturesOperation extends CommonFixture {
     @DataProvider(name = "collectionItemUrisWithBboxes")
     public Iterator<Object[]> collectionItemUrisWithBboxes( ITestContext testContext ) {
         List<Object[]> collectionsWithBboxes = new ArrayList<>();
-        int i = 0;
         for ( Map<String, Object> collection : collections ) {
-            BBox extent = parseExtent( collection );
+            BBox extent = parseSpatialExtent( collection );
             if ( extent != null ) {
                 collectionsWithBboxes.add( new Object[] { collection, extent } );
                 // These should include test cases which cross the
@@ -105,19 +108,34 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     @DataProvider(name = "collectionItemUrisWithTimes")
-    public Object[][] collectionItemUrisWithTimes( ITestContext testContext ) {
-        // TODO: find values
-        Object[][] collectionsData = new Object[collections.size() * 3][];
-        int i = 0;
+    public Iterator<Object[]> collectionItemUrisWithTimes( ITestContext testContext ) {
+        List<Object[]> collectionsWithTimes = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
-            // Example 6. A date-time
-            collectionsData[i++] = new Object[] { collection, "2018-02-12T23%3A20%3A50Z" };
-            // Example 7. A period using a start and end time
-            collectionsData[i++] = new Object[] { collection, "2018-02-12T00%3A00%3A00Z%2F2018-03-18T12%3A31%3A12Z" };
-            // Example 8. A period using start time and a duration
-            collectionsData[i++] = new Object[] { collection, "2018-02-12T00%3A00%3A00Z%2FP1M6DT12H31M12S" };
+            TemporalExtent temporalExtent = parseTemporalExtent( collection );
+            if ( temporalExtent != null ) {
+                ZonedDateTime begin = temporalExtent.getBegin();
+                ZonedDateTime end = temporalExtent.getEnd();
+
+                Duration between = Duration.between( begin, end );
+                Duration quarter = between.dividedBy( 4 );
+                ZonedDateTime beginInterval = begin.plus( quarter );
+                ZonedDateTime endInterval = beginInterval.plus( quarter );
+
+                // Example 6. A date-time
+                collectionsWithTimes.add( new Object[] { collection, formatDate( begin ), beginInterval, null } );
+                // Example 7. A period using a start and end time
+                collectionsWithTimes.add( new Object[] { collection, formatDateRange( beginInterval, endInterval ),
+                                                        beginInterval, endInterval } );
+                // Example 8. A period using start time and a duration
+                LocalDate beginIntervalDate = beginInterval.toLocalDate();
+                LocalDate endIntervalDate = beginIntervalDate.plusDays( 2 );
+                collectionsWithTimes.add( new Object[] {
+                                                        collection,
+                                                        formatDateRangeWithDuration( beginIntervalDate, endIntervalDate ),
+                                                        beginIntervalDate, endIntervalDate } );
+            }
         }
-        return collectionsData;
+        return collectionsWithTimes.iterator();
     }
 
     @BeforeClass
@@ -159,10 +177,10 @@ public class GetFeaturesOperation extends CommonFixture {
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
-        Date timeStampBeforeResponse = new Date();
+        ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
-        Date timeStampAfterResponse = new Date();
+        ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
         collectionNameAndResponse.put( collectionName, responseData );
     }
@@ -402,10 +420,10 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        Date timeStampBeforeResponse = new Date();
+        ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "limit", limit ).when().request( GET );
         response.then().statusCode( 200 );
-        Date timeStampAfterResponse = new Date();
+        ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
 
         JsonPath jsonPath = response.jsonPath();
         int numberOfFeatures = jsonPath.getList( "features" ).size();
@@ -507,11 +525,11 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        Date timeStampBeforeResponse = new Date();
+        ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "bbox",
                                                                                                 bbox.asQueryParameter() ).when().request( GET );
         response.then().statusCode( 200 );
-        Date timeStampAfterResponse = new Date();
+        ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
 
         JsonPath jsonPath = response.jsonPath();
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
@@ -586,14 +604,21 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
-     * @param time
-     *            time parameter to request, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      * @throws URISyntaxException
      *             if the creation of a uri fails
      *
      */
     @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 23)", dataProvider = "collectionItemUrisWithTimes", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateTimeParameter_requests( Map<String, Object> collection, String time )
+    public void validateTimeParameter_requests( Map<String, Object> collection, String queryParameter, Object begin,
+                                                Object end )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
@@ -601,10 +626,10 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        Date timeStampBeforeResponse = new Date();
-        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "time", time ).when().request( GET );
+        ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "time", queryParameter ).when().request( GET );
         response.then().statusCode( 200 );
-        Date timeStampAfterResponse = new Date();
+        ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
 
         JsonPath jsonPath = response.jsonPath();
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
@@ -614,8 +639,8 @@ public class GetFeaturesOperation extends CommonFixture {
         // TODO: assert returned features
     }
 
-    private void assertTimeStamp( String collectionName, JsonPath jsonPath, Date timeStampBeforeResponse,
-                                  Date timeStampAfterResponse, boolean skipIfNoTimeStamp ) {
+    private void assertTimeStamp( String collectionName, JsonPath jsonPath, ZonedDateTime timeStampBeforeResponse,
+                                  ZonedDateTime timeStampAfterResponse, boolean skipIfNoTimeStamp ) {
         String timeStamp = jsonPath.getString( "timeStamp" );
         if ( timeStamp == null )
             if ( skipIfNoTimeStamp )
@@ -623,14 +648,13 @@ public class GetFeaturesOperation extends CommonFixture {
             else
                 return;
 
-        Date date = parseAsDate( timeStamp );
-        assertTrue( date.before( timeStampAfterResponse ),
-                    "timeStamp in response must be before the request was send ("
-                                            + DATE_FORMAT.format( timeStampAfterResponse ) + ") but was '" + timeStamp
-                                            + "'" );
-        assertTrue( date.after( timeStampBeforeResponse ), "timeStamp in response must be after the request was send ("
-                                                           + DATE_FORMAT.format( timeStampBeforeResponse )
-                                                           + ") but was '" + timeStamp + "'" );
+        ZonedDateTime date = parseAsDate( timeStamp );
+        assertTrue( date.isBefore( timeStampAfterResponse ),
+                    "timeStamp in response must be before the request was send (" + formatDate( timeStampAfterResponse )
+                                            + ") but was '" + timeStamp + "'" );
+        assertTrue( date.isAfter( timeStampBeforeResponse ),
+                    "timeStamp in response must be after the request was send (" + formatDate( timeStampBeforeResponse )
+                                            + ") but was '" + timeStamp + "'" );
     }
 
     private void assertNumberReturned( String collectionName, JsonPath jsonPath, boolean skipIfNoNumberReturned ) {
@@ -701,14 +725,6 @@ public class GetFeaturesOperation extends CommonFixture {
         return mediaTypesToSupport;
     }
 
-    private Date parseAsDate( String timeStamp ) {
-        try {
-            return DATE_FORMAT.parse( timeStamp );
-        } catch ( ParseException e ) {
-            throw new AssertionError( "timeStamp " + timeStamp + "is not a valid date" );
-        }
-    }
-
     private void assertIntegerGreaterZero( Object value, String propertyName ) {
         if ( value instanceof Number )
             assertIntegerGreaterZero( ( (Number) value ).intValue(), propertyName );
@@ -731,11 +747,12 @@ public class GetFeaturesOperation extends CommonFixture {
 
         private final Response response;
 
-        private final Date timeStampBeforeResponse;
+        private final ZonedDateTime timeStampBeforeResponse;
 
-        private final Date timeStampAfterResponse;
+        private final ZonedDateTime timeStampAfterResponse;
 
-        public ResponseData( Response response, Date timeStampBeforeResponse, Date timeStampAfterResponse ) {
+        public ResponseData( Response response, ZonedDateTime timeStampBeforeResponse,
+                             ZonedDateTime timeStampAfterResponse ) {
             this.response = response;
             this.timeStampBeforeResponse = timeStampBeforeResponse;
             this.timeStampAfterResponse = timeStampAfterResponse;

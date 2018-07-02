@@ -93,12 +93,14 @@ public class GetFeaturesOperationIT {
             // getFeaturesOperation.validateBboxParameter_requests( parameter, bbox );
         }
 
-        Object[][] collectionsWithTimes = getFeaturesOperation.collectionItemUrisWithTimes( testContext );
-        for ( Object[] collection : collectionsWithTimes ) {
+        Iterator<Object[]> collectionsWithTimes = getFeaturesOperation.collectionItemUrisWithTimes( testContext );
+        for ( Iterator<Object[]> it = collectionsWithTimes; it.hasNext(); ) {
+            Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            String time = (String) collection[1];
-            // skipped (parameter missing):
-            // getFeaturesOperation.validateTimeParameter_requests( parameter, time );
+            String queryParam = (String) collection[1];
+            Object begin = collection[2];
+            Object end = collection[3];
+            getFeaturesOperation.validateTimeParameter_requests( parameter, queryParam, begin, end );
         }
     }
 

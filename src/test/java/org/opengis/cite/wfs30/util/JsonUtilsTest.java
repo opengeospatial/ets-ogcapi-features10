@@ -6,11 +6,19 @@ import static org.junit.Assert.assertThat;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRange;
+import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRangeWithDuration;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
-import static org.opengis.cite.wfs30.util.JsonUtils.parseExtent;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +42,67 @@ public class JsonUtilsTest {
     }
 
     @Test
-    public void testParseExtent() {
+    public void testParseAsDate() {
+        String timeStamp = "2017-03-04T01:02:33Z";
+        ZonedDateTime dateTime = parseAsDate( timeStamp );
+
+        assertThat( dateTime.getYear(), is( 2017 ) );
+        assertThat( dateTime.getMonth(), is( Month.MARCH ) );
+        assertThat( dateTime.getDayOfMonth(), is( 4 ) );
+        assertThat( dateTime.getHour(), is( 1 ) );
+        assertThat( dateTime.getMinute(), is( 2 ) );
+        assertThat( dateTime.getSecond(), is( 33 ) );
+    }
+
+    @Test
+    public void testFormatDate() {
+        String dateTime = "2017-03-04T01:02:33Z";
+        ZonedDateTime dateTimeAsZonedDateTime = parseAsDate( dateTime );
+
+        String dateTimeAsString = formatDate( dateTimeAsZonedDateTime );
+        assertThat( dateTimeAsString, is( dateTime ) );
+
+        String dateAsString = formatDate( dateTimeAsZonedDateTime.toLocalDate() );
+        assertThat( dateAsString, is( "2017-03-04" ) );
+    }
+
+    @Test
+    public void testFormatDateRange() {
+        String beginDateTime = "2017-03-04T01:02:33Z";
+        ZonedDateTime begin = parseAsDate( beginDateTime );
+        String endDateTime = "2018-03-04T01:02:33Z";
+        ZonedDateTime end = parseAsDate( endDateTime );
+
+        String asString = formatDateRange( begin, end );
+        assertThat( asString, is( "2017-03-04T01:02:33Z/2018-03-04T01:02:33Z" ) );
+    }
+
+    @Test
+    public void testFormatDateRangeWithDuration() {
+        String beginDate = "2017-03-04";
+        LocalDate begin = LocalDate.parse( beginDate );
+        String endDate = "2017-04-06";
+        LocalDate end = LocalDate.parse( endDate );
+
+        String asString = formatDateRangeWithDuration( begin, end );
+        assertThat( asString, is( "2017-03-04/P1M2D" ) );
+    }
+
+    @Test
+    public void testTemporalExtent() {
         List<Object> collections = jsonPath.getList( "collections" );
-        BBox extent = parseExtent( (Map<String, Object>) collections.get( 0 ) );
+        TemporalExtent extent = parseTemporalExtent( (Map<String, Object>) collections.get( 0 ) );
+
+        ZonedDateTime begin = extent.getBegin();
+        ZonedDateTime end = extent.getEnd();
+        assertThat( begin, is( ZonedDateTime.parse( "2017-01-01T00:00:00Z" ) ) );
+        assertThat( end, is( ZonedDateTime.parse( "2017-12-31T23:59:59Z" ) ) );
+    }
+
+    @Test
+    public void testParseSpatialExtent() {
+        List<Object> collections = jsonPath.getList( "collections" );
+        BBox extent = parseSpatialExtent( (Map<String, Object>) collections.get( 0 ) );
 
         String queryParam = extent.asQueryParameter();
         String[] queryParams = queryParam.split( "," );
