@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
@@ -65,24 +66,24 @@ public class GetFeaturesOperation extends CommonFixture {
     private OpenApi3 apiModel;
 
     @DataProvider(name = "collectionItemUris")
-    public Object[][] collectionItemUris( ITestContext testContext ) {
-        Object[][] collectionsData = new Object[collections.size()][];
-        for ( int i = 0; i < collections.size(); i++ ) {
-            collectionsData[i] = new Object[] { collections.get( i ) };
+    public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( Map<String, Object> collection : collections ) {
+            collectionsData.add( new Object[] { collection } );
         }
-        return collectionsData;
+        return collectionsData.iterator();
     }
 
     @DataProvider(name = "collectionItemUrisWithLimit")
-    public Object[][] collectionItemUrisWithLimits( ITestContext testContext ) {
-        // TODO: find values between min and max described in OpenApi document (per collection)
-        Object[][] collectionsData = new Object[collections.size() * 2][];
-        int i = 0;
+    public Iterator<Object[]> collectionItemUrisWithLimits( ITestContext testContext ) {
+        List<Object[]> collectionsWithLimits = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
-            collectionsData[i++] = new Object[] { collection, 5 };
-            collectionsData[i++] = new Object[] { collection, 15 };
+            Parameter limit = findParameterByName( (String) collection.get( "name" ), "limit" );
+            int[] ints = getTwoRandomLimits( limit );
+            collectionsWithLimits.add( new Object[] { collection, ints[0] } );
+            collectionsWithLimits.add( new Object[] { collection, ints[0] } );
         }
-        return collectionsData;
+        return collectionsWithLimits.iterator();
     }
 
     @DataProvider(name = "collectionItemUrisWithBboxes")
@@ -741,6 +742,16 @@ public class GetFeaturesOperation extends CommonFixture {
     private void assertIntegerGreaterZero( int value, String propertyName ) {
         String msg = "Expected property '%s' to be an integer greater than 0, but was '%s'";
         assertTrue( value > 0, String.format( msg, propertyName, value ) );
+    }
+
+    private int[] getTwoRandomLimits( Parameter limit ) {
+        Schema schema = limit.getSchema();
+        int min = schema.getMinimum().intValue();
+        int max = schema.getMaximum().intValue();
+        if ( max > 25 )
+            max = 25;
+        Random random = new Random();
+        return random.ints( 2, min, max ).toArray();
     }
 
     private class ResponseData {

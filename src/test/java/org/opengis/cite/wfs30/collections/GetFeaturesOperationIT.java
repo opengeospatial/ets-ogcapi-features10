@@ -60,8 +60,9 @@ public class GetFeaturesOperationIT {
         getFeaturesOperation.initCommonFixture( testContext );
         getFeaturesOperation.retrieveRequiredInformationFromTestContext( testContext );
 
-        Object[][] collections = getFeaturesOperation.collectionItemUris( testContext );
-        for ( Object[] collection : collections ) {
+        Iterator<Object[]> collections = getFeaturesOperation.collectionItemUris( testContext );
+        for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
+            Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             getFeaturesOperation.validateGetFeaturesOperation( parameter );
             getFeaturesOperation.validateGetFeaturesOperationResponse_Links( parameter );
@@ -76,12 +77,13 @@ public class GetFeaturesOperationIT {
             // fails (parameter is missing): getFeaturesOperation.validateTimeParameter( parameter );
         }
 
-        Object[][] collectionsWithLimits = getFeaturesOperation.collectionItemUrisWithLimits( testContext );
-        for ( Object[] collection : collectionsWithLimits ) {
+        Iterator<Object[]> collectionsWithLimits = getFeaturesOperation.collectionItemUrisWithLimits( testContext );
+        for ( Iterator<Object[]> it = collectionsWithLimits; it.hasNext(); ) {
+            Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             int limit = (int) collection[1];
             // skipped (parameter missing):
-            // getFeaturesOperation.validateLimitParameter_requests( parameter, limit );
+            getFeaturesOperation.validateLimitParameter_requests( parameter, limit );
         }
 
         Iterator<Object[]> collectionsWithBboxes = getFeaturesOperation.collectionItemUrisWithBboxes( testContext );
