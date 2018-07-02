@@ -69,12 +69,11 @@ public class GetFeaturesOperation extends CommonFixture {
     @DataProvider(name = "collectionItemUrisWithLimit")
     public Object[][] collectionItemUrisWithLimits( ITestContext testContext ) {
         // TODO: find values between min and max described in OpenApi document (per collection)
-        Object[][] collectionsData = new Object[collections.size() * 3][];
+        Object[][] collectionsData = new Object[collections.size() * 2][];
         int i = 0;
         for ( Map<String, Object> collection : collections ) {
             collectionsData[i++] = new Object[] { collection, 5 };
-            collectionsData[i++] = new Object[] { collection, 100 };
-            collectionsData[i++] = new Object[] { collection, 1000 };
+            collectionsData[i++] = new Object[] { collection, 15 };
         }
         return collectionsData;
     }
@@ -394,11 +393,13 @@ public class GetFeaturesOperation extends CommonFixture {
         Date timeStampAfterResponse = new Date();
 
         JsonPath jsonPath = response.jsonPath();
+        int numberOfFeatures = jsonPath.getList( "features" ).size();
+        assertTrue( numberOfFeatures <= limit, "Number of features for collection with name " + collectionName
+                                               + " is unexpected (was " + numberOfFeatures + "), expected are " + limit
+                                               + " or less" );
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
         assertNumberReturned( collectionName, jsonPath );
         assertNumberMatched( collectionName, jsonPath );
-
-        // TODO: assert returned features
     }
 
     /**
