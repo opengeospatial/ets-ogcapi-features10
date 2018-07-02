@@ -7,12 +7,14 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
+import org.opengis.cite.wfs30.util.BBox;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -82,11 +84,12 @@ public class GetFeaturesOperationIT {
             // getFeaturesOperation.validateLimitParameter_requests( parameter, limit );
         }
 
-        Object[][] collectionsWithBboxes = getFeaturesOperation.collectionItemUrisWithBboxes( testContext );
-        for ( Object[] collection : collectionsWithBboxes ) {
+        Iterator<Object[]> collectionsWithBboxes = getFeaturesOperation.collectionItemUrisWithBboxes( testContext );
+        for ( Iterator<Object[]> collectionWithBbox = collectionsWithBboxes; collectionWithBbox.hasNext(); ) {
+            Object[] collection = collectionWithBbox.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            String bbox = (String) collection[1];
-            // fails: response is empty
+            BBox bbox = (BBox) collection[1];
+            // fails: in collections.json must the links (rel: item, type: application/geo+json) changed to https
             // getFeaturesOperation.validateBboxParameter_requests( parameter, bbox );
         }
 

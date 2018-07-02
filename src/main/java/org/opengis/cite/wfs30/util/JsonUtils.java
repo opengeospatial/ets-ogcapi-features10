@@ -23,6 +23,37 @@ public class JsonUtils {
     }
 
     /**
+     * Parses the extent from the passed collection.
+     *
+     * @param collection
+     *            the collection containing the extent to parse, never <code>null</code>
+     * @return the parsed bbox, <code>null</code> if no extent exists
+     * @throws IllegalArgumentException
+     *             if the number of items in the extent invalid
+     *
+     */
+    public static BBox parseExtent( Map<String, Object> collection ) {
+        Object extent = collection.get( "extent" );
+        if ( extent == null || !( extent instanceof Map ) )
+            return null;
+        Object spatial = ( (Map<String, Object>) extent ).get( "spatial" );
+        if ( spatial == null || !( spatial instanceof List ) )
+            return null;
+        List<Object> coords = (List<Object>) spatial;
+        if ( coords.size() == 4 ) {
+            double minX = (Float) coords.get( 0 );
+            double minY = (Float) coords.get( 1 );
+            double maxX = (Float) coords.get( 2 );
+            double maxY = (Float) coords.get( 3 );
+            return new BBox( minX, minY, maxX, maxY );
+        } else if ( coords.size() == 6 ) {
+            throw new IllegalArgumentException( "BBox with " + coords.size()
+                                                + " coordinates is currently not supported" );
+        }
+        throw new IllegalArgumentException( "BBox with " + coords.size() + " coordinates is invalid" );
+    }
+
+    /**
      * Parses all links with 'type' of one of the passed mediaTypes and the 'rel' property with the passed value.
      *
      * @param links

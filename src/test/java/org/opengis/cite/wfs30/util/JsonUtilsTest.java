@@ -1,12 +1,14 @@
 package org.opengis.cite.wfs30.util;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseExtent;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -29,6 +31,20 @@ public class JsonUtilsTest {
     public static void parseJson() {
         InputStream json = JsonUtilsTest.class.getResourceAsStream( "../collections/collections.json" );
         jsonPath = new JsonPath( json );
+    }
+
+    @Test
+    public void testParseExtent() {
+        List<Object> collections = jsonPath.getList( "collections" );
+        BBox extent = parseExtent( (Map<String, Object>) collections.get( 0 ) );
+
+        String queryParam = extent.asQueryParameter();
+        String[] queryParams = queryParam.split( "," );
+        assertThat( queryParams.length, is( 4 ) );
+        assertEquals( Double.parseDouble( queryParams[0] ), 5.61272621360749, 0.00001 );
+        assertEquals( Double.parseDouble( queryParams[1] ), 50.2373512077239, 0.00001 );
+        assertEquals( Double.parseDouble( queryParams[2] ), 9.58963433710139, 0.00001 );
+        assertEquals( Double.parseDouble( queryParams[3] ), 52.5286304537795, 0.00001 );
     }
 
     @Test

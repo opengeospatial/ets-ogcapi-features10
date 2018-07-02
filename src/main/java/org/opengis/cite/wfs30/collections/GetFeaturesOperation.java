@@ -10,6 +10,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaT
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseExtent;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -20,6 +21,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
+import org.opengis.cite.wfs30.util.BBox;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
@@ -79,23 +82,26 @@ public class GetFeaturesOperation extends CommonFixture {
     }
 
     @DataProvider(name = "collectionItemUrisWithBboxes")
-    public Object[][] collectionItemUrisWithBboxes( ITestContext testContext ) {
-        // TODO: find example with values in extend
-        Object[][] collectionsData = new Object[collections.size() * 5][];
+    public Iterator<Object[]> collectionItemUrisWithBboxes( ITestContext testContext ) {
+        List<Object[]> collectionsWithBboxes = new ArrayList<>();
         int i = 0;
         for ( Map<String, Object> collection : collections ) {
-            // These should include test cases which cross the
-            // meridian,
-            collectionsData[i++] = new Object[] { collection, new BBox( -1.5, 50.0, 1.5, 53.0 ) };
-            // equator,
-            collectionsData[i++] = new Object[] { collection, new BBox( -80.0, -5.0, -70.0, 5.0 ) };
-            // 180 longitude,
-            collectionsData[i++] = new Object[] { collection, new BBox( 177.0, 65.0, -177.0, 70.0 ) };
-            // and polar regions.
-            collectionsData[i++] = new Object[] { collection, new BBox( -70.0, -20.0, -70.0, 160.0 ) };
-            collectionsData[i++] = new Object[] { collection, new BBox( 70.0, -20.0, 70.0, 160.0 ) };
+            BBox extent = parseExtent( collection );
+            if ( extent != null ) {
+                collectionsWithBboxes.add( new Object[] { collection, extent } );
+                // These should include test cases which cross the
+                // meridian,
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( -1.5, 50.0, 1.5, 53.0 ) } );
+                // equator,
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( -80.0, -5.0, -70.0, 5.0 ) } );
+                // 180 longitude,
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( 177.0, 65.0, -177.0, 70.0 ) } );
+                // and polar regions.
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( -70.0, -20.0, -70.0, 160.0 ) } );
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( 70.0, -20.0, 70.0, 160.0 ) } );
+            }
         }
-        return collectionsData;
+        return collectionsWithBboxes.iterator();
     }
 
     @DataProvider(name = "collectionItemUrisWithTimes")
@@ -243,7 +249,8 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertTimeStamp( collectionName, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse );
+        assertTimeStamp( collectionName, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse,
+                         true );
     }
 
     /**
@@ -272,7 +279,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberReturned( collectionName, jsonPath );
+        assertNumberReturned( collectionName, jsonPath, true );
     }
 
     /**
@@ -306,7 +313,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberMatched( collectionName, jsonPath );
+        assertNumberMatched( collectionName, jsonPath, true );
     }
 
     /**
@@ -405,9 +412,9 @@ public class GetFeaturesOperation extends CommonFixture {
         assertTrue( numberOfFeatures <= limit, "Number of features for collection with name " + collectionName
                                                + " is unexpected (was " + numberOfFeatures + "), expected are " + limit
                                                + " or less" );
-        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
-        assertNumberReturned( collectionName, jsonPath );
-        assertNumberMatched( collectionName, jsonPath );
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
+        assertNumberReturned( collectionName, jsonPath, false );
+        assertNumberMatched( collectionName, jsonPath, false );
     }
 
     /**
@@ -507,9 +514,9 @@ public class GetFeaturesOperation extends CommonFixture {
         Date timeStampAfterResponse = new Date();
 
         JsonPath jsonPath = response.jsonPath();
-        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
-        assertNumberReturned( collectionName, jsonPath );
-        assertNumberMatched( collectionName, jsonPath );
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
+        assertNumberReturned( collectionName, jsonPath, false );
+        assertNumberMatched( collectionName, jsonPath, false );
 
         // TODO: assert returned features
     }
@@ -600,18 +607,21 @@ public class GetFeaturesOperation extends CommonFixture {
         Date timeStampAfterResponse = new Date();
 
         JsonPath jsonPath = response.jsonPath();
-        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse );
-        assertNumberReturned( collectionName, jsonPath );
-        assertNumberMatched( collectionName, jsonPath );
+        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
+        assertNumberReturned( collectionName, jsonPath, false );
+        assertNumberMatched( collectionName, jsonPath, false );
 
         // TODO: assert returned features
     }
 
     private void assertTimeStamp( String collectionName, JsonPath jsonPath, Date timeStampBeforeResponse,
-                                  Date timeStampAfterResponse ) {
+                                  Date timeStampAfterResponse, boolean skipIfNoTimeStamp ) {
         String timeStamp = jsonPath.getString( "timeStamp" );
         if ( timeStamp == null )
-            throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+            if ( skipIfNoTimeStamp )
+                throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+            else
+                return;
 
         Date date = parseAsDate( timeStamp );
         assertTrue( date.before( timeStampAfterResponse ),
@@ -623,23 +633,30 @@ public class GetFeaturesOperation extends CommonFixture {
                                                            + ") but was '" + timeStamp + "'" );
     }
 
-    private void assertNumberReturned( String collectionName, JsonPath jsonPath ) {
-        if ( !hasProperty( "numberReturned", jsonPath ) ) {
-            throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName + "'" );
-        }
-        int numberReturned = jsonPath.getInt( "numberReturned" );
+    private void assertNumberReturned( String collectionName, JsonPath jsonPath, boolean skipIfNoNumberReturned ) {
+        if ( !hasProperty( "numberReturned", jsonPath ) )
+            if ( skipIfNoNumberReturned )
+                throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName
+                                         + "'" );
+            else
+                return;
 
+        int numberReturned = jsonPath.getInt( "numberReturned" );
         int numberOfFeatures = jsonPath.getList( "features" ).size();
         assertEquals( numberReturned, numberOfFeatures, "Value of numberReturned (" + numberReturned
                                                         + ") does not match the number of features in the response ("
                                                         + numberOfFeatures + ")" );
     }
 
-    private void assertNumberMatched( String collectionName, JsonPath jsonPath )
+    private void assertNumberMatched( String collectionName, JsonPath jsonPath, boolean skipIfNoNumberMatched )
                             throws URISyntaxException {
-        if ( !hasProperty( "numberMatched", jsonPath ) ) {
-            throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName + "'" );
-        }
+        if ( !hasProperty( "numberMatched", jsonPath ) )
+            if ( skipIfNoNumberMatched )
+                throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName
+                                         + "'" );
+            else
+                return;
+
         int numberMatched = jsonPath.getInt( "numberMatched" );
         int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
         assertEquals( numberMatched, numberOfAllReturnedFeatures,
@@ -729,29 +746,4 @@ public class GetFeaturesOperation extends CommonFixture {
         }
     }
 
-    private class BBox {
-        double minX;
-
-        double minY;
-
-        double maxX;
-
-        double maxY;
-
-        private BBox( double minX, double minY, double maxX, double maxY ) {
-            this.minX = minX;
-            this.minY = minY;
-            this.maxX = maxX;
-            this.maxY = maxY;
-        }
-
-        private String asQueryParameter() {
-            StringBuilder sb = new StringBuilder();
-            sb.append( minX ).append( "," );
-            sb.append( minY ).append( "," );
-            sb.append( maxX ).append( "," );
-            sb.append( maxY );
-            return sb.toString();
-        }
-    }
 }
