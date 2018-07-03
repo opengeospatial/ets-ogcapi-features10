@@ -188,8 +188,8 @@ public class GetFeaturesOperation extends CommonFixture {
     public void validateGetFeaturesOperation( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
-        if ( getFeaturesUrl.isEmpty() )
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
+        if ( getFeaturesUrl == null )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
@@ -434,7 +434,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -539,7 +539,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -640,7 +640,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -722,7 +722,7 @@ public class GetFeaturesOperation extends CommonFixture {
         return null;
     }
 
-    private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
+    private String findGetFeaturesUrlForGeoJson( Map<String, Object> collection ) {
         List<Object> links = (List<Object>) collection.get( "links" );
         for ( Object linkObject : links ) {
             Map<String, Object> link = (Map<String, Object>) linkObject;
