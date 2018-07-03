@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,9 @@ import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.testng.ISuite;
 import org.testng.ITestContext;
+
+import com.reprezen.kaizen.oasparser.OpenApi3Parser;
+import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
 
@@ -34,6 +38,10 @@ public class GetFeatureOperationIT {
     @BeforeClass
     public static void initTestFixture()
                             throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+        URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+
         InputStream json = GetFeatureOperationIT.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
@@ -47,8 +55,8 @@ public class GetFeatureOperationIT {
 
         URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
+        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
         when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-
         when( suite.getAttribute( SuiteAttribute.FEATUREIDS.getName() ) ).thenReturn( featureIds );
     }
 
@@ -60,7 +68,6 @@ public class GetFeatureOperationIT {
 
         Iterator<Object[]> collections = getFeatureOperation.collectionFeatureId( testContext );
         Object[] collectionAndFeatureId = findCollectionByName( COLLECTION_NAME, collections );
-
         assertThat( collectionAndFeatureId, notNullValue() );
 
         Map<String, Object> collection = (Map<String, Object>) collectionAndFeatureId[0];
@@ -70,6 +77,15 @@ public class GetFeatureOperationIT {
         assertThat( featureId, notNullValue() );
 
         getFeatureOperation.validateGetFeatureOperation( collection, featureId );
+
+        Iterator<Object[]> iterator = getFeatureOperation.collectionItemUris( testContext );
+        Object[] collectionByName = findCollectionByName( COLLECTION_NAME, iterator );
+        assertThat( collectionByName, notNullValue() );
+
+        Map<String, Object> collection2 = (Map<String, Object>) collectionByName[0];
+        assertThat( collection2, notNullValue() );
+
+        getFeatureOperation.validateGetFeatureOperationResponse( collection2 );
     }
 
     private Object[] findCollectionByName( String collectionName, Iterator<Object[]> collections ) {
