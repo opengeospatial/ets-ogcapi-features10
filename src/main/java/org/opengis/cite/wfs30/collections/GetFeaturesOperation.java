@@ -14,6 +14,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRange;
 import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRangeWithDuration;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
@@ -40,6 +41,7 @@ import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -64,6 +66,8 @@ public class GetFeaturesOperation extends CommonFixture {
     private List<Map<String, Object>> collections;
 
     private OpenApi3 apiModel;
+
+    private Map<String, JsonPath> collectionNameAndResponses = new HashMap<>();
 
     @DataProvider(name = "collectionItemUris")
     public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
@@ -145,6 +149,17 @@ public class GetFeaturesOperation extends CommonFixture {
         this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
+    @AfterClass
+    public void storeFeatureIds( ITestContext testContext ) {
+        Map<String, String> collectionNameAndFeatureId = new HashMap<>();
+        for ( Map.Entry<String, JsonPath> collectionNameAndResponse : collectionNameAndResponses.entrySet() ) {
+            String featureId = parseFeatureId( collectionNameAndResponse.getValue() );
+            if ( featureId != null )
+                collectionNameAndFeatureId.put( collectionNameAndResponse.getKey(), featureId );
+        }
+        testContext.getSuite().setAttribute( SuiteAttribute.FEATUREIDS.getName(), collectionNameAndFeatureId );
+    }
+
     /**
      * A.4.4.9. Validate the Get Features Operation
      *
@@ -220,6 +235,8 @@ public class GetFeaturesOperation extends CommonFixture {
         TestPoint testPoint = testPointsForNamedCollection.get( 0 );
 
         JsonPath jsonPath = response.jsonPath();
+        collectionNameAndResponses.put( collectionName, jsonPath );
+
         List<Map<String, Object>> links = jsonPath.getList( "links" );
 
         // Validate that the retrieved document includes links for: Itself
