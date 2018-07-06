@@ -476,7 +476,7 @@ public class GetFeaturesOperation extends CommonFixture {
         assertNotNull( bbox, "Required bbox parameter for collections item with name '" + collectionName
                              + "'  in OpenAPI document is missing" );
 
-        String msg = "Expected property '%s' with value '%s' but was '%s'";
+        String msg = "Expected property '%s' with value '%s' for collections item with name '" + collectionName + "' but was '%s'.";
 
         assertEquals( bbox.getName(), "bbox", String.format( msg, "name", "bbox", bbox.getName() ) );
         assertEquals( bbox.getIn(), "query", String.format( msg, "in", "query", bbox.getIn() ) );
