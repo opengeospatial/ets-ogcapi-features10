@@ -170,7 +170,7 @@ public class GetFeaturesOperation extends CommonFixture {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.9. Validate the Get Features Operation (Requirement 17, 24)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections")
-    public void validateGetFeaturesOperation( Map<String, Object> collection ) {
+    public void validateTheGetFeaturesOperation( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
 
         String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
@@ -205,8 +205,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void validateTheGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
         if ( response == null )
@@ -259,8 +259,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void validateTheGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
         if ( response == null )
@@ -289,7 +289,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -322,8 +322,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void validateTheGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -367,8 +367,8 @@ public class GetFeaturesOperation extends CommonFixture {
      *            the collection under test, never <code>null</code>
      * 
      */
-    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateLimitParameter( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void limitParameter( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         Parameter limit = findParameterByName( collectionName, "limit" );
 
@@ -412,8 +412,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 19)", dataProvider = "collectionItemUrisWithLimit", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateLimitParameter_requests( Map<String, Object> collection, int limit )
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 19)", dataProvider = "collectionItemUrisWithLimit", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void limitParameter_requests( Map<String, Object> collection, int limit )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
@@ -468,8 +468,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.12. Bounding Box (Requirement 20)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateBboxParameter( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 20)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void boundingBoxParameter( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         Parameter bbox = findParameterByName( collectionName, "bbox" );
 
@@ -517,8 +517,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 21)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateBboxParameter_requests( Map<String, Object> collection, BBox bbox )
+    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 21)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void boundingBoxParameter_requests( Map<String, Object> collection, BBox bbox )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
@@ -568,8 +568,8 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.13. Time (Requirement 22)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateTimeParameter( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void timeParameter( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         Parameter time = findParameterByName( collectionName, "time" );
 
@@ -617,9 +617,9 @@ public class GetFeaturesOperation extends CommonFixture {
      *             if the creation of a uri fails
      *
      */
-    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 23)", dataProvider = "collectionItemUrisWithTimes", dependsOnMethods = "validateGetFeaturesOperation")
-    public void validateTimeParameter_requests( Map<String, Object> collection, String queryParameter, Object begin,
-                                                Object end )
+    @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 23)", dataProvider = "collectionItemUrisWithTimes", dependsOnMethods = "validateTheGetFeaturesOperation")
+    public void timeParameter_requests( Map<String, Object> collection, String queryParameter, Object begin,
+                                       Object end )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 

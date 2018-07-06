@@ -64,17 +64,17 @@ public class GetFeaturesOperationIT {
         for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
             Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            getFeaturesOperation.validateGetFeaturesOperation( parameter );
-            getFeaturesOperation.validateGetFeaturesOperationResponse_Links( parameter );
+            getFeaturesOperation.validateTheGetFeaturesOperation( parameter );
+            getFeaturesOperation.validateTheGetFeaturesOperationResponse_Links( parameter );
             // skipped (parameter missing):
-            // getFeaturesOperation.validateGetFeaturesOperationResponse_property_timeStamp( parameter );
+            // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_timeStamp( parameter );
             // skipped (parameter missing):
             // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
             // skipped (parameter missing):
-            // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberMatched( parameter );
-            getFeaturesOperation.validateLimitParameter( parameter );
-            // fails (schema->items->type missing): getFeaturesOperation.validateBboxParameter();
-            // fails (parameter is missing): getFeaturesOperation.validateTimeParameter( parameter );
+            // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_numberMatched( parameter );
+            getFeaturesOperation.limitParameter( parameter );
+            // fails (schema->items->type missing): getFeaturesOperation.boundingBoxParameter();
+            // fails (parameter is missing): getFeaturesOperation.timeParameter( parameter );
         }
 
         Iterator<Object[]> collectionsWithLimits = getFeaturesOperation.collectionItemUrisWithLimits( testContext );
@@ -83,7 +83,7 @@ public class GetFeaturesOperationIT {
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             int limit = (int) collection[1];
             // skipped (parameter missing):
-            getFeaturesOperation.validateLimitParameter_requests( parameter, limit );
+            getFeaturesOperation.limitParameter_requests( parameter, limit );
         }
 
         Iterator<Object[]> collectionsWithBboxes = getFeaturesOperation.collectionItemUrisWithBboxes( testContext );
@@ -92,7 +92,7 @@ public class GetFeaturesOperationIT {
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
             BBox bbox = (BBox) collection[1];
             // fails: in collections.json must the links (rel: item, type: application/geo+json) changed to https
-            // getFeaturesOperation.validateBboxParameter_requests( parameter, bbox );
+            // getFeaturesOperation.boundingBoxParameter_requests( parameter, bbox );
         }
 
         Iterator<Object[]> collectionsWithTimes = getFeaturesOperation.collectionItemUrisWithTimes( testContext );
@@ -102,7 +102,7 @@ public class GetFeaturesOperationIT {
             String queryParam = (String) collection[1];
             Object begin = collection[2];
             Object end = collection[3];
-            getFeaturesOperation.validateTimeParameter_requests( parameter, queryParam, begin, end );
+            getFeaturesOperation.timeParameter_requests( parameter, queryParam, begin, end );
         }
     }
 
