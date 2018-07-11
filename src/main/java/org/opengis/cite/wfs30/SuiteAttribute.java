@@ -3,6 +3,7 @@ package org.opengis.cite.wfs30;
 import java.io.File;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.sun.jersey.api.client.Client;
@@ -36,7 +37,12 @@ public enum SuiteAttribute {
     /**
      * Parsed collections from resource /collections; Added during execution.
      */
-    COLLECTIONS( "collections", List.class );
+    COLLECTIONS( "collections", List.class ),
+
+    /**
+     * Collection names assigned to a feature id parsed from resource /collections/{name}/items; Added during execution.
+     */
+    FEATUREIDS( "featureIds", Map.class );
 
     private final Class attrType;
 

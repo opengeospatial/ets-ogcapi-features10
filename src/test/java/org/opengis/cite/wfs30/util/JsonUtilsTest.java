@@ -12,6 +12,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRangeWithDuration;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 
@@ -33,12 +34,22 @@ import io.restassured.path.json.JsonPath;
  */
 public class JsonUtilsTest {
 
-    private static JsonPath jsonPath;
+    private static JsonPath jsonCollection;
+
+    private static JsonPath jsonCollectionItem;
 
     @BeforeClass
     public static void parseJson() {
-        InputStream json = JsonUtilsTest.class.getResourceAsStream( "../collections/collections.json" );
-        jsonPath = new JsonPath( json );
+        InputStream collectionJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collections.json" );
+        jsonCollection = new JsonPath( collectionJson );
+        InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collectionItems.json" );
+        jsonCollectionItem = new JsonPath( collectionItemsJson );
+    }
+
+    @Test
+    public void testParseFeatureId() {
+        String featureId = parseFeatureId( jsonCollectionItem );
+        assertThat( featureId, is( "DENW19AL0000geMFFL" ) );
     }
 
     @Test
@@ -90,7 +101,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testTemporalExtent() {
-        List<Object> collections = jsonPath.getList( "collections" );
+        List<Object> collections = jsonCollection.getList( "collections" );
         TemporalExtent extent = parseTemporalExtent( (Map<String, Object>) collections.get( 0 ) );
 
         ZonedDateTime begin = extent.getBegin();
@@ -101,7 +112,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testParseSpatialExtent() {
-        List<Object> collections = jsonPath.getList( "collections" );
+        List<Object> collections = jsonCollection.getList( "collections" );
         BBox extent = parseSpatialExtent( (Map<String, Object>) collections.get( 0 ) );
 
         String queryParam = extent.asQueryParameter();
@@ -115,7 +126,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testFindLinkToItself() {
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = jsonCollection.getList( "links" );
         Map<String, Object> linkToItself = findLinkByRel( links, "self" );
 
         assertThat( linkToItself.get( "href" ),
@@ -127,7 +138,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testLinkIncludesRelAndType() {
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = jsonCollection.getList( "links" );
         Map<String, Object> linkToItself = findLinkByRel( links, "self" );
         boolean includesRelAndType = linkIncludesRelAndType( linkToItself );
 
@@ -136,7 +147,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testFindLinksWithoutRelOrType() {
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = jsonCollection.getList( "links" );
         List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links );
 
         assertThat( linksWithoutRelOrType.size(), is( 0 ) );
@@ -144,7 +155,7 @@ public class JsonUtilsTest {
 
     @Test
     public void testFindLinksWithSupportedMediaTypeByRel() {
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = jsonCollection.getList( "links" );
         List<String> mediaTypes = Arrays.asList( "text/html", "application/json" );
         List<Map<String, Object>> linksWithMediaTypes = findLinksWithSupportedMediaTypeByRel( links, mediaTypes,
                                                                                               "alternate" );
@@ -154,13 +165,13 @@ public class JsonUtilsTest {
 
     @Test
     public void testHasProperty_true() {
-        boolean hasProperty = hasProperty( "links", jsonPath );
+        boolean hasProperty = hasProperty( "links", jsonCollection );
         assertThat( hasProperty, is( true ) );
     }
 
     @Test
     public void testHasProperty_false() {
-        boolean hasProperty = hasProperty( "doesNotExist", jsonPath );
+        boolean hasProperty = hasProperty( "doesNotExist", jsonCollection );
         assertThat( hasProperty, is( false ) );
     }
 

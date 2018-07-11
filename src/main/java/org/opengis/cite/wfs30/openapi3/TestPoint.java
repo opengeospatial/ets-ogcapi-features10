@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.openapi3;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -66,6 +67,20 @@ public class TestPoint {
     }
 
     /**
+     * Adds a new template replacement
+     * 
+     * @param key
+     *            the key of the template, never <code>null</code>
+     * @param value
+     *            the value of the template, never <code>null</code>
+     */
+    public void addTemplateReplacement( String key, String value ) {
+        if ( this.templateReplacement == null )
+            this.templateReplacement = new HashMap<>();
+        this.templateReplacement.put( key, value );
+    }
+
+    /**
      * @return a list of requirement classes the server conforms to, <code>null</code> if the conformance classes are
      *         not requested
      */
@@ -96,7 +111,9 @@ public class TestPoint {
      * @return the URI created from the template, never <code>null</code>
      */
     public String createUri() {
-        return uriTemplate.createURI( templateReplacement );
+        if ( templateReplacement != null )
+            return uriTemplate.createURI( templateReplacement );
+        return uriTemplate.createURI();
     }
 
     @Override
@@ -121,4 +138,5 @@ public class TestPoint {
     public int hashCode() {
         return Objects.hash( uriTemplate, templateReplacement, requirementClasses, contentMediaTypes );
     }
+
 }

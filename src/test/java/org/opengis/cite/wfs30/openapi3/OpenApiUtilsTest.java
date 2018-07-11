@@ -106,4 +106,22 @@ public class OpenApiUtilsTest {
         assertThat( contentMediaTypes.size(), is( 2 ) );
     }
 
+    @Test
+    public void testRetrieveTestPoints_COLLECTIONS_WithRegEx() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS, "flurstueck\\/items\\/\\{.*\\}" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        testPoint.addTemplateReplacement( "featureId", "abc" );
+        assertThat( testPoint.createUri(),
+                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items/abc" ) );
+        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
+        assertThat( contentMediaTypes.size(), is( 2 ) );
+    }
+
 }

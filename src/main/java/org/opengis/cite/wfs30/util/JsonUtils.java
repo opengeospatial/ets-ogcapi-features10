@@ -27,6 +27,25 @@ public class JsonUtils {
     }
 
     /**
+     * Parses the id of the first feature from the passed json.
+     * 
+     * @param collectionItemJson
+     *            the json document containing the features, never <code>null</code>
+     * @return the parsed id, may be <code>null</code> if no feature could be found
+     */
+    public static String parseFeatureId( JsonPath collectionItemJson ) {
+        List<Map<String, Object>> features = collectionItemJson.get( "features" );
+        if ( features == null )
+            return null;
+        for ( Map<String, Object> feature : features ) {
+            Object featureId = feature.get( "id" );
+            if ( featureId != null && featureId instanceof String )
+                return (String) featureId;
+        }
+        return null;
+    }
+
+    /**
      * Parses the temporal extent from the passed collection.
      *
      * @param collection

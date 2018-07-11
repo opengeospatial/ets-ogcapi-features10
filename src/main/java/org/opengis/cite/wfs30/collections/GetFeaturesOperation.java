@@ -14,6 +14,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRange;
 import static org.opengis.cite.wfs30.util.JsonUtils.formatDateRangeWithDuration;
 import static org.opengis.cite.wfs30.util.JsonUtils.hasProperty;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.wfs30.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
@@ -40,6 +41,7 @@ import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -64,6 +66,8 @@ public class GetFeaturesOperation extends CommonFixture {
     private List<Map<String, Object>> collections;
 
     private OpenApi3 apiModel;
+
+    private Map<String, JsonPath> collectionNameAndResponses = new HashMap<>();
 
     @DataProvider(name = "collectionItemUris")
     public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
@@ -145,6 +149,17 @@ public class GetFeaturesOperation extends CommonFixture {
         this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
+    @AfterClass
+    public void storeFeatureIds( ITestContext testContext ) {
+        Map<String, String> collectionNameAndFeatureId = new HashMap<>();
+        for ( Map.Entry<String, JsonPath> collectionNameAndResponse : collectionNameAndResponses.entrySet() ) {
+            String featureId = parseFeatureId( collectionNameAndResponse.getValue() );
+            if ( featureId != null )
+                collectionNameAndFeatureId.put( collectionNameAndResponse.getKey(), featureId );
+        }
+        testContext.getSuite().setAttribute( SuiteAttribute.FEATUREIDS.getName(), collectionNameAndFeatureId );
+    }
+
     /**
      * A.4.4.9. Validate the Get Features Operation
      *
@@ -173,8 +188,8 @@ public class GetFeaturesOperation extends CommonFixture {
     public void validateTheGetFeaturesOperation( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
-        if ( getFeaturesUrl.isEmpty() )
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
+        if ( getFeaturesUrl == null )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
@@ -205,7 +220,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
     public void validateTheGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -220,6 +235,8 @@ public class GetFeaturesOperation extends CommonFixture {
         TestPoint testPoint = testPointsForNamedCollection.get( 0 );
 
         JsonPath jsonPath = response.jsonPath();
+        collectionNameAndResponses.put( collectionName, jsonPath );
+
         List<Map<String, Object>> links = jsonPath.getList( "links" );
 
         // Validate that the retrieved document includes links for: Itself
@@ -259,7 +276,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
     public void validateTheGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -289,7 +306,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
     public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         ResponseData response = collectionNameAndResponse.get( collectionName );
@@ -322,7 +339,7 @@ public class GetFeaturesOperation extends CommonFixture {
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
+    @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation")
     public void validateTheGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
@@ -417,7 +434,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -522,7 +539,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -623,7 +640,7 @@ public class GetFeaturesOperation extends CommonFixture {
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
-        String getFeaturesUrl = findGetFeatureUrlForGeoJson( collection );
+        String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -705,7 +722,7 @@ public class GetFeaturesOperation extends CommonFixture {
         return null;
     }
 
-    private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
+    private String findGetFeaturesUrlForGeoJson( Map<String, Object> collection ) {
         List<Object> links = (List<Object>) collection.get( "links" );
         for ( Object linkObject : links ) {
             Map<String, Object> link = (Map<String, Object>) linkObject;
