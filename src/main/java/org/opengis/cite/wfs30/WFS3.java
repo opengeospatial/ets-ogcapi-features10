@@ -12,6 +12,8 @@ public class WFS3 {
 
     public static final String OPEN_API_MIME_TYPE = "application/openapi+json;version=3.0";
 
+    public static final String GEOJSON_MIME_TYPE = "application/geo+json";
+
     public enum PATH {
 
         API( "api" ), CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
