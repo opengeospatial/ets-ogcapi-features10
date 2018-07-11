@@ -103,7 +103,7 @@ public class GetFeatureOperation extends CommonFixture {
      *            the featureId to request, may be <code>null</code> (test will be skipped)
      */
     @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "getFeaturesBase")
-    public void validateGetFeatureOperation( Map<String, Object> collection, String featureId ) {
+    public void getFeatureOperation( Map<String, Object> collection, String featureId ) {
         String collectionName = (String) collection.get( "name" );
         if ( featureId == null )
             throw new SkipException( "No featureId available for collection '" + collectionName + "'" );
@@ -154,8 +154,8 @@ public class GetFeatureOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionItemUris", dependsOnMethods = "validateGetFeatureOperation")
-    public void validateGetFeatureOperationResponse( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionItemUris", dependsOnMethods = "getFeatureOperation")
+    public void validateTheGetFeatureOperationResponse( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         Response response = collectionNameAndResponse.get( collectionName );
         if ( response == null )

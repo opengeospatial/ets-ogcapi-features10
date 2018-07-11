@@ -76,7 +76,7 @@ public class GetFeatureOperationIT {
         String featureId = (String) collectionAndFeatureId[1];
         assertThat( featureId, notNullValue() );
 
-        getFeatureOperation.validateGetFeatureOperation( collection, featureId );
+        getFeatureOperation.getFeatureOperation( collection, featureId );
 
         Iterator<Object[]> iterator = getFeatureOperation.collectionItemUris( testContext );
         Object[] collectionByName = findCollectionByName( COLLECTION_NAME, iterator );
@@ -85,7 +85,7 @@ public class GetFeatureOperationIT {
         Map<String, Object> collection2 = (Map<String, Object>) collectionByName[0];
         assertThat( collection2, notNullValue() );
 
-        getFeatureOperation.validateGetFeatureOperationResponse( collection2 );
+        getFeatureOperation.validateTheGetFeatureOperationResponse( collection2 );
     }
 
     private Object[] findCollectionByName( String collectionName, Iterator<Object[]> collections ) {
