@@ -154,7 +154,7 @@ public class GetFeatureOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionItemUris", dependsOnMethods = "getFeatureOperation")
+    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionItemUris", dependsOnMethods = "getFeatureOperation", dependsOnGroups = "getFeaturesBase")
     public void validateTheGetFeatureOperationResponse( Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
         Response response = collectionNameAndResponse.get( collectionName );
