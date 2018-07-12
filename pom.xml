@@ -161,7 +161,7 @@
 
   <profiles>
     <profile>
-      <id>web-dependencies</id>
+      <id>web-tests</id>
       <build>
         <plugins>
           <plugin>
