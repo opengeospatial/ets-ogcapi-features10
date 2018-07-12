@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+  tools {
+    maven 'mvn'
+    jdk 'JDK 8'
+  }
+  stages {
+    stage('Preparation') {
+      steps{
+        deleteDir()
+        sh 'git clone git@github.com:opengeospatial/ets-wfs30.git .'
+      }
+    }
+    stage('Build') {
+      steps{
+        sh 'mvn --version'
+        sh 'mvn clean install site -Pweb-tests,docker'
+      }
+    }
+    stage('Results') {
+      steps{
+        junit '**/target/surefire-reports/TEST-*.xml'
+        archive 'target/*'
+      }
+    }
+  }
+}
