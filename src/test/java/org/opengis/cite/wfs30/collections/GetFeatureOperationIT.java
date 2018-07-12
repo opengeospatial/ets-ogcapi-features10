@@ -39,7 +39,7 @@ public class GetFeatureOperationIT {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = GetFeatureOperationIT.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
         InputStream json = GetFeatureOperationIT.class.getResourceAsStream( "../collections/collections.json" );

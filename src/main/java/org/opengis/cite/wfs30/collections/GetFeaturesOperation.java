@@ -41,7 +41,6 @@ import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
 import org.testng.SkipException;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -66,8 +65,6 @@ public class GetFeaturesOperation extends CommonFixture {
     private List<Map<String, Object>> collections;
 
     private OpenApi3 apiModel;
-
-    private Map<String, JsonPath> collectionNameAndResponses = new HashMap<>();
 
     @DataProvider(name = "collectionItemUris")
     public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
@@ -149,17 +146,6 @@ public class GetFeaturesOperation extends CommonFixture {
         this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
-    @AfterClass
-    public void storeFeatureIds( ITestContext testContext ) {
-        Map<String, String> collectionNameAndFeatureId = new HashMap<>();
-        for ( Map.Entry<String, JsonPath> collectionNameAndResponse : collectionNameAndResponses.entrySet() ) {
-            String featureId = parseFeatureId( collectionNameAndResponse.getValue() );
-            if ( featureId != null )
-                collectionNameAndFeatureId.put( collectionNameAndResponse.getKey(), featureId );
-        }
-        testContext.getSuite().setAttribute( SuiteAttribute.FEATUREIDS.getName(), collectionNameAndFeatureId );
-    }
-
     /**
      * A.4.4.9. Validate the Get Features Operation
      *
@@ -181,11 +167,13 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      * d) References: Requirement 17
      *
+     * @param testContext
+     *            used to fill the FEATUREIDS, never <code>null</code>
      * @param collection
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.9. Validate the Get Features Operation (Requirement 17, 24)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections")
-    public void validateTheGetFeaturesOperation( Map<String, Object> collection ) {
+    public void validateTheGetFeaturesOperation( ITestContext testContext, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
@@ -199,6 +187,8 @@ public class GetFeaturesOperation extends CommonFixture {
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
         collectionNameAndResponse.put( collectionName, responseData );
+
+        addFeatureIdToTestContext( testContext, collectionName, response );
     }
 
     /**
@@ -235,7 +225,6 @@ public class GetFeaturesOperation extends CommonFixture {
         TestPoint testPoint = testPointsForNamedCollection.get( 0 );
 
         JsonPath jsonPath = response.jsonPath();
-        collectionNameAndResponses.put( collectionName, jsonPath );
 
         List<Map<String, Object>> links = jsonPath.getList( "links" );
 
@@ -493,7 +482,8 @@ public class GetFeaturesOperation extends CommonFixture {
         assertNotNull( bbox, "Required bbox parameter for collections item with name '" + collectionName
                              + "'  in OpenAPI document is missing" );
 
-        String msg = "Expected property '%s' with value '%s' for collections item with name '" + collectionName + "' but was '%s'.";
+        String msg = "Expected property '%s' with value '%s' for collections item with name '" + collectionName
+                     + "' but was '%s'.";
 
         assertEquals( bbox.getName(), "bbox", String.format( msg, "name", "bbox", bbox.getName() ) );
         assertEquals( bbox.getIn(), "query", String.format( msg, "in", "query", bbox.getIn() ) );
@@ -635,8 +625,7 @@ public class GetFeaturesOperation extends CommonFixture {
      *
      */
     @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 23)", dataProvider = "collectionItemUrisWithTimes", dependsOnMethods = "validateTheGetFeaturesOperation")
-    public void timeParameter_requests( Map<String, Object> collection, String queryParameter, Object begin,
-                                       Object end )
+    public void timeParameter_requests( Map<String, Object> collection, String queryParameter, Object begin, Object end )
                             throws URISyntaxException {
         String collectionName = (String) collection.get( "name" );
 
@@ -655,6 +644,19 @@ public class GetFeaturesOperation extends CommonFixture {
         assertNumberMatched( collectionName, jsonPath, false );
 
         // TODO: assert returned features
+    }
+
+    private void addFeatureIdToTestContext( ITestContext testContext, String collectionName, Response response ) {
+        if ( response == null )
+            return;
+        Map<String, String> collectionNameAndFeatureId = (Map<String, String>) testContext.getSuite().getAttribute( SuiteAttribute.FEATUREIDS.getName() );
+        if ( collectionNameAndFeatureId == null ) {
+            collectionNameAndFeatureId = new HashMap<>();
+            testContext.getSuite().setAttribute( SuiteAttribute.FEATUREIDS.getName(), collectionNameAndFeatureId );
+        }
+        String featureId = parseFeatureId( response.jsonPath() );
+        if ( featureId != null )
+            collectionNameAndFeatureId.put( collectionName, featureId );
     }
 
     private void assertTimeStamp( String collectionName, JsonPath jsonPath, ZonedDateTime timeStampBeforeResponse,

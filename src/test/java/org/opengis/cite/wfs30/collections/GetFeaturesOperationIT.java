@@ -36,7 +36,7 @@ public class GetFeaturesOperationIT {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = GetFeaturesOperationIT.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
         InputStream json = GetFeaturesOperationIT.class.getResourceAsStream( "../collections/collections.json" );
@@ -64,7 +64,7 @@ public class GetFeaturesOperationIT {
         for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
             Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            getFeaturesOperation.validateTheGetFeaturesOperation( parameter );
+            getFeaturesOperation.validateTheGetFeaturesOperation( testContext, parameter );
             getFeaturesOperation.validateTheGetFeaturesOperationResponse_Links( parameter );
             // skipped (parameter missing):
             // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_timeStamp( parameter );
