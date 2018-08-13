@@ -45,8 +45,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
     private final Map<TestPoint, List<Map<String, Object>>> testPointAndCollections = new HashMap<>();
 
-    private final List<String> collectionNamesFromLandingPage = new ArrayList<>();
-
     private OpenApi3 apiModel;
 
     private Object[][] testPointsData;
@@ -73,19 +71,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
                 objects[i++] = new Object[] { testPointAndCollection.getKey(), collection };
         }
         return objects;
-    }
-
-    @BeforeClass
-    public void parseRequiredMetadata( ITestContext testContext ) {
-        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
-        JsonPath jsonPath = request.jsonPath();
-
-        List<Object> collections = jsonPath.getList( "collections" );
-        for ( Object collectionObject : collections ) {
-            Map<String, Object> collection = (Map<String, Object>) collectionObject;
-            String collectionName = (String) collection.get( "name" );
-            this.collectionNamesFromLandingPage.add( collectionName );
-        }
     }
 
     @BeforeClass
@@ -201,10 +186,8 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         JsonPath jsonPath = response.jsonPath();
         List<Object> collections = jsonPath.getList( "collections" );
 
-        List<String> missingCollectionNames = findMissingCollectionNames( collections );
-        assertTrue( missingCollectionNames.isEmpty(),
-                    "Feature Collection Metadata document must include a collections property for each collection in the dataset. Missing collection properties "
-                                            + missingCollectionNames );
+        // Test method cannot be verified as the provided collections are not known.
+
         this.testPointAndCollections.put( testPoint, createCollectionsMap( collections ) );
     }
 
@@ -354,26 +337,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     private void validateFeatureCollectionMetadataOperationResponse( Response response, Map<String, Object> collection ) {
         JsonPath jsonPath = response.jsonPath();
         assertEquals( collection, jsonPath.get() );
-    }
-
-    private List<String> findMissingCollectionNames( List<Object> collections ) {
-        List<String> missingCollectionNames = new ArrayList<>();
-        for ( String collectionNameFromLandingPage : this.collectionNamesFromLandingPage ) {
-            Map<String, Object> collection = findCollectionByName( collectionNameFromLandingPage, collections );
-            if ( collection == null )
-                missingCollectionNames.add( collectionNameFromLandingPage );
-        }
-        return missingCollectionNames;
-    }
-
-    private Map<String, Object> findCollectionByName( String collectionNameFromLandingPage, List<Object> collections ) {
-        for ( Object collectionObject : collections ) {
-            Map<String, Object> collection = (Map<String, Object>) collectionObject;
-            Object collectionName = collection.get( "name" );
-            if ( collectionNameFromLandingPage.equals( collectionName ) )
-                return collection;
-        }
-        return null;
     }
 
     private List<Map<String, Object>> createCollectionsMap( List<Object> collections ) {

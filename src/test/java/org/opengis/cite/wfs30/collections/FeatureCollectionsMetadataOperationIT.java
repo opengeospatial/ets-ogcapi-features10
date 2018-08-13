@@ -50,7 +50,6 @@ public class FeatureCollectionsMetadataOperationIT {
     public void testValidateFeatureCollectionsMetadataOperationResponse() {
         FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
-        featureCollectionsMetadataOperation.parseRequiredMetadata( testContext );
         featureCollectionsMetadataOperation.openApiDocument( testContext );
         UriTemplate conformanceUri = new UriTemplate( "https://www.ldproxy.nrw.de/kataster/collections" );
         TestPoint testPoint = new TestPoint( conformanceUri, mediaTypes() );
