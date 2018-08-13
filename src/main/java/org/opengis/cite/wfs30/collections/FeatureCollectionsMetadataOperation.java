@@ -2,6 +2,7 @@ package org.opengis.cite.wfs30.collections;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
@@ -12,7 +13,6 @@ import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -2,9 +2,9 @@ package org.opengis.cite.wfs30.apidescription;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.OPEN_API_MIME_TYPE;
-import static org.testng.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;

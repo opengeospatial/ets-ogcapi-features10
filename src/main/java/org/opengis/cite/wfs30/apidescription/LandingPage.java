@@ -2,7 +2,7 @@ package org.opengis.cite.wfs30.apidescription;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
-import static org.testng.Assert.assertTrue;
+import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
@@ -82,7 +82,7 @@ public class LandingPage extends CommonFixture {
                                           && linkTypes.contains( "data" );
         assertTrue( expectedLinkTypesExists,
                     "The landing page must include at least links with relation type 'service', 'conformance' and 'data', but contains "
-                                            + linkTypes );
+                                            + String.join( ", ", linkTypes ) );
 
     }
 

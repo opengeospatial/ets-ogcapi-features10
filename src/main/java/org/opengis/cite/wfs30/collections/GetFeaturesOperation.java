@@ -1,6 +1,8 @@
 package org.opengis.cite.wfs30.collections;
 
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.EtsAssert.assertFalse;
+import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
@@ -18,9 +20,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 import java.time.Duration;
