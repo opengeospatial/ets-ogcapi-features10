@@ -5,6 +5,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
@@ -21,7 +22,6 @@ import java.util.Map;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
-import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -217,8 +217,8 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateCollectionsMetadataDocument_Links( TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
-        List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
-                                                                                        collectionName );
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel,
+                                                                                                collectionName );
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );
@@ -274,13 +274,14 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     public void validateTheFeatureCollectionMetadataOperationAndResponse( TestPoint testPoint,
                                                                           Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
-        List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
-                                                                                        collectionName );
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel,
+                                                                                                collectionName );
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );
 
-        Response response = validateTheFeatureCollectionMetadataOperationAndResponse( testPointsForNamedCollection.get( 0 ) );
+        TestPoint testPointCollectionMetadata = testPointsForNamedCollection.get(0);
+        Response response = validateTheFeatureCollectionMetadataOperationAndResponse(testPointCollectionMetadata, collectionName);
         validateFeatureCollectionMetadataOperationResponse( response, collection );
     }
 
@@ -304,12 +305,14 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      * Go to test A.4.4.8
      *
      * d) References: Requirement 15
-     * 
+     *
      * @param testPoint
      *            to test, never <code>null</code>
+     * @param collectionName
      */
-    private Response validateTheFeatureCollectionMetadataOperationAndResponse( TestPoint testPoint ) {
+    private Response validateTheFeatureCollectionMetadataOperationAndResponse(TestPoint testPoint, String collectionName) {
         String testPointUri = testPoint.createUri();
+        // TODO: add collectionName as required
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         response.then().statusCode( 200 );
         return response;

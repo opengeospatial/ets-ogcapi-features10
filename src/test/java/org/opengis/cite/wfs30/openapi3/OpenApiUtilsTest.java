@@ -5,6 +5,9 @@ import static org.junit.Assert.assertThat;
 import static org.opengis.cite.wfs30.WFS3.PATH.API;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 
 import java.net.URL;
 import java.util.List;
@@ -90,12 +93,12 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPoints_COLLECTIONS_WithExtendedPath() {
+    public void testRetrieveTestPointsForCollectionMetadata() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS, "flurstueck" );
+        List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, "flurstueck" );
 
         assertThat( testPoints.size(), is( 1 ) );
 
@@ -107,12 +110,29 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPoints_COLLECTIONS_WithRegEx() {
+    public void testRetrieveTestPointsForCollection() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS, "flurstueck\\/items\\/\\{.*\\}" );
+        List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, "flurstueck" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        assertThat( testPoint.createUri(),
+                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items" ) );
+        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
+        assertThat( contentMediaTypes.size(), is( 2 ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForFeature() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, "flurstueck", "abc" );
 
         assertThat( testPoints.size(), is( 1 ) );
 
@@ -122,6 +142,70 @@ public class OpenApiUtilsTest {
                     is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items/abc" ) );
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         assertThat( contentMediaTypes.size(), is( 2 ) );
+    }
+
+    @Test
+    public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        assertThat( testPoint.createUri(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections" ) );
+        assertThat( testPoint.getContentMediaTypes().size(), is( 4 ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForCollectionMetadata_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, "test__countries" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
+        assertThat( testPoint.createUri(),
+                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForCollection_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, "test__countries" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
+        assertThat( testPoint.createUri(),
+                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries/items" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForFeature_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, "test__countries", "abc" );
+
+        assertThat( testPoints.size(), is( 1 ) );
+
+        TestPoint testPoint = testPoints.get( 0 );
+        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
+        testPoint.addTemplateReplacement( "featureId", "abc" );
+        assertThat( testPoint.createUri(),
+                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries/items/abc" ) );
     }
 
 }

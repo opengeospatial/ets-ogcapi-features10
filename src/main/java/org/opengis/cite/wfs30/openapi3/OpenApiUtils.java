@@ -1,11 +1,14 @@
 package org.opengis.cite.wfs30.openapi3;
 
+import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import org.opengis.cite.wfs30.WFS3.PATH;
 
@@ -18,6 +21,7 @@ import com.reprezen.kaizen.oasparser.model3.Response;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 import com.reprezen.kaizen.oasparser.model3.Server;
 import com.sun.jersey.api.uri.UriTemplate;
+import com.sun.jersey.api.uri.UriTemplateParser;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -26,6 +30,8 @@ public class OpenApiUtils {
 
     // as described in https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#fixed-fields
     private static final String DEFAULT_SERVER_URL = "/";
+
+    public static final String TEMPLATE = "\\{.*\\}";
 
     private OpenApiUtils() {
     }
@@ -54,7 +60,8 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
-        return retrieveTestPoints( apiModel, path, null );
+        String requestedPath = "/" + path.getPathItem();
+        return retrieveTestPoints( apiModel, requestedPath );
     }
 
     /**
@@ -63,21 +70,66 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
-     * @param path
-     *            the path the test points should be assigned to, never <code>null</code>
-     * @param extendedPath
+     * @param collectionName
      *            the extended path, may be <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path, String extendedPath ) {
+    public static List<TestPoint> retrieveTestPointsForCollectionMetadata( OpenApi3 apiModel, String collectionName ) {
         StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( path.getPathItem() );
-        if ( extendedPath != null ) {
-            if ( !extendedPath.startsWith( "/" ) )
-                requestedPath.append( "/" );
-            requestedPath.append( extendedPath );
-        }
-        List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath.toString() );
+        requestedPath.append( "/" );
+        requestedPath.append( COLLECTIONS.getPathItem() );
+        requestedPath.append( "/" );
+        requestedPath.append( collectionName );
+
+        return retrieveTestPoints( apiModel, requestedPath.toString() );
+    }
+
+    /**
+     * Parse the test points with the passed path including the extended path from the passed OpenApi3 document as
+     * described in A.4.3. Identify the Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @param collectionName
+     *            the extended path, may be <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPointsForCollection( OpenApi3 apiModel, String collectionName ) {
+        StringBuilder requestedPath = new StringBuilder();
+        requestedPath.append( "/" );
+        requestedPath.append( COLLECTIONS.getPathItem() );
+        requestedPath.append( "/" );
+        requestedPath.append( collectionName );
+        requestedPath.append( "/items" );
+
+        return retrieveTestPoints( apiModel, requestedPath.toString() );
+    }
+
+    /**
+     * Parse the test points with the passed path including the extended path from the passed OpenApi3 document as
+     * described in A.4.3. Identify the Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @param collectionName
+     *            the extended path, may be <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPointsForFeature( OpenApi3 apiModel, String collectionName,
+                                                                String featureId ) {
+        StringBuilder requestedPath = new StringBuilder();
+        requestedPath.append( "/" );
+        requestedPath.append( COLLECTIONS.getPathItem() );
+        requestedPath.append( "/" );
+        requestedPath.append( collectionName );
+        requestedPath.append( "/items/" );
+        requestedPath.append( featureId );
+
+        return retrieveTestPoints( apiModel, requestedPath.toString() );
+    }
+
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath ) {
+        List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
@@ -107,17 +159,13 @@ public class OpenApiUtils {
      *            never <code>null</code>
      */
     private static List<Path> identifyTestPoints( OpenApi3 apiModel ) {
-        List<String> paths = new ArrayList<>();
+        List<Path> allTestPoints = new ArrayList<>();
         for ( PATH path : PATH.values() )
-            paths.add( path.getPathItem() );
-        return identifyTestPoints( apiModel, paths );
+            allTestPoints.addAll( identifyTestPoints( apiModel, "/" + path.getPathItem() ) );
+        return allTestPoints;
     }
 
     private static List<Path> identifyTestPoints( OpenApi3 apiModel, String path ) {
-        return identifyTestPoints( apiModel, Collections.singletonList( path ) );
-    }
-
-    private static List<Path> identifyTestPoints( OpenApi3 apiModel, List<String> path ) {
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
         for ( Path pathItemObject : pathItemObjects.values() ) {
@@ -129,12 +177,10 @@ public class OpenApiUtils {
         return pathItems;
     }
 
-    private static boolean isRequestedPath( String pathString, List<String> path ) {
-        for ( String pathRequested : path ) {
-            if ( pathString.matches( "\\/" + pathRequested + "(\\/?)" ) )
-                return true;
-        }
-        return false;
+    private static boolean isRequestedPath( String pathUnderTest, String pathToMatch ) {
+        UriTemplateParser parser = new UriTemplateParser( pathUnderTest );
+        Matcher matcher = parser.getPattern().matcher( pathToMatch );
+        return matcher.matches();
     }
 
     /**
