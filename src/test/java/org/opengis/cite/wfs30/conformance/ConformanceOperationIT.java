@@ -16,7 +16,6 @@ import org.testng.ISuite;
 import org.testng.ITestContext;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
-import com.sun.jersey.api.uri.UriTemplate;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -42,8 +41,7 @@ public class ConformanceOperationIT {
     public void testApiDefinition() {
         ConformanceOperation conformanceOperation = new ConformanceOperation();
         conformanceOperation.initCommonFixture( testContext );
-        UriTemplate conformanceUri = new UriTemplate( "https://www.ldproxy.nrw.de/kataster/conformance" );
-        TestPoint testPoint = new TestPoint( conformanceUri, mediaTypes() );
+        TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/conformance", mediaTypes() );
         conformanceOperation.validateConformanceOperationAndResponse( testPoint );
     }
 

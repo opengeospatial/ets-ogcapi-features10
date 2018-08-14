@@ -23,6 +23,7 @@ import java.util.Map;
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
+import org.opengis.cite.wfs30.openapi3.UriBuilder;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
@@ -107,7 +108,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      */
     @Test(description = "Implements A.4.4.4. Validate the Feature Collections Metadata Operation (Requirement 9, 10)", groups = "collections", dataProvider = "collectionsUris", dependsOnGroups = "apidefinition")
     public void validateFeatureCollectionsMetadataOperation( TestPoint testPoint ) {
-        String testPointUri = testPoint.createUri();
+        String testPointUri = new UriBuilder( testPoint ).buildUrl();
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         response.then().statusCode( 200 );
         this.testPointAndResponses.put( testPoint, response );
@@ -280,8 +281,9 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );
 
-        TestPoint testPointCollectionMetadata = testPointsForNamedCollection.get(0);
-        Response response = validateTheFeatureCollectionMetadataOperationAndResponse(testPointCollectionMetadata, collectionName);
+        TestPoint testPointCollectionMetadata = testPointsForNamedCollection.get( 0 );
+        Response response = validateTheFeatureCollectionMetadataOperationAndResponse( testPointCollectionMetadata,
+                                                                                      collectionName );
         validateFeatureCollectionMetadataOperationResponse( response, collection );
     }
 
@@ -310,9 +312,9 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
      *            to test, never <code>null</code>
      * @param collectionName
      */
-    private Response validateTheFeatureCollectionMetadataOperationAndResponse(TestPoint testPoint, String collectionName) {
-        String testPointUri = testPoint.createUri();
-        // TODO: add collectionName as required
+    private Response validateTheFeatureCollectionMetadataOperationAndResponse( TestPoint testPoint,
+                                                                               String collectionName ) {
+        String testPointUri = new UriBuilder( testPoint ).collectionName( collectionName ).buildUrl();
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         response.then().statusCode( 200 );
         return response;

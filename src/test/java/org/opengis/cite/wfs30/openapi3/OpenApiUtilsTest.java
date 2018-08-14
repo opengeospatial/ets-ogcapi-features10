@@ -49,23 +49,23 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 4 ) );
 
         TestPoint testPointWIthIndex = testPoints.get( 0 );
-        assertThat( testPointWIthIndex.getTemplateReplacement().size(), is( 1 ) );
-        assertThat( testPointWIthIndex.getTemplateReplacement().get( "index" ), is( "10" ) );
+        assertThat( testPointWIthIndex.getPredefinedTemplateReplacement().size(), is( 1 ) );
+        assertThat( testPointWIthIndex.getPredefinedTemplateReplacement().get( "index" ), is( "10" ) );
 
         TestPoint testPointWIthIndexAndEnum1 = testPoints.get( 1 );
-        assertThat( testPointWIthIndexAndEnum1.getTemplateReplacement().size(), is( 2 ) );
-        assertThat( testPointWIthIndexAndEnum1.getTemplateReplacement().get( "index" ), is( "10" ) );
-        assertThat( testPointWIthIndexAndEnum1.getTemplateReplacement().get( "enum" ), is( "eins" ) );
+        assertThat( testPointWIthIndexAndEnum1.getPredefinedTemplateReplacement().size(), is( 2 ) );
+        assertThat( testPointWIthIndexAndEnum1.getPredefinedTemplateReplacement().get( "index" ), is( "10" ) );
+        assertThat( testPointWIthIndexAndEnum1.getPredefinedTemplateReplacement().get( "enum" ), is( "eins" ) );
 
         TestPoint testPointWIthIndexAndEnum2 = testPoints.get( 2 );
-        assertThat( testPointWIthIndexAndEnum2.getTemplateReplacement().size(), is( 2 ) );
-        assertThat( testPointWIthIndexAndEnum2.getTemplateReplacement().get( "index" ), is( "10" ) );
-        assertThat( testPointWIthIndexAndEnum2.getTemplateReplacement().get( "enum" ), is( "zwei" ) );
+        assertThat( testPointWIthIndexAndEnum2.getPredefinedTemplateReplacement().size(), is( 2 ) );
+        assertThat( testPointWIthIndexAndEnum2.getPredefinedTemplateReplacement().get( "index" ), is( "10" ) );
+        assertThat( testPointWIthIndexAndEnum2.getPredefinedTemplateReplacement().get( "enum" ), is( "zwei" ) );
 
         TestPoint testPointWIthIndexAndEnum3 = testPoints.get( 3 );
-        assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().size(), is( 2 ) );
-        assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().get( "index" ), is( "10" ) );
-        assertThat( testPointWIthIndexAndEnum3.getTemplateReplacement().get( "enum" ), is( "drei" ) );
+        assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().size(), is( 2 ) );
+        assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().get( "index" ), is( "10" ) );
+        assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().get( "enum" ), is( "drei" ) );
     }
 
     @Test
@@ -103,8 +103,11 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        assertThat( testPoint.createUri(),
-                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck" ) );
+        // assertThat( testPoint.createUri(),
+        // is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getPath(), is( "/collections/flurstueck" ) );
+
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         assertThat( contentMediaTypes.size(), is( 2 ) );
     }
@@ -120,8 +123,11 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        assertThat( testPoint.createUri(),
-                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items" ) );
+        // assertThat( testPoint.createUri(),
+        // is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getPath(), is( "/collections/flurstueck/items" ) );
+
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         assertThat( contentMediaTypes.size(), is( 2 ) );
     }
@@ -137,9 +143,8 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        testPoint.addTemplateReplacement( "featureId", "abc" );
-        assertThat( testPoint.createUri(),
-                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items/abc" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getPath(), is( "/collections/flurstueck/items/{featureId}" ) );
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         assertThat( contentMediaTypes.size(), is( 2 ) );
     }
@@ -155,7 +160,11 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        assertThat( testPoint.createUri(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections" ) );
+        // assertThat( testPoint.createUri(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections" ) );
+
+        assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
+        assertThat( testPoint.getPath(), is( "/collections" ) );
+
         assertThat( testPoint.getContentMediaTypes().size(), is( 4 ) );
     }
 
@@ -170,9 +179,9 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
-        assertThat( testPoint.createUri(),
-                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries" ) );
+
+        assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
+        assertThat( testPoint.getPath(), is( "/collections/{collectionId}" ) );
     }
 
     @Test
@@ -186,9 +195,8 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
-        assertThat( testPoint.createUri(),
-                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries/items" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
+        assertThat( testPoint.getPath(), is( "/collections/{collectionId}/items" ) );
     }
 
     @Test
@@ -202,10 +210,8 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        testPoint.addTemplateReplacement( "collectionId", "test__countries" );
-        testPoint.addTemplateReplacement( "featureId", "abc" );
-        assertThat( testPoint.createUri(),
-                    is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections/test__countries/items/abc" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
+        assertThat( testPoint.getPath(), is( "/collections/{collectionId}/items/{featureId}" ) );
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
+import org.opengis.cite.wfs30.openapi3.UriBuilder;
 import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -63,7 +64,7 @@ public class ConformanceOperation extends CommonFixture {
      * d) References: Requirement 5
      */
     private Response validateConformanceOperation( TestPoint testPoint ) {
-        String testPointUri = testPoint.createUri();
+        String testPointUri = new UriBuilder( testPoint ).buildUrl();
         return init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
     }
 

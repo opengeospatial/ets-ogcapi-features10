@@ -295,23 +295,24 @@ public class OpenApiUtils {
 
     private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer ) {
         String pathString = pathItemAndServer.pathItemObject.getPathString();
-        UriTemplate uriTemplate = new UriTemplate( pathItemAndServer.serverUrl + pathString );
         Response response = pathItemAndServer.operationObject.getResponse( "200" );
         Map<String, MediaType> contentMediaTypes = response.getContentMediaTypes();
 
+        UriTemplate uriTemplate = new UriTemplate( pathItemAndServer.serverUrl + pathString );
         if ( uriTemplate.getNumberOfTemplateVariables() == 0 ) {
-            TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
+            TestPoint testPoint = new TestPoint( pathItemAndServer.serverUrl, pathString, contentMediaTypes );
             uris.add( testPoint );
         } else {
             List<Map<String, String>> templateReplacements = collectTemplateReplacements( pathItemAndServer,
                                                                                           uriTemplate );
 
             if ( templateReplacements.isEmpty() ) {
-                TestPoint testPoint = new TestPoint( uriTemplate, contentMediaTypes );
+                TestPoint testPoint = new TestPoint( pathItemAndServer.serverUrl, pathString, contentMediaTypes );
                 uris.add( testPoint );
             } else {
                 for ( Map<String, String> templateReplacement : templateReplacements ) {
-                    TestPoint testPoint = new TestPoint( uriTemplate, templateReplacement, contentMediaTypes );
+                    TestPoint testPoint = new TestPoint( pathItemAndServer.serverUrl, pathString, templateReplacement,
+                                                         contentMediaTypes );
                     uris.add( testPoint );
                 }
             }

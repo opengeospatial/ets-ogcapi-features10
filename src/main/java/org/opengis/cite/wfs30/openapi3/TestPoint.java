@@ -1,12 +1,11 @@
 package org.opengis.cite.wfs30.openapi3;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
-import com.sun.jersey.api.uri.UriTemplate;
 
 /**
  * Encapsulates a Test Point with the UriTemplate and predefined replacements.
@@ -15,69 +14,70 @@ import com.sun.jersey.api.uri.UriTemplate;
  */
 public class TestPoint {
 
-    private UriTemplate uriTemplate;
+    private final String serverUrl;
 
-    private Map<String, String> templateReplacement;
+    private final String path;
+
+    private Map<String, String> predefinedTemplateReplacement;
 
     private List<String> requirementClasses;
 
     private Map<String, MediaType> contentMediaTypes;
 
     /**
-     * Instantiates a TestPoint with UriTemplate but without defined replacements.
+     * Instantiates a TestPoint with UriTemplate but without predefined replacements.
      * 
-     * @param uriTemplate
-     *            never <code>null</code>
+     * @param serverUrl
+     *            the serverUrl, never <code>null</code>
+     * @param path
+     *            the path never, <code>null</code>
      * @param contentMediaTypes
      *            the content media types for the GET operation with response "200", may be <code>null</code>
      */
-    public TestPoint( UriTemplate uriTemplate, Map<String, MediaType> contentMediaTypes ) {
-        this( uriTemplate, null, contentMediaTypes );
+    public TestPoint( String serverUrl, String path, Map<String, MediaType> contentMediaTypes ) {
+        this( serverUrl, path, Collections.emptyMap(), contentMediaTypes );
     }
 
     /**
      * Instantiates a TestPoint with UriTemplate and predefined replacements.
      *
-     * @param uriTemplate
-     *            never <code>null</code>
-     * @param templateReplacement
-     *            may be <code>null</code>
+     * @param serverUrl
+     *            the serverUrl, never <code>null</code>
+     * @param path
+     *            the path, never <code>null</code>
+     * @param predefinedTemplateReplacement
+     *            a list of predefined replacements never <code>null</code>
      * @param contentMediaTypes
      *            the content media types for the GET operation with response "200", may be <code>null</code>
      */
-    public TestPoint( UriTemplate uriTemplate, Map<String, String> templateReplacement,
+    public TestPoint( String serverUrl, String path, Map<String, String> predefinedTemplateReplacement,
                       Map<String, MediaType> contentMediaTypes ) {
-        this.uriTemplate = uriTemplate;
-        this.templateReplacement = templateReplacement;
+        this.serverUrl = serverUrl;
+        this.path = path;
+        this.predefinedTemplateReplacement = Collections.unmodifiableMap( predefinedTemplateReplacement );
         this.contentMediaTypes = contentMediaTypes;
     }
 
     /**
-     * @return the UriTemplate, never <code>null</code>
+     *
+     * @return the serverUrl never <code>null</code>
      */
-    public UriTemplate getUriTemplate() {
-        return uriTemplate;
+    public String getServerUrl() {
+        return serverUrl;
     }
 
     /**
-     * @return predefined replacements, may be <code>null</code>
+     * @return the path never, <code>null</code>
      */
-    public Map<String, String> getTemplateReplacement() {
-        return templateReplacement;
+    public String getPath() {
+        return path;
     }
 
     /**
-     * Adds a new template replacement
-     * 
-     * @param key
-     *            the key of the template, never <code>null</code>
-     * @param value
-     *            the value of the template, never <code>null</code>
+     * @return an unmodifiable mao with predefined replacements, may be empty but never <code>null</code>
      */
-    public void addTemplateReplacement( String key, String value ) {
-        if ( this.templateReplacement == null )
-            this.templateReplacement = new HashMap<>();
-        this.templateReplacement.put( key, value );
+    public Map<String, String> getPredefinedTemplateReplacement() {
+        return predefinedTemplateReplacement;
     }
 
     /**
@@ -105,20 +105,9 @@ public class TestPoint {
         return contentMediaTypes;
     }
 
-    /**
-     * Creates an URI from the template with the replacement.
-     * 
-     * @return the URI created from the template, never <code>null</code>
-     */
-    public String createUri() {
-        if ( templateReplacement != null )
-            return uriTemplate.createURI( templateReplacement );
-        return uriTemplate.createURI();
-    }
-
     @Override
     public String toString() {
-        return "Pattern: " + uriTemplate.getPattern() + ", Replacements: " + templateReplacement;
+        return "Server URL: " + serverUrl + " , Path: " + path + ", Replacements: " + predefinedTemplateReplacement;
     }
 
     @Override
@@ -128,15 +117,16 @@ public class TestPoint {
         if ( o == null || getClass() != o.getClass() )
             return false;
         TestPoint testPoint = (TestPoint) o;
-        return Objects.equals( uriTemplate, testPoint.uriTemplate )
-               && Objects.equals( templateReplacement, testPoint.templateReplacement )
+        return Objects.equals( serverUrl, testPoint.serverUrl )
+               && Objects.equals( path, testPoint.predefinedTemplateReplacement )
+               && Objects.equals( predefinedTemplateReplacement, testPoint.path )
                && Objects.equals( requirementClasses, testPoint.requirementClasses )
                && Objects.equals( contentMediaTypes, testPoint.contentMediaTypes );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( uriTemplate, templateReplacement, requirementClasses, contentMediaTypes );
+        return Objects.hash( serverUrl, path, predefinedTemplateReplacement, requirementClasses, contentMediaTypes );
     }
 
 }
