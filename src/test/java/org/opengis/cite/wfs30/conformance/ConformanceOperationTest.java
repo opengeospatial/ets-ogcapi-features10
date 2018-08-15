@@ -1,8 +1,13 @@
 package org.opengis.cite.wfs30.conformance;
 
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.opengis.cite.wfs30.conformance.RequirementClass.CORE;
+import static org.opengis.cite.wfs30.conformance.RequirementClass.GEOJSON;
+import static org.opengis.cite.wfs30.conformance.RequirementClass.GMLSF2;
+import static org.opengis.cite.wfs30.conformance.RequirementClass.HTML;
+import static org.opengis.cite.wfs30.conformance.RequirementClass.OPENAPI30;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,14 +26,10 @@ public class ConformanceOperationTest {
         ConformanceOperation conformanceOperationTest = new ConformanceOperation();
         InputStream json = ConformanceOperationTest.class.getResourceAsStream( "req-classes.json" );
         JsonPath jsonPath = new JsonPath( json );
-        List<String> requirementClasses = conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
+        List<RequirementClass> requirementClasses = conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
 
         assertThat( requirementClasses.size(), is( 5 ) );
-        assertThat( requirementClasses, hasItem( "http://www.opengis.net/spec/wfs-1/3.0/req/core" ) );
-        assertThat( requirementClasses, hasItem( "http://www.opengis.net/spec/wfs-1/3.0/req/oas30" ) );
-        assertThat( requirementClasses, hasItem( "http://www.opengis.net/spec/wfs-1/3.0/req/html" ) );
-        assertThat( requirementClasses, hasItem( "http://www.opengis.net/spec/wfs-1/3.0/req/geojson" ) );
-        assertThat( requirementClasses, hasItem( "http://www.opengis.net/spec/wfs-1/3.0/req/gmlsf2" ) );
+        assertThat( requirementClasses, hasItems( CORE, OPENAPI30, HTML, GEOJSON, GMLSF2 ) );
     }
 
     @Test(expectedExceptions = AssertionError.class)

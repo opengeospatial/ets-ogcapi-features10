@@ -3,7 +3,6 @@ package org.opengis.cite.wfs30.collections;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
-import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
@@ -18,16 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.opengis.cite.wfs30.CommonFixture;
+import org.opengis.cite.wfs30.CommonDataFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
-import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
@@ -36,7 +33,7 @@ import io.restassured.response.Response;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class GetFeatureOperation extends CommonFixture {
+public class GetFeatureOperation extends CommonDataFixture {
 
     private OpenApi3 apiModel;
 
@@ -151,14 +148,6 @@ public class GetFeatureOperation extends CommonFixture {
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForFeature( apiModel, collectionName,
-                                                                                     featureId );
-
-        if ( testPointsForNamedCollection.isEmpty() )
-            throw new SkipException( "Could not find collection with name " + collectionName
-                                     + " in the OpenAPI document" );
-        TestPoint testPoint = testPointsForNamedCollection.get( 0 );
-
         JsonPath jsonPath = response.jsonPath();
 
         List<Map<String, Object>> links = jsonPath.getList( "links" );
@@ -179,7 +168,7 @@ public class GetFeatureOperation extends CommonFixture {
         // Validate that the retrieved document includes links for:
         // Alternate encodings of this document in every other media type as identified by the compliance classes for
         // this server
-        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPoint, linkToSelf );
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures( linkToSelf );
         List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport,
                                                                                          "alternate" );
         List<String> typesWithoutLink = findUnsupportedTypes( alternateLinks, mediaTypesToSupport );
@@ -192,15 +181,6 @@ public class GetFeatureOperation extends CommonFixture {
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links for alternate encodings in Get Feature Operation Response must include a rel and type parameter. Missing for links "
                                             + linksWithoutRelOrType );
-    }
-
-    private List<String> createListOfMediaTypesToSupport( TestPoint testPoint, Map<String, Object> linkToSelf ) {
-        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
-        List<String> mediaTypesToSupport = new ArrayList<>();
-        mediaTypesToSupport.addAll( contentMediaTypes.keySet() );
-        if ( linkToSelf != null )
-            mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
-        return mediaTypesToSupport;
     }
 
     private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {

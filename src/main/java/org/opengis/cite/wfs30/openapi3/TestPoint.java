@@ -1,7 +1,6 @@
 package org.opengis.cite.wfs30.openapi3;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,8 +18,6 @@ public class TestPoint {
     private final String path;
 
     private Map<String, String> predefinedTemplateReplacement;
-
-    private List<String> requirementClasses;
 
     private Map<String, MediaType> contentMediaTypes;
 
@@ -81,24 +78,6 @@ public class TestPoint {
     }
 
     /**
-     * @return a list of requirement classes the server conforms to, <code>null</code> if the conformance classes are
-     *         not requested
-     */
-    public List<String> getRequirementClasses() {
-        return requirementClasses;
-    }
-
-    /**
-     * Adds the requirement classes the server conforms to
-     * 
-     * @param requirementClasses
-     *            never <code>null</code>
-     */
-    public void addRequirementClasses( List<String> requirementClasses ) {
-        this.requirementClasses = requirementClasses;
-    }
-
-    /**
      * @return the content media types for the GET operation with response "200", may be <code>null</code>
      */
     public Map<String, MediaType> getContentMediaTypes() {
@@ -120,13 +99,12 @@ public class TestPoint {
         return Objects.equals( serverUrl, testPoint.serverUrl )
                && Objects.equals( path, testPoint.predefinedTemplateReplacement )
                && Objects.equals( predefinedTemplateReplacement, testPoint.path )
-               && Objects.equals( requirementClasses, testPoint.requirementClasses )
                && Objects.equals( contentMediaTypes, testPoint.contentMediaTypes );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( serverUrl, path, predefinedTemplateReplacement, requirementClasses, contentMediaTypes );
+        return Objects.hash( serverUrl, path, predefinedTemplateReplacement, contentMediaTypes );
     }
 
 }
