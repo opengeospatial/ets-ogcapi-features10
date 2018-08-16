@@ -11,6 +11,8 @@ for more information, including the API documentation.
 The test suite is built using [Apache Maven v3](https://maven.apache.org/). The options 
 for running the suite are summarized below.
 
+As entry point the Landing Page of the WFS 3.0 is expected.
+
 #### 1. Integrated development environment (IDE)
 
 Use a Java IDE such as Eclipse, NetBeans, or IntelliJ. Clone the repository and build the project.
@@ -28,7 +30,7 @@ You can modify the sample file in `src/main/config/test-run-props.xml`
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <comment>Test run arguments</comment>
-  <entry key="iut">http://schemas.opengis.net/gml/3.2.1/gml.xsd</entry>
+  <entry key="iut">https://www.ldproxy.nrw.de/rest/services/kataster/</entry>
 </properties>
 ```
 
@@ -41,7 +43,12 @@ One of the build artifacts is an "all-in-one" JAR file that includes the test
 suite and all of its dependencies; this makes it very easy to execute the test 
 suite in a command shell:
 
-`java -jar ets-wfs30-0.1-SNAPSHOT-aio.jar [-o|--outputDir $TMPDIR] [test-run-props.xml]`
+`java -jar ets-wfs30-${version}-aio.jar [-o|--outputDir $TMPDIR] [test-run-props.xml]`
+
+#### 4. Docker
+
+This test suite comes with a Dockerfile which can be used to easily setup the OGC test harness with
+the test suite. Details can be found on [How to create Docker Images of test suites](https://github.com/opengeospatial/cite/wiki/How-to-create-Docker-Images-of-test-suites).
 
 #### 3. OGC test harness
 
@@ -49,7 +56,6 @@ Use [TEAM Engine](https://github.com/opengeospatial/teamengine), the official OG
 The latest test suite release are usually available at the [beta testing facility](http://cite.opengeospatial.org/te2/). 
 You can also [build and deploy](https://github.com/opengeospatial/teamengine) the test 
 harness yourself and use a local installation.
-
 
 ### How to contribute
 
