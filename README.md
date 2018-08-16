@@ -45,12 +45,12 @@ suite in a command shell:
 
 `java -jar ets-wfs30-${version}-aio.jar [-o|--outputDir $TMPDIR] [test-run-props.xml]`
 
-#### 4. Docker
+#### 3. Docker
 
 This test suite comes with a Dockerfile which can be used to easily setup the OGC test harness with
 the test suite. Details can be found on [How to create Docker Images of test suites](https://github.com/opengeospatial/cite/wiki/How-to-create-Docker-Images-of-test-suites).
 
-#### 3. OGC test harness
+#### 4. OGC test harness
 
 Use [TEAM Engine](https://github.com/opengeospatial/teamengine), the official OGC test harness.
 The latest test suite release are usually available at the [beta testing facility](http://cite.opengeospatial.org/te2/). 
