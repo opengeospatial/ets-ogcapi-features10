@@ -3,8 +3,7 @@ package org.opengis.cite.wfs30.collections;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
-import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
-import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
@@ -44,15 +43,6 @@ public class GetFeatureOperation extends CommonFixture {
     private List<Map<String, Object>> collections;
 
     private final Map<String, Response> collectionNameAndResponse = new HashMap<>();
-
-    @DataProvider(name = "collectionItemUris")
-    public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map<String, Object> collection : collections ) {
-            collectionsData.add( new Object[] { collection } );
-        }
-        return collectionsData.iterator();
-    }
 
     @DataProvider(name = "collectionFeatureId")
     public Iterator<Object[]> collectionFeatureId( ITestContext testContext ) {
@@ -154,15 +144,16 @@ public class GetFeatureOperation extends CommonFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionItemUris", dependsOnMethods = "getFeatureOperation")
-    public void validateTheGetFeatureOperationResponse( Map<String, Object> collection ) {
+    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionFeatureId", dependsOnMethods = "getFeatureOperation")
+    public void validateTheGetFeatureOperationResponse( Map<String, Object> collection, String featureId ) {
         String collectionName = (String) collection.get( "name" );
         Response response = collectionNameAndResponse.get( collectionName );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPoints( apiModel, COLLECTIONS,
-                                                                           collectionName + "\\/items\\/\\{.*\\}" );
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForFeature( apiModel, collectionName,
+                                                                                     featureId );
+
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );

@@ -4,6 +4,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.wfs30.util.JsonUtils.collectNumberOfAllReturnedFeatures;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
@@ -35,7 +36,6 @@ import java.util.Random;
 
 import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
-import org.opengis.cite.wfs30.openapi3.OpenApiUtils;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
@@ -217,8 +217,7 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
-        List<TestPoint> testPointsForNamedCollection = OpenApiUtils.retrieveTestPoints( apiModel, COLLECTIONS,
-                                                                                        collectionName + "/items" );
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollection( apiModel, collectionName );
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with name " + collectionName
                                      + " in the OpenAPI document" );

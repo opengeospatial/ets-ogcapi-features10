@@ -19,7 +19,6 @@ import org.testng.ITestContext;
 import com.reprezen.kaizen.oasparser.OpenApi3Parser;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
-import com.sun.jersey.api.uri.UriTemplate;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -50,10 +49,8 @@ public class FeatureCollectionsMetadataOperationIT {
     public void testValidateFeatureCollectionsMetadataOperationResponse() {
         FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
-        featureCollectionsMetadataOperation.parseRequiredMetadata( testContext );
         featureCollectionsMetadataOperation.openApiDocument( testContext );
-        UriTemplate conformanceUri = new UriTemplate( "https://www.ldproxy.nrw.de/kataster/collections" );
-        TestPoint testPoint = new TestPoint( conformanceUri, mediaTypes() );
+        TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/collections", mediaTypes() );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections( testPoint );
@@ -64,7 +61,8 @@ public class FeatureCollectionsMetadataOperationIT {
             Map<String, Object> collection = (Map<String, Object>) object[1];
             featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Links( tp, collection );
             featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Extent( tp, collection );
-            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( tp, collection );
+            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( tp,
+                                                                                                          collection );
         }
     }
 
