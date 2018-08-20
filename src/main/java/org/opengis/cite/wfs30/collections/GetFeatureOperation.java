@@ -1,6 +1,7 @@
 package org.opengis.cite.wfs30.collections;
 
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
@@ -9,7 +10,6 @@ import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.wfs30.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
