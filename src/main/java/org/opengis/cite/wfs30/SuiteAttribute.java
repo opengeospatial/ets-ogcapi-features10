@@ -35,6 +35,11 @@ public enum SuiteAttribute {
     API_MODEL( "apiModel", OpenApi3.class ),
 
     /**
+     * Requirement classes parsed from /conformance; Added during execution.
+     */
+    REQUIREMENTCLASSES( "requirementclasses", List.class ),
+
+    /**
      * Parsed collections from resource /collections; Added during execution.
      */
     COLLECTIONS( "collections", List.class ),

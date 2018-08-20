@@ -3,6 +3,7 @@ package org.opengis.cite.wfs30.conformance;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
+import static org.opengis.cite.wfs30.SuiteAttribute.REQUIREMENTCLASSES;
 import static org.opengis.cite.wfs30.WFS3.PATH.CONFORMANCE;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
 import static org.testng.Assert.assertNotNull;
@@ -14,6 +15,7 @@ import org.opengis.cite.wfs30.CommonFixture;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.openapi3.UriBuilder;
 import org.testng.ITestContext;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -27,11 +29,18 @@ import io.restassured.response.Response;
  */
 public class ConformanceOperation extends CommonFixture {
 
+    private List<RequirementClass> requirementClasses;
+
     @DataProvider(name = "conformanceUris")
     public Object[][] conformanceUris( ITestContext testContext ) {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, CONFORMANCE );
         return new Object[][] { testPoints.toArray() };
+    }
+
+    @AfterClass
+    public void storeRequirementClassesInTestContext( ITestContext testContext ) {
+        testContext.getSuite().setAttribute( REQUIREMENTCLASSES.getName(), this.requirementClasses );
     }
 
     /**
@@ -43,7 +52,7 @@ public class ConformanceOperation extends CommonFixture {
     @Test(description = "Implements A.4.4.2. Validate Conformance Operation (Requirement 5) and A.4.4.3. Validate Conformance Operation Response (Requirement 6)", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
         Response response = validateConformanceOperation( testPoint );
-        validateConformanceOperationResponse( testPoint, response );
+        validateConformanceOperationResponse( response );
     }
 
     /**
@@ -88,12 +97,11 @@ public class ConformanceOperation extends CommonFixture {
      *
      * d) References: Requirement 6
      */
-    private void validateConformanceOperationResponse( TestPoint testPoint, Response response ) {
+    private void validateConformanceOperationResponse( Response response ) {
         response.then().statusCode( 200 );
 
         JsonPath jsonPath = response.jsonPath();
-        List<String> requirementClasses = parseAndValidateRequirementClasses( jsonPath );
-        testPoint.addRequirementClasses( requirementClasses );
+        this.requirementClasses = parseAndValidateRequirementClasses( jsonPath );
     }
 
     /**
@@ -103,15 +111,18 @@ public class ConformanceOperation extends CommonFixture {
      * @throws AssertionError
      *             if the json does not follow the expected structure
      */
-    List<String> parseAndValidateRequirementClasses( JsonPath jsonPath ) {
-        List<String> requirementClasses = new ArrayList<>();
+    List<RequirementClass> parseAndValidateRequirementClasses( JsonPath jsonPath ) {
+        List<RequirementClass> requirementClasses = new ArrayList<>();
         List<Object> conformsTo = jsonPath.getList( "conformsTo" );
         assertNotNull( conformsTo, "Missing member 'conformsTo'." );
 
         for ( Object conformTo : conformsTo ) {
-            if ( conformTo instanceof String )
-                requirementClasses.add( (String) conformTo );
-            else
+            if ( conformTo instanceof String ) {
+                String conformanceClass = (String) conformTo;
+                RequirementClass requirementClass = RequirementClass.byConformanceClass( conformanceClass );
+                if ( requirementClass != null )
+                    requirementClasses.add( requirementClass );
+            } else
                 throw new AssertionError( "At least one element array 'conformsTo' is not a string value (" + conformTo
                                           + ")" );
         }

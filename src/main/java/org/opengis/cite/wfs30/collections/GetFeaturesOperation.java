@@ -4,7 +4,6 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
-import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.wfs30.util.JsonUtils.collectNumberOfAllReturnedFeatures;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
@@ -34,9 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.opengis.cite.wfs30.CommonFixture;
+import org.opengis.cite.wfs30.CommonDataFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
-import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
@@ -45,7 +43,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
@@ -58,7 +55,7 @@ import io.restassured.response.Response;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class GetFeaturesOperation extends CommonFixture {
+public class GetFeaturesOperation extends CommonDataFixture {
 
     private final Map<String, ResponseData> collectionNameAndResponse = new HashMap<>();
 
@@ -217,12 +214,6 @@ public class GetFeaturesOperation extends CommonFixture {
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with name " + collectionName );
 
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollection( apiModel, collectionName );
-        if ( testPointsForNamedCollection.isEmpty() )
-            throw new SkipException( "Could not find collection with name " + collectionName
-                                     + " in the OpenAPI document" );
-        TestPoint testPoint = testPointsForNamedCollection.get( 0 );
-
         JsonPath jsonPath = response.jsonPath();
 
         List<Map<String, Object>> links = jsonPath.getList( "links" );
@@ -233,7 +224,7 @@ public class GetFeaturesOperation extends CommonFixture {
 
         // Validate that the retrieved document includes links for: Alternate encodings of this document in
         // every other media type as identified by the compliance classes for this server.
-        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPoint, linkToSelf );
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures( linkToSelf );
         List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport,
                                                                                          "alternate" );
         List<String> typesWithoutLink = findUnsupportedTypes( alternateLinks, mediaTypesToSupport );
@@ -733,15 +724,6 @@ public class GetFeaturesOperation extends CommonFixture {
                 return (String) link.get( "href" );
         }
         return null;
-    }
-
-    private List<String> createListOfMediaTypesToSupport( TestPoint testPoint, Map<String, Object> linkToSelf ) {
-        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
-        List<String> mediaTypesToSupport = new ArrayList<>();
-        mediaTypesToSupport.addAll( contentMediaTypes.keySet() );
-        if ( linkToSelf != null )
-            mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
-        return mediaTypesToSupport;
     }
 
     private void assertIntegerGreaterZero( Object value, String propertyName ) {

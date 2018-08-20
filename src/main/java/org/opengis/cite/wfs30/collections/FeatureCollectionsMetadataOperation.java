@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.opengis.cite.wfs30.CommonFixture;
+import org.opengis.cite.wfs30.CommonDataFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.openapi3.UriBuilder;
@@ -31,7 +31,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
@@ -40,7 +39,7 @@ import io.restassured.response.Response;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureCollectionsMetadataOperation extends CommonFixture {
+public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
 
     private final Map<TestPoint, Response> testPointAndResponses = new HashMap<>();
 
@@ -149,7 +148,7 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
 
         // Validate that the retrieved document includes links for: Itself, Alternate encodings of this document in
         // every other media type as identified by the compliance classes for this server.
-        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPoint, linkToSelf );
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForOtherResources( linkToSelf );
         List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport,
                                                                                          "alternate" );
         List<String> typesWithoutLink = findUnsupportedTypes( alternateLinks, mediaTypesToSupport );
@@ -218,25 +217,21 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections")
     public void validateCollectionsMetadataDocument_Links( TestPoint testPoint, Map<String, Object> collection ) {
         String collectionName = (String) collection.get( "name" );
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel,
-                                                                                                collectionName );
-        if ( testPointsForNamedCollection.isEmpty() )
-            throw new SkipException( "Could not find collection with name " + collectionName
-                                     + " in the OpenAPI document" );
 
-        List<String> mediaTypesToSupport = createListOfMediaTypesToSupport( testPointsForNamedCollection.get( 0 ), null );
+        List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures();
         List<Map<String, Object>> links = (List<Map<String, Object>>) collection.get( "links" );
 
-        List<Map<String, Object>> alternateLinks = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport,
-                                                                                         "item" );
-        List<String> typesWithoutLink = findUnsupportedTypes( alternateLinks, mediaTypesToSupport );
+        List<Map<String, Object>> items = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport, "item" );
+        List<String> typesWithoutLink = findUnsupportedTypes( items, mediaTypesToSupport );
         assertTrue( typesWithoutLink.isEmpty(),
-                    "Collections Metadata document must include links with relation 'item' for each supported encodings. Missing links for types "
-                                            + typesWithoutLink );
-        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( alternateLinks );
+                    "Collections Metadata document for collection with name "
+                                            + collectionName
+                                            + " must include links with relation 'item' for each supported encodings. Missing links for types "
+                                            + String.join( ", ", typesWithoutLink ) );
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( items );
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links with relation 'item' for encodings must include a rel and type parameter. Missing for links "
-                                            + linksWithoutRelOrType );
+                                            + String.join( ", ", linksWithoutRelOrType ) );
     }
 
     /**
@@ -349,15 +344,6 @@ public class FeatureCollectionsMetadataOperation extends CommonFixture {
         for ( Object collection : collections )
             collectionsMap.add( (Map<String, Object>) collection );
         return collectionsMap;
-    }
-
-    private List<String> createListOfMediaTypesToSupport( TestPoint testPoint, Map<String, Object> linkToSelf ) {
-        Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
-        List<String> mediaTypesToSupport = new ArrayList<>();
-        mediaTypesToSupport.addAll( contentMediaTypes.keySet() );
-        if ( linkToSelf != null )
-            mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
-        return mediaTypesToSupport;
     }
 
 }
