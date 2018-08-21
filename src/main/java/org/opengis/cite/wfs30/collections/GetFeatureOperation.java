@@ -89,7 +89,7 @@ public class GetFeatureOperation extends CommonDataFixture {
      * @param featureId
      *            the featureId to request, may be <code>null</code> (test will be skipped)
      */
-    @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "getFeaturesBase")
+    @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "getFeaturesBase", alwaysRun = true)
     public void getFeatureOperation( Map<String, Object> collection, String featureId ) {
         String collectionName = (String) collection.get( "name" );
         if ( featureId == null )
@@ -141,7 +141,7 @@ public class GetFeatureOperation extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionFeatureId", dependsOnMethods = "getFeatureOperation")
+    @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionFeatureId", dependsOnMethods = "getFeatureOperation", alwaysRun = true)
     public void validateTheGetFeatureOperationResponse( Map<String, Object> collection, String featureId ) {
         String collectionName = (String) collection.get( "name" );
         Response response = collectionNameAndResponse.get( collectionName );
