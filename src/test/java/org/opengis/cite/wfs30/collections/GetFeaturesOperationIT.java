@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
+import org.opengis.cite.wfs30.conformance.RequirementClass;
 import org.opengis.cite.wfs30.util.BBox;
 import org.testng.ISuite;
 import org.testng.ITestContext;
@@ -43,6 +45,9 @@ public class GetFeaturesOperationIT {
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
+        List<RequirementClass> requirementClasses = new ArrayList();
+        requirementClasses.add( RequirementClass.CORE );
+
         testContext = mock( ITestContext.class );
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
@@ -51,6 +56,7 @@ public class GetFeaturesOperationIT {
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
         when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
+        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
     }
 
     @Test
@@ -59,6 +65,7 @@ public class GetFeaturesOperationIT {
         GetFeaturesOperation getFeaturesOperation = new GetFeaturesOperation();
         getFeaturesOperation.initCommonFixture( testContext );
         getFeaturesOperation.retrieveRequiredInformationFromTestContext( testContext );
+        getFeaturesOperation.requirementClasses( testContext );
 
         Iterator<Object[]> collections = getFeaturesOperation.collectionItemUris( testContext );
         for ( Iterator<Object[]> it = collections; it.hasNext(); ) {

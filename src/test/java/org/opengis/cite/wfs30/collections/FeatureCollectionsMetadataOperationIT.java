@@ -5,13 +5,16 @@ import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opengis.cite.wfs30.SuiteAttribute;
+import org.opengis.cite.wfs30.conformance.RequirementClass;
 import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.testng.ISuite;
 import org.testng.ITestContext;
@@ -36,6 +39,9 @@ public class FeatureCollectionsMetadataOperationIT {
         URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
+        List<RequirementClass> requirementClasses = new ArrayList();
+        requirementClasses.add( RequirementClass.CORE );
+
         testContext = mock( ITestContext.class );
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
@@ -43,6 +49,7 @@ public class FeatureCollectionsMetadataOperationIT {
         URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
+        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
     }
 
     @Test
@@ -50,6 +57,7 @@ public class FeatureCollectionsMetadataOperationIT {
         FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
         featureCollectionsMetadataOperation.openApiDocument( testContext );
+        featureCollectionsMetadataOperation.requirementClasses( testContext );
         TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/collections", mediaTypes() );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );

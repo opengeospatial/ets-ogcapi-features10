@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
+import org.opengis.cite.wfs30.conformance.RequirementClass;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -49,6 +51,9 @@ public class GetFeatureOperationIT {
         Map<String, String> featureIds = new HashMap<>();
         featureIds.put( COLLECTION_NAME, "DENW19AL0000geMFFL" );
 
+        List<RequirementClass> requirementClasses = new ArrayList();
+        requirementClasses.add( RequirementClass.CORE );
+
         testContext = mock( ITestContext.class );
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
@@ -58,6 +63,7 @@ public class GetFeatureOperationIT {
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
         when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
         when( suite.getAttribute( SuiteAttribute.FEATUREIDS.getName() ) ).thenReturn( featureIds );
+        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
     }
 
     @Test
@@ -65,6 +71,7 @@ public class GetFeatureOperationIT {
         GetFeatureOperation getFeatureOperation = new GetFeatureOperation();
         getFeatureOperation.initCommonFixture( testContext );
         getFeatureOperation.retrieveRequiredInformationFromTestContext( testContext );
+        getFeatureOperation.requirementClasses( testContext );
 
         Iterator<Object[]> collections = getFeatureOperation.collectionFeatureId( testContext );
         Object[] collectionAndFeatureId = findCollectionByName( COLLECTION_NAME, collections );
