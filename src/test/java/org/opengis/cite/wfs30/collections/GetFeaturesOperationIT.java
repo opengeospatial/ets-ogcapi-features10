@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
 import org.opengis.cite.wfs30.conformance.RequirementClass;
+import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.util.BBox;
 import org.testng.ISuite;
 import org.testng.ITestContext;
@@ -79,9 +80,17 @@ public class GetFeaturesOperationIT {
             // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
             // skipped (parameter missing):
             // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_numberMatched( parameter );
-            getFeaturesOperation.limitParameter( parameter );
-            // fails (schema->items->type missing): getFeaturesOperation.boundingBoxParameter();
-            // fails (parameter is missing): getFeaturesOperation.timeParameter( parameter );
+        }
+
+        Iterator<Object[]> collectionPaths = getFeaturesOperation.collectionPaths( testContext );
+        for ( Iterator<Object[]> it = collectionPaths; it.hasNext(); ) {
+            Object[] collectionPath = it.next();
+            TestPoint testPoint = (TestPoint) collectionPath[0];
+            getFeaturesOperation.limitParameter( testPoint );
+            // fails (parameter is missing):
+            // getFeaturesOperation.timeParameter( testPoint );
+            // fails (schema->items->type missing):
+            // getFeaturesOperation.boundingBoxParameter( testPoint );
         }
 
         Iterator<Object[]> collectionsWithLimits = getFeaturesOperation.collectionItemUrisWithLimits( testContext );

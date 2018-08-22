@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30.openapi3;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.opengis.cite.wfs30.WFS3.PATH.API;
@@ -7,11 +8,14 @@ import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -150,6 +154,21 @@ public class OpenApiUtilsTest {
     }
 
     @Test
+    public void testRetrieveTestPointsForCollections() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel );
+
+        assertThat( testPoints.size(), is( 3 ) );
+        List<String> paths = testPoints.stream().map( tp -> tp.getPath() ).collect( Collectors.toCollection( ArrayList::new ) );
+        assertThat( paths, hasItem( "/collections/flurstueck/items" ) );
+        assertThat( paths, hasItem( "/collections/gebaeudebauwerk/items" ) );
+        assertThat( paths, hasItem( "/collections/verwaltungseinheit/items" ) );
+    }
+
+    @Test
     public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
@@ -212,6 +231,18 @@ public class OpenApiUtilsTest {
         TestPoint testPoint = testPoints.get( 0 );
         assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
         assertThat( testPoint.getPath(), is( "/collections/{collectionId}/items/{featureId}" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForCollections_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel );
+
+        assertThat( testPoints.size(), is( 1 ) );
+        assertThat( testPoints.get( 0 ).getPath(), is( "/collections/{collectionId}/items" ) );
     }
 
 }
