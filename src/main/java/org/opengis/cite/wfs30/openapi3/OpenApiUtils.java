@@ -33,6 +33,21 @@ public class OpenApiUtils {
 
     public static final String TEMPLATE = "\\{.*\\}";
 
+    @FunctionalInterface
+    private interface PathMatcherFunction<A, B, C> {
+        A apply( B b, C c );
+    }
+
+    private static class PathMatcher implements PathMatcherFunction<Boolean, String, String> {
+
+        @Override
+        public Boolean apply( String pathUnderTest, String pathToMatch ) {
+            UriTemplateParser parser = new UriTemplateParser( pathUnderTest );
+            Matcher matcher = parser.getPattern().matcher( pathToMatch );
+            return matcher.matches();
+        }
+    }
+
     private OpenApiUtils() {
     }
 
@@ -85,6 +100,23 @@ public class OpenApiUtils {
     }
 
     /**
+     * Parse the test points for all collections including the extended path from the passed OpenApi3 document as
+     * described in A.4.3. Identify the Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel ) {
+        StringBuilder requestedPath = new StringBuilder();
+        requestedPath.append( "/" );
+        requestedPath.append( COLLECTIONS.getPathItem() );
+        requestedPath.append( "/.*/items" );
+
+        return retrieveTestPoints( apiModel, requestedPath.toString(), ( a, b ) -> a.matches( b ) );
+    }
+
+    /**
      * Parse the test points with the passed path including the extended path from the passed OpenApi3 document as
      * described in A.4.3. Identify the Test Points.
      *
@@ -129,7 +161,12 @@ public class OpenApiUtils {
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath ) {
-        List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath );
+        return retrieveTestPoints( apiModel, requestedPath, new PathMatcher() );
+    }
+
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath,
+                                                       PathMatcherFunction<Boolean, String, String> pathMatcher ) {
+        List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath, pathMatcher );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
@@ -161,26 +198,21 @@ public class OpenApiUtils {
     private static List<Path> identifyTestPoints( OpenApi3 apiModel ) {
         List<Path> allTestPoints = new ArrayList<>();
         for ( PATH path : PATH.values() )
-            allTestPoints.addAll( identifyTestPoints( apiModel, "/" + path.getPathItem() ) );
+            allTestPoints.addAll( identifyTestPoints( apiModel, "/" + path.getPathItem(), new PathMatcher() ) );
         return allTestPoints;
     }
 
-    private static List<Path> identifyTestPoints( OpenApi3 apiModel, String path ) {
+    private static List<Path> identifyTestPoints( OpenApi3 apiModel, String path,
+                                                  PathMatcherFunction<Boolean, String, String> pathMatch ) {
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
         for ( Path pathItemObject : pathItemObjects.values() ) {
             String pathString = pathItemObject.getPathString();
-            if ( isRequestedPath( pathString, path ) ) {
+            if ( pathMatch.apply( pathString, path ) ) {
                 pathItems.add( pathItemObject );
             }
         }
         return pathItems;
-    }
-
-    private static boolean isRequestedPath( String pathUnderTest, String pathToMatch ) {
-        UriTemplateParser parser = new UriTemplateParser( pathUnderTest );
-        Matcher matcher = parser.getPattern().matcher( pathToMatch );
-        return matcher.matches();
     }
 
     /**

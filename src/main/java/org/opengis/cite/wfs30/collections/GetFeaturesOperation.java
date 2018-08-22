@@ -5,7 +5,8 @@ import static org.opengis.cite.wfs30.EtsAssert.assertFalse;
 import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
-import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
 import static org.opengis.cite.wfs30.util.JsonUtils.collectNumberOfAllReturnedFeatures;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
@@ -22,8 +23,6 @@ import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -37,17 +36,14 @@ import java.util.Random;
 
 import org.opengis.cite.wfs30.CommonDataFixture;
 import org.opengis.cite.wfs30.SuiteAttribute;
+import org.opengis.cite.wfs30.openapi3.TestPoint;
 import org.opengis.cite.wfs30.util.BBox;
 import org.opengis.cite.wfs30.util.TemporalExtent;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.SkipException;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import org.testng.internal.BaseTestMethod;
 
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
@@ -78,14 +74,28 @@ public class GetFeaturesOperation extends CommonDataFixture {
         return collectionsData.iterator();
     }
 
+    @DataProvider(name = "collectionPaths")
+    public Iterator<Object[]> collectionPaths( ITestContext testContext ) {
+        List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( apiModel );
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( TestPoint testPointForCollections : testPointsForCollections ) {
+            collectionsData.add( new Object[] { testPointForCollections } );
+        }
+        return collectionsData.iterator();
+    }
+
     @DataProvider(name = "collectionItemUrisWithLimit")
     public Iterator<Object[]> collectionItemUrisWithLimits( ITestContext testContext ) {
         List<Object[]> collectionsWithLimits = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
-            Parameter limit = findParameterByName( (String) collection.get( "name" ), "limit" );
-            int[] ints = getTwoRandomLimits( limit );
-            collectionsWithLimits.add( new Object[] { collection, ints[0] } );
-            collectionsWithLimits.add( new Object[] { collection, ints[0] } );
+            String collectionName = (String) collection.get( "name" );
+            List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, collectionName );
+            for ( TestPoint testPoint : testPoints ) {
+                Parameter limit = findParameterByName( testPoint, "limit" );
+                int[] ints = getTwoRandomLimits( limit );
+                collectionsWithLimits.add( new Object[] { collection, ints[0] } );
+                collectionsWithLimits.add( new Object[] { collection, ints[0] } );
+            }
         }
         return collectionsWithLimits.iterator();
     }
@@ -365,16 +375,15 @@ public class GetFeaturesOperation extends CommonDataFixture {
      * explode: false
      * </pre>
      *
-     * @param collection
-     *            the collection under test, never <code>null</code>
+     * @param testPoint
+     *            the test point under test, never <code>null</code>
      * 
      */
-    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
-    public void limitParameter( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        Parameter limit = findParameterByName( collectionName, "limit" );
+    @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionPaths", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
+    public void limitParameter( TestPoint testPoint ) {
+        Parameter limit = findParameterByName( testPoint, "limit" );
 
-        assertNotNull( limit, "Required limit parameter for collections item with name '" + collectionName
+        assertNotNull( limit, "Required limit parameter for collections path '" + testPoint.getPath()
                               + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
@@ -467,18 +476,17 @@ public class GetFeaturesOperation extends CommonDataFixture {
      * explode: false
      * </pre>
      *
-     * @param collection
-     *            the collection under test, never <code>null</code>
+     * @param testPoint
+     *            the testPoint under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 20)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
-    public void boundingBoxParameter( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        Parameter bbox = findParameterByName( collectionName, "bbox" );
+    @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 20)", dataProvider = "collectionPaths", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
+    public void boundingBoxParameter( TestPoint testPoint ) {
+        Parameter bbox = findParameterByName( testPoint, "bbox" );
 
-        assertNotNull( bbox, "Required bbox parameter for collections item with name '" + collectionName
+        assertNotNull( bbox, "Required bbox parameter for collections path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
 
-        String msg = "Expected property '%s' with value '%s' for collections item with name '" + collectionName
+        String msg = "Expected property '%s' with value '%s' for collections path '" + testPoint.getPath()
                      + "' but was '%s'.";
 
         assertEquals( bbox.getName(), "bbox", String.format( msg, "name", "bbox", bbox.getName() ) );
@@ -568,15 +576,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
      * explode: false
      * </pre>
      * 
-     * @param collection
-     *            the collection under test, never <code>null</code>
+     * @param testPoint
+     *            the testPoint under test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
-    public void timeParameter( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        Parameter time = findParameterByName( collectionName, "time" );
+    @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionPaths", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
+    public void timeParameter( TestPoint testPoint ) {
+        Parameter time = findParameterByName( testPoint, "time" );
 
-        assertNotNull( time, "Required time parameter for collections item with name '" + collectionName
+        assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
@@ -705,8 +712,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
                                               + numberOfAllReturnedFeatures + ")" );
     }
 
-    private Parameter findParameterByName( String collectionName, String name ) {
-        String collectionItemPath = "/" + COLLECTIONS.getPathItem() + "/" + collectionName + "/items";
+    private Parameter findParameterByName( TestPoint testPoint, String name ) {
+        String collectionItemPath = testPoint.getPath();
         Path path = apiModel.getPath( collectionItemPath );
         if ( path != null ) {
             for ( Parameter parameter : path.getParameters() )
