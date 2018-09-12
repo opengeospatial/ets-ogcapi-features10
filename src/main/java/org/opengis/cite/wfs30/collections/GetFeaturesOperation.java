@@ -115,8 +115,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
                 // 180 longitude,
                 collectionsWithBboxes.add( new Object[] { collection, new BBox( 177.0, 65.0, -177.0, 70.0 ) } );
                 // and polar regions.
-                collectionsWithBboxes.add( new Object[] { collection, new BBox( -70.0, -20.0, -70.0, 160.0 ) } );
-                collectionsWithBboxes.add( new Object[] { collection, new BBox( 70.0, -20.0, 70.0, 160.0 ) } );
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( -180.0, 85.0, 180.0, 90.0 ) } );
+                collectionsWithBboxes.add( new Object[] { collection, new BBox( -180.0, -85.0, 180.0, -90.0 ) } );
             }
         }
         return collectionsWithBboxes.iterator();
