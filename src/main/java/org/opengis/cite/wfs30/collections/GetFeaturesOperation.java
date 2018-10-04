@@ -444,7 +444,6 @@ public class GetFeaturesOperation extends CommonDataFixture {
                                                + " or less" );
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
         assertNumberReturned( collectionName, jsonPath, false );
-        assertNumberMatched( collectionName, jsonPath, false );
     }
 
     /**
@@ -546,7 +545,6 @@ public class GetFeaturesOperation extends CommonDataFixture {
         JsonPath jsonPath = response.jsonPath();
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
         assertNumberReturned( collectionName, jsonPath, false );
-        assertNumberMatched( collectionName, jsonPath, false );
 
         // TODO: assert returned features
     }
@@ -644,7 +642,6 @@ public class GetFeaturesOperation extends CommonDataFixture {
         JsonPath jsonPath = response.jsonPath();
         assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
         assertNumberReturned( collectionName, jsonPath, false );
-        assertNumberMatched( collectionName, jsonPath, false );
 
         // TODO: assert returned features
     }
@@ -704,8 +701,17 @@ public class GetFeaturesOperation extends CommonDataFixture {
             else
                 return;
 
+        int maximumLimit = -1;
+
+        TestPoint testPoint = retrieveTestPointsForCollection( apiModel, collectionName ).get( 0 );
+        if ( testPoint != null ) {
+            Parameter limitParameter = findParameterByName( testPoint, "limit" );
+            if ( limitParameter != null && limitParameter.getSchema() != null ) {
+                maximumLimit = limitParameter.getSchema().getMaximum().intValue();
+            }
+        }
         int numberMatched = jsonPath.getInt( "numberMatched" );
-        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
+        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath, maximumLimit );
         assertEquals( numberMatched, numberOfAllReturnedFeatures,
                       "Value of numberReturned (" + numberMatched
                                               + ") does not match the number of features in all responses ("
