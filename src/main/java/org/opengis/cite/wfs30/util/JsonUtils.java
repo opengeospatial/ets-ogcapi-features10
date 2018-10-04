@@ -277,7 +277,7 @@ public class JsonUtils {
      * @param jsonPath
      *            the initial collection, never <code>null</code>
      * @param maximumLimit
-     *            the limit parameter value to use, if <= 0 the parameter is omitted
+     *            the limit parameter value to use, if &lt;= 0 the parameter is omitted
      * @return the number of all returned features
      * @throws URISyntaxException
      *             if the creation of a uri fails

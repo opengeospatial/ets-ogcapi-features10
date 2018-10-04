@@ -140,6 +140,8 @@ public class GetFeatureOperation extends CommonDataFixture {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param featureId
+     *            the featureId to request, may be <code>null</code> (test will be skipped)
      */
     @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionFeatureId", dependsOnMethods = "getFeatureOperation", alwaysRun = true)
     public void validateTheGetFeatureOperationResponse( Map<String, Object> collection, String featureId ) {
