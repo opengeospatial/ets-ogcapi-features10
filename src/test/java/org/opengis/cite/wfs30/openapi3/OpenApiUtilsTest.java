@@ -154,12 +154,12 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections() {
+    public void testRetrieveTestPointsForCollections_all() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, -1 );
 
         assertThat( testPoints.size(), is( 3 ) );
         List<String> paths = testPoints.stream().map( tp -> tp.getPath() ).collect( Collectors.toCollection( ArrayList::new ) );
@@ -167,6 +167,20 @@ public class OpenApiUtilsTest {
         assertThat( paths, hasItem( "/collections/gebaeudebauwerk/items" ) );
         assertThat( paths, hasItem( "/collections/verwaltungseinheit/items" ) );
     }
+
+    @Test
+    public void testRetrieveTestPointsForCollections_limit1() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, 1 );
+
+        assertThat( testPoints.size(), is( 1 ) );
+        List<String> paths = testPoints.stream().map( tp -> tp.getPath() ).collect( Collectors.toCollection( ArrayList::new ) );
+        assertThat( paths, hasItem( "/collections/flurstueck/items" ) );
+    }
+
 
     @Test
     public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
@@ -195,7 +209,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, "test__countries" );
 
-        assertThat( testPoints.size(), is( 1 ) );
+        assertThat( testPoints.size(), is( 118 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
 
@@ -211,7 +225,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, "test__countries" );
 
-        assertThat( testPoints.size(), is( 1 ) );
+        assertThat( testPoints.size(), is( 118 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
         assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
@@ -226,7 +240,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, "test__countries", "abc" );
 
-        assertThat( testPoints.size(), is( 1 ) );
+        assertThat( testPoints.size(), is( 118 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
         assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
@@ -234,15 +248,26 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_compactAPI() {
+    public void testRetrieveTestPointsForCollections_all_compactAPI() {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, -1 );
+
+        assertThat( testPoints.size(), is( 118 ) );
+        assertThat( testPoints.get( 0 ).getPath(), is( "/collections/{collectionId}/items" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForCollections_limit1_compactAPI() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, 1 );
 
         assertThat( testPoints.size(), is( 1 ) );
         assertThat( testPoints.get( 0 ).getPath(), is( "/collections/{collectionId}/items" ) );
     }
-
 }

@@ -3,5 +3,5 @@
 <properties version="1.0">
     <comment>Sample test run arguments</comment>
     <entry key="iut">http://www.w3schools.com/xml/note.xml</entry>
-    <entry key="ics">class-A,class-B</entry>
+    <entry key="noofcollections">3</entry>
 </properties>

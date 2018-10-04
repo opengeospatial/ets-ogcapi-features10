@@ -342,8 +342,11 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
 
     private List<Map<String, Object>> createCollectionsMap( List<Object> collections ) {
         List<Map<String, Object>> collectionsMap = new ArrayList<>();
-        for ( Object collection : collections )
+        for ( Object collection : collections ) {
             collectionsMap.add( (Map<String, Object>) collection );
+            if ( noOfCollections > 0 && collectionsMap.size() >= noOfCollections )
+                return collectionsMap;
+        }
         return collectionsMap;
     }
 

@@ -76,7 +76,7 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
     @DataProvider(name = "collectionPaths")
     public Iterator<Object[]> collectionPaths( ITestContext testContext ) {
-        List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( apiModel );
+        List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( apiModel, noOfCollections );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( TestPoint testPointForCollections : testPointsForCollections ) {
             collectionsData.add( new Object[] { testPointForCollections } );

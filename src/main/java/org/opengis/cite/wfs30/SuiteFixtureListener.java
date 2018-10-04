@@ -67,14 +67,18 @@ public class SuiteFixtureListener implements ISuiteListener {
         TestSuiteLogger.log( Level.FINE, String.format( "Wrote test subject to file: %s (%d bytes)",
                                                         entityFile.getAbsolutePath(), entityFile.length() ) );
         suite.setAttribute( SuiteAttribute.TEST_SUBJ_FILE.getName(), entityFile );
-        /*
-         * Document iutDoc = null; try { iutDoc = URIUtils.parseURI(entityFile.toURI()); } catch (Exception x) { throw
-         * new RuntimeException("Failed to parse resource retrieved from " + iutRef, x); }
-         * suite.setAttribute(SuiteAttribute.TEST_SUBJECT.getName(), iutDoc); if
-         * (TestSuiteLogger.isLoggable(Level.FINE)) { StringBuilder logMsg = new
-         * StringBuilder("Parsed resource retrieved from "); logMsg.append(iutRef).append("\n");
-         * logMsg.append(XMLUtils.writeNodeToString(iutDoc)); TestSuiteLogger.log(Level.FINE, logMsg.toString()); }
-         */
+
+        String noOfCollections = params.get( TestRunArg.NOOFCOLLECTIONS.toString() );
+        try {
+            if ( noOfCollections != null ) {
+                int noOfCollectionsInt = Integer.parseInt( noOfCollections );
+                suite.setAttribute( SuiteAttribute.NO_OF_COLLECTIONS.getName(), noOfCollectionsInt );
+            }
+        } catch ( NumberFormatException e ) {
+            TestSuiteLogger.log( Level.WARNING,
+                                 String.format( "Could not parse parameter %s: %s. Expected is a valid integer",
+                                                TestRunArg.NOOFCOLLECTIONS.toString(), noOfCollections ) );
+        }
     }
 
     /**

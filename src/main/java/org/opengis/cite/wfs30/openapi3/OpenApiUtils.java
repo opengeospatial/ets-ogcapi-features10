@@ -140,15 +140,23 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param noOfCollection
+     *            the number of collections to return test points for (-1 means the test points of all collections
+     *            should be returned)
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel ) {
+    public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel, int noOfCollection ) {
         StringBuilder requestedPath = new StringBuilder();
         requestedPath.append( "/" );
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/.*/items" );
 
-        return retrieveTestPoints( apiModel, requestedPath.toString(), ( a, b ) -> a.matches( b ) );
+        List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, requestedPath.toString(),
+                                                            ( a, b ) -> a.matches( b ) );
+        if ( noOfCollection < 0 ) {
+            return allTestPoints;
+        }
+        return allTestPoints.subList( 0, noOfCollection );
     }
 
     /**
@@ -425,6 +433,10 @@ public class OpenApiUtils {
                 templateReplacements.add( replacement );
             }
         } else {
+            if ( templateReplacements.isEmpty() ) {
+                Map<String, String> replacement = new HashMap<>();
+                templateReplacements.add( replacement );
+            }
             List<Map<String, String>> templateReplacementsToAdd = new ArrayList<>();
             for ( Map<String, String> templateReplacement : templateReplacements ) {
                 for ( Object enumValue : enums ) {

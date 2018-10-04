@@ -1,5 +1,6 @@
 package org.opengis.cite.wfs30;
 
+import static org.opengis.cite.wfs30.SuiteAttribute.NO_OF_COLLECTIONS;
 import static org.opengis.cite.wfs30.SuiteAttribute.REQUIREMENTCLASSES;
 
 import java.util.ArrayList;
@@ -16,11 +17,23 @@ import org.testng.annotations.BeforeClass;
  */
 public class CommonDataFixture extends CommonFixture {
 
+    private static final int DEFAULT_NUMBER_OF_COLLECTIONS = 3;
+
     private List<RequirementClass> requirementClasses;
+
+    protected int noOfCollections = DEFAULT_NUMBER_OF_COLLECTIONS;
 
     @BeforeClass
     public void requirementClasses( ITestContext testContext ) {
         this.requirementClasses = (List<RequirementClass>) testContext.getSuite().getAttribute( REQUIREMENTCLASSES.getName() );
+    }
+
+    @BeforeClass
+    public void noOfCollections( ITestContext testContext ) {
+        Object noOfCollections = testContext.getSuite().getAttribute( NO_OF_COLLECTIONS.getName() );
+        if ( noOfCollections != null ) {
+            this.noOfCollections = (Integer) noOfCollections;
+        }
     }
 
     protected List<String> createListOfMediaTypesToSupportForOtherResources( Map<String, Object> linkToSelf ) {
