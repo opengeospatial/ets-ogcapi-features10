@@ -4,9 +4,8 @@ import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
-import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
-import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
@@ -53,7 +52,7 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
     public Object[][] collectionsUris( ITestContext testContext ) {
         if ( this.testPointsData == null ) {
             OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-            List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+            List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel );
             this.testPointsData = new Object[][] { testPoints.toArray() };
         }
         return testPointsData;

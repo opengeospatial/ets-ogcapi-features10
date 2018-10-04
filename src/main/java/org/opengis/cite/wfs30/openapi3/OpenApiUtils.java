@@ -1,6 +1,8 @@
 package org.opengis.cite.wfs30.openapi3;
 
-import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.API;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.COLLECTIONS;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.CONFORMANCE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-
-import org.opengis.cite.wfs30.WFS3.PATH;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
@@ -31,11 +31,25 @@ public class OpenApiUtils {
     // as described in https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#fixed-fields
     private static final String DEFAULT_SERVER_URL = "/";
 
-    public static final String TEMPLATE = "\\{.*\\}";
-
     @FunctionalInterface
     private interface PathMatcherFunction<A, B, C> {
         A apply( B b, C c );
+    }
+
+    enum PATH {
+
+        API( "api" ), CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
+
+        private String pathItem;
+
+        PATH( String pathItem ) {
+
+            this.pathItem = pathItem;
+        }
+
+        private String getPathItem() {
+            return pathItem;
+        }
     }
 
     private static class PathMatcher implements PathMatcherFunction<Boolean, String, String> {
@@ -70,13 +84,34 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
-     * @param path
-     *            the path the test points should be assigned to, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
-        String requestedPath = "/" + path.getPathItem();
-        return retrieveTestPoints( apiModel, requestedPath );
+    public static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel ) {
+        return retrieveTestPoints( apiModel, API );
+    }
+
+    /**
+     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
+     * Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPointsForConformance( OpenApi3 apiModel ) {
+        return retrieveTestPoints( apiModel, CONFORMANCE );
+    }
+
+    /**
+     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
+     * Test Points.
+     *
+     * @param apiModel
+     *            never <code>null</code>
+     * @return the parsed test points, may be empty but never <code>null</code>
+     */
+    public static List<TestPoint> retrieveTestPointsForCollectionsMetadata( OpenApi3 apiModel ) {
+        return retrieveTestPoints( apiModel, COLLECTIONS );
     }
 
     /**
@@ -145,6 +180,8 @@ public class OpenApiUtils {
      *            never <code>null</code>
      * @param collectionName
      *            the extended path, may be <code>null</code>
+     * @param featureId
+     *            the id of the feature, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForFeature( OpenApi3 apiModel, String collectionName,
@@ -158,6 +195,11 @@ public class OpenApiUtils {
         requestedPath.append( featureId );
 
         return retrieveTestPoints( apiModel, requestedPath.toString() );
+    }
+
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
+        String requestedPath = "/" + path.getPathItem();
+        return retrieveTestPoints( apiModel, requestedPath );
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath ) {

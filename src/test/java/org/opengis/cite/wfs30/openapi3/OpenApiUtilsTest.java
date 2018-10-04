@@ -3,12 +3,12 @@ package org.opengis.cite.wfs30.openapi3;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.opengis.cite.wfs30.WFS3.PATH.API;
-import static org.opengis.cite.wfs30.WFS3.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForApi;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 
 import java.net.URL;
@@ -78,7 +78,7 @@ public class OpenApiUtilsTest {
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, API );
+        List<TestPoint> testPoints = retrieveTestPointsForApi( apiModel );
 
         assertThat( testPoints.size(), is( 1 ) );
     }
@@ -89,7 +89,7 @@ public class OpenApiUtilsTest {
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+        List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel );
 
         assertThat( testPoints.size(), is( 1 ) );
         Map<String, MediaType> contentMediaTypes = testPoints.get( 0 ).getContentMediaTypes();
@@ -174,7 +174,7 @@ public class OpenApiUtilsTest {
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, COLLECTIONS );
+        List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel );
 
         assertThat( testPoints.size(), is( 1 ) );
 

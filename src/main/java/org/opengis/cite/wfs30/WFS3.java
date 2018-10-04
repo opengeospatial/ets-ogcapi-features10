@@ -14,19 +14,4 @@ public class WFS3 {
 
     public static final String GEOJSON_MIME_TYPE = "application/geo+json";
 
-    public enum PATH {
-
-        API( "api" ), CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
-
-        private String pathItem;
-
-        PATH( String pathItem ) {
-
-            this.pathItem = pathItem;
-        }
-
-        public String getPathItem() {
-            return pathItem;
-        }
-    }
 }
