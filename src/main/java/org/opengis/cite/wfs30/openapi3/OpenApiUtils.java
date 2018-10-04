@@ -10,7 +10,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
@@ -53,12 +56,34 @@ public class OpenApiUtils {
     }
 
     private static class PathMatcher implements PathMatcherFunction<Boolean, String, String> {
-
         @Override
         public Boolean apply( String pathUnderTest, String pathToMatch ) {
             UriTemplateParser parser = new UriTemplateParser( pathUnderTest );
             Matcher matcher = parser.getPattern().matcher( pathToMatch );
             return matcher.matches();
+        }
+    }
+
+    private static class ExactMatchFilter implements Predicate<TestPoint> {
+
+        private final String requestedPath;
+
+        ExactMatchFilter( String requestedPath ) {
+            this.requestedPath = requestedPath;
+        }
+
+        @Override
+        public boolean test( TestPoint testPoint ) {
+            UriTemplate uriTemplate = new UriTemplate( testPoint.getPath() );
+            Map<String, String> templateReplacement = new HashMap<>( testPoint.getPredefinedTemplateReplacement() );
+            List<String> templateVariables = uriTemplate.getTemplateVariables();
+            for ( String templateVariable : templateVariables ) {
+                if ( !templateReplacement.containsKey( templateVariable ) )
+                    templateReplacement.put( templateVariable, ".*" );
+            }
+            String uri = uriTemplate.createURI( templateReplacement );
+            Pattern pattern = Pattern.compile( uri );
+            return pattern.matcher( requestedPath ).matches();
         }
     }
 
@@ -72,27 +97,26 @@ public class OpenApiUtils {
      *            never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel ) {
+    static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel ) {
         List<Path> pathItemObjects = identifyTestPoints( apiModel );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
 
     /**
-     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
-     * Test Points.
+     * Parse the API test points from the passed OpenApi3 document as described in A.4.3. Identify the Test Points.
      *
      * @param apiModel
      *            never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel ) {
+    static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel ) {
         return retrieveTestPoints( apiModel, API );
     }
 
     /**
-     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
-     * Test Points.
+     * Parse the CONFORMANCE test points from the passed OpenApi3 document as described in A.4.3. Identify the Test
+     * Points.
      *
      * @param apiModel
      *            never <code>null</code>
@@ -103,7 +127,7 @@ public class OpenApiUtils {
     }
 
     /**
-     * Parse the test points with the passed path from the passed OpenApi3 document as described in A.4.3. Identify the
+     * Parse the COLLECTIONS METADATA test points from the passed OpenApi3 document as described in A.4.3. Identify the
      * Test Points.
      *
      * @param apiModel
@@ -115,8 +139,8 @@ public class OpenApiUtils {
     }
 
     /**
-     * Parse the test points with the passed path including the extended path from the passed OpenApi3 document as
-     * described in A.4.3. Identify the Test Points.
+     * Parse the COLLECTION METADATA test points for the passed collectionName including the extended path from the
+     * passed OpenApi3 document as described in A.4.3. Identify the Test Points.
      *
      * @param apiModel
      *            never <code>null</code>
@@ -131,12 +155,13 @@ public class OpenApiUtils {
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
 
-        return retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
     /**
-     * Parse the test points for all collections including the extended path from the passed OpenApi3 document as
-     * described in A.4.3. Identify the Test Points.
+     * Parse the COLLECTIONS test points from the passed OpenApi3 document as described in A.4.3. Identify the Test
+     * Points.
      *
      * @param apiModel
      *            never <code>null</code>
@@ -177,7 +202,8 @@ public class OpenApiUtils {
         requestedPath.append( collectionName );
         requestedPath.append( "/items" );
 
-        return retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
     /**
@@ -202,7 +228,8 @@ public class OpenApiUtils {
         requestedPath.append( "/items/" );
         requestedPath.append( featureId );
 
-        return retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {

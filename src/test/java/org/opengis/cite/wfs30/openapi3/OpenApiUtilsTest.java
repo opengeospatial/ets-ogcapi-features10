@@ -181,7 +181,6 @@ public class OpenApiUtilsTest {
         assertThat( paths, hasItem( "/collections/flurstueck/items" ) );
     }
 
-
     @Test
     public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
         OpenApi3Parser parser = new OpenApi3Parser();
@@ -209,7 +208,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, "test__countries" );
 
-        assertThat( testPoints.size(), is( 118 ) );
+        assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
 
@@ -225,7 +224,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, "test__countries" );
 
-        assertThat( testPoints.size(), is( 118 ) );
+        assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
         assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
@@ -240,7 +239,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, "test__countries", "abc" );
 
-        assertThat( testPoints.size(), is( 118 ) );
+        assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
         assertThat( testPoint.getServerUrl(), is( "http://cloudsdi.geo-solutions.it:80/geoserver/wfs3" ) );
