@@ -3,4 +3,5 @@
 <properties version="1.0">
   <comment>Sample test run arguments (ets-wfs30)</comment>
   <entry key="iut">https://www.ldproxy.nrw.de/rest/services/kataster/</entry>
+  <entry key="noofcollections">3</entry>
 </properties>

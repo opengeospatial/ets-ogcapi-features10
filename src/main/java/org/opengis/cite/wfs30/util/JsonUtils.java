@@ -276,11 +276,13 @@ public class JsonUtils {
      * 
      * @param jsonPath
      *            the initial collection, never <code>null</code>
+     * @param maximumLimit
+     *            the limit parameter value to use, if &lt;= 0 the parameter is omitted
      * @return the number of all returned features
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    public static int collectNumberOfAllReturnedFeatures( JsonPath jsonPath )
+    public static int collectNumberOfAllReturnedFeatures( JsonPath jsonPath, int maximumLimit )
                             throws URISyntaxException {
         int numberOfAllReturnedFeatures = jsonPath.getList( "features" ).size();
         Map<String, Object> nextLink = findLinkByRel( jsonPath.getList( "links" ), "next" );
@@ -295,6 +297,9 @@ public class JsonUtils {
                 String key = pair.substring( 0, idx );
                 String value = pair.substring( idx + 1 );
                 accept.param( key, value );
+            }
+            if ( maximumLimit > 0 ) {
+                accept.param( "limit", maximumLimit );
             }
 
             Response response = accept.when().request( GET );

@@ -21,7 +21,7 @@ public class JsonUtilsIT {
         URL json = new URL( "http://geo.kralidis.ca/pygeoapi/collections/lakes/items" );
         JsonPath jsonPath = new JsonPath( json );
 
-        int numberOfAllFeatures = collectNumberOfAllReturnedFeatures( jsonPath );
+        int numberOfAllFeatures = collectNumberOfAllReturnedFeatures( jsonPath, -1 );
 
         assertThat( numberOfAllFeatures, is( 25 ) );
     }

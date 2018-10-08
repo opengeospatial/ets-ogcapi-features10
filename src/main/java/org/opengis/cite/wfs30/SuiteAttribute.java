@@ -30,6 +30,11 @@ public enum SuiteAttribute {
     TEST_SUBJ_FILE( "testSubjectFile", File.class ),
 
     /**
+     * The number of collections to test.
+     */
+    NO_OF_COLLECTIONS( "noOfCollections", Integer.class ),
+
+    /**
      * Parsed OpenApi3 document resource /api; Added during execution.
      */
     API_MODEL( "apiModel", OpenApi3.class ),

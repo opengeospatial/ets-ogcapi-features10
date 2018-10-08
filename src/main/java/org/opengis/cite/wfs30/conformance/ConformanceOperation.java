@@ -4,8 +4,7 @@ import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.wfs30.SuiteAttribute.REQUIREMENTCLASSES;
-import static org.opengis.cite.wfs30.WFS3.PATH.CONFORMANCE;
-import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPoints;
+import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForConformance;
 import static org.testng.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class ConformanceOperation extends CommonFixture {
     @DataProvider(name = "conformanceUris")
     public Object[][] conformanceUris( ITestContext testContext ) {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, CONFORMANCE );
+        List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel );
         return new Object[][] { testPoints.toArray() };
     }
 
