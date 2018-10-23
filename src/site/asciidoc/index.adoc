@@ -1,41 +1,29 @@
-= Test suite: ets-wfs30
+= WFS 3.0 Conformance Test Suite
 
 == Scope
 
-This executable test suite (ETS) verifies the conformance of the implementation 
-under test (IUT) with respect to the set of relevant specifications depicted in 
-Figure 1. Conformance testing is a kind of "black box" testing that examines the 
-externally visible characteristics or behaviors of the IUT while disregarding 
-any implementation details.
+This executable test suite (ETS) verifies that a WFS 3.0 implementation conforms to https://github.com/opengeospatial/wfs_fes[Web feature Service (WFS) 3.0 - Core] and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
 
-*Figure 1: Relevant specifications*
-
-image::img/specifications.png[]
-
-Several conformance classes are defined in the principal specifications; the ones 
+Several conformance classes are defined in the principal specifications; the ones
 listed below are covered by this test suite:
 
-* Class A 
-    - List capabilities of conformance class A
-* Class B 
-    - List capabilities of conformance class B
-
+* Core
+    - The Core specifies requirements that all WFS have to implement.
 
 == Test requirements
 
 The documents listed below stipulate requirements that must be satisfied by a 
 conforming implementation.
 
-1. [Web Content Accessibility Guidelines (WCAG) 2.0](http://www.w3.org/TR/WCAG20/)
-2. [Extensible Markup Language (XML) 1.0, Fifth Edition](http://www.w3.org/TR/xml/)
-3. [RFC 7231](https://tools.ietf.org/html/rfc7231) - Hypertext Transfer Protocol 
-(HTTP/1.1): Semantics and Content 
+1. https://github.com/opengeospatial/wfs_fes[Web feature Service (WFS) 3.0 - Core]
 
-If any of the following preconditions are not satisfied then all tests in the 
-suite will be marked as skipped.
+The are some requirements the test suite expects to be satisfied by the service under test:
 
-1. Precondition 1;
-2. Precondition 2.
+* The landing page must support HTML as output format.
+* The API definition must be available in OpenAPI 3.0.
+* The Conformance statements must be available in Json.
+* The DatasetDistribution metadata must be available in Json.
+* Features or feature collections must be support GeoJson as output format.
 
 == Test suite structure
 
@@ -44,17 +32,18 @@ The test suite definition file (testng.xml) is located in the root package,
 of which includes a set of test classes that contain the actual test methods. 
 The general structure of the test suite is shown in Table 1.
 
-.Table 1 - Test suite structure
-[cols=2*,options=header]
+.Test suite structure
+[cols="2,6a",options=header]
 |===
 |Conformance class
 |Test classes
 
-|Conformance Level 1
-|org.opengis.cite.wfs30.level1.*
-
-|Conformance Level 2
-|org.opengis.cite.wfs30.level2.*
+|Core
+|
+ * org.opengis.cite.wfs30.general.*
+ * org.opengis.cite.wfs30.apidescription.*
+ * org.opengis.cite.wfs30.conformance.*
+ * org.opengis.cite.wfs30.collections.*
 
 |===
 
@@ -67,8 +56,8 @@ methods that constitute the suite.
 The test run arguments are summarized in Table 2. The _Obligation_ descriptor can 
 have the following values: M (mandatory), O (optional), or C (conditional).
 
-.Table 2 - Test run arguments
-[cols=4*,options=header]
+.Test run arguments
+[cols="1,1,1,6",options=header]
 |===
 |Name
 |Value domain
@@ -78,11 +67,6 @@ have the following values: M (mandatory), O (optional), or C (conditional).
 |iut
 |URI
 |M
-|A URI that refers to the implementation under test or metadata about it. Ampersand ('&amp;') characters must be percent-encoded as '%26'.
-
-|ics
-|A comma-separated list of string values.
-|O
-|An implementation conformance statement that indicates which conformance classes or options are supported.
+|A URI that refers to the landing page of the service under test. Ampersand ('&amp;') characters must be percent-encoded as '%26'.
 
 |===

@@ -5,3 +5,16 @@ h2 {font-size: 1.2em;}
 h3 {font-size: 1em; margin-bottom: 0.5em;}
 pre { margin-top: 1em; margin-bottom: 1em; }
 .figure {margin-top: 2em; margin-bottom: 2em; text-align:center;}
+.tableblock {
+  padding: 10px;
+}
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;}
+th {
+  text-align: left;
+  background-color: LightCyan;
+}
