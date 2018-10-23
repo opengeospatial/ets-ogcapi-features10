@@ -50,11 +50,12 @@ The general structure of the test suite is shown in Table 1.
 The Javadoc documentation provides more detailed information about the test 
 methods that constitute the suite.
 
+include::how-to-run-the-tests.adoc[]
 
-== Test run arguments
+== Using the REST API
 
-The test run arguments are summarized in Table 2. The _Obligation_ descriptor can 
-have the following values: M (mandatory), O (optional), or C (conditional).
+Using the REST API of the TEAM Engine requires some run arguments. These ate summarized in Table 2.
+The _Obligation_ descriptor can have the following values: M (mandatory), O (optional), or C (conditional).
 
 .Test run arguments
 [cols="1,1,1,6",options=header]
