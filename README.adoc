@@ -11,6 +11,9 @@ for more information, including the API documentation.
 
 The test suite is built using https://maven.apache.org/[Apache Maven v3].
 
+== How to run the test suite
+The options for running the suite are summarized in 
+
 include::src/site/asciidoc/how-to-run-the-tests.adoc[]
 
 == How to contribute
