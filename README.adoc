@@ -1,4 +1,4 @@
-== Test suite: ets-wfs30
+== WFS 3.0 Conformance Test Suite
 
 === Scope
 
