@@ -1,0 +1,63 @@
+<LandingPage xmlns="http://www.opengis.net/wfs/3.0">
+  <wstxns1:link xmlns:wstxns1="http://www.w3.org/2005/Atom"
+                wstxns1:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/?f=application%2Fjson"
+                wstxns1:rel="alternate" wstxns1:type="application/json"
+                wstxns1:title="This document as application/json"/>
+  <wstxns2:link xmlns:wstxns2="http://www.w3.org/2005/Atom"
+                wstxns2:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/?f=application%2Fx-yaml"
+                wstxns2:rel="alternate" wstxns2:type="application/x-yaml"
+                wstxns2:title="This document as application/x-yaml"/>
+  <wstxns3:link xmlns:wstxns3="http://www.w3.org/2005/Atom"
+                wstxns3:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/?f=application%2Fxml"
+                wstxns3:rel="self" wstxns3:type="application/xml" wstxns3:title="This document"/>
+  <wstxns4:link xmlns:wstxns4="http://www.w3.org/2005/Atom"
+                wstxns4:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/?f=text%2Fhtml" wstxns4:rel="alternate"
+                wstxns4:type="text/html" wstxns4:title="This document as text/html"/>
+  <wstxns5:link xmlns:wstxns5="http://www.w3.org/2005/Atom"
+                wstxns5:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/api?f=application%2Fopenapi%2Bjson%3Bversion%3D3.0"
+                wstxns5:rel="service" wstxns5:type="application/openapi+json;version=3.0"
+                wstxns5:title="API definition for this endpoint as application/openapi+json;version=3.0"/>
+  <wstxns6:link xmlns:wstxns6="http://www.w3.org/2005/Atom"
+                wstxns6:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/api?f=application%2Fjson"
+                wstxns6:rel="service" wstxns6:type="application/json"
+                wstxns6:title="API definition for this endpoint as application/json"/>
+  <wstxns7:link xmlns:wstxns7="http://www.w3.org/2005/Atom"
+                wstxns7:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/api?f=application%2Fx-yaml"
+                wstxns7:rel="service" wstxns7:type="application/x-yaml"
+                wstxns7:title="API definition for this endpoint as application/x-yaml"/>
+  <wstxns8:link xmlns:wstxns8="http://www.w3.org/2005/Atom"
+                wstxns8:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/api?f=application%2Fxml"
+                wstxns8:rel="service" wstxns8:type="application/xml"
+                wstxns8:title="API definition for this endpoint as application/xml"/>
+  <wstxns9:link xmlns:wstxns9="http://www.w3.org/2005/Atom"
+                wstxns9:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/api?f=text%2Fhtml"
+                wstxns9:rel="service" wstxns9:type="text/html"
+                wstxns9:title="API definition for this endpoint as text/html"/>
+  <wstxns10:link xmlns:wstxns10="http://www.w3.org/2005/Atom"
+                 wstxns10:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/conformance?f=application%2Fjson"
+                 wstxns10:rel="conformance" wstxns10:type="application/json"
+                 wstxns10:title="Conformance declaration as application/json"/>
+  <wstxns11:link xmlns:wstxns11="http://www.w3.org/2005/Atom"
+                 wstxns11:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/conformance?f=application%2Fx-yaml"
+                 wstxns11:rel="conformance" wstxns11:type="application/x-yaml"
+                 wstxns11:title="Conformance declaration as application/x-yaml"/>
+  <wstxns12:link xmlns:wstxns12="http://www.w3.org/2005/Atom"
+                 wstxns12:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/conformance?f=application%2Fxml"
+                 wstxns12:rel="conformance" wstxns12:type="application/xml"
+                 wstxns12:title="Conformance declaration as application/xml"/>
+  <wstxns13:link xmlns:wstxns13="http://www.w3.org/2005/Atom"
+                 wstxns13:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections?f=application%2Fjson"
+                 wstxns13:rel="data" wstxns13:type="application/json"
+                 wstxns13:title="Collections Metadata as application/json"/>
+  <wstxns14:link xmlns:wstxns14="http://www.w3.org/2005/Atom"
+                 wstxns14:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections?f=application%2Fx-yaml"
+                 wstxns14:rel="data" wstxns14:type="application/x-yaml"
+                 wstxns14:title="Collections Metadata as application/x-yaml"/>
+  <wstxns15:link xmlns:wstxns15="http://www.w3.org/2005/Atom"
+                 wstxns15:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections?f=application%2Fxml"
+                 wstxns15:rel="data" wstxns15:type="application/xml"
+                 wstxns15:title="Collections Metadata as application/xml"/>
+  <wstxns16:link xmlns:wstxns16="http://www.w3.org/2005/Atom"
+                 wstxns16:href="http://cloudsdi.geo-solutions.it:80/geoserver/wfs3/collections?f=text%2Fhtml"
+                 wstxns16:rel="data" wstxns16:type="text/html" wstxns16:title="Collections Metadata as text/html"/>
+</LandingPage>
