@@ -17,13 +17,13 @@ conforming implementation.
 
 1. https://github.com/opengeospatial/wfs_fes[Web feature Service (WFS) 3.0 - Core]
 
-The are some requirements the test suite expects to be satisfied by the service under test:
+There are some requirements the test suite expects to be satisfied by the service under test:
 
 * The landing page must support HTML as output format.
 * The API definition must be available in OpenAPI 3.0.
-* The Conformance statements must be available in Json.
-* The DatasetDistribution metadata must be available in Json.
-* Features or feature collections must be support GeoJson as output format.
+* The Conformance statements must be available in JSON.
+* The DatasetDistribution metadata must be available in JSON.
+* Features or feature collections must be support GeoJSON as output format.
 
 == Test suite structure
 
