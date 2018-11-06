@@ -1,0 +1,12 @@
+= Release Notes WFS 3.0
+
+== 0.1 (2018-07-12)
+- https://github.com/opengeospatial/ets-wfs30/issues/17[#17]: Implement A.4.4. Processing the OpenAPI Document - Part 4
+- https://github.com/opengeospatial/ets-wfs30/issues/8[#8]: Implement A.4.4. Processing the OpenAPI Document - Part 3
+- https://github.com/opengeospatial/ets-wfs30/issues/7[#7]: Implement A.4.4. Processing the OpenAPI Document - Part 2
+- https://github.com/opengeospatial/ets-wfs30/issues/6[#6]: Implement A.4.4. Processing the OpenAPI Document - Part 1
+- https://github.com/opengeospatial/ets-wfs30/issues/5[#5]: Implement A.4.3. Identify the Test Points
+- https://github.com/opengeospatial/ets-wfs30/issues/4[#4]: Implement A.4.2. Retrieve the API Description
+- https://github.com/opengeospatial/ets-wfs30/issues/3[#3]: Implement A.4.1. General Tests
+- https://github.com/opengeospatial/ets-wfs30/issues/13[#13]: Introduce Dockerfile and Maven Docker plugin
+- https://github.com/opengeospatial/ets-wfs30/issues/10[#10]: Prepare ETS

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
-    <title>Test suite: ets-wfs30</title>
+    <title>WFS 3.0 Conformance Test Suite</title>
     <meta charset="UTF-8" />
     <style type="text/css">
 body {
@@ -54,11 +54,16 @@ dt {
     </style>
   </head>
   <body>
-  <h1>Test suite: ets-wfs30</h1>
+  <h1>WFS 3.0 Conformance Test Suite</h1>
 	<p>This executable test suite (ETS) verifies the conformance of the implementation 
-	under test (IUT) with respect to all relevant specifications. Conformance testing 
+	under test (IUT) with respect to https://github.com/opengeospatial/wfs_fes and related standards. Conformance testing
   is a kind of "black box" testing that examines externally visible characteristics 
-  or behaviors of the IUT and is independent of any implementation details.</p>
+  or behaviors of the SUT and is independent of any implementation details.</p>
+
+    <p>The following conformance levels currently tested:</p>
+    <ul>
+      <li>Core</li>
+    </ul>
 
 	<p>The test run arguments are summarized in the following table. The <em>Obligation</em> 
 	descriptor can have the following values: M (mandatory), O (optional), or C 
@@ -79,16 +84,8 @@ dt {
         <td>iut</td>
         <td>URI</td>
 		<td>M</td>
-		<td>A URI that refers to the implementation under test or metadata about it.
-    Ampersand ('&amp;') characters must be percent-encoded as '%26'.</td>
+		<td>A URI that refers to the landing page of the SUT. Ampersand ('&amp;') characters must be percent-encoded as '%26'.</td>
       </tr>
-	  <tr>
-      <td>ics</td>
-      <td>A comma-separated list of string values.</td>
-      <td>O</td>
-      <td>An implementation conformance statement that indicates which conformance 
-      classes or options are supported.</td>
-    </tr>
 	  </tbody>
   </table>
 
