@@ -427,12 +427,9 @@ public class GetFeaturesOperation extends CommonDataFixture {
      *            the collection under test, never <code>null</code>
      * @param limit
      *            limit parameter to request, never <code>null</code>
-     * @throws URISyntaxException
-     *             if the creation of a uri fails
      */
     @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 19)", dataProvider = "collectionItemUrisWithLimit", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
-    public void limitParameter_requests( Map<String, Object> collection, int limit )
-                            throws URISyntaxException {
+    public void limitParameter_requests( Map<String, Object> collection, int limit ) {
         String collectionName = (String) collection.get( "name" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );

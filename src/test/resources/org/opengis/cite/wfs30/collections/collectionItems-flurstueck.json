@@ -1,22 +1,22 @@
 {
   "type" : "FeatureCollection",
   "links" : [ {
-    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items?f=json",
+    "href" : "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=json",
     "rel" : "self",
     "type" : "application/geo+json",
     "title" : "this document"
   }, {
-    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items?f=xml",
+    "href" : "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=xml",
     "rel" : "alternate",
     "type" : "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
     "title" : "this document as GML"
   }, {
-    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items?f=html",
+    "href" : "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=html",
     "rel" : "alternate",
     "type" : "text/html",
     "title" : "this document as HTML"
   }, {
-    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items?f=json&page=2&limit=10",
+    "href" : "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=json&page=2&limit=10",
     "rel" : "next",
     "type" : "application/geo+json",
     "title" : "next page"

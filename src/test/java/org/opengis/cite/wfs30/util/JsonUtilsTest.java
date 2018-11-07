@@ -54,7 +54,7 @@ public class JsonUtilsTest {
     public static void parseJson() {
         InputStream collectionJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collections.json" );
         jsonCollection = new JsonPath( collectionJson );
-        InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collectionItems.json" );
+        InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collectionItems-flurstueck.json" );
         jsonCollectionItem = new JsonPath( collectionItemsJson );
     }
 
@@ -152,7 +152,7 @@ public class JsonUtilsTest {
         Map<String, Object> linkToItself = findLinkByRel( links, "self" );
 
         assertThat( linkToItself.get( "href" ),
-                    is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/?f=json" ) );
+                    is( "http://localhost:8090/rest/services/kataster/collections/?f=json" ) );
         assertThat( linkToItself.get( "rel" ), is( "self" ) );
         assertThat( linkToItself.get( "type" ), is( "application/json" ) );
         assertThat( linkToItself.get( "title" ), is( "this document" ) );

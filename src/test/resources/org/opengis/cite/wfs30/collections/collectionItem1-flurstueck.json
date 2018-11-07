@@ -1,0 +1,86 @@
+{
+  "type": "Feature",
+  "links": [
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items/DENW19AL0000geMFFL?f=json",
+      "rel": "self",
+      "type": "application/geo+json",
+      "title": "this document"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items/DENW19AL0000geMFFL?f=xml",
+      "rel": "alternate",
+      "type": "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
+      "title": "this document as GML"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items/DENW19AL0000geMFFL?f=html",
+      "rel": "alternate",
+      "type": "text/html",
+      "title": "this document as HTML"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=json",
+      "rel": "collection",
+      "type": "application/geo+json",
+      "title": "the collection document"
+    }
+  ],
+  "id": "DENW19AL0000geMFFL",
+  "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+      [
+        [
+          [
+            8.711910494386446,
+            51.49108376876667
+          ],
+          [
+            8.71229996279325,
+            51.491067136843
+          ],
+          [
+            8.71238480759279,
+            51.49164525475229
+          ],
+          [
+            8.712013831642468,
+            51.491666041604
+          ],
+          [
+            8.711993473544684,
+            51.4916028694182
+          ],
+          [
+            8.711960339932295,
+            51.49139558179017
+          ],
+          [
+            8.711953300233393,
+            51.49135154980474
+          ],
+          [
+            8.711910494386446,
+            51.49108376876667
+          ]
+        ]
+      ]
+    ]
+  },
+  "properties": {
+    "aktualit": "2017-04-26Z",
+    "flaeche": 1739.0,
+    "flstkennz": "05297001600193______",
+    "land": "Nordrhein-Westfalen",
+    "gemarkung": "Wünnenberg",
+    "flur": "016",
+    "flurstnr": "193",
+    "gmdschl": "05774040",
+    "regbezirk": "Detmold",
+    "kreis": "Paderborn",
+    "gemeinde": "Bad Wünnenberg",
+    "lagebeztxt": "Bleiwäscher Straße",
+    "tntxt": "Platz / Parkplatz;1739"
+  }
+}

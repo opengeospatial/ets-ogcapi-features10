@@ -1,0 +1,154 @@
+{
+  "type" : "FeatureCollection",
+  "links" : [ {
+    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/gebaeudebauwerk/items?f=json",
+    "rel" : "self",
+    "type" : "application/geo+json",
+    "title" : "this document"
+  }, {
+    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/gebaeudebauwerk/items?f=xml",
+    "rel" : "alternate",
+    "type" : "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
+    "title" : "this document as GML"
+  }, {
+    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/gebaeudebauwerk/items?f=html",
+    "rel" : "alternate",
+    "type" : "text/html",
+    "title" : "this document as HTML"
+  }, {
+    "href" : "http://www.ldproxy.nrw.de/rest/services/kataster/collections/gebaeudebauwerk/items?f=json&page=2&limit=10",
+    "rel" : "next",
+    "type" : "application/geo+json",
+    "title" : "next page"
+  } ],
+  "features" : [ {
+    "type" : "Feature",
+    "id" : "DENW26AL100011QvBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.878764313993017, 51.492947351685686 ], [ 6.8787769428822, 51.492907138123755 ], [ 6.878808056621983, 51.492910956575166 ], [ 6.878795384575511, 51.49295116935938 ], [ 6.878764313993017, 51.492947351685686 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2014-09-16",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Freizeit- und Vergnügungsstätte",
+      "anzahlgs" : 1
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW02AL1000EeRpBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 7.333443222187106, 51.51870183546221 ], [ 7.333498823308082, 51.518680719654576 ], [ 7.333529162110772, 51.51871158154032 ], [ 7.333473236150396, 51.51873290856792 ], [ 7.333443222187106, 51.51870183546221 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2012-11-06",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Bergwerk"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW36AL1000IQRyBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 7.147887548176582, 50.7014799736858 ], [ 7.147923560416564, 50.701451621645695 ], [ 7.1479807255423315, 50.70148090580361 ], [ 7.147956288070372, 50.70150016010966 ], [ 7.147912990601087, 50.70147798564189 ], [ 7.147901444147701, 50.70148708383914 ], [ 7.147887548176582, 50.7014799736858 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2013-03-13",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Umformer"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW36AL1000IQSQBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 7.135115368521688, 50.69212799972436 ], [ 7.1352879463840955, 50.69206251551148 ], [ 7.135332956344838, 50.69204542777351 ], [ 7.135596023862616, 50.69233383547591 ], [ 7.135573380695808, 50.69234282688281 ], [ 7.135555247969011, 50.69232412623816 ], [ 7.135361671657858, 50.69239602928894 ], [ 7.135115368521688, 50.69212799972436 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2015-06-12",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Tiefgarage"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW36AL1000J53SBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 7.128713966818475, 50.694925265408 ], [ 7.128798160599934, 50.69486625014978 ], [ 7.128851123853596, 50.694896726516156 ], [ 7.128766362969135, 50.69495575968809 ], [ 7.128713966818475, 50.694925265408 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2013-03-13",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Gebäude für religiöse Zwecke"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW39AL1000eyzOBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.174049388137505, 50.70427727326285 ], [ 6.174086059799854, 50.70420476270913 ], [ 6.174253788037451, 50.70423884814659 ], [ 6.174233409268094, 50.70427951547236 ], [ 6.174213301363981, 50.70427541166963 ], [ 6.174197139322555, 50.70430743802205 ], [ 6.174049388137505, 50.70427727326285 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2013-04-24",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Wohnhaus",
+      "lagebeztxt" : "Dinkermichsweg 8"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW21AL1000J0u1BL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.77145389740199, 51.513055921535326 ], [ 6.771456210102157, 51.51303866250359 ], [ 6.77167501551265, 51.51303808155525 ], [ 6.771674222426856, 51.51303897479996 ], [ 6.771675139403735, 51.513089282405375 ], [ 6.771453749979931, 51.51308846525745 ], [ 6.77145389740199, 51.513055921535326 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2015-07-01",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Schuppen",
+      "anzahlgs" : 1
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW47AL10003lNQBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.897347621868285, 51.51858877583442 ], [ 6.89747578612063, 51.51859057024805 ], [ 6.897472136801239, 51.51869200949667 ], [ 6.897472129764581, 51.51869216225252 ], [ 6.897471404219639, 51.51871229370026 ], [ 6.89734324003987, 51.518710490292364 ], [ 6.897343949911312, 51.51869070030034 ], [ 6.897343967711, 51.51869031391789 ], [ 6.897347621868285, 51.51858877583442 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2014-02-03",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Wohnhaus",
+      "anzahlgs" : 2,
+      "lagebeztxt" : "Wielandstraße 15"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW47AL10003lUkBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.885184316198019, 51.53706848032335 ], [ 6.885240005876938, 51.53703307163393 ], [ 6.8853642697665824, 51.537108911368605 ], [ 6.885308344553463, 51.537144423786394 ], [ 6.885184316198019, 51.53706848032335 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2012-07-19",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Wohnhaus",
+      "anzahlgs" : 2,
+      "lagebeztxt" : "Heinrich-Kämpchen-Straße 21"
+    }
+  }, {
+    "type" : "Feature",
+    "id" : "DENW47AL10003ldUBL",
+    "geometry" : {
+      "type" : "MultiPolygon",
+      "coordinates" : [ [ [ [ 6.909808369801357, 51.521563425060734 ], [ 6.909808603554129, 51.52156335728284 ], [ 6.909811700778388, 51.52156308873846 ], [ 6.909939543350779, 51.5215519497225 ], [ 6.910012589814858, 51.521545589532295 ], [ 6.910025393801354, 51.521600297570124 ], [ 6.909953018468308, 51.52160679563284 ], [ 6.909959200672211, 51.52163517094462 ], [ 6.909830915056389, 51.52164685066212 ], [ 6.909827773792041, 51.521647136408184 ], [ 6.909808369801357, 51.521563425060734 ] ] ] ]
+    },
+    "properties" : {
+      "aktualit" : "2014-10-23",
+      "gebnutzbez" : "Gebaeude",
+      "funktion" : "Wohnhaus",
+      "anzahlgs" : 2,
+      "lagebeztxt" : "Fähndrichsweg 8"
+    }
+  } ]
+}

@@ -1,5 +1,8 @@
 package org.opengis.cite.wfs30.collections;
 
+import static net.jadler.Jadler.closeJadler;
+import static net.jadler.Jadler.initJadlerListeningOn;
+import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -14,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.wfs30.SuiteAttribute;
@@ -29,7 +34,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class GetFeatureOperationIT {
+public class GetFeatureOperationTest {
 
     public static final String COLLECTION_NAME = "flurstueck";
 
@@ -41,10 +46,10 @@ public class GetFeatureOperationIT {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = GetFeatureOperationIT.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = GetFeatureOperationTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
-        InputStream json = GetFeatureOperationIT.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream json = GetFeatureOperationTest.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
@@ -58,7 +63,7 @@ public class GetFeatureOperationIT {
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
+        URI landingPageUri = new URI( "https://localhost:8090" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
         when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
@@ -66,8 +71,19 @@ public class GetFeatureOperationIT {
         when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
     }
 
+    @Before
+    public void setUp() {
+        initJadlerListeningOn( 8090 );
+    }
+
+    @After
+    public void tearDown() {
+        closeJadler();
+    }
+
     @Test
     public void testGetFeatureOperations() {
+        prepareJadler();
         GetFeatureOperation getFeatureOperation = new GetFeatureOperation();
         getFeatureOperation.initCommonFixture( testContext );
         getFeatureOperation.retrieveRequiredInformationFromTestContext( testContext );
@@ -85,6 +101,11 @@ public class GetFeatureOperationIT {
 
         getFeatureOperation.getFeatureOperation( collection, featureId );
         getFeatureOperation.validateTheGetFeatureOperationResponse( collection, featureId );
+    }
+
+    private void prepareJadler() {
+        InputStream collectionItemById = getClass().getResourceAsStream( "collectionItem1-flurstueck.json" );
+        onRequest().respond().withBody( collectionItemById );
     }
 
     private Object[] findCollectionByName( String collectionName, Iterator<Object[]> collections ) {
