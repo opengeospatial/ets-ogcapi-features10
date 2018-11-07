@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [],
+  "numberMatched": 25,
+  "numberReturned": 0,
+  "links": [
+    {
+      "type": "application/json",
+      "rel": "self",
+      "title": "Collection items",
+      "href": "http://localhost:8090/collections/lakes/items"
+    },
+    {
+      "type": "application/json",
+      "rel": "prev",
+      "title": "items (prev)",
+      "href": "http://localhost:8090/collections/lakes/items/?startindex=20"
+    },
+    {
+      "type": "application/json",
+      "rel": "next",
+      "title": "items (next)",
+      "href": "http://localhost:8090/collections/lakes/items/?startindex=40"
+    },
+    {
+      "type": "application/json",
+      "title": "Collection",
+      "rel": "collection",
+      "href": "http://localhost:8090/collections/lakes"
+    }
+  ],
+  "timeStamp": "2018-11-07T10:00:15.326076"
+}

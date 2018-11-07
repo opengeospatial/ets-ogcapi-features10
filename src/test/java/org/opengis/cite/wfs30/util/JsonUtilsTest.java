@@ -1,8 +1,17 @@
 package org.opengis.cite.wfs30.util;
 
+import static net.jadler.Jadler.closeJadler;
+import static net.jadler.Jadler.initJadlerListeningOn;
+import static net.jadler.Jadler.onRequest;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.opengis.cite.wfs30.util.JsonUtils.collectNumberOfAllReturnedFeatures;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinksWithoutRelOrType;
@@ -17,6 +26,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
@@ -24,6 +34,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -44,6 +56,16 @@ public class JsonUtilsTest {
         jsonCollection = new JsonPath( collectionJson );
         InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collectionItems.json" );
         jsonCollectionItem = new JsonPath( collectionItemsJson );
+    }
+
+    @Before
+    public void setUp() {
+        initJadlerListeningOn( 8090 );
+    }
+
+    @After
+    public void tearDown() {
+        closeJadler();
     }
 
     @Test
@@ -173,6 +195,33 @@ public class JsonUtilsTest {
     public void testHasProperty_false() {
         boolean hasProperty = hasProperty( "doesNotExist", jsonCollection );
         assertThat( hasProperty, is( false ) );
+    }
+
+    @Test
+    public void testCollectNumberOfAllReturnedFeatures()
+                            throws Exception {
+        prepareJadler();
+        URL json = new URL( "http://localhost:8090/collections/lakes/items" );
+        JsonPath jsonPath = new JsonPath( json );
+
+        int numberOfAllFeatures = collectNumberOfAllReturnedFeatures( jsonPath, -1 );
+
+        assertThat( numberOfAllFeatures, is( 25 ) );
+    }
+
+    private void prepareJadler() {
+        InputStream item1_10 = getClass().getResourceAsStream( "items_1-10.json" );
+        onRequest().havingParameter( "startindex", nullValue() ).respond().withBody( item1_10 );
+
+        InputStream item11_20 = getClass().getResourceAsStream( "items_11-20.json" );
+        onRequest().havingParameterEqualTo( "startindex", "10" ).respond().withBody( item11_20 );
+
+        InputStream item21_30 = getClass().getResourceAsStream( "items_21-30.json" );
+        onRequest().havingParameterEqualTo( "startindex", "20" ).respond().withBody( item21_30 );
+
+        InputStream item31_40 = getClass().getResourceAsStream( "items_31-40.json" );
+        onRequest().havingParameter( "startindex",
+                                     allOf( notNullValue(), not( hasItems( "10" ) ), not( hasItems( "20" ) ) ) ).respond().withBody( item31_40 );
     }
 
 }
