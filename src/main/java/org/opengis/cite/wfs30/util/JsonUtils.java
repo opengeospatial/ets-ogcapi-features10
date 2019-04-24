@@ -152,10 +152,10 @@ public class JsonUtils {
             return null;
         List<Object> coords = (List<Object>) spatial;
         if ( coords.size() == 4 ) {
-            double minX = (Float) coords.get( 0 );
-            double minY = (Float) coords.get( 1 );
-            double maxX = (Float) coords.get( 2 );
-            double maxY = (Float) coords.get( 3 );
+            double minX = parseValueAsDouble( coords.get( 0 ) );
+            double minY = parseValueAsDouble( coords.get( 1 ) );
+            double maxX = parseValueAsDouble( coords.get( 2 ) );
+            double maxY = parseValueAsDouble( coords.get( 3 ) );
             return new BBox( minX, minY, maxX, maxY );
         } else if ( coords.size() == 6 ) {
             throw new IllegalArgumentException( "BBox with " + coords.size()
@@ -332,6 +332,18 @@ public class JsonUtils {
                 return true;
         }
         return false;
+    }
+
+    private static double parseValueAsDouble( Object cords ) {
+        if ( cords instanceof Integer ) {
+            return ( (Integer) cords ).doubleValue();
+        } else if ( cords instanceof Float ) {
+            return ( (Float) cords ).doubleValue();
+        } else if ( cords instanceof Double ) {
+            return (Double) cords;
+        } else {
+            return Double.parseDouble( cords.toString() );
+        }
     }
 
 }
