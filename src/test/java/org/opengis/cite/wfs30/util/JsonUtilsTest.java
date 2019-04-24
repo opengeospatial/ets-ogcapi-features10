@@ -147,12 +147,25 @@ public class JsonUtilsTest {
     }
 
     @Test
+    public void testParseSpatialExtent_WithIntegerValues() {
+        List<Object> collections = jsonCollection.getList( "collections" );
+        BBox extent = parseSpatialExtent( (Map<String, Object>) collections.get( 1 ) );
+
+        String queryParam = extent.asQueryParameter();
+        String[] queryParams = queryParam.split( "," );
+        assertThat( queryParams.length, is( 4 ) );
+        assertThat( Double.parseDouble( queryParams[0] ), is( 5d ) );
+        assertThat( Double.parseDouble( queryParams[1] ), is( 50d ) );
+        assertThat( Double.parseDouble( queryParams[2] ), is( 9d ) );
+        assertThat( Double.parseDouble( queryParams[3] ), is( 52d ) );
+    }
+
+    @Test
     public void testFindLinkToItself() {
         List<Map<String, Object>> links = jsonCollection.getList( "links" );
         Map<String, Object> linkToItself = findLinkByRel( links, "self" );
 
-        assertThat( linkToItself.get( "href" ),
-                    is( "http://localhost:8090/rest/services/kataster/collections/?f=json" ) );
+        assertThat( linkToItself.get( "href" ), is( "http://localhost:8090/rest/services/kataster/collections/?f=json" ) );
         assertThat( linkToItself.get( "rel" ), is( "self" ) );
         assertThat( linkToItself.get( "type" ), is( "application/json" ) );
         assertThat( linkToItself.get( "title" ), is( "this document" ) );

@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.hamcrest.core.IsInstanceOf;
-
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -154,10 +152,10 @@ public class JsonUtils {
             return null;
         List<Object> coords = (List<Object>) spatial;
         if ( coords.size() == 4 ) {
-            double minX = getValueAsDouble(coords.get( 0 ));
-            double minY = getValueAsDouble(coords.get( 1 ));
-            double maxX = getValueAsDouble(coords.get( 2 ));
-            double maxY = getValueAsDouble(coords.get( 3 ));
+            double minX = parseValueAsDouble( coords.get( 0 ) );
+            double minY = parseValueAsDouble( coords.get( 1 ) );
+            double maxX = parseValueAsDouble( coords.get( 2 ) );
+            double maxY = parseValueAsDouble( coords.get( 3 ) );
             return new BBox( minX, minY, maxX, maxY );
         } else if ( coords.size() == 6 ) {
             throw new IllegalArgumentException( "BBox with " + coords.size()
@@ -335,15 +333,17 @@ public class JsonUtils {
         }
         return false;
     }
-    
-    private static double getValueAsDouble(Object cords){     
-      if(cords instanceof Integer){
-          return ((Integer) cords).doubleValue();
-      } else if(cords instanceof Float){
-          return ((Float) cords).doubleValue();
-      } else {
-          return (Double) cords;
-      }
+
+    private static double parseValueAsDouble( Object cords ) {
+        if ( cords instanceof Integer ) {
+            return ( (Integer) cords ).doubleValue();
+        } else if ( cords instanceof Float ) {
+            return ( (Float) cords ).doubleValue();
+        } else if ( cords instanceof Double ) {
+            return (Double) cords;
+        } else {
+            return Double.parseDouble( cords.toString() );
+        }
     }
 
 }
