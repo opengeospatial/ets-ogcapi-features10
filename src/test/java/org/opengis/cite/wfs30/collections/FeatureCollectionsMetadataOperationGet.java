@@ -1,8 +1,13 @@
 package org.opengis.cite.wfs30.collections;
 
+import static net.jadler.Jadler.closeJadler;
+import static net.jadler.Jadler.initJadlerListeningOn;
+import static net.jadler.Jadler.onRequest;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -26,7 +33,7 @@ import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureCollectionsMetadataOperationIT {
+public class FeatureCollectionsMetadataOperationGet {
 
     private static ITestContext testContext;
 
@@ -36,7 +43,7 @@ public class FeatureCollectionsMetadataOperationIT {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionsMetadataOperationIT.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeatureCollectionsMetadataOperationGet.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
         List<RequirementClass> requirementClasses = new ArrayList();
@@ -52,13 +59,25 @@ public class FeatureCollectionsMetadataOperationIT {
         when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
     }
 
+    @Before
+    public void setUp() {
+        initJadlerListeningOn( 8090 );
+    }
+
+    @After
+    public void tearDown() {
+        closeJadler();
+    }
+
     @Test
     public void testValidateFeatureCollectionsMetadataOperationResponse() {
+        prepareJadler();
         FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
         featureCollectionsMetadataOperation.openApiDocument( testContext );
         featureCollectionsMetadataOperation.requirementClasses( testContext );
-        TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/collections", mediaTypes() );
+        TestPoint testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections",
+                                             mediaTypes() );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections( testPoint );
@@ -79,6 +98,20 @@ public class FeatureCollectionsMetadataOperationIT {
         mediaTypes.put( "application/json", Mockito.mock( MediaType.class ) );
         mediaTypes.put( "text/html", Mockito.mock( MediaType.class ) );
         return mediaTypes;
+    }
+
+    private void prepareJadler() {
+        InputStream collections = getClass().getResourceAsStream( "collections.json" );
+        onRequest().havingPath( endsWith( "collections" ) ).respond().withBody( collections );
+
+        InputStream collectionFlurstueck = getClass().getResourceAsStream( "collection-flurstueck.json" );
+        onRequest().havingPath( endsWith( "collections/flurstueck" ) ).respond().withBody( collectionFlurstueck );
+
+        InputStream collectionGebaeudebauwerk = getClass().getResourceAsStream( "collection-gebaeudebauwerk.json" );
+        onRequest().havingPath( endsWith( "collections/gebaeudebauwerk" ) ).respond().withBody( collectionGebaeudebauwerk );
+
+        InputStream collectionVerwaltungseinheit = getClass().getResourceAsStream( "collection-verwaltungseinheit.json" );
+        onRequest().havingPath( endsWith( "collections/verwaltungseinheit" ) ).respond().withBody( collectionVerwaltungseinheit );
     }
 
 }

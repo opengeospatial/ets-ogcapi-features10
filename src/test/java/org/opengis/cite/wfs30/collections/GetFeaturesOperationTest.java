@@ -143,6 +143,9 @@ public class GetFeaturesOperationTest {
         InputStream flurstueckItemsLimit = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
         onRequest().havingPath( containsString( "collections/flurstueck/items" ) ).havingParameterEqualTo( "limit",
                                                                                                            "25" ).respond().withBody( flurstueckItemsLimit );
+
+        InputStream verwaltungseinheitItems = getClass().getResourceAsStream( "collectionItems-verwaltungseinheit.json" );
+        onRequest().havingPath( endsWith( "collections/verwaltungseinheit/items" ) ).respond().withBody( verwaltungseinheitItems );
     }
 
 }

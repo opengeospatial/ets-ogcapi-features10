@@ -107,9 +107,7 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        // assertThat( testPoint.createUri(),
-        // is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck" ) );
-        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://localhost:8090/rest/services/kataster" ) );
         assertThat( testPoint.getPath(), is( "/collections/flurstueck" ) );
 
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
@@ -127,9 +125,7 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        // assertThat( testPoint.createUri(),
-        // is( "http://www.ldproxy.nrw.de/rest/services/kataster/collections/flurstueck/items" ) );
-        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://localhost:8090/rest/services/kataster" ) );
         assertThat( testPoint.getPath(), is( "/collections/flurstueck/items" ) );
 
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
@@ -147,7 +143,7 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
 
         TestPoint testPoint = testPoints.get( 0 );
-        assertThat( testPoint.getServerUrl(), is( "http://www.ldproxy.nrw.de/rest/services/kataster" ) );
+        assertThat( testPoint.getServerUrl(), is( "http://localhost:8090/rest/services/kataster" ) );
         assertThat( testPoint.getPath(), is( "/collections/flurstueck/items/{featureId}" ) );
         Map<String, MediaType> contentMediaTypes = testPoint.getContentMediaTypes();
         assertThat( contentMediaTypes.size(), is( 2 ) );
