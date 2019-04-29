@@ -14,8 +14,8 @@ pipeline {
     stage('Release') {
       steps{
         sh 'mvn --version'
-        sh 'mvn -Dresume=false -DdryRun=true release:prepare -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion}'
-        sh 'mvn -Dresume=false release:prepare release:perform -Psign-artifacts-with-ogc -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion}'
+        sh 'mvn -Dresume=false -DdryRun=true release:prepare -Psign-artifacts-with-ogc,integration-tests,docker -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion}'
+        sh 'mvn -Dresume=false release:prepare release:perform -Psign-artifacts-with-ogc,integration-tests,docker -DreleaseVersion=${releaseVersion} -DdevelopmentVersion=${developmentVersion}'
       }
     }
     stage('Publication of site') {
