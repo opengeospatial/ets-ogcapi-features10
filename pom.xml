@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opengis.cite</groupId>
   <artifactId>ets-wfs30</artifactId>
-  <version>0.3</version>
+  <version>0.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>WFS 3.0 Conformance Test Suite</name>
@@ -30,7 +30,7 @@
     <connection>scm:git:https://github.com/opengeospatial/ets-wfs30.git</connection>
     <developerConnection>scm:git:git@github.com:opengeospatial/ets-wfs30.git</developerConnection>
     <url>https://github.com/opengeospatial/ets-wfs30</url>
-    <tag>0.3</tag>
+    <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Tracker</system>
