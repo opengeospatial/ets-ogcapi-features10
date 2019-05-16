@@ -178,6 +178,19 @@ public class OpenApiUtilsTest {
     }
 
     @Test
+    public void testRetrieveTestPointsForCollections_limitGreaterThanSize() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, 6 );
+
+        assertThat( testPoints.size(), is( 3 ) );
+        List<String> paths = testPoints.stream().map( tp -> tp.getPath() ).collect( Collectors.toCollection( ArrayList::new ) );
+        assertThat( paths, hasItem( "/collections/flurstueck/items" ) );
+    }
+
+    @Test
     public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
         OpenApi3Parser parser = new OpenApi3Parser();
 

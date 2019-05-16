@@ -178,7 +178,7 @@ public class OpenApiUtils {
 
         List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, requestedPath.toString(),
                                                             ( a, b ) -> a.matches( b ) );
-        if ( noOfCollection < 0 ) {
+        if ( noOfCollection < 0 || allTestPoints.size() <= noOfCollection ) {
             return allTestPoints;
         }
         return allTestPoints.subList( 0, noOfCollection );
