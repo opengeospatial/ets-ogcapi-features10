@@ -70,4 +70,9 @@ The _Obligation_ descriptor can have the following values: M (mandatory), O (opt
 |M
 |A URI that refers to the landing page of the service under test. Ampersand ('&amp;') characters must be percent-encoded as '%26'.
 
+|noofcollections
+|Integer
+|O
+|Number of collections under test. -1 means that all collections should be tested. Default: 3
+
 |===
