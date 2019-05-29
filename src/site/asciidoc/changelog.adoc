@@ -1,5 +1,10 @@
 = Release Notes WFS 3.0
 
+== 0.4 (2019-05-29)
+
+- https://github.com/opengeospatial/ets-wfs30/issues/60[#60]: Test "boundingBoxParameter" fails with IndexOutOfBoundException bug
+- https://github.com/opengeospatial/ets-wfs30/issues/58[#58]: Add documentation of parameter noofcollections for REST API
+
 == 0.3 (2019-04-26)
 
 - https://github.com/opengeospatial/ets-wfs30/issues/56[#56]: Test for extent should manage both integer and float
