@@ -50,7 +50,7 @@
   <properties>
     <ets-code>wfs30</ets-code>
     <spec-version>3.0</spec-version>
-    <docker.teamengine.version>5.3</docker.teamengine.version>
+    <docker.teamengine.version>5.4</docker.teamengine.version>
   </properties>
 
   <dependencies>
@@ -212,7 +212,7 @@
               <image>
                 <name>ogccite/${project.artifactId}</name>
                 <build>
-                  <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                  <dockerFileDir>${project.basedir}/src/docker</dockerFileDir>
                   <tags>
                     <tag>${project.version}-teamengine-${docker.teamengine.version}</tag>
                   </tags>

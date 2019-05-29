@@ -25,4 +25,4 @@ ADD maven/ets-wfs30-*-deps.zip /root/
 RUN cd /root/ && unzip -q -o ets-wfs30-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib
 
 # run tomcat
-CMD ["catalina.sh", "run"]
+CMD ["catalina.sh", "jpda", "run"]
