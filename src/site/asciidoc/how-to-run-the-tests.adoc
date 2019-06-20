@@ -40,7 +40,39 @@ suite in a command shell:
 === 3. Docker
 
 This test suite comes with a Dockerfile which can be used to easily setup the OGC test harness with
-the test suite. Details can be found on https://github.com/opengeospatial/cite/wiki/How-to-create-Docker-Images-of-test-suites#create-docker-image-and-create-and-start-docker-container[Create Docker Image and create and start Docker Container].
+the test suite.
+
+You need to retrieve the https://hub.docker.com/r/ogccite/ets-wfs30[image from Docker Hub] by running the following
+
+    docker run -p 8081:8080 ogccite/ets-wfs30
+
+Then, open http://localhost:8081/teamengine/ to see below
+
+image::images/welcome-ogccite-01.png[]
+
+Login with user and password 'ogctest'
+
+image::images/login-ogccite-02.png[]
+
+Create a new session from the list
+
+image::images/test-session-ogccite-03.png[]
+
+Choose 'OGC' organization then Specification 'Web Feature Service (WFS) - 3.0 [ 0.4 ]'
+
+image::images/complete-test-session-ogccite-04.png[]
+
+Choose the endpoint URL to test if you query all the endpoints (it could take too long depending of the available datasets for the endpoint)
+
+image::images/wfs-conformance-test-suite-ogccite-05.png[]
+
+Wait test execution and see the results from the validator
+
+image::images/result-wfs-test-suite-ogccite-06.png[]
+
+HTTP calls to localhost are not working with Docker. You need to make calls using host IP (`ipconfig` on Windows or `ifconfig` on Unix based OS like Linux or Mac)
+
+Details can be found on https://github.com/opengeospatial/cite/wiki/How-to-create-Docker-Images-of-test-suites#create-docker-image-and-create-and-start-docker-container[Create Docker Image and create and start Docker Container].
 
 === 4. OGC test harness
 
