@@ -48,27 +48,27 @@ You need to retrieve the https://hub.docker.com/r/ogccite/ets-wfs30[image from D
 
 Then, open http://localhost:8081/teamengine/ to see below
 
-image::images/welcome-ogccite-01.png[]
+image::img/welcome-ogccite-01.png[]
 
 Login with user and password 'ogctest'
 
-image::images/login-ogccite-02.png[]
+image::img/login-ogccite-02.png[]
 
 Create a new session from the list
 
-image::images/test-session-ogccite-03.png[]
+image::img/test-session-ogccite-03.png[]
 
 Choose 'OGC' organization then Specification 'Web Feature Service (WFS) - 3.0 [ 0.4 ]'
 
-image::images/complete-test-session-ogccite-04.png[]
+image::img/complete-test-session-ogccite-04.png[]
 
 Choose the endpoint URL to test if you query all the endpoints (it could take too long depending of the available datasets for the endpoint)
 
-image::images/wfs-conformance-test-suite-ogccite-05.png[]
+image::img/wfs-conformance-test-suite-ogccite-05.png[]
 
 Wait test execution and see the results from the validator
 
-image::images/result-wfs-test-suite-ogccite-06.png[]
+image::img/result-wfs-test-suite-ogccite-06.png[]
 
 HTTP calls to localhost are not working with Docker. You need to make calls using host IP (`ipconfig` on Windows or `ifconfig` on Unix based OS like Linux or Mac)
 
