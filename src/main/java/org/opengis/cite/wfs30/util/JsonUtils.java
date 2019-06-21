@@ -38,9 +38,8 @@ public class JsonUtils {
         if ( features == null )
             return null;
         for ( Map<String, Object> feature : features ) {
-            Object featureId = feature.get( "id" );
-            if ( featureId != null && featureId instanceof String )
-                return (String) featureId;
+            if ( feature.containsKey( "id" ) )
+                return feature.get( "id" ).toString();
         }
         return null;
     }
