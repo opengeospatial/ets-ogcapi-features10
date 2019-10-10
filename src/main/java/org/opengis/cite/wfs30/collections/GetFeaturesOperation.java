@@ -4,6 +4,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.EtsAssert.assertFalse;
 import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
+import static org.opengis.cite.wfs30.SuiteAttribute.IUT;
 import static org.opengis.cite.wfs30.WFS3.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
@@ -23,6 +24,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.parseTemporalExtent;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -64,6 +66,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
     private OpenApi3 apiModel;
 
+    private URI iut;
+
     @DataProvider(name = "collectionItemUris")
     public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
@@ -75,7 +79,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
     @DataProvider(name = "collectionPaths")
     public Iterator<Object[]> collectionPaths( ITestContext testContext ) {
-        List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( apiModel, noOfCollections );
+        this.iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
+        List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( apiModel, iut, noOfCollections );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( TestPoint testPointForCollections : testPointsForCollections ) {
             collectionsData.add( new Object[] { testPointForCollections } );
@@ -85,10 +90,11 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
     @DataProvider(name = "collectionItemUrisWithLimit")
     public Iterator<Object[]> collectionItemUrisWithLimits( ITestContext testContext ) {
+        URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         List<Object[]> collectionsWithLimits = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
             String collectionName = (String) collection.get( "name" );
-            List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, collectionName );
+            List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionName );
             for ( TestPoint testPoint : testPoints ) {
                 Parameter limit = findParameterByName( testPoint, "limit" );
                 if ( limit != null && limit.getSchema() != null ) {
@@ -707,7 +713,7 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
         int maximumLimit = -1;
 
-        TestPoint testPoint = retrieveTestPointsForCollection( apiModel, collectionName ).get( 0 );
+        TestPoint testPoint = retrieveTestPointsForCollection( apiModel, iut, collectionName ).get( 0 );
         if ( testPoint != null ) {
             Parameter limitParameter = findParameterByName( testPoint, "limit" );
             if ( limitParameter != null && limitParameter.getSchema() != null ) {

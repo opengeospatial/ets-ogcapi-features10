@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,14 @@ public class FeatureCollectionsMetadataOperationGet {
 
     private static ISuite suite;
 
+    private static URI iut;
+
+    @BeforeClass
+    public static void instantiateUri()
+                    throws URISyntaxException {
+        iut = new URI( "http://localhost:8080/oaf" );
+    }
+    
     @BeforeClass
     public static void initTestFixture()
                             throws Exception {
@@ -88,7 +97,8 @@ public class FeatureCollectionsMetadataOperationGet {
             Map<String, Object> collection = (Map<String, Object>) object[1];
             featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Links( tp, collection );
             featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Extent( tp, collection );
-            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( tp,
+            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( testContext,
+                                                                                                          tp,
                                                                                                           collection );
         }
     }

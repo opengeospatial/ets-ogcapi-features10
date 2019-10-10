@@ -4,6 +4,7 @@ import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.API;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.COLLECTIONS;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.PATH.CONFORMANCE;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -95,11 +96,13 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel ) {
+    static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut ) {
         List<Path> pathItemObjects = identifyTestPoints( apiModel );
-        List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
+        List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, iut, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
 
@@ -108,10 +111,12 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel ) {
-        return retrieveTestPoints( apiModel, API );
+    static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel, URI iut ) {
+        return retrieveTestPoints( apiModel, iut, API );
     }
 
     /**
@@ -120,10 +125,12 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForConformance( OpenApi3 apiModel ) {
-        return retrieveTestPoints( apiModel, CONFORMANCE );
+    public static List<TestPoint> retrieveTestPointsForConformance( OpenApi3 apiModel, URI iut ) {
+        return retrieveTestPoints( apiModel, iut, CONFORMANCE );
     }
 
     /**
@@ -134,8 +141,8 @@ public class OpenApiUtils {
      *            never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForCollectionsMetadata( OpenApi3 apiModel ) {
-        return retrieveTestPoints( apiModel, COLLECTIONS );
+    public static List<TestPoint> retrieveTestPointsForCollectionsMetadata( OpenApi3 apiModel, URI iut ) {
+        return retrieveTestPoints( apiModel, iut, COLLECTIONS );
     }
 
     /**
@@ -144,18 +151,20 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @param collectionName
      *            the extended path, may be <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForCollectionMetadata( OpenApi3 apiModel, String collectionName ) {
+    public static List<TestPoint> retrieveTestPointsForCollectionMetadata( OpenApi3 apiModel, URI iut, String collectionName ) {
         StringBuilder requestedPath = new StringBuilder();
         requestedPath.append( "/" );
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
@@ -165,18 +174,20 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @param noOfCollection
      *            the number of collections to return test points for (-1 means the test points of all collections
      *            should be returned)
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel, int noOfCollection ) {
+    public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel, URI iut, int noOfCollection ) {
         StringBuilder requestedPath = new StringBuilder();
         requestedPath.append( "/" );
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/.*/items" );
 
-        List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, requestedPath.toString(),
+        List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(),
                                                             ( a, b ) -> a.matches( b ) );
         if ( noOfCollection < 0 || allTestPoints.size() <= noOfCollection ) {
             return allTestPoints;
@@ -190,11 +201,13 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @param collectionName
      *            the extended path, may be <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForCollection( OpenApi3 apiModel, String collectionName ) {
+    public static List<TestPoint> retrieveTestPointsForCollection( OpenApi3 apiModel, URI iut, String collectionName ) {
         StringBuilder requestedPath = new StringBuilder();
         requestedPath.append( "/" );
         requestedPath.append( COLLECTIONS.getPathItem() );
@@ -202,7 +215,7 @@ public class OpenApiUtils {
         requestedPath.append( collectionName );
         requestedPath.append( "/items" );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
@@ -212,13 +225,15 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @param collectionName
      *            the extended path, may be <code>null</code>
      * @param featureId
      *            the id of the feature, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
-    public static List<TestPoint> retrieveTestPointsForFeature( OpenApi3 apiModel, String collectionName,
+    public static List<TestPoint> retrieveTestPointsForFeature( OpenApi3 apiModel, URI iut, String collectionName,
                                                                 String featureId ) {
         StringBuilder requestedPath = new StringBuilder();
         requestedPath.append( "/" );
@@ -228,23 +243,23 @@ public class OpenApiUtils {
         requestedPath.append( "/items/" );
         requestedPath.append( featureId );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
-    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, PATH path ) {
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path ) {
         String requestedPath = "/" + path.getPathItem();
-        return retrieveTestPoints( apiModel, requestedPath );
+        return retrieveTestPoints( apiModel, iut, requestedPath );
     }
 
-    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath ) {
-        return retrieveTestPoints( apiModel, requestedPath, new PathMatcher() );
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, String requestedPath ) {
+        return retrieveTestPoints( apiModel, iut, requestedPath, new PathMatcher() );
     }
 
-    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, String requestedPath,
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, String requestedPath,
                                                        PathMatcherFunction<Boolean, String, String> pathMatcher ) {
         List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath, pathMatcher );
-        List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, pathItemObjects );
+        List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, iut, pathItemObjects );
         return processServerObjects( pathItemAndServers );
     }
 
@@ -336,10 +351,12 @@ public class OpenApiUtils {
      * 
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            never <code>null</code>
      * @param pathItemObjects
      *            never <code>null</code>
      */
-    private static List<PathItemAndServer> identifyServerUrls( OpenApi3 apiModel, List<Path> pathItemObjects ) {
+    private static List<PathItemAndServer> identifyServerUrls( OpenApi3 apiModel, URI iut, List<Path> pathItemObjects ) {
         List<PathItemAndServer> pathItemAndServers = new ArrayList<>();
 
         for ( Path pathItemObject : pathItemObjects ) {
@@ -347,6 +364,10 @@ public class OpenApiUtils {
             for ( Operation operationObject : operationObjects.values() ) {
                 List<String> serverUrls = identifyServerObjects( apiModel, pathItemObject, operationObject );
                 for ( String serverUrl : serverUrls ) {
+                    if ( serverUrl.endsWith( "/" ) ) {
+                        String iutUrl = iut.toString();
+                        serverUrl = iutUrl.endsWith( "/" ) ? iutUrl.substring( 0, iutUrl.length() - 1 ) : iutUrl;
+                    }
                     PathItemAndServer pathItemAndServer = new PathItemAndServer( pathItemObject, operationObject,
                                                                                  serverUrl );
                     pathItemAndServers.add( pathItemAndServer );
