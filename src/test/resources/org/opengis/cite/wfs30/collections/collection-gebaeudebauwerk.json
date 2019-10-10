@@ -13,19 +13,19 @@
   "links": [
     {
       "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=json",
-      "rel": "item",
+      "rel": "items",
       "type": "application/geo+json",
       "title": "Gebäude, Bauwerk as GeoJSON"
     },
     {
       "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=html",
-      "rel": "item",
+      "rel": "items",
       "type": "text/html",
       "title": "Gebäude, Bauwerk as HTML"
     },
     {
       "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=xml",
-      "rel": "item",
+      "rel": "items",
       "type": "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
       "title": "Gebäude, Bauwerk as GML"
     },

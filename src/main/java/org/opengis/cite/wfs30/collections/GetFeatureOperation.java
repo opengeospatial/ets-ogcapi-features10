@@ -195,7 +195,7 @@ public class GetFeatureOperation extends CommonDataFixture {
             Map<String, Object> link = (Map<String, Object>) linkObject;
             Object rel = link.get( "rel" );
             Object type = link.get( "type" );
-            if ( "item".equals( rel ) && GEOJSON_MIME_TYPE.equals( type ) )
+            if ( "items".equals( rel ) && GEOJSON_MIME_TYPE.equals( type ) )
                 return (String) link.get( "href" );
         }
         return null;

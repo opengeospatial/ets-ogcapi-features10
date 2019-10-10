@@ -229,7 +229,7 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
         List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures();
         List<Map<String, Object>> links = (List<Map<String, Object>>) collection.get( "links" );
 
-        List<Map<String, Object>> items = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport, "item" );
+        List<Map<String, Object>> items = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport, "items" );
         List<String> typesWithoutLink = findUnsupportedTypes( items, mediaTypesToSupport );
         assertTrue( typesWithoutLink.isEmpty(),
                     "Collections Metadata document for collection with id "
