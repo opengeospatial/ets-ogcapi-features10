@@ -397,9 +397,9 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
         assertEquals( limit.getName(), "limit", String.format( msg, "name", "limit", limit.getName() ) );
         assertEquals( limit.getIn(), "query", String.format( msg, "in", "query", limit.getIn() ) );
-        assertFalse( limit.getRequired(), String.format( msg, "required", "false", limit.getRequired() ) );
+        assertFalse( isRequired( limit ), String.format( msg, "required", "false", limit.getRequired() ) );
         assertEquals( limit.getStyle(), "form", String.format( msg, "style", "form", limit.getStyle() ) );
-        assertFalse( limit.getExplode(), String.format( msg, "explode", "false", limit.getExplode() ) );
+        assertFalse( isExplode( limit ), String.format( msg, "explode", "false", limit.getExplode() ) );
 
         Schema schema = limit.getSchema();
         assertEquals( schema.getType(), "integer", String.format( msg, "schema -> type", "integer", schema.getType() ) );
@@ -494,9 +494,9 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
         assertEquals( bbox.getName(), "bbox", String.format( msg, "name", "bbox", bbox.getName() ) );
         assertEquals( bbox.getIn(), "query", String.format( msg, "in", "query", bbox.getIn() ) );
-        assertFalse( bbox.getRequired(), String.format( msg, "required", "false", bbox.getRequired() ) );
+        assertFalse( isRequired( bbox ), String.format( msg, "required", "false", bbox.getRequired() ) );
         assertEquals( bbox.getStyle(), "form", String.format( msg, "style", "form", bbox.getStyle() ) );
-        assertFalse( bbox.getExplode(), String.format( msg, "explode", "false", bbox.getExplode() ) );
+        assertFalse( isExplode( bbox ), String.format( msg, "explode", "false", bbox.getExplode() ) );
 
         Schema schema = bbox.getSchema();
         assertEquals( schema.getType(), "array", String.format( msg, "schema -> type", "array", schema.getType() ) );
@@ -592,9 +592,9 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
         assertEquals( time.getName(), "time", String.format( msg, "name", "time", time.getName() ) );
         assertEquals( time.getIn(), "query", String.format( msg, "in", "query", time.getIn() ) );
-        assertFalse( time.getRequired(), String.format( msg, "required", "false", time.getRequired() ) );
+        assertFalse( isRequired( time ), String.format( msg, "required", "false", time.getRequired() ) );
         assertEquals( time.getStyle(), "form", String.format( msg, "style", "form", time.getStyle() ) );
-        assertFalse( time.getExplode(), String.format( msg, "explode", "false", time.getExplode() ) );
+        assertFalse( isExplode( time ), String.format( msg, "explode", "false", time.getExplode() ) );
 
         Schema schema = time.getSchema();
         assertEquals( schema.getType(), "string", String.format( msg, "schema -> type", "string", schema.getType() ) );
@@ -767,6 +767,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
         assertTrue( value > 0, String.format( msg, propertyName, value ) );
     }
 
+    private boolean isRequired( Parameter param ) {
+        return param.getRequired() != null && param.getRequired();
+    }
+
+    private Boolean isExplode(Parameter param) {
+        return param.getExplode() != null && param.getExplode();
+    }
+    
     private class ResponseData {
 
         private final Response response;
