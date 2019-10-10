@@ -110,7 +110,7 @@ public class OpenApi extends CommonFixture {
             Map<String, Object> linkMap = (Map<String, Object>) link;
             Object rel = linkMap.get( "rel" );
             Object type = linkMap.get( "type" );
-            if ( "service".equals( rel ) && OPEN_API_MIME_TYPE.equals( type ) )
+            if ( "service-desc".equals( rel ) && OPEN_API_MIME_TYPE.equals( type ) )
                 return (String) linkMap.get( "href" );
         }
         return null;

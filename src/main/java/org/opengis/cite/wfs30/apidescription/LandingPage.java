@@ -78,8 +78,9 @@ public class LandingPage extends CommonFixture {
         List<Object> links = response.getList( "links" );
         Set<String> linkTypes = collectLinkTypes( links );
 
-        boolean expectedLinkTypesExists = linkTypes.contains( "service" ) && linkTypes.contains( "conformance" )
-                                          && linkTypes.contains( "data" );
+        boolean expectedLinkTypesExists = ( linkTypes.contains( "service-desc" )
+                                            || linkTypes.contains( "service-doc" ) )
+                                          && linkTypes.contains( "conformance" ) && linkTypes.contains( "data" );
         assertTrue( expectedLinkTypesExists,
                     "The landing page must include at least links with relation type 'service', 'conformance' and 'data', but contains "
                                             + String.join( ", ", linkTypes ) );
