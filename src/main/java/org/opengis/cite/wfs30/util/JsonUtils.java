@@ -234,6 +234,8 @@ public class JsonUtils {
      * @return the link to itself or <code>null</code> if no such link exists
      */
     public static Map<String, Object> findLinkByRel( List<Map<String, Object>> links, String expectedRel ) {
+        if ( links == null )
+            return null;
         for ( Map<String, Object> link : links ) {
             Object rel = link.get( "rel" );
             if ( expectedRel.equals( rel ) )
