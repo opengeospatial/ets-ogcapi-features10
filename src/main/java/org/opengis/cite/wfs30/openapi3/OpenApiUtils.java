@@ -404,7 +404,9 @@ public class OpenApiUtils {
 
     private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer ) {
         String pathString = pathItemAndServer.pathItemObject.getPathString();
-        Response response = pathItemAndServer.operationObject.getResponse( "200" );
+        Response response = getResponse(pathItemAndServer);
+        if ( response == null )
+            return;
         Map<String, MediaType> contentMediaTypes = response.getContentMediaTypes();
 
         UriTemplate uriTemplate = new UriTemplate( pathItemAndServer.serverUrl + pathString );
@@ -426,6 +428,14 @@ public class OpenApiUtils {
                 }
             }
         }
+    }
+
+    private static Response getResponse( PathItemAndServer pathItemAndServer ) {
+        if ( pathItemAndServer.operationObject.hasResponse( "200" ) )
+            return pathItemAndServer.operationObject.getResponse( "200" );
+        if ( pathItemAndServer.operationObject.hasResponse( "default" ) )
+            return pathItemAndServer.operationObject.getResponse( "default" );
+        return null;
     }
 
     private static List<Map<String, String>> collectTemplateReplacements( PathItemAndServer pathItemAndServer,
