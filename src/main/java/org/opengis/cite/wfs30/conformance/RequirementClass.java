@@ -8,21 +8,21 @@ package org.opengis.cite.wfs30.conformance;
  */
 public enum RequirementClass {
 
-    CORE( "http://www.opengis.net/spec/wfs-1/3.0/req/core" ),
+    CORE( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core" ),
 
-    HTML( "http://www.opengis.net/spec/wfs-1/3.0/req/html", "text/html", "text/html" ),
+    HTML( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html", "text/html", "text/html" ),
 
-    GEOJSON( "http://www.opengis.net/spec/wfs-1/3.0/req/geojson", "application/geo+json", "application/json" ),
+    GEOJSON( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson", "application/geo+json", "application/json" ),
 
-    GMLSF0( "http://www.opengis.net/spec/wfs-1/3.0/req/gmlsf0",
+    GMLSF0( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/gmlsf0",
            "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf0",
            "application/xml" ),
 
-    GMLSF2( "http://www.opengis.net/spec/wfs-1/3.0/req/gmlsf2",
+    GMLSF2( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/gmlsf2",
            "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
            "application/xml" ),
 
-    OPENAPI30( "http://www.opengis.net/spec/wfs-1/3.0/req/oas30" );
+    OPENAPI30( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30" );
 
     private final String conformanceClass;
 
