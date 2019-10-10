@@ -439,7 +439,7 @@ public class GetFeaturesOperation extends CommonDataFixture {
         String collectionName = (String) collection.get( "name" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
-        if ( getFeaturesUrl.isEmpty() )
+        if ( getFeaturesUrl == null || getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with name " + collectionName
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
