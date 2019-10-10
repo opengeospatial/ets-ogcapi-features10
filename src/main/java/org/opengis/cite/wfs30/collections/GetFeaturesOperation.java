@@ -582,7 +582,7 @@ public class GetFeaturesOperation extends CommonDataFixture {
      *            the testPoint under test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionPaths", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
-    public void timeParameter( TestPoint testPoint ) {
+    public void datetimeParameter( TestPoint testPoint ) {
         Parameter time = findParameterByName( testPoint, "datetime" );
 
         assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()
