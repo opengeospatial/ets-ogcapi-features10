@@ -583,14 +583,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionPaths", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void timeParameter( TestPoint testPoint ) {
-        Parameter time = findParameterByName( testPoint, "time" );
+        Parameter time = findParameterByName( testPoint, "datetime" );
 
         assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
 
-        assertEquals( time.getName(), "time", String.format( msg, "name", "time", time.getName() ) );
+        assertEquals( time.getName(), "datetime", String.format( msg, "name", "datetime", time.getName() ) );
         assertEquals( time.getIn(), "query", String.format( msg, "in", "query", time.getIn() ) );
         assertFalse( time.getRequired(), String.format( msg, "required", "false", time.getRequired() ) );
         assertEquals( time.getStyle(), "form", String.format( msg, "style", "form", time.getStyle() ) );
