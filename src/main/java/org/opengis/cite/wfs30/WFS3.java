@@ -10,7 +10,7 @@ public class WFS3 {
     private WFS3() {
     }
 
-    public static final String OPEN_API_MIME_TYPE = "application/openapi+json;version=3.0";
+    public static final String OPEN_API_MIME_TYPE = "application/vnd.oai.openapi+json;version=3.0";
 
     public static final String GEOJSON_MIME_TYPE = "application/geo+json";
 
