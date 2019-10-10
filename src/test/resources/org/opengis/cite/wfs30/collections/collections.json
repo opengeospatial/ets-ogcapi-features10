@@ -39,7 +39,7 @@
   ],
   "collections": [
     {
-      "name": "flurstueck",
+      "id": "flurstueck",
       "title": "Flurstück",
       "description": null,
       "extent": {
@@ -82,7 +82,7 @@
       ]
     },
     {
-      "name": "gebaeudebauwerk",
+      "id": "gebaeudebauwerk",
       "title": "Gebäude, Bauwerk",
       "description": null,
       "extent": {
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "name" : "verwaltungseinheit",
+      "id" : "verwaltungseinheit",
       "title" : "Verwaltungseinheit",
       "extent" : {
         "spatial" : [ 5.61272621360749, 50.2373512077239, 9.58963433710139, 52.5286304537795 ],

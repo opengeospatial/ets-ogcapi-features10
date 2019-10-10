@@ -93,8 +93,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
         URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         List<Object[]> collectionsWithLimits = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
-            String collectionName = (String) collection.get( "name" );
-            List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionName );
+            String collectionId = (String) collection.get( "id" );
+            List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionId );
             for ( TestPoint testPoint : testPoints ) {
                 Parameter limit = findParameterByName( testPoint, "limit" );
                 if ( limit != null && limit.getSchema() != null ) {
@@ -200,11 +200,11 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.9. Validate the Get Features Operation (Requirement 17, 24)", groups = "getFeaturesBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections", alwaysRun = true)
     public void validateTheGetFeaturesOperation( ITestContext testContext, Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
+        String collectionId = (String) collection.get( "id" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl == null )
-            throw new SkipException( "Could not find url for collection with name " + collectionName
+            throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
         ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
@@ -212,9 +212,9 @@ public class GetFeaturesOperation extends CommonDataFixture {
         response.then().statusCode( 200 );
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
-        collectionNameAndResponse.put( collectionName, responseData );
+        collectionNameAndResponse.put( collectionId, responseData );
 
-        addFeatureIdToTestContext( testContext, collectionName, response );
+        addFeatureIdToTestContext( testContext, collectionId, response );
     }
 
     /**
@@ -238,10 +238,10 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 25, 26)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void validateTheGetFeaturesOperationResponse_Links( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        ResponseData response = collectionNameAndResponse.get( collectionName );
+        String collectionId = (String) collection.get( "id" );
+        ResponseData response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+            throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
 
@@ -286,14 +286,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 27)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void validateTheGetFeaturesOperationResponse_property_timeStamp( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        ResponseData response = collectionNameAndResponse.get( collectionName );
+        String collectionId = (String) collection.get( "id" );
+        ResponseData response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+            throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertTimeStamp( collectionName, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse,
+        assertTimeStamp( collectionId, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse,
                          true );
     }
 
@@ -316,14 +316,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 29)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void validateGetFeaturesOperationResponse_property_numberReturned( Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
-        ResponseData response = collectionNameAndResponse.get( collectionName );
+        String collectionId = (String) collection.get( "id" );
+        ResponseData response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+            throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberReturned( collectionName, jsonPath, true );
+        assertNumberReturned( collectionId, jsonPath, true );
     }
 
     /**
@@ -350,14 +350,14 @@ public class GetFeaturesOperation extends CommonDataFixture {
     @Test(description = "Implements A.4.4.10. Validate the Get Features Operation Response (Requirement 28)", dataProvider = "collectionItemUris", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void validateTheGetFeaturesOperationResponse_property_numberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
-        String collectionName = (String) collection.get( "name" );
-        ResponseData response = collectionNameAndResponse.get( collectionName );
+        String collectionId = (String) collection.get( "id" );
+        ResponseData response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+            throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberMatched( collectionName, jsonPath, true );
+        assertNumberMatched( collectionId, jsonPath, true );
     }
 
     /**
@@ -436,11 +436,11 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 19)", dataProvider = "collectionItemUrisWithLimit", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void limitParameter_requests( Map<String, Object> collection, int limit ) {
-        String collectionName = (String) collection.get( "name" );
+        String collectionId = (String) collection.get( "id" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl == null || getFeaturesUrl.isEmpty() )
-            throw new SkipException( "Could not find url for collection with name " + collectionName
+            throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "limit", limit ).when().request( GET );
@@ -449,11 +449,11 @@ public class GetFeaturesOperation extends CommonDataFixture {
 
         JsonPath jsonPath = response.jsonPath();
         int numberOfFeatures = jsonPath.getList( "features" ).size();
-        assertTrue( numberOfFeatures <= limit, "Number of features for collection with name " + collectionName
+        assertTrue( numberOfFeatures <= limit, "Number of features for collection with name " + collectionId
                                                + " is unexpected (was " + numberOfFeatures + "), expected are " + limit
                                                + " or less" );
-        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
-        assertNumberReturned( collectionName, jsonPath, false );
+        assertTimeStamp( collectionId, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
+        assertNumberReturned( collectionId, jsonPath, false );
     }
 
     /**
@@ -539,12 +539,12 @@ public class GetFeaturesOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 21)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateTheGetFeaturesOperation", alwaysRun = true)
     public void boundingBoxParameter_requests( Map<String, Object> collection, BBox bbox )
-                            throws URISyntaxException {
-        String collectionName = (String) collection.get( "name" );
+                    throws URISyntaxException {
+        String collectionId = (String) collection.get( "id" );
 
         String getFeaturesUrl = findGetFeaturesUrlForGeoJson( collection );
         if ( getFeaturesUrl.isEmpty() )
-            throw new SkipException( "Could not find url for collection with name " + collectionName
+            throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
         Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "bbox",
@@ -553,8 +553,8 @@ public class GetFeaturesOperation extends CommonDataFixture {
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
 
         JsonPath jsonPath = response.jsonPath();
-        assertTimeStamp( collectionName, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
-        assertNumberReturned( collectionName, jsonPath, false );
+        assertTimeStamp( collectionId, jsonPath, timeStampBeforeResponse, timeStampAfterResponse, false );
+        assertNumberReturned( collectionId, jsonPath, false );
 
         // TODO: assert returned features
     }

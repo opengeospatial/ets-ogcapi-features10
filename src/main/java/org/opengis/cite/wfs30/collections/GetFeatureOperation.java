@@ -46,10 +46,10 @@ public class GetFeatureOperation extends CommonDataFixture {
         Map<String, String> collectionNameToFeatureId = (Map<String, String>) testContext.getSuite().getAttribute( SuiteAttribute.FEATUREIDS.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
-            String collectionName = (String) collection.get( "name" );
+            String collectionId = (String) collection.get( "id" );
             String featureId = null;
             if ( collectionNameToFeatureId != null )
-                featureId = collectionNameToFeatureId.get( collectionName );
+                featureId = collectionNameToFeatureId.get( collectionId );
             collectionsData.add( new Object[] { collection, featureId } );
         }
         return collectionsData.iterator();
@@ -91,13 +91,13 @@ public class GetFeatureOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "getFeaturesBase", alwaysRun = true)
     public void getFeatureOperation( Map<String, Object> collection, String featureId ) {
-        String collectionName = (String) collection.get( "name" );
+        String collectionId = (String) collection.get( "id" );
         if ( featureId == null )
-            throw new SkipException( "No featureId available for collection '" + collectionName + "'" );
+            throw new SkipException( "No featureId available for collection '" + collectionId + "'" );
 
         String getFeatureUrl = findGetFeatureUrlForGeoJson( collection );
         if ( getFeatureUrl == null )
-            throw new SkipException( "Could not find url for collection with name " + collectionName
+            throw new SkipException( "Could not find url for collection with name " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         String getFeatureUrlWithFeatureId;
         if (getFeatureUrl.indexOf( "?" ) == -1) {
@@ -109,7 +109,7 @@ public class GetFeatureOperation extends CommonDataFixture {
         Response response = init().baseUri( getFeatureUrlWithFeatureId ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
 
-        collectionNameAndResponse.put( collectionName, response );
+        collectionNameAndResponse.put( collectionId, response );
     }
 
     /**
@@ -149,10 +149,10 @@ public class GetFeatureOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.15. Validate the Get Feature Operation Response (Requirement 32)", dataProvider = "collectionFeatureId", dependsOnMethods = "getFeatureOperation", alwaysRun = true)
     public void validateTheGetFeatureOperationResponse( Map<String, Object> collection, String featureId ) {
-        String collectionName = (String) collection.get( "name" );
-        Response response = collectionNameAndResponse.get( collectionName );
+        String collectionId = (String) collection.get( "id" );
+        Response response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with name " + collectionName );
+            throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
 

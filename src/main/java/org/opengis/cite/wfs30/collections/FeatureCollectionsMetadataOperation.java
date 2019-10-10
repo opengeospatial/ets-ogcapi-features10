@@ -224,7 +224,7 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.6. Validate a Collections Metadata document (Requirement 13)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections", alwaysRun = true)
     public void validateCollectionsMetadataDocument_Links( TestPoint testPoint, Map<String, Object> collection ) {
-        String collectionName = (String) collection.get( "name" );
+        String collectionId = (String) collection.get( "id" );
 
         List<String> mediaTypesToSupport = createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures();
         List<Map<String, Object>> links = (List<Map<String, Object>>) collection.get( "links" );
@@ -232,8 +232,8 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
         List<Map<String, Object>> items = findLinksWithSupportedMediaTypeByRel( links, mediaTypesToSupport, "item" );
         List<String> typesWithoutLink = findUnsupportedTypes( items, mediaTypesToSupport );
         assertTrue( typesWithoutLink.isEmpty(),
-                    "Collections Metadata document for collection with name "
-                                            + collectionName
+                    "Collections Metadata document for collection with id "
+                                            + collectionId
                                             + " must include links with relation 'item' for each supported encodings. Missing links for types "
                                             + String.join( ", ", typesWithoutLink ) );
         List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( items );
@@ -280,16 +280,15 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
     public void validateTheFeatureCollectionMetadataOperationAndResponse( ITestContext testContext, TestPoint testPoint,
                                                                           Map<String, Object> collection ) {
         URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
-        String collectionName = (String) collection.get( "name" );
+        String collectionId = (String) collection.get( "id" );
         List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel, iut,
-                                                                                                collectionName );
+                                                                                                collectionId );
         if ( testPointsForNamedCollection.isEmpty() )
-            throw new SkipException( "Could not find collection with name " + collectionName
-                                     + " in the OpenAPI document" );
+            throw new SkipException( "Could not find collection with id " + collectionId + " in the OpenAPI document" );
 
         TestPoint testPointCollectionMetadata = testPointsForNamedCollection.get( 0 );
         Response response = validateTheFeatureCollectionMetadataOperationAndResponse( testPointCollectionMetadata,
-                                                                                      collectionName );
+                                                                                      collectionId );
         validateFeatureCollectionMetadataOperationResponse( response, collection );
     }
 

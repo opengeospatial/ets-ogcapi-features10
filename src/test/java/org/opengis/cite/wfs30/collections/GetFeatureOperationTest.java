@@ -90,7 +90,7 @@ public class GetFeatureOperationTest {
         getFeatureOperation.requirementClasses( testContext );
 
         Iterator<Object[]> collections = getFeatureOperation.collectionFeatureId( testContext );
-        Object[] collectionAndFeatureId = findCollectionByName( COLLECTION_NAME, collections );
+        Object[] collectionAndFeatureId = findCollectionById( COLLECTION_NAME, collections );
         assertThat( collectionAndFeatureId, notNullValue() );
 
         Map<String, Object> collection = (Map<String, Object>) collectionAndFeatureId[0];
@@ -108,11 +108,11 @@ public class GetFeatureOperationTest {
         onRequest().respond().withBody( collectionItemById );
     }
 
-    private Object[] findCollectionByName( String collectionName, Iterator<Object[]> collections ) {
+    private Object[] findCollectionById( String collectionName, Iterator<Object[]> collections ) {
         for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
             Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            if ( collectionName.equals( parameter.get( "name" ) ) )
+            if ( collectionName.equals( parameter.get( "id" ) ) )
                 return collection;
         }
         return null;
