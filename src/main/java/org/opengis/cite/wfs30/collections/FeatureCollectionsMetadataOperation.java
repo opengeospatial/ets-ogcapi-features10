@@ -4,6 +4,7 @@ import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.EtsAssert.assertTrue;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
+import static org.opengis.cite.wfs30.SuiteAttribute.IUT;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
 import static org.opengis.cite.wfs30.util.JsonUtils.findLinkByRel;
@@ -14,6 +15,7 @@ import static org.opengis.cite.wfs30.util.JsonUtils.linkIncludesRelAndType;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +54,13 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
     public Object[][] collectionsUris( ITestContext testContext ) {
         if ( this.testPointsData == null ) {
             OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-            List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel );
-            this.testPointsData = new Object[][] { testPoints.toArray() };
+            URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
+            List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel, iut );
+            this.testPointsData = new Object[testPoints.size()][];
+            int i = 0;
+            for ( TestPoint testPoint : testPoints ) {
+                this.testPointsData[i++] = new Object[] { testPoint };
+            }
         }
         return testPointsData;
     }
@@ -262,16 +269,19 @@ public class FeatureCollectionsMetadataOperation extends CommonDataFixture {
      * A.4.4.7. Validate the Feature Collection Metadata Operation and A.4.4.8. Validate the Feature Collection Metadata
      * Operation Response
      * 
+     * @param testContext
+     *            never <code>null</code>
      * @param testPoint
      *            the test point to test, never <code>null</code>
      * @param collection
      *            the collection to test, never <code>null</code>
      */
     @Test(description = "Implements A.4.4.7. Validate the Feature Collection Metadata Operation (Requirement 15) and A.4.4.8. Validate the Feature Collection Metadata Operation Response (Requirement 16)", groups = "collections", dataProvider = "collections", dependsOnMethods = "validateFeatureCollectionsMetadataOperationResponse_Collections", alwaysRun = true)
-    public void validateTheFeatureCollectionMetadataOperationAndResponse( TestPoint testPoint,
+    public void validateTheFeatureCollectionMetadataOperationAndResponse( ITestContext testContext, TestPoint testPoint,
                                                                           Map<String, Object> collection ) {
+        URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         String collectionName = (String) collection.get( "name" );
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel,
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel, iut,
                                                                                                 collectionName );
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with name " + collectionName

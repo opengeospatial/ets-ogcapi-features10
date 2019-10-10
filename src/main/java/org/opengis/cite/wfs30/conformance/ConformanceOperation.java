@@ -3,10 +3,12 @@ package org.opengis.cite.wfs30.conformance;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.wfs30.SuiteAttribute.API_MODEL;
+import static org.opengis.cite.wfs30.SuiteAttribute.IUT;
 import static org.opengis.cite.wfs30.SuiteAttribute.REQUIREMENTCLASSES;
 import static org.opengis.cite.wfs30.openapi3.OpenApiUtils.retrieveTestPointsForConformance;
 import static org.testng.Assert.assertNotNull;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +35,14 @@ public class ConformanceOperation extends CommonFixture {
     @DataProvider(name = "conformanceUris")
     public Object[][] conformanceUris( ITestContext testContext ) {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
-        List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel );
-        return new Object[][] { testPoints.toArray() };
+        URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
+        List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel, iut );
+        Object[][] testPointsData = new Object[testPoints.size()][];
+        int i = 0;
+        for ( TestPoint testPoint : testPoints ) {
+            testPointsData[i++] = new Object[] { testPoint };
+        }
+        return testPointsData;
     }
 
     @AfterClass
