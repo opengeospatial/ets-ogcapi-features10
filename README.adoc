@@ -1,10 +1,10 @@
-= WFS 3.0 Conformance Test Suite
+= OGC API - Features  Conformance Test Suite
 
 == Scope
 
 Describe scope of the test suite.
 
-Visit the http://opengeospatial.github.io/ets-wfs30/[project documentation website]
+Visit the https://opengeospatial.github.io/ets-ogcapi-features-1.0/[project documentation website]
 for more information, including the API documentation.
 
 == How to build the test suite
