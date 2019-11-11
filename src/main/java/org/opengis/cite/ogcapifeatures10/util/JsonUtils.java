@@ -294,14 +294,21 @@ public class JsonUtils {
 
             RequestSpecification accept = given().log().all().baseUri( nextUrl ).accept( GEOJSON_MIME_TYPE );
             String[] pairs = uri.getQuery().split( "&" );
+            String limitParamFromUri = null;
             for ( String pair : pairs ) {
                 int idx = pair.indexOf( "=" );
                 String key = pair.substring( 0, idx );
                 String value = pair.substring( idx + 1 );
-                accept.param( key, value );
+                if ( "limit".equals( key ) ) {
+                    limitParamFromUri = value;
+                } else {
+                    accept.param( key, value );
+                }
             }
             if ( maximumLimit > 0 ) {
                 accept.param( "limit", maximumLimit );
+            } else if ( limitParamFromUri != null ) {
+                accept.param( "limit", limitParamFromUri );
             }
 
             Response response = accept.when().request( GET );
