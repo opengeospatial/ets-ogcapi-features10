@@ -4,15 +4,15 @@
 <organization>
   <name>OGC</name>
   <standard>
-    <name>Web Feature Service (WFS)</name>
+    <name>OGC API Features</name>
     <version>
       <name>${spec-version}</name>
       <suite>
-        <namespace-uri>http://www.opengis.net/cite/wfs30</namespace-uri>
+        <namespace-uri>http://www.opengis.net/cite/ogcapi-features-1.0</namespace-uri>
         <prefix>tns</prefix>
         <local-name>ets-${ets-code}-${version}</local-name>
-        <title>WFS 3.0 Conformance Test Suite</title>
-        <description>Checks WFS 3.0 implementations for conformance to ISO 19142:2010.</description>
+        <title>OGC API Features 1.0 Conformance Test Suite</title>
+        <description>Checks OGC API Features 1.0 implementations for conformance.</description>
         <BasicConformanceClasses>
           <conformanceClass>Core</conformanceClass>
         </BasicConformanceClasses>
@@ -21,9 +21,9 @@
         <name>${project.version}</name>
         <status>Beta</status>
         <sources>
-          <source>wfs30/${spec-version}/ctl</source>
+          <source>ogcapi-features-1.0/${spec-version}/ctl</source>
         </sources>
-        <webdir>wfs30/${spec-version}/site</webdir>
+        <webdir>ogcapi-features-1.0/${spec-version}/site</webdir>
       </revision>
     </version>
   </standard>

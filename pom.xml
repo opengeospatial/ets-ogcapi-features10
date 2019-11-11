@@ -8,13 +8,13 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opengis.cite</groupId>
-  <artifactId>ets-wfs30</artifactId>
+  <artifactId>ets-ogcapi-features-1.0</artifactId>
   <version>0.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>WFS 3.0 Conformance Test Suite</name>
+  <name>OGC API-Features 1.0 Conformance Test Suite</name>
   <description>Describe purpose of test suite.</description>
-  <url>http://opengeospatial.github.io/ets-wfs30/</url>
+  <url>http://opengeospatial.github.io/ets-ogcapi-features-1.0/</url>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -27,14 +27,14 @@
     <url>http://www.opengeospatial.org/</url>
   </organization>
   <scm>
-    <connection>scm:git:https://github.com/opengeospatial/ets-wfs30.git</connection>
-    <developerConnection>scm:git:git@github.com:opengeospatial/ets-wfs30.git</developerConnection>
-    <url>https://github.com/opengeospatial/ets-wfs30</url>
+    <connection>scm:git:https://github.com/opengeospatial/ets-ogcapi-features-1.0.git</connection>
+    <developerConnection>scm:git:git@github.com:opengeospatial/ets-ogcapi-features-1.0.git</developerConnection>
+    <url>https://github.com/opengeospatial/ets-ogcapi-features-1.0</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Tracker</system>
-    <url>https://github.com/opengeospatial/ets-wfs30/issues</url>
+    <url>https://github.com/opengeospatial/ets-ogcapi-features-1.0/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -48,8 +48,8 @@
   </developers>
 
   <properties>
-    <ets-code>wfs30</ets-code>
-    <spec-version>3.0</spec-version>
+    <ets-code>ogcapi-features-1.0</ets-code>
+    <spec-version>1.0</spec-version>
     <docker.teamengine.version>5.4</docker.teamengine.version>
   </properties>
 
@@ -129,7 +129,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.opengis.cite.wfs30.TestNGController</mainClass>
+              <mainClass>org.opengis.cite.ogcapifeatures10.TestNGController</mainClass>
             </manifest>
           </archive>
           <descriptors>
@@ -370,7 +370,7 @@
     </repository>
     <site>
       <id>site</id>
-      <url>scm:git:git@github.com:opengeospatial/ets-wfs30.git</url>
+      <url>scm:git:git@github.com:opengeospatial/ets-ogcapi-features-1.0.git</url>
     </site>
   </distributionManagement>
 </project>

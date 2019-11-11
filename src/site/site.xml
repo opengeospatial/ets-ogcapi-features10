@@ -23,7 +23,7 @@
 
   <body>
     <links>
-      <item name="Issues" href="https://github.com/opengeospatial/ets-wfs30/issues"/>
+      <item name="Issues" href="https://github.com/opengeospatial/ets-ogcapi-features-1.0/issues"/>
     </links>
 
     <menu name="Getting Started">

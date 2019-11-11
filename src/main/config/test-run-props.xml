@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
-  <comment>Sample test run arguments (ets-wfs30)</comment>
+  <comment>Sample test run arguments (ets-ogcapi-features-1.0)</comment>
   <entry key="iut">https://www.ldproxy.nrw.de/rest/services/kataster/</entry>
   <entry key="noofcollections">3</entry>
 </properties>

@@ -1,5 +1,5 @@
 import org.junit.Test;
-import org.opengis.cite.wfs30.EtsAssert;
+import org.opengis.cite.ogcapifeatures10.EtsAssert;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
