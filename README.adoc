@@ -1,4 +1,4 @@
-= WFS 3.0 Conformance Test Suite
+= OGC API - Features  Conformance Test Suite
 
 == Scope
 

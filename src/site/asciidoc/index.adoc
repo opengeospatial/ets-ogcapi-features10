@@ -19,11 +19,11 @@ conforming implementation.
 
 There are some requirements the test suite expects to be satisfied by the service under test:
 
-* The landing page must support HTML as output format.
-* The API definition must be available in OpenAPI 3.0.
-* The Conformance statements must be available in JSON.
-* The DatasetDistribution metadata must be available in JSON.
-* Features or feature collections must be support GeoJSON as output format.
+* The API landing page response must be available in JSON.
+* The API definition response must be available in OpenAPI 3.0.
+* The conformance class response must be available in JSON.
+* The feature collections metadata response must be available in JSON.
+* Features and feature collections must be available in GeoJSON.
 
 == Test suite structure
 
