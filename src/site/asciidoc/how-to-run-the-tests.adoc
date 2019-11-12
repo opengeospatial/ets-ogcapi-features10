@@ -35,16 +35,16 @@ One of the build artifacts is an "all-in-one" JAR file that includes the test
 suite and all of its dependencies; this makes it very easy to execute the test
 suite in a command shell:
 
-`java -jar ets-ogcapi-features-1.0-${version}-aio.jar [-o|--outputDir $TMPDIR] [test-run-props.xml]`
+`java -jar ets-ogcapi-features10-${version}-aio.jar [-o|--outputDir $TMPDIR] [test-run-props.xml]`
 
 === 3. Docker
 
 This test suite comes with a Dockerfile which can be used to easily setup the OGC test harness with
 the test suite.
 
-You need to retrieve the https://hub.docker.com/r/ogccite/ets-ogcapi-features-1.0[image from Docker Hub] by running the following
+You need to retrieve the https://hub.docker.com/r/ogccite/ets-ogcapi-features10[image from Docker Hub] by running the following
 
-    docker run -p 8081:8080 ogccite/ets-ogcapi-features-1.0
+    docker run -p 8081:8080 ogccite/ets-ogcapi-features10
 
 Then, open http://localhost:8081/teamengine/ to see below
 

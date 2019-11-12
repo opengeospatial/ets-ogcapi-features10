@@ -8,13 +8,13 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opengis.cite</groupId>
-  <artifactId>ets-ogcapi-features-1.0</artifactId>
+  <artifactId>ets-ogcapi-features10</artifactId>
   <version>0.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>OGC API-Features 1.0 Conformance Test Suite</name>
   <description>Describe purpose of test suite.</description>
-  <url>http://opengeospatial.github.io/ets-ogcapi-features-1.0/</url>
+  <url>http://opengeospatial.github.io/ets-ogcapi-features10/</url>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -27,14 +27,14 @@
     <url>http://www.opengeospatial.org/</url>
   </organization>
   <scm>
-    <connection>scm:git:https://github.com/opengeospatial/ets-ogcapi-features-1.0.git</connection>
-    <developerConnection>scm:git:git@github.com:opengeospatial/ets-ogcapi-features-1.0.git</developerConnection>
-    <url>https://github.com/opengeospatial/ets-ogcapi-features-1.0</url>
+    <connection>scm:git:https://github.com/opengeospatial/ets-ogcapi-features10.git</connection>
+    <developerConnection>scm:git:git@github.com:opengeospatial/ets-ogcapi-features10.git</developerConnection>
+    <url>https://github.com/opengeospatial/ets-ogcapi-features10</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Tracker</system>
-    <url>https://github.com/opengeospatial/ets-ogcapi-features-1.0/issues</url>
+    <url>https://github.com/opengeospatial/ets-ogcapi-features10/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -370,7 +370,7 @@
     </repository>
     <site>
       <id>site</id>
-      <url>scm:git:git@github.com:opengeospatial/ets-ogcapi-features-1.0.git</url>
+      <url>scm:git:git@github.com:opengeospatial/ets-ogcapi-features10.git</url>
     </site>
   </distributionManagement>
 </project>

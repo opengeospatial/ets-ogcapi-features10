@@ -4,7 +4,7 @@
 
 Describe scope of the test suite.
 
-Visit the http://opengeospatial.github.io/ets-ogcapi-features-1.0/[project documentation website]
+Visit the http://opengeospatial.github.io/ets-ogcapi-features10/[project documentation website]
 for more information, including the API documentation.
 
 == How to build the test suite
