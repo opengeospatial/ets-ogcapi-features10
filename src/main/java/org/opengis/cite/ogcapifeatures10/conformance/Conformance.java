@@ -5,8 +5,10 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.IUT;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.REQUIREMENTCLASSES;
+import static org.opengis.cite.ogcapifeatures10.conformance.RequirementClass.CORE;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForConformance;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -26,9 +28,11 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
+ * A.2.4. Conformance Path {root}/conformance
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ConformanceOperation extends CommonFixture {
+public class Conformance extends CommonFixture {
 
     private List<RequirementClass> requirementClasses;
 
@@ -51,64 +55,50 @@ public class ConformanceOperation extends CommonFixture {
     }
 
     /**
-     * Implements A.4.4.2. Validate Conformance Operation and A.4.4.3. Validate Conformance Operation Response.
+     * <pre>
+     * Abstract Test 7: /ats/core/conformance-op
+     * Test Purpose: Validate that a Conformance Declaration can be retrieved from the expected location.
+     * Requirement: /req/core/conformance-op
+     *
+     * Test Method:
+     *  1. Construct a path for each "conformance" link on the landing page as well as for the {root}/conformance path.
+     *  2. Issue an HTTP GET request on each path
+     *  3. Validate that a document was returned with a status code 200
+     *  4. Validate the contents of the returned document using test /ats/core/conformance-success.
+     * </pre>
+     *
+     * <pre>
+     * Abstract Test 8: /ats/core/conformance-success
+     * Test Purpose: Validate that the Conformance Declaration response complies with the required structure and contents.
+     * Requirement: /req/core/conformance-success
+     *
+     * Test Method:
+     *  1. Validate the response document against OpenAPI 3.0 schema confClasses.yaml
+     *  2. Validate that the document includes the conformance class "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core"
+     *  3. Validate that the document list all OGC API conformance classes that the API implements.
+     * </pre>
      *
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.4.4.2. Validate Conformance Operation (Requirement 5) and A.4.4.3. Validate Conformance Operation Response (Requirement 6)", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
+    @Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op) and /req/core/conformance-op", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
-        Response response = validateConformanceOperation( testPoint );
-        validateConformanceOperationResponse( response );
-    }
-
-    /**
-     * A.4.4.2. Validate Conformance Operation
-     *
-     * a) Test Purpose: Validate that Conformance Operation behaves as required.
-     *
-     * b) Pre-conditions: Path = /conformance
-     *
-     * c) Test Method:
-     *
-     * DO FOR each /conformance test point
-     *
-     * Issue an HTTP GET request using the test point URI
-     *
-     * Go to test A.4.4.3.
-     *
-     * d) References: Requirement 5
-     */
-    private Response validateConformanceOperation( TestPoint testPoint ) {
         String testPointUri = new UriBuilder( testPoint ).buildUrl();
-        return init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
+        Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
+        validateConformanceOperationResponse( testPointUri, response );
     }
 
     /**
-     * A.4.4.3. Validate Conformance Operation Response
-     *
-     * a) Test Purpose: Validate the Response to the Conformance Operation.
-     *
-     * b) Pre-conditions:
-     *
-     * Path = /conformance
-     *
-     * A Conformance document has been retrieved
-     *
-     * c) Test Method:
-     *
-     * Validate the retrieved document against the classes.yaml schema.
-     *
-     * Record all reported compliance classes and associate that list with the test point. This information will be used
-     * in latter tests.
-     *
-     * d) References: Requirement 6
+     * Abstract Test 8: /ats/core/conformance-success
      */
-    private void validateConformanceOperationResponse( Response response ) {
+    private void validateConformanceOperationResponse( String testPointUri, Response response ) {
         response.then().statusCode( 200 );
 
         JsonPath jsonPath = response.jsonPath();
         this.requirementClasses = parseAndValidateRequirementClasses( jsonPath );
+        assertTrue( this.requirementClasses.contains( CORE ),
+                    "Requirement class \"http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core\" is not available from path "
+                                                              + testPointUri );
     }
 
     /**
@@ -119,10 +109,10 @@ public class ConformanceOperation extends CommonFixture {
      *             if the json does not follow the expected structure
      */
     List<RequirementClass> parseAndValidateRequirementClasses( JsonPath jsonPath ) {
-        List<RequirementClass> requirementClasses = new ArrayList<>();
         List<Object> conformsTo = jsonPath.getList( "conformsTo" );
         assertNotNull( conformsTo, "Missing member 'conformsTo'." );
 
+        List<RequirementClass> requirementClasses = new ArrayList<>();
         for ( Object conformTo : conformsTo ) {
             if ( conformTo instanceof String ) {
                 String conformanceClass = (String) conformTo;

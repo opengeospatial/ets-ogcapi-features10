@@ -19,12 +19,12 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ConformanceOperationTest {
+public class ConformanceTest {
 
     @Test
     public void testParseAndValidateRequirementClasses() {
-        ConformanceOperation conformanceOperationTest = new ConformanceOperation();
-        InputStream json = ConformanceOperationTest.class.getResourceAsStream( "req-classes.json" );
+        Conformance conformanceOperationTest = new Conformance();
+        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes.json" );
         JsonPath jsonPath = new JsonPath( json );
         List<RequirementClass> requirementClasses = conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
 
@@ -34,16 +34,16 @@ public class ConformanceOperationTest {
 
     @Test(expectedExceptions = AssertionError.class)
     public void testParseAndValidateRequirementClasses_invalidConformsTo() {
-        ConformanceOperation conformanceOperationTest = new ConformanceOperation();
-        InputStream json = ConformanceOperationTest.class.getResourceAsStream( "req-classes_invalidConformsTo.json" );
+        Conformance conformanceOperationTest = new Conformance();
+        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidConformsTo.json" );
         JsonPath jsonPath = new JsonPath( json );
         conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
     }
 
     @Test(expectedExceptions = AssertionError.class)
     public void testParseAndValidateRequirementClasses_invalidElementDataType() {
-        ConformanceOperation conformanceOperationTest = new ConformanceOperation();
-        InputStream json = ConformanceOperationTest.class.getResourceAsStream( "req-classes_invalidElementDataType.json" );
+        Conformance conformanceOperationTest = new Conformance();
+        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidElementDataType.json" );
         JsonPath jsonPath = new JsonPath( json );
         conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
     }

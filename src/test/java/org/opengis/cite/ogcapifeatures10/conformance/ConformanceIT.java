@@ -20,7 +20,7 @@ import com.reprezen.kaizen.oasparser.model3.MediaType;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ConformanceOperationIT {
+public class ConformanceIT {
 
     private static ITestContext testContext;
 
@@ -39,7 +39,7 @@ public class ConformanceOperationIT {
 
     @Test
     public void testApiDefinition() {
-        ConformanceOperation conformanceOperation = new ConformanceOperation();
+        Conformance conformanceOperation = new Conformance();
         conformanceOperation.initCommonFixture( testContext );
         TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/conformance", mediaTypes() );
         conformanceOperation.validateConformanceOperationAndResponse( testPoint );
