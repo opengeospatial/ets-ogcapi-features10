@@ -14,7 +14,7 @@ import org.testng.ITestContext;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class OpenApiIT {
+public class ApiDefinitionIT {
 
     private static ITestContext testContext;
 
