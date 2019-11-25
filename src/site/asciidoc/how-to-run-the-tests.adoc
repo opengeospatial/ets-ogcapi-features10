@@ -58,7 +58,7 @@ Create a new session from the list
 
 image::img/test-session-ogccite-03.png[]
 
-Choose 'OGC' organization then Specification 'OGC API Features - 1.0'
+Choose 'OGC' organization then Specification 'OGC API - Features - 1.0'
 
 image::img/complete-test-session-ogccite-04.png[]
 
