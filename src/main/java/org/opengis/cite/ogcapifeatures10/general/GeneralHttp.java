@@ -9,27 +9,29 @@ import org.testng.annotations.Test;
 import io.restassured.response.Response;
 
 /**
+ * A.2.1. General Tests
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class GeneralHttp extends CommonFixture {
 
     /**
-     * A.4.1.1. HTTP 1.1
+     * A.2.1.1. HTTP
      *
-     * a) Test Purpose: Validate that the WFS services advertised through the API conform with HTTP 1.1.
+     * Test Purpose: Validate that the resource paths advertised through the API conform with HTTP 1.1 and, where
+     * appropriate, TLS.
      *
-     * b) Pre-conditions: none
+     * Requirement: /req/core/http
      *
-     * c) Test Method:
+     * Test Method:
      *
-     * Build all requests using the HTTP 1.1 protocol.
+     * 1. All compliance tests shall be configured to use the HTTP 1.1 protocol exclusively.
      *
-     * Validate that all responses comply with the HTTP 1.1 protocol
-     *
-     * d) References: Requirement 7
+     * 2. For APIs which support HTTPS, all compliance tests shall be configured to use HTTP over TLS (RFC 2818) with
+     * their HTTP 1.1 protocol. (untested)
      */
-    @Test(description = "Implements A.4.1.1. HTTP 1.1 (Requirement 7)")
-    public void http11() {
+    @Test(description = "Implements A.2.1.1. HTTP (Requirement /req/core/http)")
+    public void http() {
         Response response = init().baseUri( rootUri.toString() ).when().request( GET, "/" );
         response.then().statusLine( containsString( "HTTP/1.1" ) );
     }
