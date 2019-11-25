@@ -14,7 +14,7 @@
     <packages>
       <package name="org.opengis.cite.ogcapifeatures10.general" />
       <package name="org.opengis.cite.ogcapifeatures10.landingpage" />
-      <package name="org.opengis.cite.ogcapifeatures10.apidescription" />
+      <package name="org.opengis.cite.ogcapifeatures10.apidefinition" />
       <package name="org.opengis.cite.ogcapifeatures10.conformance" />
       <package name="org.opengis.cite.ogcapifeatures10.collections" />
     </packages>

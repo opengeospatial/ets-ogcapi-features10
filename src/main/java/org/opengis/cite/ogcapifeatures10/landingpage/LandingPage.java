@@ -36,7 +36,7 @@ public class LandingPage extends CommonFixture {
      *  3. Validate the contents of the returned document using test /ats/core/root-success.
      * </pre>
      */
-    @Test(description = "Implements A.4.2.1. Landing Page Retrieval (Requirement 1)", groups = "landingpage")
+    @Test(description = "Implements A.2.2. Landing Page {root}/, Abstract Test 3 (Requirement /req/core/root-op)", groups = "landingpage")
     public void landingPageRetrieval() {
         Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
         request.then().statusCode( 200 );
@@ -45,18 +45,17 @@ public class LandingPage extends CommonFixture {
 
     /**
      * <pre>
-     * Abstract Test 4: /ats/core/root-success
-     * Test Purpose: Validate that the landing page complies with the require structure and contents.
-     * Requirement: /req/core/root-success
+     * Abstract Test 4: /ats/core/root-success Test Purpose: Validate that the landing page complies with the require
+     * structure and contents. Requirement: /req/core/root-success
      *
-     * Test Method:
-     * Validate the landing page for all supported media types using the resources and tests identified in Schema and
-     * Tests for Landing Pages. For formats that require manual inspection, perform the following:
-     *  a) Validate that the landing page includes a "service-desc" and/or "service-doc" link to an API Definition
-     *  b) Validate that the landing page includes a "conformance" link to the conformance class declaration
-     *  c) Validate that the landing page includes a "data" link to the Feature contents.
+     * Test Method: Validate the landing page for all supported media types using the resources and tests identified in
+     * Schema and Tests for Landing Pages. For formats that require manual inspection, perform the following: a)
+     * Validate that the landing page includes a "service-desc" and/or "service-doc" link to an API Definition b)
+     * Validate that the landing page includes a "conformance" link to the conformance class declaration c) Validate
+     * that the landing page includes a "data" link to the Feature contents.
+     * </pre>
      */
-    @Test(description = "Implements A.4.2.2. Landing Page Validation (Requirement 2)", groups = "landingpage", dependsOnMethods = "landingPageRetrieval")
+    @Test(description = "Implements A.2.2. Landing Page {root}/, Abstract Test 4 (Requirement /req/core/root-success)", groups = "landingpage", dependsOnMethods = "landingPageRetrieval")
     public void landingPageValidation() {
         List<Object> links = response.getList( "links" );
         Set<String> linkTypes = collectLinkTypes( links );

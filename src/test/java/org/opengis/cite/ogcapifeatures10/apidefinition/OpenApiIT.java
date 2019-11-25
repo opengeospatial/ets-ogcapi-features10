@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.apidescription;
+package org.opengis.cite.ogcapifeatures10.apidefinition;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,7 +34,7 @@ public class OpenApiIT {
     @Test
     public void testOpenApi()
                             throws Exception {
-        OpenApi openApi = new OpenApi();
+        ApiDefinition openApi = new ApiDefinition();
         openApi.initCommonFixture( testContext );
         openApi.retrieveApiUrl();
         openApi.openapiDocumentRetrieval();

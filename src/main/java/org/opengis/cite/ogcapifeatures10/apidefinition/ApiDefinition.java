@@ -1,10 +1,10 @@
-package org.opengis.cite.ogcapifeatures10.apidescription;
+package org.opengis.cite.ogcapifeatures10.apidefinition;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
-import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.OPEN_API_MIME_TYPE;
+import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.API_MODEL;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,9 +24,11 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
+ * A.2.3. API Definition Path {root}/api (link)
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class OpenApi extends CommonFixture {
+public class ApiDefinition extends CommonFixture {
 
     private String response;
 
@@ -41,60 +43,43 @@ public class OpenApi extends CommonFixture {
     }
 
     /**
-     * A.4.2.3. OpenAPI Document Retrieval
+     * <pre>
+     * Abstract Test 5: /ats/core/api-definition-op
+     * Test Purpose: Validate that the API Definition document can be retrieved from the expected location.
+     * Requirement: /req/core/api-definition-op
      *
-     * a) Test Purpose: Validate that the API Definition document can be retrieved from the expected location.
-     * 
-     * b) Pre-conditions:
+     * Test Method
      *
-     * A URL to the server hosting the API Definition document is known.
-     *
-     * The test client can authenticate to the server.
-     *
-     * The test client has sufficient privileges to assess the API Definition document.
-     *
-     * c) Test Method:
-     *
-     * Issue an HTTP GET request to the URL {server}/api
-     *
-     * Validate that a document was returned with a status code 200
-     *
-     * Validate the contents of the returned document using test A.4.2.4
-     *
-     * d) References: Requirements 3 and 4
+     *  1. Construct a path for each API Definition link on the landing page
+     *  2. Issue a HTTP GET request on each path
+     *  3. Validate that a document was returned with a status code 200
+     *  4. Validate the contents of the returned document using test /ats/core/api-definition-success.
+     * </pre>
      */
-    @Test(description = "Implements A.4.2.3. OpenAPI Document Retrieval (Requirement 3, 4)", groups = "apidefinition", dependsOnGroups = "landingpage")
+    @Test(description = "Implements A.2.3. API Definition Path {root}/api (link), Abstract Test 5 (Requirement /req/core/api-definition-op)", groups = "apidefinition", dependsOnGroups = "landingpage")
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
-            throw new SkipException( "Api URL could not be parsed from the landing page" );
+            throw new SkipException( "Path to the API Definition could not be constructed from the landing page" );
         Response request = init().baseUri( apiUrl ).accept( JSON ).when().request( GET, "/" );
         request.then().statusCode( 200 );
         response = request.asString();
     }
 
     /**
-     * A.4.2.4. API Definition Validation
+     * <pre>
+     * Abstract Test 6: /ats/core/api-definition-success
+     * Test Purpose: Validate that the API Definition complies with the required structure and contents.
+     * Requirement: /req/core/api-definition-success
      *
-     * a) Test Purpose: Validate that the API Definition page complies with the require structure and contents.
-     *
-     * b) Pre-conditions: The API Definition document has been retrieved from the server
-     * 
-     * c) Test Method:
-     * 
-     * Validate the API Definition document against the OpenAPI 3.0 schema
-     *
-     * Identify the Test Points as described in test A.4.3
-     * 
-     * Process the API Definition document as described in test A.4.4
-     * 
-     * d) References: Requirement 4
+     * Test Method: Validate the API Definition document against an appropriate schema document.
+     * </pre>
      *
      * @param testContext
      *            never <code>null</code>
      * @throws MalformedURLException
      *             if the apiUrl is malformed
      */
-    @Test(description = "Implements A.4.2.4. API Definition Validation (Requirement 4)", groups = "apidefinition", dependsOnMethods = "openapiDocumentRetrieval")
+    @Test(description = "Implements A.2.3. API Definition Path {root}/api (link), Abstract Test 6 (Requirement /req/core/api-definition-success)", groups = "apidefinition", dependsOnMethods = "openapiDocumentRetrieval")
     public void apiDefinitionValidation( ITestContext testContext )
                             throws MalformedURLException {
         OpenApi3Parser parser = new OpenApi3Parser();

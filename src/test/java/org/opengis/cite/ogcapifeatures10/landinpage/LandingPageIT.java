@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.apidescription;
+package org.opengis.cite.ogcapifeatures10.landinpage;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
