@@ -1,14 +1,14 @@
-= WFS 3.0 Conformance Test Suite
+= OGC API - Features Conformance Test Suite
 
 == Scope
 
-This executable test suite (ETS) verifies that a OGC API Features implementation conforms to https://github.com/opengeospatial/ogcapi-features[OGC API Features 1.0 - Core] and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
+This executable test suite (ETS) verifies that an OGC API - Features instance conforms to http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] (OGC 17-069r3) and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
 
-Several conformance classes are defined in the principal specifications; the ones
+Several conformance classes are defined in the principal specifications. The ones
 listed below are covered by this test suite:
 
 * Core
-    - The Core specifies requirements that all WFS have to implement.
+    - The Core specifies requirements that all OGC API - Features instances have to fulfill.
 
 == Test requirements
 
@@ -21,9 +21,9 @@ There are some requirements the test suite expects to be satisfied by the servic
 
 * The API landing page response must be available in JSON.
 * The API definition response must be available in OpenAPI 3.0.
-* The conformance class response must be available in JSON.
-* The feature collections metadata response must be available in JSON.
-* Features and feature collections must be available in GeoJSON.
+* The conformance classes response must be available in JSON.
+* The feature collections metadata response and feature collection metadata responses must be available in JSON.
+* Feature collections and features must be available in GeoJSON.
 
 == Test suite structure
 
@@ -54,7 +54,7 @@ include::how-to-run-the-tests.adoc[]
 
 == Using the REST API
 
-Using the REST API of the TEAM Engine requires some run arguments. These ate summarized in Table 2.
+Using the REST API of the TEAM Engine requires some run arguments. These are summarized in Table 2.
 The _Obligation_ descriptor can have the following values: M (mandatory), O (optional), or C (conditional).
 
 .Test run arguments
