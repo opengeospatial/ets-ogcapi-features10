@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.apidescription;
+package org.opengis.cite.ogcapifeatures10.landingpage;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
@@ -16,6 +16,8 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
+ * A.2.2. Landing Page {root}/
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class LandingPage extends CommonFixture {
@@ -23,27 +25,16 @@ public class LandingPage extends CommonFixture {
     private JsonPath response;
 
     /**
-     * A.4.2.1. Landing Page Retrieval
+     * <pre>
+     * Abstract Test 3: /ats/core/root-op
+     * Test Purpose: Validate that a landing page can be retrieved from the expected location.
+     * Requirement: /req/core/root-op
      *
-     * a) Test Purpose: Validate that a landing page can be retrieved from the expected location.
-     *
-     * b) Pre-conditions:
-     *
-     * A URL to the server hosting the landing page is known.
-     *
-     * The test client can authenticate to the server.
-     *
-     * The test client has sufficient privileges to access the landing page.
-     *
-     * c) Test Method:
-     *
-     * Issue an HTTP GET request to the URL {root}/
-     *
-     * Validate that a document was returned with a status code 200
-     *
-     * Validate the contents of the returned document using test A.4.2.2
-     *
-     * d) References: Requirement 1
+     * Test Method:
+     *  1. Issue an HTTP GET request to the URL {root}/
+     *  2. Validate that a document was returned with a status code 200
+     *  3. Validate the contents of the returned document using test /ats/core/root-success.
+     * </pre>
      */
     @Test(description = "Implements A.4.2.1. Landing Page Retrieval (Requirement 1)", groups = "landingpage")
     public void landingPageRetrieval() {
@@ -53,25 +44,17 @@ public class LandingPage extends CommonFixture {
     }
 
     /**
-     * A.4.2.2. Landing Page Validation
+     * <pre>
+     * Abstract Test 4: /ats/core/root-success
+     * Test Purpose: Validate that the landing page complies with the require structure and contents.
+     * Requirement: /req/core/root-success
      *
-     * a) Test Purpose: Validate that the landing page complies with the require structure and contents.
-     *
-     * b) Pre-conditions:
-     *
-     * The landing page has been retrieved from the server
-     *
-     * c) Test Method:
-     *
-     * Validate the landing page against the root.yaml schema
-     *
-     * Validate that the landing page includes a “service” link to API Definition
-     *
-     * Validate that the landing page includes a “conformance” link to the conformance class document
-     *
-     * Validate that the landing page includes a “data” link to the WFS contents.
-     *
-     * d) References: Requirement 2
+     * Test Method:
+     * Validate the landing page for all supported media types using the resources and tests identified in Schema and
+     * Tests for Landing Pages. For formats that require manual inspection, perform the following:
+     *  a) Validate that the landing page includes a "service-desc" and/or "service-doc" link to an API Definition
+     *  b) Validate that the landing page includes a "conformance" link to the conformance class declaration
+     *  c) Validate that the landing page includes a "data" link to the Feature contents.
      */
     @Test(description = "Implements A.4.2.2. Landing Page Validation (Requirement 2)", groups = "landingpage", dependsOnMethods = "landingPageRetrieval")
     public void landingPageValidation() {
@@ -82,9 +65,8 @@ public class LandingPage extends CommonFixture {
                                             || linkTypes.contains( "service-doc" ) )
                                           && linkTypes.contains( "conformance" ) && linkTypes.contains( "data" );
         assertTrue( expectedLinkTypesExists,
-                    "The landing page must include at least links with relation type 'service', 'conformance' and 'data', but contains "
-                                            + String.join( ", ", linkTypes ) );
-
+                    "The landing page must include at least links with relation type 'service-desc' or 'service-doc', 'conformance' and 'data', but contains "
+                                             + String.join( ", ", linkTypes ) );
     }
 
     private Set<String> collectLinkTypes( List<Object> links ) {

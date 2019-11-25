@@ -36,7 +36,7 @@ public class GeneralHttpIT {
                             throws Exception {
         GeneralHttp generalHttp = new GeneralHttp();
         generalHttp.initCommonFixture( testContext );
-        generalHttp.http11();
+        generalHttp.http();
     }
 
 }

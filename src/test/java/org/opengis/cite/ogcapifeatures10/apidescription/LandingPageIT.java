@@ -8,6 +8,7 @@ import java.net.URI;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.landingpage.LandingPage;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
