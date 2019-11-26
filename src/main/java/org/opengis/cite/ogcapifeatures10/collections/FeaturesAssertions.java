@@ -12,13 +12,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 
+import org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.testng.SkipException;
 
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
-import com.reprezen.kaizen.oasparser.model3.Operation;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
-import com.reprezen.kaizen.oasparser.model3.Path;
 
 import io.restassured.path.json.JsonPath;
 
@@ -26,21 +25,6 @@ import io.restassured.path.json.JsonPath;
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeaturesAssertions {
-
-    static Parameter findParameterByName( TestPoint testPoint, OpenApi3 apiModel, String name ) {
-        String collectionItemPath = testPoint.getPath();
-        Path path = apiModel.getPath( collectionItemPath );
-        if ( path != null ) {
-            for ( Parameter parameter : path.getParameters() )
-                if ( name.equals( parameter.getName() ) )
-                    return parameter;
-            Operation get = path.getOperation( "get" );
-            for ( Parameter parameter : get.getParameters() )
-                if ( name.equals( parameter.getName() ) )
-                    return parameter;
-        }
-        return null;
-    }
 
     static void assertIntegerGreaterZero( Object value, String propertyName ) {
         if ( value instanceof Number )
@@ -108,7 +92,7 @@ public class FeaturesAssertions {
 
         TestPoint testPoint = retrieveTestPointsForCollection( apiModel, iut, collectionName ).get( 0 );
         if ( testPoint != null ) {
-            Parameter limitParameter = findParameterByName( testPoint, apiModel, "limit" );
+            Parameter limitParameter = OpenApiUtils.retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
             if ( limitParameter != null && limitParameter.getSchema() != null ) {
                 maximumLimit = limitParameter.getSchema().getMaximum().intValue();
             }

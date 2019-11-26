@@ -249,6 +249,20 @@ public class OpenApiUtils {
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
+    public static Parameter retrieveParameterByName( String collectionItemPath, OpenApi3 apiModel, String name ) {
+        Path path = apiModel.getPath( collectionItemPath );
+        if ( path != null ) {
+            for ( Parameter parameter : path.getParameters() )
+                if ( name.equals( parameter.getName() ) )
+                    return parameter;
+            Operation get = path.getOperation( "get" );
+            for ( Parameter parameter : get.getParameters() )
+                if ( name.equals( parameter.getName() ) )
+                    return parameter;
+        }
+        return null;
+    }
+
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path ) {
         String requestedPath = "/" + path.getPathItem();
         return retrieveTestPoints( apiModel, iut, requestedPath );

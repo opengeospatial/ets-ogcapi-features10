@@ -10,7 +10,7 @@ import static org.opengis.cite.ogcapifeatures10.collections.FeaturesAssertions.a
 import static org.opengis.cite.ogcapifeatures10.collections.FeaturesAssertions.assertNumberMatched;
 import static org.opengis.cite.ogcapifeatures10.collections.FeaturesAssertions.assertNumberReturned;
 import static org.opengis.cite.ogcapifeatures10.collections.FeaturesAssertions.assertTimeStamp;
-import static org.opengis.cite.ogcapifeatures10.collections.FeaturesAssertions.findParameterByName;
+import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
@@ -98,7 +98,7 @@ public class Features extends CommonDataFixture {
             String collectionId = (String) collection.get( "id" );
             List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionId );
             for ( TestPoint testPoint : testPoints ) {
-                Parameter limit = findParameterByName( testPoint, apiModel, "limit" );
+                Parameter limit = retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
                 if ( limit != null && limit.getSchema() != null ) {
                     int min = limit.getSchema().getMinimum().intValue();
                     int max = limit.getSchema().getMaximum().intValue();
@@ -468,7 +468,7 @@ public class Features extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.11. Limit Parameter (Requirement 18)", dataProvider = "collectionPaths", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void limitParameter( TestPoint testPoint ) {
-        Parameter limit = findParameterByName( testPoint, apiModel, "limit" );
+        Parameter limit = retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
 
         assertNotNull( limit, "Required limit parameter for collections path '" + testPoint.getPath()
                               + "'  in OpenAPI document is missing" );
@@ -566,7 +566,7 @@ public class Features extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.12. Bounding Box Parameter (Requirement 20)", dataProvider = "collectionPaths", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void boundingBoxParameter( TestPoint testPoint ) {
-        Parameter bbox = findParameterByName( testPoint, apiModel, "bbox" );
+        Parameter bbox = retrieveParameterByName( testPoint.getPath(), apiModel, "bbox" );
 
         assertNotNull( bbox, "Required bbox parameter for collections path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
@@ -665,7 +665,7 @@ public class Features extends CommonDataFixture {
      */
     @Test(description = "Implements A.4.4.13. Time Parameter (Requirement 22)", dataProvider = "collectionPaths", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void datetimeParameter( TestPoint testPoint ) {
-        Parameter time = findParameterByName( testPoint, apiModel, "datetime" );
+        Parameter time = retrieveParameterByName( testPoint.getPath(), apiModel, "datetime" );
 
         assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
