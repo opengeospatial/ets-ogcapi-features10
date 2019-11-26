@@ -1,5 +1,6 @@
 package org.opengis.cite.ogcapifeatures10;
 
+import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.NO_OF_COLLECTIONS;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.REQUIREMENTCLASSES;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -18,6 +20,8 @@ import org.testng.annotations.BeforeClass;
 public class CommonDataFixture extends CommonFixture {
 
     private static final int DEFAULT_NUMBER_OF_COLLECTIONS = 3;
+
+    private OpenApi3 apiModel;
 
     private List<RequirementClass> requirementClasses;
 
@@ -34,6 +38,17 @@ public class CommonDataFixture extends CommonFixture {
         if ( noOfCollections != null ) {
             this.noOfCollections = (Integer) noOfCollections;
         }
+    }
+
+    @BeforeClass
+    public void retrieveApiModel( ITestContext testContext ) {
+        this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
+    }
+
+    public OpenApi3 getApiModel() {
+        if ( apiModel == null )
+            throw new SkipException( "ApiModel is not available." );
+        return apiModel;
     }
 
     protected List<String> createListOfMediaTypesToSupportForOtherResources( Map<String, Object> linkToSelf ) {
@@ -64,5 +79,4 @@ public class CommonDataFixture extends CommonFixture {
             mediaTypesToSupport.remove( linkToSelf.get( "type" ) );
         return mediaTypesToSupport;
     }
-
 }

@@ -35,8 +35,6 @@ import io.restassured.response.Response;
  */
 public class FeatureCollection extends CommonDataFixture {
 
-    private OpenApi3 apiModel;
-
     private Map<String, Response> collectionIdAndResponse = new HashMap<>();
 
     @DataProvider(name = "collections")
@@ -48,11 +46,6 @@ public class FeatureCollection extends CommonDataFixture {
         for ( Map<String, Object> collection : testPointAndCollections )
             objects[i++] = new Object[] { collection };
         return objects;
-    }
-
-    @BeforeClass
-    public void openApiDocument( ITestContext testContext ) {
-        this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
     }
 
     /**
@@ -74,7 +67,7 @@ public class FeatureCollection extends CommonDataFixture {
         String collectionId = (String) collection.get( "id" );
         assertNotNull( collectionId, "Id of the collection is not available" );
         URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
-        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( apiModel, iut,
+        List<TestPoint> testPointsForNamedCollection = retrieveTestPointsForCollectionMetadata( getApiModel(), iut,
                                                                                                 collectionId );
         if ( testPointsForNamedCollection.isEmpty() )
             throw new SkipException( "Could not find collection with id " + collectionId + " in the OpenAPI document" );

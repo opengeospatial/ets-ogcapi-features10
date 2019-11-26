@@ -3,7 +3,6 @@ package org.opengis.cite.ogcapifeatures10.collections;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
-import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.IUT;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
@@ -26,11 +25,8 @@ import org.opengis.cite.ogcapifeatures10.openapi3.UriBuilder;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -46,16 +42,13 @@ public class FeatureCollections extends CommonDataFixture {
 
     private final Map<TestPoint, List<Map<String, Object>>> testPointAndCollections = new HashMap<>();
 
-    private OpenApi3 apiModel;
-
     private Object[][] testPointsData;
 
     @DataProvider(name = "collectionsUris")
     public Object[][] collectionsUris( ITestContext testContext ) {
         if ( this.testPointsData == null ) {
-            OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
             URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
-            List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel, iut );
+            List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( getApiModel(), iut );
             this.testPointsData = new Object[testPoints.size()][];
             int i = 0;
             for ( TestPoint testPoint : testPoints ) {
@@ -63,11 +56,6 @@ public class FeatureCollections extends CommonDataFixture {
             }
         }
         return testPointsData;
-    }
-
-    @BeforeClass
-    public void openApiDocument( ITestContext testContext ) {
-        this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
     }
 
     @AfterClass

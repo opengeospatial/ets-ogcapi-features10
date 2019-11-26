@@ -97,7 +97,7 @@ public class FeaturesTest {
             // skipped (parameter missing):
             // getFeaturesOperation.validateFeaturesOperationResponse_property_numberMatched( parameter );
         }
-
+/*
         Iterator<Object[]> collectionPaths = getFeaturesOperation.collectionPaths( testContext );
         for ( Iterator<Object[]> it = collectionPaths; it.hasNext(); ) {
             Object[] collectionPath = it.next();

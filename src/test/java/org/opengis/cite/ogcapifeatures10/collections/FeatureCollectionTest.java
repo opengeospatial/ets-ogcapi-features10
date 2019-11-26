@@ -83,7 +83,7 @@ public class FeatureCollectionTest {
         prepareJadler();
         FeatureCollection featureCollection = new FeatureCollection();
         featureCollection.initCommonFixture( testContext );
-        featureCollection.openApiDocument( testContext );
+        featureCollection.retrieveApiModel( testContext );
         featureCollection.requirementClasses( testContext );
 
         Object[][] collections = featureCollection.collections( testContext );

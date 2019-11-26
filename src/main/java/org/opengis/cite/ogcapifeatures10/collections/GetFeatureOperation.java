@@ -35,8 +35,6 @@ import io.restassured.response.Response;
  */
 public class GetFeatureOperation extends CommonDataFixture {
 
-    private OpenApi3 apiModel;
-
     private List<Map<String, Object>> collections;
 
     private final Map<String, Response> collectionNameAndResponse = new HashMap<>();
@@ -57,7 +55,6 @@ public class GetFeatureOperation extends CommonDataFixture {
 
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
-        this.apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
         this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
@@ -89,7 +86,7 @@ public class GetFeatureOperation extends CommonDataFixture {
      * @param featureId
      *            the featureId to request, may be <code>null</code> (test will be skipped)
      */
-    @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "getFeaturesBase", alwaysRun = true)
+    @Test(description = "Implements A.4.4.14. Get Feature Operation (Requirement 30, 31)", dataProvider = "collectionFeatureId", dependsOnGroups = "featuresBase", alwaysRun = true)
     public void getFeatureOperation( Map<String, Object> collection, String featureId ) {
         String collectionId = (String) collection.get( "id" );
         if ( featureId == null )

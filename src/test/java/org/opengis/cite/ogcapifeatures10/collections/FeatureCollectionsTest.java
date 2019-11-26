@@ -89,7 +89,7 @@ public class FeatureCollectionsTest {
         prepareJadler();
         FeatureCollections featureCollectionsMetadataOperation = new FeatureCollections();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
-        featureCollectionsMetadataOperation.openApiDocument( testContext );
+        featureCollectionsMetadataOperation.retrieveApiModel( testContext );
         featureCollectionsMetadataOperation.requirementClasses( testContext );
         TestPoint testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections",
                                              mediaTypes() );
