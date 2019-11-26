@@ -103,9 +103,16 @@ public class FeaturesBBox extends AbstractFeatures {
         assertFalse( isExplode( bbox ), String.format( msg, "explode", "false", bbox.getExplode() ) );
 
         Schema schema = bbox.getSchema();
+        assertNotNull( schema, "Expected schema for bbox parameter for collections path '" + testPoint.getPath() );
         assertEquals( schema.getType(), "array", String.format( msg, "schema -> type", "array", schema.getType() ) );
+        
+        assertNotNull( schema.getMinItems(),
+                      String.format( msg, "schema -> minItems", "null", schema.getMinItems() ) );
         assertEquals( schema.getMinItems().intValue(), 4,
                       String.format( msg, "schema -> minItems", "4", schema.getMinItems() ) );
+        
+        assertNotNull( schema.getMaxItems(),
+                      String.format( msg, "schema -> maxItems", "null", schema.getMaxItems() ) );
         assertEquals( schema.getMaxItems().intValue(), 6,
                       String.format( msg, "schema -> maxItems", "6", schema.getMaxItems() ) );
 

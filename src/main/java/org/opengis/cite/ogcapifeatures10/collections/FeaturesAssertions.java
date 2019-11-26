@@ -11,6 +11,7 @@ import static org.testng.Assert.assertEquals;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
@@ -90,8 +91,9 @@ public class FeaturesAssertions {
 
         int maximumLimit = -1;
 
-        TestPoint testPoint = retrieveTestPointsForCollection( apiModel, iut, collectionName ).get( 0 );
-        if ( testPoint != null ) {
+        List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionName );
+        if ( !testPoints.isEmpty() ) {
+            TestPoint testPoint = testPoints.get( 0 );
             Parameter limitParameter = OpenApiUtils.retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
             if ( limitParameter != null && limitParameter.getSchema() != null ) {
                 maximumLimit = limitParameter.getSchema().getMaximum().intValue();

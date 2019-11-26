@@ -113,7 +113,7 @@ public class AbstractFeatures extends CommonDataFixture {
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
-        String type = jsonPath.get( "features" );
+        List<Object> type = jsonPath.get( "features" );
         assertNotNull( type, "features property is missing" );
     }
 

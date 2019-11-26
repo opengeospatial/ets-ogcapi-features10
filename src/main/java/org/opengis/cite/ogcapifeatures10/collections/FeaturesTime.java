@@ -137,7 +137,7 @@ public class FeaturesTime extends AbstractFeatures {
      *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
      *            request is an instant
      */
-    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTIme, Abstract Test 13: (Requirement /req/core/fc-op)", dataProvider = "collectionItemUrisWithBboxes", dependsOnGroups = "featuresBase", alwaysRun = true)
+    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTIme, Abstract Test 13: (Requirement /req/core/fc-op)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
     public void validateFeaturesWithDateTimeOperation( Map<String, Object> collection, String queryParameter,
                                                        Object begin, Object end ) {
         String collectionId = (String) collection.get( "id" );
