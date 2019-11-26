@@ -10,7 +10,7 @@
     <ctl:param name="testRunArgs">A Document node containing test run arguments (as XML properties).</ctl:param>
     <ctl:param name="outputDir">The directory in which the test results will be written.</ctl:param>
     <ctl:return>The test results as a Source object (root node).</ctl:return>
-    <ctl:description>Runs the OGC API Features 1.0 (${version}) test suite.</ctl:description>
+    <ctl:description>Runs the OGC API - Features (${version}) test suite.</ctl:description>
     <ctl:code>
       <xsl:variable name="controller" select="tng:new($outputDir)" />
       <xsl:copy-of select="tng:doTestRun($controller, $testRunArgs)" />
@@ -18,8 +18,8 @@
   </ctl:function>
 
   <ctl:suite name="tns:ets-${ets-code}-${version}">
-    <ctl:title>OGC API Features 1.0Conformance Test Suite</ctl:title>
-    <ctl:description>Checks OGC API Features 1.0 implementations for conformance.</ctl:description>
+    <ctl:title>OGC API - Features Conformance Test Suite</ctl:title>
+    <ctl:description>Checks OGC API - Features implementations for conformance.</ctl:description>
     <ctl:starting-test>tns:Main</ctl:starting-test>
   </ctl:suite>
 
@@ -28,12 +28,12 @@
     <ctl:code>
       <xsl:variable name="form-data">
         <ctl:form method="POST" width="800" height="600" xmlns="http://www.w3.org/1999/xhtml">
-          <h2>OGC API Features Conformance Test Suite</h2>
+          <h2>OGC API - Features Conformance Test Suite</h2>
           <div style="background:#F0F8FF" bgcolor="#F0F8FF">
             <p>The implementation under test (IUT) is checked against the following specifications:</p>
             <ul>
               <li>
-                <a href="http://docs.opengeospatial.org/is/17-069r3/17-069r3.html">OGC API - Features - Part 1: Core 1.0</a>
+                <a href="http://docs.opengeospatial.org/is/17-069r3/17-069r3.html">OGC API - Features - Part 1: Core</a>
               </li>
             </ul>
             <p>The following conformance levels are defined:</p>
@@ -47,10 +47,10 @@
                        border-width: medium; padding:4px">Implementation under test
             </legend>
             <p>
-              <label for="wfs-uri">
+              <label for="ogc-api-features-uri">
                 <h4 style="margin-bottom: 0.5em">Location of the landing page</h4>
               </label>
-              <input id="wfs-uri" name="wfs-uri" size="128" type="text"
+              <input id="ogc-api-features-uri" name="ogc-api-features-uri" size="128" type="text"
                      value="http://192.168.0.1:8002/" />
             </p>
             <p>
@@ -79,7 +79,7 @@
       <xsl:variable name="test-run-props">
         <properties version="1.0">
           <entry key="iut">
-            <xsl:value-of select="normalize-space($form-data/values/value[@key='wfs-uri'])" />
+            <xsl:value-of select="normalize-space($form-data/values/value[@key='ogc-api-features-uri'])" />
           </entry>
           <entry key="noofcollections">
             <xsl:choose>

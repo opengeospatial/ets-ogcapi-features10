@@ -4,15 +4,15 @@
 <organization>
   <name>OGC</name>
   <standard>
-    <name>OGC API Features</name>
+    <name>OGC API - Features</name>
     <version>
       <name>${spec-version}</name>
       <suite>
         <namespace-uri>http://www.opengis.net/cite/ogcapi-features-1.0</namespace-uri>
         <prefix>tns</prefix>
         <local-name>ets-${ets-code}-${version}</local-name>
-        <title>OGC API Features 1.0 Conformance Test Suite</title>
-        <description>Checks OGC API Features 1.0 implementations for conformance.</description>
+        <title>OGC API - Features Conformance Test Suite</title>
+        <description>Checks OGC API - Features implementations for conformance.</description>
         <BasicConformanceClasses>
           <conformanceClass>Core</conformanceClass>
         </BasicConformanceClasses>
