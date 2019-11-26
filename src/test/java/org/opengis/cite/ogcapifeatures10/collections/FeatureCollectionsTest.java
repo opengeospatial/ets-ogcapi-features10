@@ -4,8 +4,13 @@ import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.opengis.cite.ogcapifeatures10.SuiteAttribute.COLLECTIONS;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -20,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
@@ -90,6 +96,12 @@ public class FeatureCollectionsTest {
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Items( testPoint );
+        featureCollectionsMetadataOperation.storeCollectionsInTestContext( testContext );
+
+        ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass( List.class );
+        verify( suite ).setAttribute( eq( COLLECTIONS.getName() ), argumentCaptor.capture() );
+        List capturedArgument = argumentCaptor.getValue();
+        assertThat( capturedArgument.size(), is( 3 ) );
     }
 
     private Map<String, MediaType> mediaTypes() {

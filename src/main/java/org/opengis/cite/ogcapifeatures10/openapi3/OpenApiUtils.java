@@ -139,6 +139,8 @@ public class OpenApiUtils {
      *
      * @param apiModel
      *            never <code>null</code>
+     * @param iut
+     *            the url of the instance under test, never <code>null</code>
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForCollectionsMetadata( OpenApi3 apiModel, URI iut ) {
