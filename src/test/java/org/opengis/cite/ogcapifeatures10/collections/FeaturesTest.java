@@ -35,7 +35,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class GetFeaturesOperationTest {
+public class FeaturesTest {
 
     private static ITestContext testContext;
 
@@ -45,10 +45,10 @@ public class GetFeaturesOperationTest {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = GetFeaturesOperationTest.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeaturesTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
-        InputStream json = GetFeaturesOperationTest.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream json = FeaturesTest.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
@@ -79,7 +79,7 @@ public class GetFeaturesOperationTest {
     @Test
     public void testGetFeatureOperations() {
         prepareJadler();
-        GetFeaturesOperation getFeaturesOperation = new GetFeaturesOperation();
+        Features getFeaturesOperation = new Features();
         getFeaturesOperation.initCommonFixture( testContext );
         getFeaturesOperation.retrieveRequiredInformationFromTestContext( testContext );
         getFeaturesOperation.requirementClasses( testContext );
@@ -88,14 +88,14 @@ public class GetFeaturesOperationTest {
         for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
             Object[] collection = it.next();
             Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            getFeaturesOperation.validateTheGetFeaturesOperation( testContext, parameter );
-            getFeaturesOperation.validateTheGetFeaturesOperationResponse_Links( parameter );
+            getFeaturesOperation.validateFeaturesOperation( testContext, parameter );
+            getFeaturesOperation.validateFeaturesOperationResponse_Links( parameter );
             // skipped (parameter missing):
-            // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_timeStamp( parameter );
+            // getFeaturesOperation.validateFeaturesOperationResponse_property_timeStamp( parameter );
             // skipped (parameter missing):
             // getFeaturesOperation.validateGetFeaturesOperationResponse_property_numberReturned( parameter );
             // skipped (parameter missing):
-            // getFeaturesOperation.validateTheGetFeaturesOperationResponse_property_numberMatched( parameter );
+            // getFeaturesOperation.validateFeaturesOperationResponse_property_numberMatched( parameter );
         }
 
         Iterator<Object[]> collectionPaths = getFeaturesOperation.collectionPaths( testContext );
