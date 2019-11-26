@@ -34,7 +34,7 @@ import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureCollectionsMetadataOperationGet {
+public class FeatureCollectionsTest {
 
     private static ITestContext testContext;
 
@@ -44,15 +44,15 @@ public class FeatureCollectionsMetadataOperationGet {
 
     @BeforeClass
     public static void instantiateUri()
-                    throws URISyntaxException {
+                            throws URISyntaxException {
         iut = new URI( "http://localhost:8080/oaf" );
     }
-    
+
     @BeforeClass
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionsMetadataOperationGet.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeatureCollectionsTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
         List<RequirementClass> requirementClasses = new ArrayList();
@@ -81,7 +81,7 @@ public class FeatureCollectionsMetadataOperationGet {
     @Test
     public void testValidateFeatureCollectionsMetadataOperationResponse() {
         prepareJadler();
-        FeatureCollectionsMetadataOperation featureCollectionsMetadataOperation = new FeatureCollectionsMetadataOperation();
+        FeatureCollections featureCollectionsMetadataOperation = new FeatureCollections();
         featureCollectionsMetadataOperation.initCommonFixture( testContext );
         featureCollectionsMetadataOperation.openApiDocument( testContext );
         featureCollectionsMetadataOperation.requirementClasses( testContext );
@@ -89,18 +89,7 @@ public class FeatureCollectionsMetadataOperationGet {
                                              mediaTypes() );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
         featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
-        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections( testPoint );
-
-        Object[][] collections = featureCollectionsMetadataOperation.collections( testContext );
-        for ( Object[] object : collections ) {
-            TestPoint tp = (TestPoint) object[0];
-            Map<String, Object> collection = (Map<String, Object>) object[1];
-            featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Links( tp, collection );
-            featureCollectionsMetadataOperation.validateCollectionsMetadataDocument_Extent( tp, collection );
-            featureCollectionsMetadataOperation.validateTheFeatureCollectionMetadataOperationAndResponse( testContext,
-                                                                                                          tp,
-                                                                                                          collection );
-        }
+        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Items( testPoint );
     }
 
     private Map<String, MediaType> mediaTypes() {
