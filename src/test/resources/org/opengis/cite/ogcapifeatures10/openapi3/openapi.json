@@ -248,6 +248,8 @@
         }, {
           "$ref" : "#/components/parameters/limit"
         }, {
+          "$ref" : "#/components/parameters/datetime"
+        }, {
           "$ref" : "#/components/parameters/offset"
         }, {
           "$ref" : "#/components/parameters/bbox"
@@ -464,6 +466,8 @@
         }, {
           "$ref" : "#/components/parameters/limit"
         }, {
+          "$ref" : "#/components/parameters/datetime"
+        }, {
           "$ref" : "#/components/parameters/offset"
         }, {
           "$ref" : "#/components/parameters/bbox"
@@ -629,6 +633,8 @@
           "$ref" : "#/components/parameters/f"
         }, {
           "$ref" : "#/components/parameters/limit"
+        }, {
+          "$ref" : "#/components/parameters/datetime"
         }, {
           "$ref" : "#/components/parameters/offset"
         }, {
@@ -991,6 +997,17 @@
         },
         "example" : 10
       },
+      "datetime" : {
+        "name" : "datetime",
+        "in" : "query",
+        "description" : "The datetime parameter...",
+        "required" : false,
+        "style" : "form",
+        "explode" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
       "offset" : {
         "name" : "offset",
         "in" : "query",
@@ -1015,7 +1032,10 @@
         "schema" : {
           "maxItems" : 6,
           "minItems" : 4,
-          "type" : "array"
+          "type" : "array",
+          "items" : {
+            "type": "number"
+          }
         }
       },
       "resultType" : {

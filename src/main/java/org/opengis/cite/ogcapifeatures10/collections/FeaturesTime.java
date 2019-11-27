@@ -91,7 +91,7 @@ public class FeaturesTime extends AbstractFeatures {
      *            the testPoint under test, never <code>null</code>
      */
     @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 14: (Requirement /req/core/fc-time-definition)", dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
-    public void timeParameter( TestPoint testPoint ) {
+    public void timeParameterDefinition( TestPoint testPoint ) {
         Parameter time = retrieveParameterByName( testPoint.getPath(), getApiModel(), "datetime" );
 
         assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()

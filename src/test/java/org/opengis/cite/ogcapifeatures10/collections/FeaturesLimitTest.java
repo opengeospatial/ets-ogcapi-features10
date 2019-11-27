@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
+import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -38,6 +40,8 @@ public class FeaturesLimitTest {
     private static ITestContext testContext;
 
     private static ISuite suite;
+
+    private static TestPoint testPoint;
 
     @BeforeClass
     public static void initTestFixture()
@@ -57,6 +61,9 @@ public class FeaturesLimitTest {
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
 
+        testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
+                                   Collections.emptyMap() );
+
         URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
@@ -75,12 +82,17 @@ public class FeaturesLimitTest {
     }
 
     @Test
+    public void testParameterDefinition() {
+        prepareJadler();
+        FeaturesLimit features = initFeaturesLimit();
+
+        features.limitParameterDefinition( testPoint );
+    }
+
+    @Test
     public void test() {
         prepareJadler();
-        FeaturesLimit features = new FeaturesLimit();
-        features.initCommonFixture( testContext );
-        features.retrieveRequiredInformationFromTestContext( testContext );
-        features.requirementClasses( testContext );
+        FeaturesLimit features = initFeaturesLimit();
 
         Map<String, Object> collection = prepareCollection();
         features.validateFeaturesWithLimitOperation( collection, 10, 15 );
@@ -93,6 +105,15 @@ public class FeaturesLimitTest {
         // features.validateFeaturesWithLimitResponse_NumberMatched( collection , 10, 15 );
         // skipped (collection missing):
         // features.validateFeaturesResponse_NumberReturned( collection, 10, 15 );
+    }
+
+    private FeaturesLimit initFeaturesLimit() {
+        FeaturesLimit features = new FeaturesLimit();
+        features.initCommonFixture( testContext );
+        features.retrieveRequiredInformationFromTestContext( testContext );
+        features.requirementClasses( testContext );
+        features.retrieveApiModel( testContext );
+        return features;
     }
 
     private static Map<String, Object> prepareCollection() {

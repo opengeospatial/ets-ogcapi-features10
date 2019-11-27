@@ -87,7 +87,7 @@ public class FeaturesLimit extends AbstractFeatures {
      *            the testPoint under test, never <code>null</code>
      */
     @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 16: (Requirement /req/core/fc-limit-definition)", dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
-    public void limitParameter( TestPoint testPoint ) {
+    public void limitParameterDefinition( TestPoint testPoint ) {
         Parameter limit = retrieveParameterByName( testPoint.getPath(), getApiModel(), "limit" );
 
         assertNotNull( limit, "Required limit parameter for collections path '" + testPoint.getPath()

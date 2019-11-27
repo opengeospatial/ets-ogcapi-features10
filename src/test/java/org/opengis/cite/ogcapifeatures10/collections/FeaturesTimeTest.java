@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
-import org.opengis.cite.ogcapifeatures10.util.BBox;
+import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -37,6 +38,8 @@ public class FeaturesTimeTest {
     private static ITestContext testContext;
 
     private static ISuite suite;
+
+    private static TestPoint testPoint;
 
     @BeforeClass
     public static void initTestFixture()
@@ -56,6 +59,9 @@ public class FeaturesTimeTest {
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
 
+        testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
+                                   Collections.emptyMap() );
+
         URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
         when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
@@ -74,12 +80,17 @@ public class FeaturesTimeTest {
     }
 
     @Test
+    public void testParameterDefinition() {
+        prepareJadler();
+        FeaturesTime features = initFeaturesTime();
+
+        features.timeParameterDefinition( testPoint );
+    }
+
+    @Test
     public void test() {
         prepareJadler();
-        FeaturesTime features = new FeaturesTime();
-        features.initCommonFixture( testContext );
-        features.retrieveRequiredInformationFromTestContext( testContext );
-        features.requirementClasses( testContext );
+        FeaturesTime features = initFeaturesTime();
 
         Map<String, Object> collection = prepareCollection();
         String queryString = "2014-08-09";
@@ -95,6 +106,15 @@ public class FeaturesTimeTest {
         // features.validateFeaturesWithDateTimeResponse_NumberMatched( collection , queryString, begin, end );
         // skipped (collection missing):
         // features.validateFeaturesResponse_NumberReturned( collection, queryString, begin, end );
+    }
+
+    private FeaturesTime initFeaturesTime() {
+        FeaturesTime features = new FeaturesTime();
+        features.initCommonFixture( testContext );
+        features.retrieveRequiredInformationFromTestContext( testContext );
+        features.requirementClasses( testContext );
+        features.retrieveApiModel( testContext );
+        return features;
     }
 
     private static Map<String, Object> prepareCollection() {
