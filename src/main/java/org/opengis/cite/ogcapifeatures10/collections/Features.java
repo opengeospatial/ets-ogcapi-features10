@@ -88,7 +88,7 @@ public class Features extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateFeaturesOperationResponse_TypeProperty( Map<String, Object> collection ) {
+    public void validateFeaturesResponse_TypeProperty( Map<String, Object> collection ) {
         validateTypeProperty( collection );
     }
 
@@ -108,7 +108,7 @@ public class Features extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateFeaturesOperationResponse_FeaturesProperty( Map<String, Object> collection ) {
+    public void validateFeaturesResponse_FeaturesProperty( Map<String, Object> collection ) {
         validateFeaturesProperty( collection );
     }
 
@@ -141,7 +141,7 @@ public class Features extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateFeaturesOperationResponse_Links( Map<String, Object> collection ) {
+    public void validateFeaturesResponse_Links( Map<String, Object> collection ) {
         validateLinks( collection );
     }
 
@@ -169,7 +169,7 @@ public class Features extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateFeaturesOperationResponse_TimeStamp( Map<String, Object> collection ) {
+    public void validateFeaturesResponse_TimeStamp( Map<String, Object> collection ) {
         validateTimeStamp( collection );
     }
 
@@ -200,7 +200,7 @@ public class Features extends AbstractFeatures {
      *             if the creation of a uri fails
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateFeaturesOperationResponse_NumberMatched( Map<String, Object> collection )
+    public void validateFeaturesResponse_NumberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
         validateNumberMatched( collection );
     }
@@ -229,7 +229,7 @@ public class Features extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
-    public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection ) {
+    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection ) {
         validateNumberReturned( collection );
     }
 

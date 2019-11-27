@@ -3,7 +3,9 @@ package org.opengis.cite.ogcapifeatures10.collections;
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
 import static net.jadler.Jadler.onRequest;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +33,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesTest {
+public class FeaturesLimitTest {
 
     private static ITestContext testContext;
 
@@ -41,10 +43,10 @@ public class FeaturesTest {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesTest.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeaturesLimitTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
-        InputStream json = FeaturesTest.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream json = FeaturesLimitTest.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
@@ -75,22 +77,22 @@ public class FeaturesTest {
     @Test
     public void test() {
         prepareJadler();
-        Features features = new Features();
+        FeaturesLimit features = new FeaturesLimit();
         features.initCommonFixture( testContext );
         features.retrieveRequiredInformationFromTestContext( testContext );
         features.requirementClasses( testContext );
 
         Map<String, Object> collection = prepareCollection();
-        features.validateFeaturesOperation( testContext, collection );
-        features.validateFeaturesResponse_TypeProperty( collection );
-        features.validateFeaturesResponse_FeaturesProperty( collection );
-        features.validateFeaturesResponse_Links( collection );
+        features.validateFeaturesWithLimitOperation( collection, 10, 15 );
+        features.validateFeaturesWithLimitResponse_TypeProperty( collection, 10, 15 );
+        features.validateFeaturesWithLimitResponse_FeaturesProperty( collection, 10, 15 );
+        features.validateFeaturesWithLimitResponse_Links( collection, 10, 15 );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_TimeStamp( collection );
+        // features.validateFeaturesWithLimitResponse_TimeStamp( collection, 10, 15 );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberMatched( collection );
+        // features.validateFeaturesWithLimitResponse_NumberMatched( collection , 10, 15 );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberReturned( collection );
+        // features.validateFeaturesResponse_NumberReturned( collection, 10, 15 );
     }
 
     private static Map<String, Object> prepareCollection() {
@@ -99,7 +101,12 @@ public class FeaturesTest {
 
     private void prepareJadler() {
         InputStream flurstueckItems = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).respond().withBody( flurstueckItems );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameter( "limit",
+                                                                                              nullValue() ).respond().withBody( flurstueckItems );
+
+        InputStream flurstueckItemsLimit = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
+        onRequest().havingPath( containsString( "collections/flurstueck/items" ) ).havingParameterEqualTo( "limit",
+                                                                                                           "10" ).respond().withBody( flurstueckItemsLimit );
     }
 
 }

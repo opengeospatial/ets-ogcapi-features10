@@ -364,7 +364,7 @@ public class FeaturesLimit extends AbstractFeatures {
      *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
-    public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, int limit,
+    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, int limit,
                                                                      int max ) {
         validateNumberReturned( collection );
     }

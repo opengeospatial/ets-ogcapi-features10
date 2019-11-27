@@ -20,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
+import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -31,7 +32,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesTest {
+public class FeaturesBBoxTest {
 
     private static ITestContext testContext;
 
@@ -41,10 +42,10 @@ public class FeaturesTest {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesTest.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeaturesBBoxTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
-        InputStream json = FeaturesTest.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream json = FeaturesBBoxTest.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
@@ -75,22 +76,23 @@ public class FeaturesTest {
     @Test
     public void test() {
         prepareJadler();
-        Features features = new Features();
+        FeaturesBBox features = new FeaturesBBox();
         features.initCommonFixture( testContext );
         features.retrieveRequiredInformationFromTestContext( testContext );
         features.requirementClasses( testContext );
 
         Map<String, Object> collection = prepareCollection();
-        features.validateFeaturesOperation( testContext, collection );
-        features.validateFeaturesResponse_TypeProperty( collection );
-        features.validateFeaturesResponse_FeaturesProperty( collection );
-        features.validateFeaturesResponse_Links( collection );
+        BBox bbox = new BBox( 5, 48, 9, 50 );
+        features.validateFeaturesWithBoundingBoxOperation( collection, bbox );
+        features.validateFeaturesWithBoundingBoxResponse_TypeProperty( collection, bbox );
+        features.validateFeaturesWithBoundingBoxResponse_FeaturesProperty( collection, bbox );
+        features.validateFeaturesWithBoundingBoxResponse_Links( collection, bbox );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_TimeStamp( collection );
+        // features.validateFeaturesWithBoundingBoxResponse_TimeStamp( collection, bbox );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberMatched( collection );
+        // features.validateFeaturesWithBoundingBoxResponse_NumberMatched( collection , bbox );
         // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberReturned( collection );
+        // features.validateFeaturesResponse_NumberReturned( collection, bbox );
     }
 
     private static Map<String, Object> prepareCollection() {
@@ -99,7 +101,7 @@ public class FeaturesTest {
 
     private void prepareJadler() {
         InputStream flurstueckItems = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).respond().withBody( flurstueckItems );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameter( "bbox" ).respond().withBody( flurstueckItems );
     }
 
 }

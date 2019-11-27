@@ -147,7 +147,7 @@ public class FeaturesTime extends AbstractFeatures {
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         ZonedDateTime timeStampBeforeResponse = ZonedDateTime.now();
-        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "time",
+        Response response = init().baseUri( getFeaturesUrl ).accept( GEOJSON_MIME_TYPE ).param( "datetime",
                                                                                                 queryParameter ).when().request( GET );
         response.then().statusCode( 200 );
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
@@ -394,7 +394,7 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
+    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
         validateNumberReturned( collection );
     }
 

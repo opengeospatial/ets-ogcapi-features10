@@ -355,7 +355,7 @@ public class FeaturesBBox extends AbstractFeatures {
      *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
-    public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, BBox bbox ) {
+    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, BBox bbox ) {
         validateNumberReturned( collection );
     }
 
