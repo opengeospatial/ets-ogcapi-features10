@@ -173,6 +173,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) {
@@ -198,6 +200,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_TypeProperty( Map<String, Object> collection, BBox bbox ) {
@@ -218,6 +222,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_FeaturesProperty( Map<String, Object> collection, BBox bbox ) {
@@ -251,6 +257,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_Links( Map<String, Object> collection, BBox bbox ) {
@@ -279,6 +287,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_TimeStamp( Map<String, Object> collection, BBox bbox ) {
@@ -307,6 +317,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      *
      * @throws URISyntaxException
      *             if the creation of a uri fails
@@ -339,6 +351,8 @@ public class FeaturesBBox extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param bbox
+     *            bbox parameter to request, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, BBox bbox ) {

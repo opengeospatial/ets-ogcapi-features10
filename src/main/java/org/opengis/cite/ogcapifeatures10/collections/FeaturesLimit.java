@@ -129,6 +129,8 @@ public class FeaturesLimit extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      * @param limit
      *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 13: (Requirement /req/core/fc-op)", dataProvider = "collectionItemUrisWithLimits", dependsOnGroups = "featuresBase",  alwaysRun = true)
     public void validateFeaturesWithLimitOperation( Map<String, Object> collection, int limit, int max ) {
@@ -163,6 +165,8 @@ public class FeaturesLimit extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      * @param limit
      *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 17: (Requirement /req/core/fc-limit-response)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateFeaturesWithLimitResponse( Map<String, Object> collection, int limit, int max ) {
@@ -193,6 +197,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateFeaturesWithLimitResponse_TypeProperty( Map<String, Object> collection, int limit, int max ) {
@@ -213,6 +221,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateFeaturesWithLimitResponse_FeaturesProperty( Map<String, Object> collection, int limit,
@@ -247,6 +259,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateFeaturesWithLimitResponse_Links( Map<String, Object> collection, int limit, int max ) {
@@ -275,6 +291,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateFeaturesWithLimitResponse_TimeStamp( Map<String, Object> collection, int limit, int max ) {
@@ -303,6 +323,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
@@ -334,6 +358,10 @@ public class FeaturesLimit extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param limit
+     *            limit parameter to request, never <code>null</code>
+     * @param max
+     *            max limit defined by the service, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation", alwaysRun = true)
     public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, int limit,

@@ -170,6 +170,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 19: (Requirement /req/core/fc-time-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
     public void validateFeaturesWithDateTimeResponse( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
@@ -195,6 +203,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
     public void validateFeaturesWithDateTimeResponse_TypeProperty( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
@@ -215,6 +231,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
     public void validateFeaturesWithDateTimeResponse_FeaturesProperty( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
@@ -248,6 +272,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
     public void validateFeaturesWithDateTimeResponse_Links( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
@@ -276,6 +308,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
     public void validateFeaturesWithDateTimeResponse_TimeStamp( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
@@ -304,6 +344,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      *
      * @throws URISyntaxException
      *             if the creation of a uri fails
@@ -336,6 +384,14 @@ public class FeaturesTime extends AbstractFeatures {
      *
      * @param collection
      *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
     public void validateGetFeaturesOperationResponse_NumberReturned( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
