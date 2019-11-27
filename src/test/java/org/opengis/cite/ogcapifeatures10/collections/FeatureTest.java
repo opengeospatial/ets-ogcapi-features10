@@ -34,7 +34,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class GetFeatureOperationTest {
+public class FeatureTest {
 
     public static final String COLLECTION_NAME = "flurstueck";
 
@@ -46,10 +46,10 @@ public class GetFeatureOperationTest {
     public static void initTestFixture()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = GetFeatureOperationTest.class.getResource( "../openapi3/openapi.json" );
+        URL openAppiDocument = FeatureTest.class.getResource( "../openapi3/openapi.json" );
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
 
-        InputStream json = GetFeatureOperationTest.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream json = FeatureTest.class.getResourceAsStream( "../collections/collections.json" );
         JsonPath collectionsResponse = new JsonPath( json );
         List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
 
@@ -84,7 +84,7 @@ public class GetFeatureOperationTest {
     @Test
     public void testGetFeatureOperations() {
         prepareJadler();
-        GetFeatureOperation getFeatureOperation = new GetFeatureOperation();
+        Feature getFeatureOperation = new Feature();
         getFeatureOperation.initCommonFixture( testContext );
         getFeatureOperation.retrieveRequiredInformationFromTestContext( testContext );
         getFeatureOperation.requirementClasses( testContext );
@@ -99,8 +99,8 @@ public class GetFeatureOperationTest {
         String featureId = (String) collectionAndFeatureId[1];
         assertThat( featureId, notNullValue() );
 
-        getFeatureOperation.getFeatureOperation( collection, featureId );
-        getFeatureOperation.validateTheGetFeatureOperationResponse( collection, featureId );
+        getFeatureOperation.featureOperation( collection, featureId );
+        getFeatureOperation.validateFeatureResponse( collection, featureId );
     }
 
     private void prepareJadler() {
