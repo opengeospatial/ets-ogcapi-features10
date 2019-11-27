@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.testng.ISuite;
@@ -14,6 +15,7 @@ import org.testng.ITestContext;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
+@Ignore("Stable service is required")
 public class ApiDefinitionIT {
 
     private static ITestContext testContext;

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
@@ -20,6 +21,7 @@ import com.reprezen.kaizen.oasparser.model3.MediaType;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
+@Ignore("Stable service is required")
 public class ConformanceIT {
 
     private static ITestContext testContext;
