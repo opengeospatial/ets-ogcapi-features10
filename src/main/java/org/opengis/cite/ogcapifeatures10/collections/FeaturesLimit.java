@@ -48,15 +48,7 @@ public class FeaturesLimit extends AbstractFeatures {
             for ( TestPoint testPoint : testPoints ) {
                 Parameter limit = retrieveParameterByName( testPoint.getPath(), getApiModel(), "limit" );
                 if ( limit != null && limit.getSchema() != null ) {
-                    int min = limit.getSchema().getMinimum().intValue();
                     int max = limit.getSchema().getMaximum().intValue();
-                    if ( min == max ) {
-                        collectionsWithLimits.add( new Object[] { collection, min, max } );
-                    } else {
-                        collectionsWithLimits.add( new Object[] { collection, min, max } );
-                        int betweenMinAndMax = min + ( ( max - min ) / 2 );
-                        collectionsWithLimits.add( new Object[] { collection, betweenMinAndMax, max } );
-                    }
                     collectionsWithLimits.add( new Object[] { collection, max + 1, max } );
                 }
             }
