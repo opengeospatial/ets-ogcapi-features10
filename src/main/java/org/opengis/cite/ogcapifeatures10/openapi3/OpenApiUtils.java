@@ -103,7 +103,7 @@ public class OpenApiUtils {
     static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut ) {
         List<Path> pathItemObjects = identifyTestPoints( apiModel );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, iut, pathItemObjects );
-        return processServerObjects( pathItemAndServers );
+        return processServerObjects( pathItemAndServers, true );
     }
 
     /**
@@ -116,7 +116,7 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel, URI iut ) {
-        return retrieveTestPoints( apiModel, iut, API );
+        return retrieveTestPoints( apiModel, iut, API, true );
     }
 
     /**
@@ -130,7 +130,7 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForConformance( OpenApi3 apiModel, URI iut ) {
-        return retrieveTestPoints( apiModel, iut, CONFORMANCE );
+        return retrieveTestPoints( apiModel, iut, CONFORMANCE, false );
     }
 
     /**
@@ -144,7 +144,7 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForCollectionsMetadata( OpenApi3 apiModel, URI iut ) {
-        return retrieveTestPoints( apiModel, iut, COLLECTIONS );
+        return retrieveTestPoints( apiModel, iut, COLLECTIONS, false );
     }
 
     /**
@@ -166,7 +166,7 @@ public class OpenApiUtils {
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(), true );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
@@ -190,7 +190,7 @@ public class OpenApiUtils {
         requestedPath.append( "/.*/items" );
 
         List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(),
-                                                            ( a, b ) -> a.matches( b ) );
+                                                            ( a, b ) -> a.matches( b ), true );
         if ( noOfCollection < 0 || allTestPoints.size() <= noOfCollection ) {
             return allTestPoints;
         }
@@ -217,7 +217,7 @@ public class OpenApiUtils {
         requestedPath.append( collectionName );
         requestedPath.append( "/items" );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(), true );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
@@ -245,7 +245,7 @@ public class OpenApiUtils {
         requestedPath.append( "/items/" );
         requestedPath.append( featureId );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(), true );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
     }
 
@@ -263,20 +263,20 @@ public class OpenApiUtils {
         return null;
     }
 
-    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path ) {
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path, boolean allowEmptyTemplateReplacements ) {
         String requestedPath = "/" + path.getPathItem();
-        return retrieveTestPoints( apiModel, iut, requestedPath );
+        return retrieveTestPoints( apiModel, iut, requestedPath, allowEmptyTemplateReplacements );
     }
 
-    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, String requestedPath ) {
-        return retrieveTestPoints( apiModel, iut, requestedPath, new PathMatcher() );
+    private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, String requestedPath, boolean allowEmptyTemplateReplacements ) {
+        return retrieveTestPoints( apiModel, iut, requestedPath, new PathMatcher(), allowEmptyTemplateReplacements );
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, String requestedPath,
-                                                       PathMatcherFunction<Boolean, String, String> pathMatcher ) {
+                                                       PathMatcherFunction<Boolean, String, String> pathMatcher, boolean allowEmptyTemplateReplacements ) {
         List<Path> pathItemObjects = identifyTestPoints( apiModel, requestedPath, pathMatcher );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, iut, pathItemObjects );
-        return processServerObjects( pathItemAndServers );
+        return processServerObjects( pathItemAndServers, allowEmptyTemplateReplacements );
     }
 
     /**
@@ -431,15 +431,15 @@ public class OpenApiUtils {
      * @param pathItemAndServers
      *            never <code>null</code>
      */
-    private static List<TestPoint> processServerObjects( List<PathItemAndServer> pathItemAndServers ) {
+    private static List<TestPoint> processServerObjects( List<PathItemAndServer> pathItemAndServers, boolean allowEmptyTemplateReplacements ) {
         List<TestPoint> uris = new ArrayList<>();
         for ( PathItemAndServer pathItemAndServer : pathItemAndServers ) {
-            processServerObject( uris, pathItemAndServer );
+            processServerObject( uris, pathItemAndServer, allowEmptyTemplateReplacements );
         }
         return uris;
     }
 
-    private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer ) {
+    private static void processServerObject( List<TestPoint> uris, PathItemAndServer pathItemAndServer, boolean allowEmptyTemplateReplacements ) {
         String pathString = pathItemAndServer.pathItemObject.getPathString();
         Response response = getResponse(pathItemAndServer);
         if ( response == null )
@@ -454,7 +454,7 @@ public class OpenApiUtils {
             List<Map<String, String>> templateReplacements = collectTemplateReplacements( pathItemAndServer,
                                                                                           uriTemplate );
 
-            if ( templateReplacements.isEmpty() ) {
+            if ( templateReplacements.isEmpty() && allowEmptyTemplateReplacements ) {
                 TestPoint testPoint = new TestPoint( pathItemAndServer.serverUrl, pathString, contentMediaTypes );
                 uris.add( testPoint );
             } else {
