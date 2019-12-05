@@ -1,6 +1,5 @@
 package org.opengis.cite.ogcapifeatures10.openapi3;
 
-import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.PATH.API;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.PATH.COLLECTIONS;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.PATH.CONFORMANCE;
 
@@ -42,7 +41,7 @@ public class OpenApiUtils {
 
     enum PATH {
 
-        API( "api" ), CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
+        CONFORMANCE( "conformance" ), COLLECTIONS( "collections" );
 
         private String pathItem;
 
@@ -104,19 +103,6 @@ public class OpenApiUtils {
         List<Path> pathItemObjects = identifyTestPoints( apiModel );
         List<PathItemAndServer> pathItemAndServers = identifyServerUrls( apiModel, iut, pathItemObjects );
         return processServerObjects( pathItemAndServers, true );
-    }
-
-    /**
-     * Parse the API test points from the passed OpenApi3 document as described in A.4.3. Identify the Test Points.
-     *
-     * @param apiModel
-     *            never <code>null</code>
-     * @param iut
-     *            the url of the instance under test, never <code>null</code>
-     * @return the parsed test points, may be empty but never <code>null</code>
-     */
-    static List<TestPoint> retrieveTestPointsForApi( OpenApi3 apiModel, URI iut ) {
-        return retrieveTestPoints( apiModel, iut, API, true );
     }
 
     /**

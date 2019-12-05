@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPoints;
-import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForApi;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
@@ -49,7 +48,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openAppiDocument, true );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
 
-        assertThat( testPoints.size(), is( 3 ) );
+        assertThat( testPoints.size(), is( 2 ) );
 
     }
 
@@ -82,17 +81,6 @@ public class OpenApiUtilsTest {
         assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().size(), is( 2 ) );
         assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().get( "index" ), is( "10" ) );
         assertThat( testPointWIthIndexAndEnum3.getPredefinedTemplateReplacement().get( "enum" ), is( "drei" ) );
-    }
-
-    @Test
-    public void testRetrieveTestPoints_API() {
-        OpenApi3Parser parser = new OpenApi3Parser();
-
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPointsForApi( apiModel, iut );
-
-        assertThat( testPoints.size(), is( 1 ) );
     }
 
     @Test
