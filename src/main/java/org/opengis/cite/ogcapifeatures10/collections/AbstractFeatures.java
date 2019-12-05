@@ -49,7 +49,6 @@ public class AbstractFeatures extends CommonDataFixture {
 
     @DataProvider(name = "collectionPaths")
     public Iterator<Object[]> collectionPaths( ITestContext testContext ) {
-        this.iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections( getApiModel(), iut,
                                                                                      noOfCollections );
         List<Object[]> collectionsData = new ArrayList<>();
@@ -61,6 +60,7 @@ public class AbstractFeatures extends CommonDataFixture {
 
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
+        this.iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
