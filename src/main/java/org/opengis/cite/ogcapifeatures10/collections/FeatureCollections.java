@@ -109,7 +109,7 @@ public class FeatureCollections extends CommonDataFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 1 (Requirement /req/core/fc-md-success)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
+    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 1 (Requirement /req/core/fc-md-success)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
     public void validateFeatureCollectionsMetadataOperationResponse_Links( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
@@ -157,7 +157,7 @@ public class FeatureCollections extends CommonDataFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 2 (Requirement /req/core/fc-md-success)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
+    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 2 (Requirement /req/core/fc-md-success)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
     public void validateFeatureCollectionsMetadataOperationResponse_Items( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
@@ -185,7 +185,7 @@ public class FeatureCollections extends CommonDataFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 3 (Requirement /req/core/fc-md-success)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
+    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 3 (Requirement /req/core/fc-md-success)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
     public void validateFeatureCollectionsMetadataOperationResponse_CrsProperty( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
@@ -209,7 +209,7 @@ public class FeatureCollections extends CommonDataFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 4 (Requirement /req/core/fc-md-success)", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
+    @Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 4 (Requirement /req/core/fc-md-success)", groups = "collections", dataProvider = "collectionsUris", dependsOnMethods = "validateFeatureCollectionsMetadataOperation", alwaysRun = true)
     public void validateFeatureCollectionsMetadataOperationResponse_Content( TestPoint testPoint ) {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
