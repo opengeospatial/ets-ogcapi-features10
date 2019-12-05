@@ -51,7 +51,7 @@
                 <h4 style="margin-bottom: 0.5em">Location of the landing page</h4>
               </label>
               <input id="ogc-api-features-uri" name="ogc-api-features-uri" size="128" type="text"
-                     value="http://192.168.0.1:8002/" />
+                     value="" />
             </p>
             <p>
               <h4 style="margin-bottom: 0.5em">Number of tested collections</h4>
