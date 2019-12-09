@@ -1,5 +1,16 @@
 = Release Notes OGC API - Features
 
+== 0.5 (2019-12-09)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/45[#45]: Update implementation to OGC API - Features 1.0 spec
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/79[#79]: Update documentation to OGC API - Features 1.0 spec
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/74[#74]: Minor improvements and bug fixes
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/65[#65]: Rename parameter 'time' to 'datetime'
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/73[#73]: Change title, short name and description to reflect OGC API - Features
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/53[#53]: Question about landing page as html
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/62[#62]: A.4.4.14 skipped test - 'No featureId available'
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/68[#68]: Enhance Docker documentation
+
 == 0.4 (2019-05-29)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/60[#60]: Test "boundingBoxParameter" fails with IndexOutOfBoundException bug
