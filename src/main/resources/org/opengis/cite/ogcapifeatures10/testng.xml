@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="ogcapi-features-1.0-${version}" verbose="0" configfailurepolicy="continue">
+  <parameter name="iut" value="" />
+  <parameter name="ics" value="" />
+
+  <listeners>
+    <listener class-name="org.opengis.cite.ogcapifeatures10.TestRunListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.SuiteFixtureListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.TestFailureListener" />
+  </listeners>
+
+  <test name="Core">
+    <packages>
+      <package name="org.opengis.cite.ogcapifeatures10.general" />
+      <package name="org.opengis.cite.ogcapifeatures10.landingpage" />
+      <package name="org.opengis.cite.ogcapifeatures10.apidefinition" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance" />
+      <package name="org.opengis.cite.ogcapifeatures10.collections" />
+    </packages>
+    <classes>
+      <class name="org.opengis.cite.ogcapifeatures10.SuitePreconditions" />
+    </classes>
+  </test>
+
+</suite>

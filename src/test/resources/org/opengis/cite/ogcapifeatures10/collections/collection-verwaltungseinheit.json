@@ -1,0 +1,48 @@
+{
+  "id" : "verwaltungseinheit",
+  "title" : "Verwaltungseinheit",
+  "extent" : {
+    "spatial" : [ 5.61272621360749, 50.2373512077239, 9.58963433710139, 52.5286304537795 ],
+    "temporal" : [ "2018-05-18T14:45:44Z", "2019-04-29T09:15:38Z" ]
+  },
+  "links" : [ {
+    "rel" : "items",
+    "type" : "application/geo+json",
+    "title" : "Verwaltungseinheit as GeoJSON",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit/items?f=json"
+  }, {
+    "rel" : "items",
+    "type" : "text/html",
+    "title" : "Verwaltungseinheit as HTML",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit/items?f=html"
+  }, {
+    "rel" : "items",
+    "type" : "application/gml+xml;profile=\"http://www.opengis.net/def/profile/ogc/2.0/gml-sf2\";version=3.2",
+    "title" : "Verwaltungseinheit as GML",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit/items?f=xml"
+  }, {
+    "rel" : "self",
+    "type" : "application/json",
+    "title" : "Information about the Verwaltungseinheit data",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit?f=json"
+  }, {
+    "rel" : "alternate",
+    "type" : "text/html",
+    "title" : "Information about the Verwaltungseinheit data",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit?f=html"
+  }, {
+    "rel" : "alternate",
+    "type" : "application/gml+xml;profile=\\\"http://www.opengis.net/def/profile/ogc/2.0/gml-sf2\\\";version=3.2",
+    "title" : "Information about the Verwaltungseinheit data",
+    "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit?f=xml"
+  } ],
+  "tilingSchemes" : [ {
+    "identifier" : "default",
+    "links" : [ {
+      "rel" : "tilingScheme",
+      "type" : "application/json",
+      "title" : "Google Maps Tiling Scheme",
+      "href" : "http://localhost:8090/kataster/collections/verwaltungseinheit/tiles/default?f=json"
+    } ]
+  } ]
+}

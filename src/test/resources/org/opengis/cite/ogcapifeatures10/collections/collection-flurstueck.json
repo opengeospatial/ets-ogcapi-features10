@@ -1,0 +1,43 @@
+{
+  "id": "flurstueck",
+  "title": "Flurstück",
+  "description": null,
+  "extent": {
+    "spatial": [
+      5.61272621360749,
+      50.2373512077239,
+      9.58963433710139,
+      52.5286304537795
+    ],
+    "temporal": [
+      "2017-01-01T00:00:00Z",
+      "2017-12-31T23:59:59Z"
+    ]
+  },
+  "links": [
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=json",
+      "rel": "items",
+      "type": "application/geo+json",
+      "title": "Flurstück as GeoJSON"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=html",
+      "rel": "items",
+      "type": "text/html",
+      "title": "Flurstück as HTML"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=xml",
+      "rel": "items",
+      "type": "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
+      "title": "Flurstück as GML"
+    },
+    {
+      "href": "https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?REQUEST=DescribeFeatureType&VERSION=2.0.0&NAMESPACES=xmlns%28ave%2Chttp%3A%2F%2Frepository.gdi-de.org%2Fschemas%2Fadv%2Fprodukt%2Falkis-vereinfacht%2F1.0%29&TYPENAMES=ave%3AFlurstueck&SERVICE=WFS",
+      "rel": "describedBy",
+      "type": "application/xml",
+      "title": "XML schema for feature type Flurstück"
+    }
+  ]
+}

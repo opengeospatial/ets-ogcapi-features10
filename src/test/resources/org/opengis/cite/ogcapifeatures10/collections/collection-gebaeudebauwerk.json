@@ -1,0 +1,39 @@
+{
+  "id": "gebaeudebauwerk",
+  "title": "Gebäude, Bauwerk",
+  "description": null,
+  "extent": {
+    "spatial": [
+      5,
+      50,
+      9,
+      52
+    ]
+  },
+  "links": [
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=json",
+      "rel": "items",
+      "type": "application/geo+json",
+      "title": "Gebäude, Bauwerk as GeoJSON"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=html",
+      "rel": "items",
+      "type": "text/html",
+      "title": "Gebäude, Bauwerk as HTML"
+    },
+    {
+      "href": "http://localhost:8090/rest/services/kataster/collections/gebaeudebauwerk/items?f=xml",
+      "rel": "items",
+      "type": "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
+      "title": "Gebäude, Bauwerk as GML"
+    },
+    {
+      "href": "https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?REQUEST=DescribeFeatureType&VERSION=2.0.0&NAMESPACES=xmlns%28ave%2Chttp%3A%2F%2Frepository.gdi-de.org%2Fschemas%2Fadv%2Fprodukt%2Falkis-vereinfacht%2F1.0%29&TYPENAMES=ave%3AGebaeudeBauwerk&SERVICE=WFS",
+      "rel": "describedBy",
+      "type": "application/xml",
+      "title": "XML schema for feature type Gebäude, Bauwerk"
+    }
+  ]
+}

@@ -1,35 +1,35 @@
-= Release Notes WFS 3.0
+= Release Notes OGC API - Features
 
 == 0.4 (2019-05-29)
 
-- https://github.com/opengeospatial/ets-wfs30/issues/60[#60]: Test "boundingBoxParameter" fails with IndexOutOfBoundException bug
-- https://github.com/opengeospatial/ets-wfs30/issues/58[#58]: Add documentation of parameter noofcollections for REST API
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/60[#60]: Test "boundingBoxParameter" fails with IndexOutOfBoundException bug
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/58[#58]: Add documentation of parameter noofcollections for REST API
 
 == 0.3 (2019-04-26)
 
-- https://github.com/opengeospatial/ets-wfs30/issues/56[#56]: Test for extent should manage both integer and float
-- https://github.com/opengeospatial/ets-wfs30/issues/54[#54]: Manage getFeatureUrlWithFeatureId when no query string
-- https://github.com/opengeospatial/ets-wfs30/issues/51[#51]: Improve Docker configuration and enable push to Docker Hub
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/56[#56]: Test for extent should manage both integer and float
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/54[#54]: Manage getFeatureUrlWithFeatureId when no query string
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/51[#51]: Improve Docker configuration and enable push to Docker Hub
 
 == 0.2 (2018-12-21)
 
-- https://github.com/opengeospatial/ets-wfs30/issues/46[#46]: Clean Up ETS
-- https://github.com/opengeospatial/ets-wfs30/issues/9[#9]: Create documentation of test suite
-- https://github.com/opengeospatial/ets-wfs30/issues/43[#43]: Exhaustive paging tests unecessary slow/too many requests performed
-- https://github.com/opengeospatial/ets-wfs30/issues/38[#38]: Improve execution order of tests
-- https://github.com/opengeospatial/ets-wfs30/issues/31[#31]: Improve message of failing test LandingTest.landingPageValidation()
-- https://github.com/opengeospatial/ets-wfs30/issues/36[#36]: Test validateCollectionsMetadataDocument_Links fails
-- https://github.com/opengeospatial/ets-wfs30/issues/30[#30]: Remove test FeatureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections()
-- https://github.com/opengeospatial/ets-wfs30/issues/28[#28]: Enhance ETS to run against server implementing the compact API flavor
-- https://github.com/opengeospatial/ets-wfs30/issues/34[#34]: Update README.md regarding test execution (especially IDE mode)
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/46[#46]: Clean Up ETS
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/9[#9]: Create documentation of test suite
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/43[#43]: Exhaustive paging tests unecessary slow/too many requests performed
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/38[#38]: Improve execution order of tests
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/31[#31]: Improve message of failing test LandingTest.landingPageValidation()
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/36[#36]: Test validateCollectionsMetadataDocument_Links fails
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/30[#30]: Remove test FeatureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Collections()
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/28[#28]: Enhance ETS to run against server implementing the compact API flavor
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/34[#34]: Update README.md regarding test execution (especially IDE mode)
 
 == 0.1 (2018-07-12)
-- https://github.com/opengeospatial/ets-wfs30/issues/17[#17]: Implement A.4.4. Processing the OpenAPI Document - Part 4
-- https://github.com/opengeospatial/ets-wfs30/issues/8[#8]: Implement A.4.4. Processing the OpenAPI Document - Part 3
-- https://github.com/opengeospatial/ets-wfs30/issues/7[#7]: Implement A.4.4. Processing the OpenAPI Document - Part 2
-- https://github.com/opengeospatial/ets-wfs30/issues/6[#6]: Implement A.4.4. Processing the OpenAPI Document - Part 1
-- https://github.com/opengeospatial/ets-wfs30/issues/5[#5]: Implement A.4.3. Identify the Test Points
-- https://github.com/opengeospatial/ets-wfs30/issues/4[#4]: Implement A.4.2. Retrieve the API Description
-- https://github.com/opengeospatial/ets-wfs30/issues/3[#3]: Implement A.4.1. General Tests
-- https://github.com/opengeospatial/ets-wfs30/issues/13[#13]: Introduce Dockerfile and Maven Docker plugin
-- https://github.com/opengeospatial/ets-wfs30/issues/10[#10]: Prepare ETS
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/17[#17]: Implement A.4.4. Processing the OpenAPI Document - Part 4
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/8[#8]: Implement A.4.4. Processing the OpenAPI Document - Part 3
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/7[#7]: Implement A.4.4. Processing the OpenAPI Document - Part 2
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/6[#6]: Implement A.4.4. Processing the OpenAPI Document - Part 1
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/5[#5]: Implement A.4.3. Identify the Test Points
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/4[#4]: Implement A.4.2. Retrieve the API Description
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/3[#3]: Implement A.4.1. General Tests
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/13[#13]: Introduce Dockerfile and Maven Docker plugin
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/10[#10]: Prepare ETS
