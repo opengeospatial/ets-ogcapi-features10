@@ -58,7 +58,6 @@ public class FeaturesLimit extends AbstractFeatures {
                         int betweenMinAndMax = min + ( ( max - min ) / 2 );
                         collectionsWithLimits.add( new Object[] { collection, betweenMinAndMax, max } );
                     }
-                    collectionsWithLimits.add( new Object[] { collection, max + 1, max } );
                 }
             }
         }
