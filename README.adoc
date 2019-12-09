@@ -20,9 +20,9 @@ include::src/site/asciidoc/how-to-run-the-tests.adoc[]
 
 If you would like to get involved, you can:
 
-* https://github.com/opengeospatial/ets-cat30/issues[Report an issue] such as a defect or
+* https://github.com/opengeospatial/ets-ogcapi-features10/issues[Report an issue] such as a defect or
 an enhancement request
-* Help to resolve an https://github.com/opengeospatial/ets-cat30/issues?q=is%3Aopen[open issue]
+* Help to resolve an https://github.com/opengeospatial/ets-ogcapi-features10/issues?q=is%3Aopen[open issue]
 * Fix a bug: Fork the repository, apply the fix, and create a pull request
 * Add new tests: Fork the repository, implement and verify the tests on a new topic branch,
 and create a pull request (don't forget to periodically rebase long-lived branches so
