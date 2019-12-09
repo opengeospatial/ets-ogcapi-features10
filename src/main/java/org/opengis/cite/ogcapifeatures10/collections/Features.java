@@ -67,7 +67,7 @@ public class Features extends AbstractFeatures {
         response.then().statusCode( 200 );
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
-        collectionIdAndResponse.put( collectionId, responseData );
+        collectionIdAndResponse.put( asKey( collectionId ), responseData );
 
         addFeatureIdToTestContext( testContext, collectionId, response );
     }
@@ -89,7 +89,8 @@ public class Features extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_TypeProperty( Map<String, Object> collection ) {
-        validateTypeProperty( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateTypeProperty( asKey( collectionId ) );
     }
 
     /**
@@ -109,7 +110,8 @@ public class Features extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_FeaturesProperty( Map<String, Object> collection ) {
-        validateFeaturesProperty( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateFeaturesProperty( asKey( collectionId ) );
     }
 
     /**
@@ -142,7 +144,8 @@ public class Features extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_Links( Map<String, Object> collection ) {
-        validateLinks( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateLinks( asKey( collectionId ) );
     }
 
     /**
@@ -170,7 +173,8 @@ public class Features extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_TimeStamp( Map<String, Object> collection ) {
-        validateTimeStamp( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateTimeStamp( asKey( collectionId ) );
     }
 
     /**
@@ -202,7 +206,8 @@ public class Features extends AbstractFeatures {
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_NumberMatched( Map<String, Object> collection )
                             throws URISyntaxException {
-        validateNumberMatched( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateNumberMatched( asKey( collectionId ) );
     }
 
     /**
@@ -230,7 +235,8 @@ public class Features extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection ) {
-        validateNumberReturned( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateNumberReturned( asKey( collectionId ) );
     }
 
     private void addFeatureIdToTestContext( ITestContext testContext, String collectionName, Response response ) {
@@ -244,6 +250,10 @@ public class Features extends AbstractFeatures {
         String featureId = parseFeatureId( response.jsonPath() );
         if ( featureId != null )
             collectionNameAndFeatureId.put( collectionName, featureId );
+    }
+
+    private CollectionResponseKey asKey( String collectionId ) {
+        return new CollectionResponseKey( collectionId );
     }
 
 }

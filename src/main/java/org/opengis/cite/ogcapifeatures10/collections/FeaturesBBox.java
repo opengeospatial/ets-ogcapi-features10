@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
@@ -105,14 +106,12 @@ public class FeaturesBBox extends AbstractFeatures {
         Schema schema = bbox.getSchema();
         assertNotNull( schema, "Expected schema for bbox parameter for collections path '" + testPoint.getPath() );
         assertEquals( schema.getType(), "array", String.format( msg, "schema -> type", "array", schema.getType() ) );
-        
-        assertNotNull( schema.getMinItems(),
-                      String.format( msg, "schema -> minItems", "null", schema.getMinItems() ) );
+
+        assertNotNull( schema.getMinItems(), String.format( msg, "schema -> minItems", "null", schema.getMinItems() ) );
         assertEquals( schema.getMinItems().intValue(), 4,
                       String.format( msg, "schema -> minItems", "4", schema.getMinItems() ) );
-        
-        assertNotNull( schema.getMaxItems(),
-                      String.format( msg, "schema -> maxItems", "null", schema.getMaxItems() ) );
+
+        assertNotNull( schema.getMaxItems(), String.format( msg, "schema -> maxItems", "null", schema.getMaxItems() ) );
         assertEquals( schema.getMaxItems().intValue(), 6,
                       String.format( msg, "schema -> maxItems", "6", schema.getMaxItems() ) );
 
@@ -156,7 +155,7 @@ public class FeaturesBBox extends AbstractFeatures {
         response.then().statusCode( 200 );
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
-        collectionIdAndResponse.put( collectionId, responseData );
+        collectionIdAndResponse.put( asKey( collectionId, bbox ), responseData );
     }
 
     /**
@@ -179,7 +178,7 @@ public class FeaturesBBox extends AbstractFeatures {
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) {
         String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+        ResponseData response = collectionIdAndResponse.get( asKey( collectionId, bbox ) );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
@@ -205,7 +204,8 @@ public class FeaturesBBox extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_TypeProperty( Map<String, Object> collection, BBox bbox ) {
-        validateTypeProperty( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateTypeProperty( asKey( collectionId, bbox ) );
     }
 
     /**
@@ -227,7 +227,8 @@ public class FeaturesBBox extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_FeaturesProperty( Map<String, Object> collection, BBox bbox ) {
-        validateFeaturesProperty( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateFeaturesProperty( asKey( collectionId, bbox ) );
     }
 
     /**
@@ -262,7 +263,8 @@ public class FeaturesBBox extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_Links( Map<String, Object> collection, BBox bbox ) {
-        validateLinks( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateLinks( asKey( collectionId, bbox ) );
     }
 
     /**
@@ -292,7 +294,8 @@ public class FeaturesBBox extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_TimeStamp( Map<String, Object> collection, BBox bbox ) {
-        validateTimeStamp( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateTimeStamp( asKey( collectionId, bbox ) );
     }
 
     /**
@@ -326,7 +329,8 @@ public class FeaturesBBox extends AbstractFeatures {
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse_NumberMatched( Map<String, Object> collection, BBox bbox )
                             throws URISyntaxException {
-        validateNumberMatched( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateNumberMatched( asKey( collectionId, bbox ) );
     }
 
     /**
@@ -356,7 +360,38 @@ public class FeaturesBBox extends AbstractFeatures {
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, BBox bbox ) {
-        validateNumberReturned( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateNumberReturned( asKey( collectionId, bbox ) );
     }
 
+    private CollectionIdWithBboxKey asKey( String collectionId, BBox bBox ) {
+        return new CollectionIdWithBboxKey( collectionId, bBox );
+    }
+
+    private class CollectionIdWithBboxKey extends CollectionResponseKey {
+
+        BBox bbox;
+
+        public CollectionIdWithBboxKey( String collectionId, BBox bbox ) {
+            super( collectionId );
+            this.bbox = bbox;
+        }
+
+        @Override
+        public boolean equals( Object o ) {
+            if ( this == o )
+                return true;
+            if ( o == null || getClass() != o.getClass() )
+                return false;
+            if ( !super.equals( o ) )
+                return false;
+            CollectionIdWithBboxKey that = (CollectionIdWithBboxKey) o;
+            return Objects.equals( bbox, that.bbox );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash( super.hashCode(), bbox );
+        }
+    }
 }

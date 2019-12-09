@@ -3,6 +3,7 @@ package org.opengis.cite.ogcapifeatures10.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -52,6 +53,22 @@ public class BBox {
     @Override
     public String toString() {
         return asQueryParameter();
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o )
+            return true;
+        if ( o == null || getClass() != o.getClass() )
+            return false;
+        BBox bBox = (BBox) o;
+        return Double.compare( bBox.minX, minX ) == 0 && Double.compare( bBox.minY, minY ) == 0
+               && Double.compare( bBox.maxX, maxX ) == 0 && Double.compare( bBox.maxY, maxY ) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( minX, minY, maxX, maxY );
     }
 
     private DecimalFormat formatter() {

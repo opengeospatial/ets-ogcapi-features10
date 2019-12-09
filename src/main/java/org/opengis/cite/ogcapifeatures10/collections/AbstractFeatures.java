@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.opengis.cite.ogcapifeatures10.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
@@ -41,7 +42,7 @@ import io.restassured.response.Response;
  */
 public class AbstractFeatures extends CommonDataFixture {
 
-    protected final Map<String, ResponseData> collectionIdAndResponse = new HashMap<>();
+    protected final Map<CollectionResponseKey, ResponseData> collectionIdAndResponse = new HashMap<>();
 
     protected List<Map<String, Object>> collections;
 
@@ -79,11 +80,10 @@ public class AbstractFeatures extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    public void validateTypeProperty( Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+    public void validateTypeProperty( CollectionResponseKey collection ) {
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
         String type = jsonPath.get( "type" );
@@ -106,11 +106,10 @@ public class AbstractFeatures extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    void validateFeaturesProperty( Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+    void validateFeaturesProperty( CollectionResponseKey collection ) {
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
         List<Object> type = jsonPath.get( "features" );
@@ -145,11 +144,10 @@ public class AbstractFeatures extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    void validateLinks( Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+    void validateLinks( CollectionResponseKey collection ) {
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> links = jsonPath.getList( "links" );
@@ -198,15 +196,14 @@ public class AbstractFeatures extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    public void validateTimeStamp( Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+    public void validateTimeStamp( CollectionResponseKey collection ) {
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertTimeStamp( collectionId, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse,
+        assertTimeStamp( collection.id, jsonPath, response.timeStampBeforeResponse, response.timeStampAfterResponse,
                          true );
     }
 
@@ -236,16 +233,15 @@ public class AbstractFeatures extends CommonDataFixture {
      * @throws URISyntaxException
      *             if the creation of a uri fails
      */
-    void validateNumberMatched( Map<String, Object> collection )
+    void validateNumberMatched( CollectionResponseKey collection )
                             throws URISyntaxException {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberMatched( getApiModel(), iut, collectionId, jsonPath, true );
+        assertNumberMatched( getApiModel(), iut, collection.id, jsonPath, true );
     }
 
     /**
@@ -271,15 +267,14 @@ public class AbstractFeatures extends CommonDataFixture {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    void validateNumberReturned( Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+    void validateNumberReturned( CollectionResponseKey collection ) {
+        ResponseData response = collectionIdAndResponse.get( collection );
         if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
 
         JsonPath jsonPath = response.jsonPath();
 
-        assertNumberReturned( collectionId, jsonPath, true );
+        assertNumberReturned( collection.id, jsonPath, true );
     }
 
     protected String findFeaturesUrlForGeoJson( Map<String, Object> collection ) {
@@ -321,4 +316,29 @@ public class AbstractFeatures extends CommonDataFixture {
             return response.jsonPath();
         }
     }
+
+    protected class CollectionResponseKey {
+
+        private final String id;
+
+        protected CollectionResponseKey( String id ) {
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals( Object o ) {
+            if ( this == o )
+                return true;
+            if ( o == null || getClass() != o.getClass() )
+                return false;
+            CollectionResponseKey that = (CollectionResponseKey) o;
+            return Objects.equals( id, that.id );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash( id );
+        }
+    }
+    
 }

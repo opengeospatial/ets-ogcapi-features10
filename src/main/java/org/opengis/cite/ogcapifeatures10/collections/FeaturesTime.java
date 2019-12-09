@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.TemporalExtent;
@@ -152,7 +153,7 @@ public class FeaturesTime extends AbstractFeatures {
         response.then().statusCode( 200 );
         ZonedDateTime timeStampAfterResponse = ZonedDateTime.now();
         ResponseData responseData = new ResponseData( response, timeStampBeforeResponse, timeStampAfterResponse );
-        collectionIdAndResponse.put( collectionId, responseData );
+        collectionIdAndResponse.put( asKey( collectionId, queryParameter ), responseData );
 
     }
 
@@ -180,9 +181,10 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 19: (Requirement /req/core/fc-time-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
+    public void validateFeaturesWithDateTimeResponse( Map<String, Object> collection, String queryParameter,
+                                                      Object begin, Object end ) {
         String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( collectionId );
+        ResponseData response = collectionIdAndResponse.get( asKey( collectionId, queryParameter ) );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
@@ -213,8 +215,10 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse_TypeProperty( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
-        validateTypeProperty( collection );
+    public void validateFeaturesWithDateTimeResponse_TypeProperty( Map<String, Object> collection,
+                                                                   String queryParameter, Object begin, Object end ) {
+        String collectionId = (String) collection.get( "id" );
+        validateTypeProperty( asKey( collectionId, queryParameter ) );
     }
 
     /**
@@ -241,8 +245,11 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse_FeaturesProperty( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
-        validateFeaturesProperty( collection );
+    public void validateFeaturesWithDateTimeResponse_FeaturesProperty( Map<String, Object> collection,
+                                                                       String queryParameter, Object begin,
+                                                                       Object end ) {
+        String collectionId = (String) collection.get( "id" );
+        validateFeaturesProperty( asKey( collectionId, queryParameter ) );
     }
 
     /**
@@ -282,8 +289,10 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse_Links( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
-        validateLinks( collection );
+    public void validateFeaturesWithDateTimeResponse_Links( Map<String, Object> collection, String queryParameter,
+                                                            Object begin, Object end ) {
+        String collectionId = (String) collection.get( "id" );
+        validateLinks( asKey( collectionId, queryParameter ) );
     }
 
     /**
@@ -318,8 +327,10 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse_TimeStamp( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
-        validateTimeStamp( collection );
+    public void validateFeaturesWithDateTimeResponse_TimeStamp( Map<String, Object> collection, String queryParameter,
+                                                                Object begin, Object end ) {
+        String collectionId = (String) collection.get( "id" );
+        validateTimeStamp( asKey( collectionId, queryParameter ) );
     }
 
     /**
@@ -357,9 +368,11 @@ public class FeaturesTime extends AbstractFeatures {
      *             if the creation of a uri fails
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesWithDateTimeResponse_NumberMatched( Map<String, Object> collection, String queryParameter, Object begin, Object end )
+    public void validateFeaturesWithDateTimeResponse_NumberMatched( Map<String, Object> collection,
+                                                                    String queryParameter, Object begin, Object end )
                             throws URISyntaxException {
-        validateNumberMatched( collection );
+        String collectionId = (String) collection.get( "id" );
+        validateNumberMatched( asKey( collectionId, queryParameter ) );
     }
 
     /**
@@ -394,8 +407,41 @@ public class FeaturesTime extends AbstractFeatures {
      *            request is an instant
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - DateTime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
-    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, String queryParameter, Object begin, Object end ){
-        validateNumberReturned( collection );
+    public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, String queryParameter,
+                                                         Object begin, Object end ) {
+        String collectionId = (String) collection.get( "id" );
+        validateNumberReturned( asKey( collectionId, queryParameter ) );
+    }
+
+    private CollectionIdWithTimeKey asKey( String collectionId, String queryParameter ) {
+        return new CollectionIdWithTimeKey( collectionId, queryParameter );
+    }
+
+    private class CollectionIdWithTimeKey extends CollectionResponseKey {
+
+        String queryParameter;
+
+        public CollectionIdWithTimeKey( String collectionId, String queryParameter ) {
+            super( collectionId );
+            this.queryParameter = queryParameter;
+        }
+
+        @Override
+        public boolean equals( Object o ) {
+            if ( this == o )
+                return true;
+            if ( o == null || getClass() != o.getClass() )
+                return false;
+            if ( !super.equals( o ) )
+                return false;
+            CollectionIdWithTimeKey that = (CollectionIdWithTimeKey) o;
+            return Objects.equals( queryParameter, that.queryParameter );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash( super.hashCode(), queryParameter );
+        }
     }
 
 }
