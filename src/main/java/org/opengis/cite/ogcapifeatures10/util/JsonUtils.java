@@ -10,10 +10,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -326,18 +323,49 @@ public class JsonUtils {
         return numberOfAllReturnedFeatures;
     }
 
+    private static boolean isSameMediaType( String mediaType1, String mediaType2 ) {
+        if ( mediaType1.contains(";") || mediaType2.contains(";") ) {
+            // media types are not case sensitive
+            String[] components1 = mediaType1.toLowerCase().split(";");
+            String[] components2 = mediaType2.toLowerCase().split(";");
+            // type and subtype must match
+            if ( !components1[0].trim().equals(components2[0].trim()) )
+                return false;
+            Set<String> parameters1 = new HashSet<>();
+            Set<String> parameters2 = new HashSet<>();
+            // normalize parameter values and compare them
+            for ( int i=1; i<components1.length; i++ ) {
+                String parameter = components1[i].trim().replace("\"","");
+                if (!parameter.isEmpty())
+                    parameters1.add(parameter);
+            }
+            for ( int i=1; i<components2.length; i++ ) {
+                String parameter = components2[i].trim().replace("\"","");
+                if (!parameter.isEmpty())
+                    parameters2.add(parameter);
+            }
+            if ( parameters1.size() != parameters2.size() )
+                return false;
+            if ( !parameters1.containsAll(parameters2) )
+                return false;
+        } else if ( !mediaType1.trim().equalsIgnoreCase(mediaType2.trim()) )
+            return false;
+
+        return true;
+    }
+
     private static boolean hasLinkForContentType( List<Map<String, Object>> alternateLinks, String mediaType ) {
         for ( Map<String, Object> alternateLink : alternateLinks ) {
             Object type = alternateLink.get( "type" );
-            if ( mediaType.equals( type ) )
+            if ( type instanceof String && isSameMediaType( mediaType, (String) type ) )
                 return true;
         }
         return false;
     }
 
-    private static boolean isSupportedMediaType( Object type, List<String> contentMediaTypes ) {
-        for ( String contentMediaType : contentMediaTypes ) {
-            if ( contentMediaType.equals( type ) )
+    private static boolean isSupportedMediaType( Object type, List<String> mediaTypes ) {
+        for ( String mediaType : mediaTypes ) {
+            if ( type instanceof String && isSameMediaType( mediaType, (String) type ) )
                 return true;
         }
         return false;
