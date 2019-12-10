@@ -57,7 +57,7 @@ public class FeaturesAssertions {
 
         ZonedDateTime date = parseAsDate( timeStamp );
         assertTrue( !date.isAfter( timeStampAfterResponse.truncatedTo( SECONDS ) ),
-                    "timeStamp in response must be before the request was send (" + formatDate( timeStampAfterResponse.truncatedTo( SECONDS ) )
+                    "timeStamp in response must not be after the request was send (" + formatDate( timeStampAfterResponse.truncatedTo( SECONDS ) )
                                                              + ") but was '" + timeStamp + "'" );
         assertTrue( !date.isBefore( timeStampBeforeResponse.truncatedTo( SECONDS ) ),
                     "timeStamp in response must not be before the request was send (" + formatDate( timeStampBeforeResponse.truncatedTo( SECONDS ) )
