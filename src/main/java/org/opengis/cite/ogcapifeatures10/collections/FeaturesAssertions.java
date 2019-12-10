@@ -1,5 +1,6 @@
 package org.opengis.cite.ogcapifeatures10.collections;
 
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.collectNumberOfAllReturnedFeatures;
@@ -55,11 +56,11 @@ public class FeaturesAssertions {
                 return;
 
         ZonedDateTime date = parseAsDate( timeStamp );
-        assertTrue( date.isBefore( timeStampAfterResponse ),
-                    "timeStamp in response must be before the request was send (" + formatDate( timeStampAfterResponse )
+        assertTrue( !date.isAfter( timeStampAfterResponse.truncatedTo( SECONDS ) ),
+                    "timeStamp in response must be before the request was send (" + formatDate( timeStampAfterResponse.truncatedTo( SECONDS ) )
                                                              + ") but was '" + timeStamp + "'" );
-        assertTrue( date.isAfter( timeStampBeforeResponse ),
-                    "timeStamp in response must be after the request was send (" + formatDate( timeStampBeforeResponse )
+        assertTrue( !date.isBefore( timeStampBeforeResponse.truncatedTo( SECONDS ) ),
+                    "timeStamp in response must not be before the request was send (" + formatDate( timeStampBeforeResponse.truncatedTo( SECONDS ) )
                                                              + ") but was '" + timeStamp + "'" );
     }
 
