@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -214,11 +215,11 @@ public class JsonUtils {
      *            list of links to search in, never <code>null</code>
      * @return the links without 'rel' or 'type' property
      */
-    public static List<String> findLinksWithoutRelOrType( List<Map<String, Object>> links ) {
+    public static List<String> findLinksWithoutRelOrType( List<Map<String, Object>> links, Set<String> rels ) {
         List<String> linksWithoutRelOrType = new ArrayList<>();
-        for ( Map<String, Object> alternateLink : links ) {
-            if ( !linkIncludesRelAndType( alternateLink ) )
-                linksWithoutRelOrType.add( (String) alternateLink.get( "href" ) );
+        for ( Map<String, Object> link : links ) {
+            if ( rels.contains(link.get( "rel" )) && !linkIncludesRelAndType( link ) )
+                linksWithoutRelOrType.add( (String) link.get( "href" ) );
         }
         return linksWithoutRelOrType;
     }
