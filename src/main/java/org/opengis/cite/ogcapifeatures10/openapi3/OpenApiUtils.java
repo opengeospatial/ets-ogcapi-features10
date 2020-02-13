@@ -4,6 +4,8 @@ import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.PATH.COLLE
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.PATH.CONFORMANCE;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -366,9 +368,11 @@ public class OpenApiUtils {
             for ( Operation operationObject : operationObjects.values() ) {
                 List<String> serverUrls = identifyServerObjects( apiModel, pathItemObject, operationObject );
                 for ( String serverUrl : serverUrls ) {
-                    if ( serverUrl.endsWith( "/" ) ) {
-                        String iutUrl = iut.toString();
-                        serverUrl = iutUrl.endsWith( "/" ) ? iutUrl.substring( 0, iutUrl.length() - 1 ) : iutUrl;
+                    if ( DEFAULT_SERVER_URL.equalsIgnoreCase( serverUrl ) ) {
+                        serverUrl = iut.toString();
+                    }  else if ( serverUrl.startsWith( "/" ) ) {
+                        URI resolvedUri = iut.resolve( serverUrl );
+                        serverUrl = resolvedUri.toString();
                     }
                     PathItemAndServer pathItemAndServer = new PathItemAndServer( pathItemObject, operationObject,
                                                                                  serverUrl );
