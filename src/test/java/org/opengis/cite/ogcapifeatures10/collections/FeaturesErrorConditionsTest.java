@@ -16,6 +16,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.testng.ISuite;
@@ -73,6 +74,7 @@ public class FeaturesErrorConditionsTest {
         featuresErrorConditions.validateFeaturesOperation_QueryParamInvalid( parameter );
     }
 
+    @Ignore
     @Test
     public void testValidateFeaturesOperation_QueryParamUnknown() {
         prepareJadler();
