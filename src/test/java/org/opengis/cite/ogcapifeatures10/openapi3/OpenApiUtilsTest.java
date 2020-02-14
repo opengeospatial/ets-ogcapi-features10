@@ -36,12 +36,25 @@ public class OpenApiUtilsTest {
     @BeforeClass
     public static void instantiateUri()
                             throws URISyntaxException {
-        iut = new URI( "http://localhost:8080/oaf" );
+        iut = new URI( "http://localhost:8080/example" );
     }
 
     @Test
     public void testRetrieveTestPoints()
-                            throws URISyntaxException {
+                            throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
+
+        assertThat( testPoints.size(), is( 2 ) );
+
+    }
+
+    @Test
+    public void testRelativeServerPath()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -54,7 +67,8 @@ public class OpenApiUtilsTest {
 
     @Ignore
     @Test
-    public void testRetrieveTestPoints_moreComplex() {
+    public void testRetrieveTestPoints_moreComplex()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_moreComplex.json" );
@@ -84,7 +98,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPoints_COLLECTIONS() {
+    public void testRetrieveTestPoints_COLLECTIONS()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -97,7 +112,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollectionMetadata() {
+    public void testRetrieveTestPointsForCollectionMetadata()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -115,7 +131,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollection() {
+    public void testRetrieveTestPointsForCollection()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -133,7 +150,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForFeature() {
+    public void testRetrieveTestPointsForFeature()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -150,7 +168,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_all() {
+    public void testRetrieveTestPointsForCollections_all()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -165,7 +184,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_limit1() {
+    public void testRetrieveTestPointsForCollections_limit1()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -178,7 +198,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_limitGreaterThanSize() {
+    public void testRetrieveTestPointsForCollections_limitGreaterThanSize()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
@@ -191,7 +212,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPoints_COLLECTIONS_compactAPI() {
+    public void testRetrieveTestPoints_COLLECTIONS_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
@@ -210,7 +232,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollectionMetadata_compactAPI() {
+    public void testRetrieveTestPointsForCollectionMetadata_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
@@ -226,7 +249,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollection_compactAPI() {
+    public void testRetrieveTestPointsForCollection_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
@@ -241,7 +265,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForFeature_compactAPI() {
+    public void testRetrieveTestPointsForFeature_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
@@ -256,7 +281,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_all_compactAPI() {
+    public void testRetrieveTestPointsForCollections_all_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
@@ -268,7 +294,8 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPointsForCollections_limit1_compactAPI() {
+    public void testRetrieveTestPointsForCollections_limit1_compactAPI()
+                            throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
         URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
