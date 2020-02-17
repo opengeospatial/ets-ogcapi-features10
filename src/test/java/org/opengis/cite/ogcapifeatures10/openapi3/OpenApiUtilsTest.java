@@ -57,12 +57,25 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
 
         assertThat( testPoints.size(), is( 2 ) );
 
+    }
+
+    @Test
+    public void testRelativeServerPath() {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi-relativeServerPath.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
+
+        assertThat( testPoints.size(), is( 2 ) );
+        assertThat( testPoints.get( 0 ).getServerUrl(), is( "http://localhost:8080/path" ) );
+        assertThat( testPoints.get( 1 ).getServerUrl(), is( "http://localhost:8080/path" ) );
     }
 
     @Ignore
@@ -71,8 +84,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_moreComplex.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_moreComplex.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
 
         assertThat( testPoints.size(), is( 4 ) );
@@ -102,8 +115,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel, iut );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -116,8 +129,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, iut, "flurstueck" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -135,8 +148,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, "flurstueck" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -154,8 +167,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, iut, "flurstueck", "abc" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -172,8 +185,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, -1 );
 
         assertThat( testPoints.size(), is( 3 ) );
@@ -188,8 +201,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, 1 );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -202,8 +215,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, 6 );
 
         assertThat( testPoints.size(), is( 3 ) );
@@ -216,8 +229,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionsMetadata( apiModel, iut );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -236,8 +249,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollectionMetadata( apiModel, iut, "test__countries" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -253,8 +266,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, "test__countries" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -269,8 +282,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForFeature( apiModel, iut, "test__countries", "abc" );
 
         assertThat( testPoints.size(), is( 1 ) );
@@ -285,8 +298,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, -1 );
 
         assertThat( testPoints.size(), is( 118 ) );
@@ -298,8 +311,8 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openAppiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_compact-api.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, 1 );
 
         assertThat( testPoints.size(), is( 1 ) );
