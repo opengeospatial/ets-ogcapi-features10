@@ -57,18 +57,6 @@ public class OpenApiUtilsTest {
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
-        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
-        OpenApi3 apiModel = parser.parse( openApiDocument, true );
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
-
-        assertThat( testPoints.size(), is( 2 ) );
-
-    }
-
-    @Test
-    public void testRelativeServerPath() {
-        OpenApi3Parser parser = new OpenApi3Parser();
-
         URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi-relativeServerPath.json" );
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut );
