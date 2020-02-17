@@ -36,7 +36,7 @@ public class ApiDefinition extends CommonFixture {
 
     @BeforeClass(dependsOnMethods = "initCommonFixture")
     public void retrieveApiUrl() {
-        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET, "/" );
+        Response request = init().baseUri( rootUri.toString() ).accept( JSON ).when().request( GET );
         JsonPath jsonPath = request.jsonPath();
 
         this.apiUrl = parseApiUrl( jsonPath );
@@ -60,7 +60,7 @@ public class ApiDefinition extends CommonFixture {
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
             throw new SkipException( "Path to the API Definition could not be constructed from the landing page" );
-        Response request = init().baseUri( apiUrl ).accept( OPEN_API_MIME_TYPE ).when().request( GET, "/" );
+        Response request = init().baseUri( apiUrl ).accept( OPEN_API_MIME_TYPE ).when().request( GET );
         request.then().statusCode( 200 );
         response = request.asString();
     }
