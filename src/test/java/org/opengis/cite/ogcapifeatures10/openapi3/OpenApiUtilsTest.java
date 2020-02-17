@@ -3,6 +3,8 @@ package org.opengis.cite.ogcapifeatures10.openapi3;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.isFreeFormParameterSupportedForCollection;
+import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.isParameterSupportedForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPoints;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
@@ -306,4 +308,53 @@ public class OpenApiUtilsTest {
         assertThat( testPoints.size(), is( 1 ) );
         assertThat( testPoints.get( 0 ).getPath(), is( "/collections/{collectionId}/items" ) );
     }
+
+    @Test
+    public void testIsFreeFormParameterSupportedForCollection()
+                    throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, "flurstueck" );
+
+        assertThat( isFreeFormParameterSupported, is( false ) );
+    }
+
+    @Test
+    public void testIsFreeFormParameterSupportedForCollection_supported()
+                    throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi-freeformparam.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, "flurstueck" );
+
+        assertThat( isFreeFormParameterSupported, is( true ) );
+    }
+
+    @Test
+    public void testIsParameterSupportedForCollection()
+                    throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, "flurstueck", "unknown" );
+
+        assertThat( isFreeFormParameterSupported, is( false ) );
+    }
+
+    @Test
+    public void testIsParameterSupportedForCollection_supported()
+                    throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, "flurstueck", "limit" );
+
+        assertThat( isFreeFormParameterSupported, is( true ) );
+    }
+    
 }

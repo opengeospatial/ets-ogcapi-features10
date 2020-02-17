@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
@@ -112,15 +114,35 @@ public class FeaturesErrorConditions extends AbstractFeatures {
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/21 (Requirement /req/core/query-param-unknown)", groups = "featuresBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections", alwaysRun = true)
     public void validateFeaturesOperation_QueryParamUnkown( Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
+        boolean freeFormParameterSupported = OpenApiUtils.isFreeFormParameterSupportedForCollection( getApiModel(), collectionId );
+        if ( freeFormParameterSupported ) {
+            throw new SkipException( "Free-form parameters are supported for collection with id " + collectionId );
+        }
 
         String featuresUrl = findFeaturesUrlForGeoJson( collection );
-        if ( featuresUrl == null )
+        if ( featuresUrl == null ) {
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+        }
 
-        Response response = init().baseUri( featuresUrl ).accept( GEOJSON_MIME_TYPE ).param( UNKNOWN_QUERY_PARAM,
+        String queryParam = createRandomQueryParam();
+        boolean parameterSupportedForCollection = OpenApiUtils.isParameterSupportedForCollection( getApiModel(), collectionId,
+                                                                                                  queryParam );
+        if ( parameterSupportedForCollection ) {
+            throw new SkipException( "Parameters " + queryParam + " is supported for collection with id "
+                                     + collectionId );
+        }
+
+        Response response = init().baseUri( featuresUrl ).accept( GEOJSON_MIME_TYPE ).param( queryParam,
                                                                                              1 ).when().request( GET );
         response.then().statusCode( 400 );
+    }
+
+
+    private String createRandomQueryParam() {
+        Random r = new Random();
+        int suffix = 10000 + r.nextInt( 10000 );
+        return UNKNOWN_QUERY_PARAM + suffix;
     }
 
 }

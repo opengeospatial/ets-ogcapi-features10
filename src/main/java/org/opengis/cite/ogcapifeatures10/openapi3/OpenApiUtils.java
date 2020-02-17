@@ -198,15 +198,10 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForCollection( OpenApi3 apiModel, URI iut, String collectionName ) {
-        StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( "/" );
-        requestedPath.append( COLLECTIONS.getPathItem() );
-        requestedPath.append( "/" );
-        requestedPath.append( collectionName );
-        requestedPath.append( "/items" );
+        String requestedPath = createCollectionPath( collectionName );
 
-        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(), true );
-        return testPoints.stream().filter( new ExactMatchFilter( requestedPath.toString() ) ).collect( Collectors.toList() );
+        List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath, true );
+        return testPoints.stream().filter( new ExactMatchFilter( requestedPath ) ).collect( Collectors.toList() );
     }
 
     /**
@@ -249,6 +244,47 @@ public class OpenApiUtils {
                     return parameter;
         }
         return null;
+    }
+
+    public static boolean isFreeFormParameterSupportedForCollection( OpenApi3 apiModel, String collectionName ) {
+        String requestedPath = createCollectionPath( collectionName );
+
+        List<Path> paths = identifyTestPoints( apiModel, requestedPath, new PathMatcher() );
+        for ( Path path : paths ) {
+            Collection<Parameter> parameters = path.getGet().getParameters();
+            for ( Parameter parameter : parameters ) {
+                if ( parameter.getSchema() != null && parameter.getSchema().isAdditionalProperties() ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isParameterSupportedForCollection( OpenApi3 apiModel, String collectionName,
+                                                             String queryParam ) {
+        String requestedPath = createCollectionPath( collectionName );
+
+        List<Path> paths = identifyTestPoints( apiModel, requestedPath, new PathMatcher() );
+        for ( Path path : paths ) {
+            Collection<Parameter> parameters = path.getGet().getParameters();
+            for ( Parameter parameter : parameters ) {
+                if ( queryParam.equalsIgnoreCase( parameter.getName() ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static String createCollectionPath( String collectionName ) {
+        StringBuilder requestedPath = new StringBuilder();
+        requestedPath.append( "/" );
+        requestedPath.append( COLLECTIONS.getPathItem() );
+        requestedPath.append( "/" );
+        requestedPath.append( collectionName );
+        requestedPath.append( "/items" );
+        return requestedPath.toString();
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path, boolean allowEmptyTemplateReplacements ) {
