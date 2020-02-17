@@ -13,10 +13,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAn
 import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.opengis.cite.ogcapifeatures10.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
@@ -135,8 +132,11 @@ public class FeatureCollections extends CommonDataFixture {
                     "Feature Collections Metadata document must include links for alternate encodings. Missing links for types "
                                                 + typesWithoutLink );
 
-        // Requirement 13 B: All links SHALL include the rel and type link parameters.
-        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( alternateLinks );
+        // Requirement 13 B: All "self"/"alternate" links SHALL include the rel and type link parameters.
+        Set<String> rels = new HashSet<>();
+        rels.add("self");
+        rels.add("alternate");
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( alternateLinks, rels );
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links for alternate encodings must include a rel and type parameter. Missing for links "
                                                      + linksWithoutRelOrType );

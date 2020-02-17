@@ -30,9 +30,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -183,7 +181,10 @@ public class JsonUtilsTest {
     @Test
     public void testFindLinksWithoutRelOrType() {
         List<Map<String, Object>> links = jsonCollection.getList( "links" );
-        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links );
+        Set<String> rels = new HashSet<>();
+        rels.add("self");
+        rels.add("alternate");
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links, rels );
 
         assertThat( linksWithoutRelOrType.size(), is( 0 ) );
     }

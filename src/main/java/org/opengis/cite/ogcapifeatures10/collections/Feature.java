@@ -10,11 +10,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findUnsupportedTy
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
 import static org.testng.Assert.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.opengis.cite.ogcapifeatures10.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
@@ -158,10 +154,14 @@ public class Feature extends CommonDataFixture {
         assertTrue( linkIncludesRelAndType( linkToCollection ),
                     "Link to feature collection must include a rel and type parameter" );
 
-        // Verify that all links include the rel and type link parameters.
-        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links );
+        // Verify that all "self"/"alternate"/"collection" links include the rel and type link parameters.
+        Set<String> rels = new HashSet<String>();
+        rels.add("self");
+        rels.add("alternate");
+        rels.add("collection");
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links, rels );
         assertTrue( linksWithoutRelOrType.isEmpty(),
-                    "Links for alternate encodings in Get Feature Operation Response must include a rel and type parameter. Missing for links "
+                    "Links with link relation types 'self', 'alternate' and 'collection' in Get Feature Operation Response must include a rel and type parameter. Missing for links "
                                                      + linksWithoutRelOrType );
     }
 

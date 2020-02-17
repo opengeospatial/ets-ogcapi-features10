@@ -17,12 +17,7 @@ import static org.testng.Assert.assertNotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import org.opengis.cite.ogcapifeatures10.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
@@ -166,8 +161,11 @@ public class AbstractFeatures extends CommonDataFixture {
                     "Feature Collection Metadata document must include links for alternate encodings. Missing links for types "
                                                 + typesWithoutLink );
 
-        // Validate that each link includes a rel and type parameter.
-        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links );
+        // Validate that each "self"/"alternate" link includes a rel and type parameter.
+        Set<String> rels = new HashSet<>();
+        rels.add("self");
+        rels.add("alternate");
+        List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links, rels );
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links for alternate encodings must include a rel and type parameter. Missing for links "
                                                      + linksWithoutRelOrType );
