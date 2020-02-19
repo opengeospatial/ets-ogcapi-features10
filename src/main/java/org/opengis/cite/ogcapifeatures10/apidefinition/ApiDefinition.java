@@ -59,7 +59,7 @@ public class ApiDefinition extends CommonFixture {
     @Test(description = "Implements A.2.3. API Definition Path {root}/api (link), Abstract Test 5 (Requirement /req/core/api-definition-op)", groups = "apidefinition", dependsOnGroups = "landingpage")
     public void openapiDocumentRetrieval() {
         if ( apiUrl == null || apiUrl.isEmpty() )
-            throw new SkipException( "Path to the API Definition could not be constructed from the landing page" );
+            throw new AssertionError( "Path to the API Definition could not be constructed from the landing page" );
         Response request = init().baseUri( apiUrl ).accept( OPEN_API_MIME_TYPE ).when().request( GET );
         request.then().statusCode( 200 );
         response = request.asString();
