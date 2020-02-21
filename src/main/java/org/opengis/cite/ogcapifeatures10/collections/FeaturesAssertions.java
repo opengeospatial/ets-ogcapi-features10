@@ -8,6 +8,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.formatDate;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasProperty;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsDate;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,12 +57,7 @@ public class FeaturesAssertions {
                 return;
 
         ZonedDateTime date = parseAsDate( timeStamp );
-        assertTrue( !date.isAfter( timeStampAfterResponse.truncatedTo( SECONDS ) ),
-                    "timeStamp in response must not be after the request was send (" + formatDate( timeStampAfterResponse.truncatedTo( SECONDS ) )
-                                                             + ") but was '" + timeStamp + "'" );
-        assertTrue( !date.isBefore( timeStampBeforeResponse.truncatedTo( SECONDS ) ),
-                    "timeStamp in response must not be before the request was send (" + formatDate( timeStampBeforeResponse.truncatedTo( SECONDS ) )
-                                                             + ") but was '" + timeStamp + "'" );
+        assertNotNull(date, "Not valid timestamp.");
     }
 
     static void assertNumberReturned( String collectionName, JsonPath jsonPath, boolean skipIfNoNumberReturned ) {
