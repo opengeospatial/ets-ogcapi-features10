@@ -1,5 +1,14 @@
 = Release Notes OGC API - Features
 
+== 0.6 (2020-02-27)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/80[#80]: Review and test update to OGC API - Features spec
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/86[#86]: timeStamp failures on items responses
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/87[#87]: How to spot the root cause among several skipped tests?
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/89[#89]: Tests fail if 'unknownQueryParameter' is declared in the API, or if the API allows for any extra parameter
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/91[#91]: Update dependency com.reprezen.kaizen:openapi-parser
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/84[#84]: Relative path in server object of OpenAPI document leads to test failure
+
 == 0.5 (2019-12-09)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/45[#45]: Update implementation to OGC API - Features 1.0 spec
