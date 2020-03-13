@@ -19,7 +19,7 @@
       </suite>
       <revision>
         <name>${project.version}</name>
-        <status>Beta</status>
+        <status>Final</status>
         <sources>
           <source>ogcapi-features-1.0/${spec-version}/ctl</source>
         </sources>
