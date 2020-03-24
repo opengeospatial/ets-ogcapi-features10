@@ -1,5 +1,10 @@
 = Release Notes OGC API - Features
 
+== 1.0 (2020-03-24)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/103[#103]: Prepare release 1.0
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/104[#104]: Updated screenshots from WFS3 to OGC API - Features
+
 == 0.6 (2020-02-27)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/80[#80]: Review and test update to OGC API - Features spec
