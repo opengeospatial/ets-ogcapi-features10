@@ -14,6 +14,7 @@ import java.util.List;
  * <li>XML properties file: ${user.home}/test-run-props.xml</li>
  * <li>outputDir: ${user.home}</li>
  * <li>deleteSubjectOnFinish: false</li>
+ * <li>defaultListener: false</li>
  * </ul>
  *
  * <p>
@@ -21,7 +22,7 @@ import java.util.List;
  * </p>
  *
  * <pre>
- * ets-${ets-code}-${version}-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [test-run-props.xml]
+ * ets-${ets-code}-${version}-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-l|--defaultListener] [test-run-props.xml]
  * </pre>
  */
 public class CommandLineArguments {
@@ -34,6 +35,9 @@ public class CommandLineArguments {
 
     @Parameter(names = {"-d", "--deleteSubjectOnFinish"}, description = "Delete file containing representation of test subject when finished")
     private boolean deleteSubjectOnFinish = false;
+    
+    @Parameter(names = {"-l", "--defaultListener"}, arity = 1, description = "Enable HTML report generation")
+    private boolean defaultListener = false;
 
     public CommandLineArguments() {
         this.xmlProps = new ArrayList<>();
@@ -56,5 +60,9 @@ public class CommandLineArguments {
 
     public boolean doDeleteSubjectOnFinish() {
         return deleteSubjectOnFinish;
+    }
+    
+    public boolean isDefaultListener() {
+        return defaultListener;
     }
 }
