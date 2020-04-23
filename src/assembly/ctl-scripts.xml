@@ -9,11 +9,15 @@
   </formats>
   <includeBaseDirectory>true</includeBaseDirectory>
   <baseDirectory>${ets-code}/${spec-version}</baseDirectory>
-  <includeSiteDirectory>true</includeSiteDirectory>
   <fileSets>
     <fileSet>
       <directory>${project.build.scriptSourceDirectory}/ctl</directory>
       <outputDirectory>ctl</outputDirectory>
+      <filtered>true</filtered>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/site</directory>
+      <outputDirectory>site</outputDirectory>
       <filtered>true</filtered>
     </fileSet>
   </fileSets>
