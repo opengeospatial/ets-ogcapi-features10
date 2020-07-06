@@ -210,6 +210,8 @@ public class JsonUtils {
      * 
      * @param links
      *            list of links to search in, never <code>null</code>
+     * @param rels           
+     *            Set of relation types, never <code>null</code>                  
      * @return the links without 'rel' or 'type' property
      */
     public static List<String> findLinksWithoutRelOrType( List<Map<String, Object>> links, Set<String> rels ) {
