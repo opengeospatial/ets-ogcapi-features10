@@ -41,6 +41,11 @@ public class Conformance extends CommonFixture {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
         URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel, iut );
+
+        if (testPoints.isEmpty()) {
+             throw new RuntimeException("No data found for conformanceUris DataProvider.");
+        }
+
         Object[][] testPointsData = new Object[testPoints.size()][];
         int i = 0;
         for ( TestPoint testPoint : testPoints ) {
