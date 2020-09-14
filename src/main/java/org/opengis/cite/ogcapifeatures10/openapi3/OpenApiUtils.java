@@ -149,7 +149,7 @@ public class OpenApiUtils {
      */
     public static List<TestPoint> retrieveTestPointsForCollectionMetadata( OpenApi3 apiModel, URI iut, String collectionName ) {
         StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( "/" );
+        requestedPath.append(findBasePath(apiModel));
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
@@ -173,7 +173,7 @@ public class OpenApiUtils {
      */
     public static List<TestPoint> retrieveTestPointsForCollections( OpenApi3 apiModel, URI iut, int noOfCollection ) {
         StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( "/" );
+        requestedPath.append(findBasePath(apiModel));
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/.*/items" );
 
@@ -198,7 +198,7 @@ public class OpenApiUtils {
      * @return the parsed test points, may be empty but never <code>null</code>
      */
     public static List<TestPoint> retrieveTestPointsForCollection( OpenApi3 apiModel, URI iut, String collectionName ) {
-        String requestedPath = createCollectionPath( collectionName );
+        String requestedPath = createCollectionPath(apiModel, collectionName);
 
         List<TestPoint> testPoints = retrieveTestPoints( apiModel, iut, requestedPath, true );
         return testPoints.stream().filter( new ExactMatchFilter( requestedPath ) ).collect( Collectors.toList() );
@@ -221,7 +221,7 @@ public class OpenApiUtils {
     public static List<TestPoint> retrieveTestPointsForFeature( OpenApi3 apiModel, URI iut, String collectionName,
                                                                 String featureId ) {
         StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( "/" );
+        requestedPath.append(findBasePath(apiModel));
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
@@ -247,7 +247,7 @@ public class OpenApiUtils {
     }
 
     public static boolean isFreeFormParameterSupportedForCollection( OpenApi3 apiModel, String collectionName ) {
-        String requestedPath = createCollectionPath( collectionName );
+        String requestedPath = createCollectionPath(apiModel, collectionName);
 
         List<Path> paths = identifyTestPoints( apiModel, requestedPath, new PathMatcher() );
         for ( Path path : paths ) {
@@ -263,7 +263,7 @@ public class OpenApiUtils {
 
     public static boolean isParameterSupportedForCollection( OpenApi3 apiModel, String collectionName,
                                                              String queryParam ) {
-        String requestedPath = createCollectionPath( collectionName );
+        String requestedPath = createCollectionPath(apiModel, collectionName);
 
         List<Path> paths = identifyTestPoints( apiModel, requestedPath, new PathMatcher() );
         for ( Path path : paths ) {
@@ -277,9 +277,9 @@ public class OpenApiUtils {
         return false;
     }
 
-    private static String createCollectionPath( String collectionName ) {
+    private static String createCollectionPath(OpenApi3 apiModel, String collectionName) {
         StringBuilder requestedPath = new StringBuilder();
-        requestedPath.append( "/" );
+        requestedPath.append(findBasePath(apiModel));
         requestedPath.append( COLLECTIONS.getPathItem() );
         requestedPath.append( "/" );
         requestedPath.append( collectionName );
@@ -288,7 +288,7 @@ public class OpenApiUtils {
     }
 
     private static List<TestPoint> retrieveTestPoints( OpenApi3 apiModel, URI iut, PATH path, boolean allowEmptyTemplateReplacements ) {
-        String requestedPath = "/" + path.getPathItem();
+        String requestedPath = findBasePath(apiModel) + path.getPathItem();
         return retrieveTestPoints( apiModel, iut, requestedPath, allowEmptyTemplateReplacements );
     }
 
@@ -596,4 +596,11 @@ public class OpenApiUtils {
 
     }
 
+    private static String findBasePath(OpenApi3 apiModel) {
+        Map<String, Path> pathItemObjects = apiModel.getPaths();
+        String basePath = pathItemObjects.entrySet().stream()
+                                                    .filter(x -> x.getValue().getGet().getOperationId().equalsIgnoreCase("getLandingPage"))
+                                                    .findFirst().get().getKey();
+        return basePath;
+    }
 }
