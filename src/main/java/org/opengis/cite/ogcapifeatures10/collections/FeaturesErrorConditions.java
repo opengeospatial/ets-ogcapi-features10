@@ -114,7 +114,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/21 (Requirement /req/core/query-param-unknown)", groups = "featuresBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections", alwaysRun = true)
     public void validateFeaturesOperation_QueryParamUnkown( Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
-        boolean freeFormParameterSupported = OpenApiUtils.isFreeFormParameterSupportedForCollection( getApiModel(), collectionId );
+        boolean freeFormParameterSupported = OpenApiUtils.isFreeFormParameterSupportedForCollection( getApiModel(), iut, collectionId );
         if ( freeFormParameterSupported ) {
             throw new SkipException( "Free-form parameters are supported for collection with id " + collectionId );
         }
@@ -126,7 +126,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
         }
 
         String queryParam = createRandomQueryParam();
-        boolean parameterSupportedForCollection = OpenApiUtils.isParameterSupportedForCollection( getApiModel(), collectionId,
+        boolean parameterSupportedForCollection = OpenApiUtils.isParameterSupportedForCollection( getApiModel(), iut, collectionId,
                                                                                                   queryParam );
         if ( parameterSupportedForCollection ) {
             throw new SkipException( "Parameters " + queryParam + " is supported for collection with id "
