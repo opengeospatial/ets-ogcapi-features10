@@ -97,7 +97,7 @@ public class Conformance extends CommonFixture {
         } catch (Exception e) {
             //Check if exception occurred due to dummy data else throw exception.
             if (e.getMessage().contains("dummydata")) {
-                throw new RuntimeException("No data found for conformanceUris DataProvider.");
+                throw new RuntimeException("No conformance classes found at the /conformance path.");
             }
 
             throw new RuntimeException(e);
