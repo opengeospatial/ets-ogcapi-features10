@@ -23,4 +23,10 @@
     </classes>
   </test>
 
+  <test name="Simple Transactions">
+    <packages>
+      <package name="org.opengis.cite.ogcapifeatures10.simpletransactions" />
+    </packages>
+  </test>
+
 </suite>
