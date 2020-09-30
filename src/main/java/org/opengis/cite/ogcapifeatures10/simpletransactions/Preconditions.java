@@ -25,7 +25,7 @@ public class Preconditions extends CommonFixture {
      * @param testContext
      *            test context
      */
-    @Test(description = "Checks if 'Simple Transactions' conformance class is supported")
+    @Test(description = "Checks if 'Simple Transactions' conformance class is supported", groups = "preconditions")
     public void checkIfSimpleTransactionsIsSupported( ITestContext testContext ) {
         List<RequirementClass> requirementClasses = (List<RequirementClass>) testContext.getSuite().getAttribute( REQUIREMENTCLASSES.getName() );
         if ( requirementClasses == null || !requirementClasses.contains( SIMPLETRANSACTIONS ) )
