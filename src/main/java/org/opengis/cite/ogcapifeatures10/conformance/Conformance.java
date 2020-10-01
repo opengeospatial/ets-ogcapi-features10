@@ -90,18 +90,13 @@ public class Conformance extends CommonFixture {
     @Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op) and /req/core/conformance-op", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
         String testPointUri = new UriBuilder( testPoint ).buildUrl();
-        Response response = null;
 
-        try {
-            response = init().baseUri(testPointUri).accept(JSON).when().request(GET);
-        } catch (Exception e) {
-            //Check if exception occurred due to dummy data else throw exception.
-            if (e.getMessage().contains("dummydata")) {
-                throw new RuntimeException("No conformance classes found at the /conformance path.");
-            }
-
-            throw new RuntimeException(e);
+        // Check for dummy data
+        if (testPointUri.contains("dummydata")) {
+            throw new RuntimeException("No conformance classes found at the /conformance path.");
         }
+
+        Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         validateConformanceOperationResponse( testPointUri, response );
     }
 
