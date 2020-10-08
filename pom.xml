@@ -109,7 +109,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.4</version>
         <configuration>
-          <source>1.8</source>
+          <source>8</source> 
           <docfilessubdirs>true</docfilessubdirs>
           <show>package</show>
           <links>
