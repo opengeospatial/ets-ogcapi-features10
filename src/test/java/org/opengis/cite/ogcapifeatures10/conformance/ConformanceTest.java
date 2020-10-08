@@ -12,7 +12,7 @@ import static org.opengis.cite.ogcapifeatures10.conformance.RequirementClass.OPE
 import java.io.InputStream;
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import io.restassured.path.json.JsonPath;
 
@@ -32,7 +32,7 @@ public class ConformanceTest {
         assertThat( requirementClasses, hasItems( CORE, OPENAPI30, HTML, GEOJSON, GMLSF2 ) );
     }
 
-    @Test(expectedExceptions = AssertionError.class)
+    @Test(expected = AssertionError.class)
     public void testParseAndValidateRequirementClasses_invalidConformsTo() {
         Conformance conformanceOperationTest = new Conformance();
         InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidConformsTo.json" );
@@ -40,7 +40,7 @@ public class ConformanceTest {
         conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
     }
 
-    @Test(expectedExceptions = AssertionError.class)
+    @Test(expected = AssertionError.class)
     public void testParseAndValidateRequirementClasses_invalidElementDataType() {
         Conformance conformanceOperationTest = new Conformance();
         InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidElementDataType.json" );
