@@ -41,6 +41,12 @@ public class Conformance extends CommonFixture {
         OpenApi3 apiModel = (OpenApi3) testContext.getSuite().getAttribute( API_MODEL.getName() );
         URI iut = (URI) testContext.getSuite().getAttribute( IUT.getName() );
         List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel, iut );
+
+        //Set dummy TestPoint data if no testPoints found.
+        if (testPoints.isEmpty()) {
+            testPoints.add(new TestPoint("http://dummydata.com", "/conformance", null));
+        }
+
         Object[][] testPointsData = new Object[testPoints.size()][];
         int i = 0;
         for ( TestPoint testPoint : testPoints ) {
@@ -84,6 +90,12 @@ public class Conformance extends CommonFixture {
     @Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op) and /req/core/conformance-op", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
         String testPointUri = new UriBuilder( testPoint ).buildUrl();
+
+        // Check for dummy data
+        if (testPointUri.contains("dummydata")) {
+            throw new RuntimeException("No conformance classes found at the /conformance path.");
+        }
+
         Response response = init().baseUri( testPointUri ).accept( JSON ).when().request( GET );
         validateConformanceOperationResponse( testPointUri, response );
     }
