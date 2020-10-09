@@ -316,7 +316,7 @@ public class OpenApiUtilsTest {
 
         URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
-        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, "flurstueck" );
+        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, iut, "flurstueck" );
 
         assertThat( isFreeFormParameterSupported, is( false ) );
     }
@@ -328,7 +328,7 @@ public class OpenApiUtilsTest {
 
         URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi-freeformparam.json" );
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
-        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, "flurstueck" );
+        boolean isFreeFormParameterSupported = isFreeFormParameterSupportedForCollection( apiModel, iut, "flurstueck" );
 
         assertThat( isFreeFormParameterSupported, is( true ) );
     }
@@ -340,7 +340,7 @@ public class OpenApiUtilsTest {
 
         URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
-        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, "flurstueck", "unknown" );
+        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, iut, "flurstueck", "unknown" );
 
         assertThat( isFreeFormParameterSupported, is( false ) );
     }
@@ -352,7 +352,7 @@ public class OpenApiUtilsTest {
 
         URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi.json" );
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
-        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, "flurstueck", "limit" );
+        boolean isFreeFormParameterSupported = isParameterSupportedForCollection( apiModel, iut, "flurstueck", "limit" );
 
         assertThat( isFreeFormParameterSupported, is( true ) );
     }
