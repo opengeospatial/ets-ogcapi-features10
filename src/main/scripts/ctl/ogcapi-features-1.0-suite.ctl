@@ -12,7 +12,7 @@
     <ctl:return>The test results as a Source object (root node).</ctl:return>
     <ctl:description>Runs the OGC API - Features (${version}) test suite.</ctl:description>
     <ctl:code>
-      <xsl:variable name="controller" select="tng:new($outputDir, false)" />
+      <xsl:variable name="controller" select="tng:new($outputDir)" />
       <xsl:copy-of select="tng:doTestRun($controller, $testRunArgs)" />
     </ctl:code>
   </ctl:function>

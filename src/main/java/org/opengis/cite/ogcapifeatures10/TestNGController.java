@@ -95,6 +95,18 @@ public class TestNGController implements TestSuiteController {
      *            The location of the directory in which test results will be
      *            written (a file system path or a 'file' URI). It will be
      *            created if it does not exist.
+     */
+    public TestNGController(String outputDir) {
+        this(outputDir, false);
+    }
+
+    /**
+     * Construct a controller that writes results to the given output directory.
+     * 
+     * @param outputDir
+     *            The location of the directory in which test results will be
+     *            written (a file system path or a 'file' URI). It will be
+     *            created if it does not exist.
      * @param defaultListener
      *            Enable HTML report generation.
      */
