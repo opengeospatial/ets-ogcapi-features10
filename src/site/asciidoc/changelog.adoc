@@ -1,5 +1,17 @@
 = Release Notes OGC API - Features
 
+== 1.1 (2020-10-21)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/107[#107]: HTML report when running tests from command line
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/117[#117]: ETS should take into account different ways of defining servers and paths
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/121[#121]: Cleanup dependencies
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/123[#123]: Test suite runs out of memory for some implementations
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/116[#116]: Test should fail when no conformance URI is found in the API model
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/111[#111]: Error on build output: Error fetching URL: http://testng.org/javadocs/
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/106[#106]: Error on build output
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/105[#105]: Errors on generating Javadoc with Maven and AdoptOpenJDK
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/113[#113]: Fix test ConformanceTest
+
 == 1.0 (2020-03-24)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/103[#103]: Prepare release 1.0
