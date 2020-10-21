@@ -22,7 +22,7 @@ import java.util.List;
  * </p>
  *
  * <pre>
- * ets-${ets-code}-${version}-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-l|--generateHtmlReport] [test-run-props.xml]
+ * ets-${ets-code}-${version}-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-h|--generateHtmlReport] [test-run-props.xml]
  * </pre>
  */
 public class CommandLineArguments {
