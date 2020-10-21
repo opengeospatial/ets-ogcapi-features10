@@ -40,14 +40,14 @@ public class TestNGController implements TestSuiteController {
      * <li>XML properties file: ${user.home}/test-run-props.xml</li>
      * <li>outputDir: ${user.home}</li>
      * <li>deleteSubjectOnFinish: false</li>
-     * <li>defaultListener: false</li>
+     * <li>generateHtmlReport: false</li>
      * </ul>
      * <p>
      * <strong>Synopsis</strong>
      * </p>
      * 
      * <pre>
-     * ets-*-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-l|--defaultListener] [test-run-props.xml]
+     * ets-*-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-h|--generateHtmlReport] [test-run-props.xml]
      * </pre>
      *
      * @param args
@@ -75,7 +75,7 @@ public class TestNGController implements TestSuiteController {
         DocumentBuilder db = dbf.newDocumentBuilder();
         File xmlArgs = testRunArgs.getPropertiesFile();
         Document testRunProps = db.parse(xmlArgs);
-        TestNGController controller = new TestNGController(testRunArgs.getOutputDir(), testRunArgs.isDefaultListener());
+        TestNGController controller = new TestNGController(testRunArgs.getOutputDir(), testRunArgs.isGenerateHtmlReport());
         Source testResults = controller.doTestRun(testRunProps);
         System.out.println("Test results: " + testResults.getSystemId());
     }
@@ -107,10 +107,10 @@ public class TestNGController implements TestSuiteController {
      *            The location of the directory in which test results will be
      *            written (a file system path or a 'file' URI). It will be
      *            created if it does not exist.
-     * @param defaultListener
+     * @param generateHtmlReport
      *            Enable HTML report generation.
      */
-    public TestNGController(String outputDir, boolean defaultListener) {
+    public TestNGController(String outputDir, boolean generateHtmlReport) {
         InputStream is = getClass().getResourceAsStream("ets.properties");
         try {
             this.etsProperties.load(is);
@@ -129,7 +129,7 @@ public class TestNGController implements TestSuiteController {
         TestSuiteLogger.log(Level.CONFIG, "Using TestNG config: " + tngSuite);
         TestSuiteLogger.log(Level.CONFIG, "Using outputDirPath: " + resultsDir.getAbsolutePath());
         // NOTE: setting third argument to 'true' enables the default listeners
-        this.executor = new TestNGExecutor(tngSuite.toString(), resultsDir.getAbsolutePath(), defaultListener);
+        this.executor = new TestNGExecutor(tngSuite.toString(), resultsDir.getAbsolutePath(), generateHtmlReport);
     }
 
     @Override
