@@ -84,7 +84,7 @@ public class FeaturesErrorConditionsTest {
         featuresErrorConditions.requirementClasses( testContext );
 
         Map<String, Object> parameter = prepareCollection();
-        featuresErrorConditions.validateFeaturesOperation_QueryParamUnkown( parameter );
+        featuresErrorConditions.validateFeaturesOperation_QueryParamUnknown( parameter );
     }
 
     private static Map<String, Object> prepareCollection() {

@@ -112,7 +112,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/21 (Requirement /req/core/query-param-unknown)", groups = "featuresBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections", alwaysRun = true)
-    public void validateFeaturesOperation_QueryParamUnkown( Map<String, Object> collection ) {
+    public void validateFeaturesOperation_QueryParamUnknown( Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
         boolean freeFormParameterSupported = OpenApiUtils.isFreeFormParameterSupportedForCollection( getApiModel(), iut, collectionId );
         if ( freeFormParameterSupported ) {
