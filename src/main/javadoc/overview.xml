@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite>
+	<title>OGC API - Features Conformance Test Suite</title>
+	<description>
+	    This executable test suite (ETS) verifies that an OGC API - Features instance conforms to
+		OGC API - Features - Part 1: Core (OGC 17-069r3) and related standards. Conformance testing 
+		is a kind of black box testing that examines externally visible characteristics or behaviors 
+		of the SUT and is independent of any implementation details. The following conformance levels 
+		currently tested: Core The test run arguments are summarized in the following table. The obligation 
+		descriptor can have the following values: M (mandatory), O (optional), or C (conditional).
+	</description>
+	<testrunarguments>
+		<testrunargument>
+			<name>iut</name>
+			<valuedomain>URI</valuedomain>
+			<obligation>M</obligation>
+			<description>A URI that refers to the landing page of the SUT.
+				Ampersand ('&amp;') characters must be percent-encoded as '%26'.
+			</description>
+		</testrunargument>
+		<testrunargument>
+			<name>noofcollections</name>
+			<valuedomain>Integer</valuedomain>
+			<obligation>O</obligation>
+			<description>Number of collections under test. -1 means that all
+				collections should be tested. Default: 3</description>
+		</testrunargument>
+	</testrunarguments>
+</testsuite>
