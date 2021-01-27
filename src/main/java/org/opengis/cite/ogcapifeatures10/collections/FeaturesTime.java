@@ -91,11 +91,11 @@ public class FeaturesTime extends AbstractFeatures {
      * @param testPoint
      *            the testPoint under test, never <code>null</code>
      */
-    @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 14: (Requirement /req/core/fc-time-definition)", dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
+    @Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 18: (Requirement /req/core/fc-time-definition)", dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
     public void timeParameterDefinition( TestPoint testPoint ) {
         Parameter time = retrieveParameterByName( testPoint.getPath(), getApiModel(), "datetime" );
 
-        assertNotNull( time, "Required time parameter for collections with path '" + testPoint.getPath()
+        assertNotNull( time, "Required datetime parameter for collections with path '" + testPoint.getPath()
                              + "'  in OpenAPI document is missing" );
 
         String msg = "Expected property '%s' with value '%s' but was '%s'";
