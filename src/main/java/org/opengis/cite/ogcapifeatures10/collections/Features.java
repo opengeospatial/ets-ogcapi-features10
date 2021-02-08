@@ -233,7 +233,7 @@ public class Features extends AbstractFeatures {
      * @param collection
      *            the collection under test, never <code>null</code>
      */
-    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
+    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)", dataProvider = "collectionItemUris", dependsOnMethods = "validateFeaturesOperation", alwaysRun = true)
     public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
         validateNumberReturned( asKey( collectionId ) );
