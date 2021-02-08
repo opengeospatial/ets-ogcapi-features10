@@ -227,10 +227,21 @@ public class FeatureCollections extends CommonDataFixture {
 
     private List<Map<String, Object>> createCollectionsMap( List<Object> collections ) {
         List<Map<String, Object>> collectionsMap = new ArrayList<>();
-        for ( Object collection : collections ) {
-            collectionsMap.add( (Map<String, Object>) collection );
-            if ( noOfCollections > 0 && collectionsMap.size() >= noOfCollections )
-                return collectionsMap;
+        for (Object collectionObj : collections) {
+            Map<String, Object> collection = (Map<String, Object>) collectionObj;
+            if (collection.get("id") != null) {
+                List<Object> links = (List<Object>) collection.get("links");
+                for (Object linkObj : links) {
+                    Map<String, Object> link = (Map<String, Object>) linkObj;
+                    if (link.get("rel").equals("items")) {
+                        collectionsMap.add(collection);
+                        break;
+                    }
+                }
+                if (noOfCollections > 0 && collectionsMap.size() >= noOfCollections) {
+                    return collectionsMap;
+                }
+            }
         }
         return collectionsMap;
     }
