@@ -15,6 +15,7 @@ import static org.testng.Assert.assertNotNull;
 import java.net.URI;
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.opengis.cite.ogcapifeatures10.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
@@ -229,13 +230,16 @@ public class FeatureCollections extends CommonDataFixture {
         List<Map<String, Object>> collectionsMap = new ArrayList<>();
         for (Object collectionObj : collections) {
             Map<String, Object> collection = (Map<String, Object>) collectionObj;
-            if (collection.get("id") != null) {
-                List<Object> links = (List<Object>) collection.get("links");
-                for (Object linkObj : links) {
-                    Map<String, Object> link = (Map<String, Object>) linkObj;
-                    if (link.get("rel").equals("items")) {
-                        collectionsMap.add(collection);
-                        break;
+            if (null != collection.get("id")) {
+                String itemType = (String) collection.get("itemType");
+                if (StringUtils.isEmpty(itemType) || itemType.equalsIgnoreCase("feature")) {
+                    List<Object> links = (List<Object>) collection.get("links");
+                    for (Object linkObj : links) {
+                        Map<String, Object> link = (Map<String, Object>) linkObj;
+                        if (link.get("rel").equals("items")) {
+                            collectionsMap.add(collection);
+                            break;
+                        }
                     }
                 }
                 if (noOfCollections > 0 && collectionsMap.size() >= noOfCollections) {
