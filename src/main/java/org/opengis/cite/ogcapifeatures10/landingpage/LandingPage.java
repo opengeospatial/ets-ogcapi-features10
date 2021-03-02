@@ -45,8 +45,9 @@ public class LandingPage extends CommonFixture {
 
     /**
      * <pre>
-     * Abstract Test 4: /ats/core/root-success Test Purpose: Validate that the landing page complies with the require
-     * structure and contents. Requirement: /req/core/root-success
+     * Abstract Test 4: /ats/core/root-success
+     * Test Purpose: Validate that the landing page complies with the require structure and contents.
+     * Requirement: /req/core/root-success
      *
      * Test Method: Validate the landing page for all supported media types using the resources and tests identified in
      * Schema and Tests for Landing Pages. For formats that require manual inspection, perform the following: a)

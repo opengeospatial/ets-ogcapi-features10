@@ -358,7 +358,7 @@ public class FeaturesBBox extends AbstractFeatures {
      * @param bbox
      *            bbox parameter to request, never <code>null</code>
      */
-    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
+    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesResponse_NumberReturned( Map<String, Object> collection, BBox bbox ) {
         String collectionId = (String) collection.get( "id" );
         validateNumberReturned( asKey( collectionId, bbox ) );
