@@ -56,10 +56,18 @@ public class JsonUtils {
         Object extent = collection.get( "extent" );
         if ( extent == null || !( extent instanceof Map ) )
             return null;
-        Object spatial = ( (Map<String, Object>) extent ).get( "temporal" );
-        if ( spatial == null || !( spatial instanceof List ) )
+        Object temporal = ( (Map<String, Object>) extent ).get( "temporal" );
+        if ( temporal == null || !( temporal instanceof Map ) )
             return null;
-        List<Object> coords = (List<Object>) spatial;
+        Object interval = ( (Map<String, Object>) temporal ).get( "interval" );
+        if ( interval == null || !( interval instanceof List ) )
+            return null;
+        List<Object> intervalList = (List<Object>) interval;
+        if ( intervalList == null || !( intervalList instanceof List ) )
+            return null;
+        List<Object> coords = null;
+        if (!intervalList.isEmpty())
+            coords = (intervalList.get(0) instanceof List) ? (List<Object>) intervalList.get(0) : intervalList;
         if ( coords.size() == 2 ) {
             ZonedDateTime begin = parseAsDate( (String) coords.get( 0 ) );
             ZonedDateTime end = parseAsDate( (String) coords.get( 1 ) );
