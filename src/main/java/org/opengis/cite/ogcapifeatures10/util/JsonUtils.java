@@ -145,9 +145,17 @@ public class JsonUtils {
         if ( extent == null || !( extent instanceof Map ) )
             return null;
         Object spatial = ( (Map<String, Object>) extent ).get( "spatial" );
-        if ( spatial == null || !( spatial instanceof List ) )
+        if ( spatial == null || !( spatial instanceof Map ) )
             return null;
-        List<Object> coords = (List<Object>) spatial;
+        Object bbox = ( (Map<String, Object>) spatial ).get( "bbox" );
+        if ( bbox == null || !( bbox instanceof List ) )
+            return null;
+        List<Object> bboxList = (List<Object>) bbox;
+        if ( bboxList == null || !( bboxList instanceof List ) )
+            return null;
+        List<Object> coords = null;
+        if (!bboxList.isEmpty())
+            coords = (bboxList.get(0) instanceof List) ? (List<Object>) bboxList.get(0) : bboxList;
         if ( coords.size() == 4 ) {
             double minX = parseValueAsDouble( coords.get( 0 ) );
             double minY = parseValueAsDouble( coords.get( 1 ) );
