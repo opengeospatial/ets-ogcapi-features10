@@ -95,8 +95,22 @@ public class ApiDefinition extends CommonFixture {
             Map<String, Object> linkMap = (Map<String, Object>) link;
             Object rel = linkMap.get( "rel" );
             Object type = linkMap.get( "type" );
-            if ( "service-desc".equals( rel ) && OPEN_API_MIME_TYPE.equals( type ) )
-                return (String) linkMap.get( "href" );
+            if ("service-desc".equals(rel) && OPEN_API_MIME_TYPE.equals(type)) {
+                String url = (String) linkMap.get("href");
+                if (!url.startsWith("http")) {
+                    String path = url;
+                    if (null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
+                        url = rootUri.getScheme() + ":";
+                    if (null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
+                        url = url + "//" + rootUri.getAuthority();
+                    url = url + path;
+                    if (null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
+                        url = url + "?" + rootUri.getQuery();
+                    if (null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
+                        url = url + "#" + rootUri.getFragment();
+                }
+                return url;
+            }
         }
         return null;
     }
