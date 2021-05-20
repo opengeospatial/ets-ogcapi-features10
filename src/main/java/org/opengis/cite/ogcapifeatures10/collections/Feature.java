@@ -81,10 +81,13 @@ public class Feature extends CommonDataFixture {
             throw new SkipException( "Could not find url for collection with name " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
         String getFeatureUrlWithFeatureId;
-        if ( getFeatureUrl.indexOf( "?" ) == -1 ) {
-            getFeatureUrlWithFeatureId = getFeatureUrl + "/" + featureId;
-        } else {
+        if ( getFeatureUrl.indexOf( "?" ) != -1 ) {
             getFeatureUrlWithFeatureId = getFeatureUrl.substring( 0, getFeatureUrl.indexOf( "?" ) ) + "/" + featureId;
+        } else if (getFeatureUrl.indexOf(".") != -1) {
+            getFeatureUrlWithFeatureId = getFeatureUrl.substring(0, getFeatureUrl.lastIndexOf(".")) + "/" + featureId
+                    + getFeatureUrl.substring(getFeatureUrl.lastIndexOf("."));
+        } else {
+            getFeatureUrlWithFeatureId = getFeatureUrl + "/" + featureId;
         }
 
         Response response = init().baseUri( getFeatureUrlWithFeatureId ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
