@@ -22,7 +22,9 @@ public enum RequirementClass {
            "application/gml+xml;version=3.2;profile=http://www.opengis.net/def/profile/ogc/2.0/gml-sf2",
            "application/xml" ),
 
-    OPENAPI30( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30" );
+    OPENAPI30( "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30" ),
+
+    CRS( "http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs" );
 
     private final String conformanceClass;
 
