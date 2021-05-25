@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.landinpage;
+package org.opengis.cite.ogcapifeatures10.conformance.core.general;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -6,24 +6,19 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.opengis.cite.ogcapifeatures10.conformance.core.landingpage.LandingPage;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-@Ignore("Stable service is required")
-public class LandingPageIT {
+public class GeneralHttpIT {
 
     private static ITestContext testContext;
 
     private static ISuite suite;
-
-    private static final String SUT = "https://www.ldproxy.nrw.de/kataster";
 
     @BeforeClass
     public static void initTestFixture()
@@ -32,16 +27,16 @@ public class LandingPageIT {
         suite = mock( ISuite.class );
         when( testContext.getSuite() ).thenReturn( suite );
 
-        URI landingPageUri = new URI( SUT );
+        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
         when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
     }
 
     @Test
-    public void testLandingPage() {
-        LandingPage landingPage = new LandingPage();
-        landingPage.initCommonFixture( testContext );
-        landingPage.landingPageRetrieval();
-        landingPage.landingPageValidation();
+    public void testGeneralHttp()
+                            throws Exception {
+        GeneralHttp generalHttp = new GeneralHttp();
+        generalHttp.initCommonFixture( testContext );
+        generalHttp.http();
     }
 
 }

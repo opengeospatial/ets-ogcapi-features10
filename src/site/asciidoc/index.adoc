@@ -40,10 +40,11 @@ The general structure of the test suite is shown in Table 1.
 
 |Core
 |
- * org.opengis.cite.ogcapifeatures10.general.*
- * org.opengis.cite.ogcapifeatures10.apidescription.*
- * org.opengis.cite.ogcapifeatures10.conformance.*
- * org.opengis.cite.ogcapifeatures10.collections.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.general.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.landingpage.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.apidescription.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.conformance.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.collections.*
 
 |===
 

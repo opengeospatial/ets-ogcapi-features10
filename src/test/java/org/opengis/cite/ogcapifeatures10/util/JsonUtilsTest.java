@@ -50,9 +50,9 @@ public class JsonUtilsTest {
 
     @BeforeClass
     public static void parseJson() {
-        InputStream collectionJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collections.json" );
+        InputStream collectionJson = JsonUtilsTest.class.getResourceAsStream( "../conformance/core/collections/collections.json" );
         jsonCollection = new JsonPath( collectionJson );
-        InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../collections/collectionItems-flurstueck.json" );
+        InputStream collectionItemsJson = JsonUtilsTest.class.getResourceAsStream( "../conformance/core/collections/collectionItems-flurstueck.json" );
         jsonCollectionItem = new JsonPath( collectionItemsJson );
     }
 
