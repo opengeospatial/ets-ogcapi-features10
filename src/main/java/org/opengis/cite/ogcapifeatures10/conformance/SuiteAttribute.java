@@ -45,9 +45,19 @@ public enum SuiteAttribute {
     REQUIREMENTCLASSES( "requirementclasses", List.class ),
 
     /**
+     * Response of resource /collections; Added during execution.
+     */
+    COLLECTIONS_RESPONSE( "collectionsResponse", Map.class ),
+
+    /**
      * Parsed collections from resource /collections; Added during execution.
      */
     COLLECTIONS( "collections", List.class ),
+
+    /**
+     * Responses of resource /collection/{collectionId}, mapped to collectionId; Added during execution.
+     */
+    COLLECTION_TO_ID( "collectionToId", Map.class ),
 
     /**
      * Collection names assigned to a feature id parsed from resource /collections/{name}/items; Added during execution.

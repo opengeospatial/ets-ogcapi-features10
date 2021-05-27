@@ -272,6 +272,42 @@ public class JsonUtils {
     }
 
     /**
+     * Retrieves the property values as list.
+     * 
+     * @param propertyName
+     *            name of the property, never <code>null</code>
+     * @param jsonPath
+     *            the json document to retrieve properties from, never <code>null</code>
+     * @return the property values as list, may be empty but never <code>null</code>
+     */
+    public static List<String> parseAsList( String propertyName, JsonPath jsonPath ) {
+        Object value = jsonPath.get( propertyName );
+        if ( value == null )
+            return Collections.emptyList();
+        if ( value instanceof String )
+            return Collections.singletonList( (String) value );
+        return jsonPath.getList( propertyName );
+    }
+
+    /**
+     * Retrieves the property values as list.
+     * 
+     * @param propertyName
+     *            name of the property, never <code>null</code>
+     * @param json
+     *            the json map to retrieve properties from, never <code>null</code>
+     * @return the property values as list, may be empty but never <code>null</code>
+     */
+    public static List<String> parseAsList( String propertyName, Map<String, Object> json ) {
+        Object value = json.get( propertyName );
+        if ( value == null )
+            return Collections.emptyList();
+        if ( value instanceof String )
+            return Collections.singletonList( (String) value );
+        return (List<String>) json.get( propertyName );
+    }
+
+    /**
      * Collects the number of all returned features by iterating over all 'next' links and summarizing the size of
      * features in 'features' array property.
      * 

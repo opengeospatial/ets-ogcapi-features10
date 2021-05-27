@@ -65,6 +65,18 @@ public class FeatureCollections extends CommonDataFixture {
         testContext.getSuite().setAttribute( SuiteAttribute.COLLECTIONS.getName(), collections );
     }
 
+    @AfterClass
+    public void storeCollectionsResponseInTestContext( ITestContext testContext ) {
+        Map<TestPoint, JsonPath> collectionsResponses = new HashMap<>();
+        for ( Map.Entry<TestPoint, Response> testPointAndResponse : testPointAndResponses.entrySet() ) {
+            if ( testPointAndResponse.getValue() != null ) {
+                JsonPath jsonPath = testPointAndResponse.getValue().jsonPath();
+                collectionsResponses.put( testPointAndResponse.getKey(), jsonPath );
+            }
+        }
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTIONS_RESPONSE.getName(), collectionsResponses );
+    }
+    
     /**
      * <pre>
      * Abstract Test 9: /ats/core/fc-md-op

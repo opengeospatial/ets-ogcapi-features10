@@ -14,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
+import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.openapi3.UriBuilder;
 import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -42,6 +44,18 @@ public class FeatureCollection extends CommonDataFixture {
         for ( Map<String, Object> collection : testPointAndCollections )
             objects[i++] = new Object[] { collection };
         return objects;
+    }
+
+    @AfterClass
+    public void storeCollectionInTestContext( ITestContext testContext ) {
+        Map<String, JsonPath> collectionsResponses = new HashMap<>();
+        for ( Map.Entry<String, Response> collectionIdAndResponseEntry : collectionIdAndResponse.entrySet() ) {
+            if ( collectionIdAndResponseEntry.getValue() != null ) {
+                JsonPath jsonPath = collectionIdAndResponseEntry.getValue().jsonPath();
+                collectionsResponses.put( collectionIdAndResponseEntry.getKey(), jsonPath );
+            }
+        }
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_TO_ID.getName(), collectionsResponses );
     }
 
     /**
