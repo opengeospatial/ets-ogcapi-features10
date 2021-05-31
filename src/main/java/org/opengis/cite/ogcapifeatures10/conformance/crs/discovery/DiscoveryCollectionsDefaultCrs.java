@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery;
 
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
