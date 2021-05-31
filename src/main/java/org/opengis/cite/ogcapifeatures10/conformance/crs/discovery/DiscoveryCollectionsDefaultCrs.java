@@ -73,11 +73,11 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
             List<String> crs = JsonUtils.parseAsList( "crs", collection );
             if ( crs.size() == 1 && "#/crs".equals( crs.get( 0 ) ) ) {
                 throw new SkipException( String.format( "Collection with id '%s' at collections path %s references to global crs section.",
-                                                        testPoint.getPath(), collectionId ) );
+                                                        collectionId, testPoint.getPath() ) );
             } else {
                 assertDefaultCrs( crs,
                                   String.format( "Collection with id '%s' at collections path %s does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                                 testPoint.getPath(), collectionId, DEFAULT_CRS,
+                                                 collectionId, testPoint.getPath(), DEFAULT_CRS,
                                                  DEFAULT_CRS_WITH_HEIGHT ) );
             }
         }
