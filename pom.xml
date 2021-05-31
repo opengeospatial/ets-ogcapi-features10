@@ -51,6 +51,12 @@
     <ets-code>ogcapi-features-1.0</ets-code>
     <spec-version>1.0</spec-version>
     <docker.teamengine.version>5.4.1</docker.teamengine.version>
+    <soapui.test.fail.ignore>false</soapui.test.fail.ignore>
+    <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
+    <soapui.iut>https://demo.ldproxy.net/daraa</soapui.iut>
+    <soapui.tests.passed>132</soapui.tests.passed>
+    <soapui.tests.skipped>4</soapui.tests.skipped>
+    <soapui.tests.failed>0</soapui.tests.failed>
   </properties>
 
   <dependencies>
@@ -307,6 +313,32 @@
             </artifactItems>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>com.smartbear.soapui</groupId>
+          <artifactId>soapui-maven-plugin</artifactId>
+          <version>5.5.0</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.jgoodies</groupId>
+              <artifactId>forms</artifactId>
+              <version>1.0.7</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <projectFile>src/test/resources/soapui/ets-ogcapi-feature10-soapui-project.xml</projectFile>
+            <settingsFile>src/test/resources/soapui/ets-ogcapi-feature10-soapui-settings.xml</settingsFile>
+            <outputFolder>${project.build.directory}/soapui</outputFolder>
+            <junitReport>true</junitReport>
+            <testFailIgnore>${soapui.test.fail.ignore}</testFailIgnore>
+            <projectProperties>
+              <value>teamengine.endpoint=${soapui.teamengine.endpoint}</value>
+              <value>iut=${soapui.iut}</value>
+              <value>tests.passed=${soapui.tests.passed}</value>
+              <value>tests.skipped=${soapui.tests.skipped}</value>
+              <value>tests.failed=${soapui.tests.failed}</value>
+            </projectProperties>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -324,6 +356,50 @@
                 <goals>
                   <goal>integration-test</goal>
                   <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.smartbear.soapui</groupId>
+            <artifactId>soapui-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>start</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                  <goal>remove</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>copy</goal>
                 </goals>
               </execution>
             </executions>
@@ -394,6 +470,13 @@
       </build>
     </profile>
   </profiles>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>smartbear-sweden-plugin-repository</id>
+      <url>http://www.soapui.org/repository/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <distributionManagement>
     <repository>
