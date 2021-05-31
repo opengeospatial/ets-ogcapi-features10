@@ -1,7 +1,11 @@
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifier;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -58,4 +62,13 @@ public class EtsAssertTest {
         assertValidCrsIdentifier( "", "FAIlURE" );
     }
 
+    @Test
+    public void testAssertDefaultCrs() {
+        assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84", OgcApiFeatures10.DEFAULT_CRS ), "OK" );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertDefaultCrs_Missing() {
+        assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84" ), "OK" );
+    }
 }

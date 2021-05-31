@@ -18,6 +18,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutR
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.formatDate;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.formatDateRange;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.formatDateRangeWithDuration;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasAtLeastOneSpatialFeatureCollection;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasProperty;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsDate;
@@ -209,6 +210,12 @@ public class JsonUtilsTest {
     public void testHasProperty_false() {
         boolean hasProperty = hasProperty( "doesNotExist", jsonCollection );
         assertThat( hasProperty, is( false ) );
+    }
+
+    @Test
+    public void testHasAtLeastOneSpatialFeatureCollection() {
+        boolean hasSpatialFeatureCollection = hasAtLeastOneSpatialFeatureCollection( jsonCollection );
+        assertThat( hasSpatialFeatureCollection, is( true ) );
     }
 
     @Test

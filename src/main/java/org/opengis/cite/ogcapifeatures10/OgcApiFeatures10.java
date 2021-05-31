@@ -14,4 +14,8 @@ public class OgcApiFeatures10 {
 
     public static final String GEOJSON_MIME_TYPE = "application/geo+json";
 
+    public static final String DEFAULT_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+    public static final String DEFAULT_CRS_WITH_HEIGHT = "http://www.opengis.net/def/crs/OGC/1.3/CRS84h";
+
 }

@@ -272,6 +272,50 @@ public class JsonUtils {
     }
 
     /**
+     * Checks if a at least one of the collection in the /collections response has a spatial extent.
+     *
+     * @param jsonPath
+     *            to check, never <code>null</code>
+     * @return <code>true</code> at least one of the collection has a spatial extent, <code>false</code> otherwise
+     */
+    public static boolean hasAtLeastOneSpatialFeatureCollection( JsonPath jsonPath ) {
+        List<Object> collections = jsonPath.getList( "collections" );
+        for ( Object collectionObj : collections ) {
+            if ( hasAtLeastOneSpatialFeatureCollection( (Map<String, Object>) collectionObj ) )
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a at least one of the collection in the /collections response has a spatial extent.
+     *
+     * @param collection
+     *            to check, never <code>null</code>
+     * @return <code>true</code> at least one of the collection has a spatial extent, <code>false</code> otherwise
+     */
+    public static boolean hasAtLeastOneSpatialFeatureCollection( Map<String, Object> collection ) {
+        Object extent = collection.get( "extent" );
+        return hasAtLeastOneSpatialFeatureCollection( extent );
+    }
+
+    /**
+     * Checks if the extent contains a spatial extent.
+     *
+     * @param extent
+     *            to check, never <code>null</code>
+     * @return <code>true</code> if extent contains a spatial extent, <code>false</code> otherwise
+     */
+    public static boolean hasAtLeastOneSpatialFeatureCollection( Object extent ) {
+        if ( extent != null && extent instanceof Map ) {
+            Object spatial = ( (Map<String, Object>) extent ).get( "spatial" );
+            if ( spatial != null )
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Retrieves the property values as list.
      * 
      * @param propertyName

@@ -1,5 +1,7 @@
 package org.opengis.cite.ogcapifeatures10;
 
+import java.util.List;
+
 import org.apache.commons.validator.routines.UrlValidator;
 import org.opengis.cite.ogcapifeatures10.util.OgcNameValidator;
 import org.opengis.cite.ogcapifeatures10.util.UrnValidator;
@@ -66,6 +68,27 @@ public class EtsAssert {
         } else {
             throw new AssertionError( failureMsg );
         }
+    }
+
+    /**
+     * Assert that one of the default CRS
+     * 
+     * <pre>
+     *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
+     *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
+     * </pre>
+     * 
+     * is in the list of passed crs.
+     * 
+     * @param valueToAssert
+     *            list of CRS which should contain the default crs, never <code>null</code>
+     * @param failureMsg
+     *            the message to throw in case of a failure, should not be <code>null</code>
+     */
+    public static void assertDefaultCrs( List<String> valueToAssert, String failureMsg ) {
+        if ( !valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS )
+             && !valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT ) )
+            throw new AssertionError( failureMsg );
     }
 
     private static void assertValidHttpCrsIdentifier( String valueToAssert, String failureMsg ) {
