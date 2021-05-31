@@ -20,12 +20,17 @@ import io.restassured.path.json.JsonPath;
  * Test Purpose: Verify that each CRS identifier is a valid value
  * Requirement: /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global
  *
+ * <pre>
+ * Abstract Test 2: /conf/crs/default-crs
+ * Test Purpose: Verify that the list of supported CRSs includes the default CRS.
+ * Requirement: /req/crs/fc-md-crs-list B
+ *
  * Test Method
- * For each string value in a crs or storageCrs property in the collections and collection objects in the paths /collections and /collections/{collectionId}, validate that the string conforms to the generic URI syntax as specified by RFC 3986, section 3. In addition, accept a single value of #/crs in each collection object at path /collections, if the collections object has a crs property.
- *  1. For http-URIs (starting with http:) validate that the string conforms to the syntax specified by RFC 7230, section 2.7.1.
- *  2. For https-URIs (starting with https:) validate that the string conforms to the syntax specified by RFC 7230, section 2.7.2.
- *  3. For URNs (starting with urn:) validate that the string conforms to the syntax specified by RFC 8141, section 2.
- *  4. For OGC URNs (starting with urn:ogc:def:crs:) and OGC http-URIs (starting with http://www.opengis.net/def/crs/) validate that the string conforms to the syntax specified by OGC Name Type Specification - definitions - part 1 – basic name.
+ * For each string value in a crs property in a collection object (for each path /collections and /collections/{collectionId})
+ * validate that either
+ * http://www.opengis.net/def/crs/OGC/1.3/CRS84 or
+ * http://www.opengis.net/def/crs/OGC/1.3/CRS84h
+ * is included in the array, if the collection has a spatial extent, i.e., is a spatial feature collection.
  * </pre>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -35,11 +40,13 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
     /**
      * Test: crs property in the collection objects in the path /collections
      *
+     * @param collectionId
+     *            id of the collection under test, never <code>null</code>
      * @param collection
      *            the /collection object, never <code>null</code>
      */
     @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "crs property in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
+                        + "crs property contains default crs in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
     public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, JsonPath collection ) {
         Object extent = collection.get( "extent" );
         if ( hasAtLeastOneSpatialFeatureCollection( extent ) ) {

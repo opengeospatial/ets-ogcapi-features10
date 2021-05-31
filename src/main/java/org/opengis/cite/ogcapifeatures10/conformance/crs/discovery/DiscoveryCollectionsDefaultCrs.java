@@ -44,7 +44,7 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
      *            the /collections JSON, never <code>null</code>
      */
     @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
-                        + "crs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
+                        + "crs property contains default crs in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
     public void verifyCollectionsPathCrsPropertyContainsDefaultCrs( TestPoint testPoint, JsonPath jsonPath ) {
         if ( hasAtLeastOneSpatialFeatureCollection( jsonPath ) ) {
             List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
@@ -65,7 +65,7 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
      *            the /collection object, never <code>null</code>
      */
     @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
-                        + "crs property in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
+                        + "crs property contains default crs in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
     public void verifyCollectionsPathCollectionCrsPropertyContainsDefaultCrs( TestPoint testPoint, JsonPath jsonPath,
                                                                               Map<String, Object> collection ) {
         if ( hasAtLeastOneSpatialFeatureCollection( collection ) ) {
