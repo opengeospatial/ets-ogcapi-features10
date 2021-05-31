@@ -26,6 +26,7 @@
   <test name="CRS - Part 2">
     <packages>
       <package name="org.opengis.cite.ogcapifeatures10.conformance.crs" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.discovery" />
     </packages>
   </test>
 
