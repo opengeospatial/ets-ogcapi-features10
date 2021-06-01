@@ -200,7 +200,8 @@ public class JsonUtils {
      *            a list of media types which should be supported, never <code>null</code>
      * @return the media types which does not have a link for.
      */
-    public static List<String> findUnsupportedTypes( List<Map<String, Object>> links, List<String> mediaTypesToSuppport ) {
+    public static List<String> findUnsupportedTypes( List<Map<String, Object>> links,
+                                                     List<String> mediaTypesToSuppport ) {
         List<String> unsupportedType = new ArrayList<>();
         for ( String contentMediaType : mediaTypesToSuppport ) {
             boolean hasLinkForContentType = hasLinkForContentType( links, contentMediaType );
@@ -215,14 +216,14 @@ public class JsonUtils {
      * 
      * @param links
      *            list of links to search in, never <code>null</code>
-     * @param rels           
-     *            Set of relation types, never <code>null</code>                  
+     * @param rels
+     *            Set of relation types, never <code>null</code>
      * @return the links without 'rel' or 'type' property
      */
     public static List<String> findLinksWithoutRelOrType( List<Map<String, Object>> links, Set<String> rels ) {
         List<String> linksWithoutRelOrType = new ArrayList<>();
         for ( Map<String, Object> link : links ) {
-            if ( rels.contains(link.get( "rel" )) && !linkIncludesRelAndType( link ) )
+            if ( rels.contains( link.get( "rel" ) ) && !linkIncludesRelAndType( link ) )
                 linksWithoutRelOrType.add( (String) link.get( "href" ) );
         }
         return linksWithoutRelOrType;
@@ -416,12 +417,12 @@ public class JsonUtils {
      * @param rootUri
      *            never <code>null</code>
      * @param collection
-     *            the /collections/{collectionId} response
+     *            the /collections/{collectionId} response, never <code>null</code>
      * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
      */
     public static String findFeaturesUrlForGeoJson( URI rootUri, JsonPath collection ) {
         List<Object> links = collection.get( "links" );
-        return findFeaturesUrlForgeoJson( rootUri, links );
+        return findFeaturesUrlForGeoJson( rootUri, links );
     }
 
     /**
@@ -430,31 +431,31 @@ public class JsonUtils {
      * @param rootUri
      *            never <code>null</code>
      * @param collection
-     *            the collection object /collections response
+     *            the collection object /collections response, never <code>null</code>
      * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
      */
     public static String findFeaturesUrlForGeoJson( URI rootUri, Map<String, Object> collection ) {
         List<Object> links = (List<Object>) collection.get( "links" );
-        return findFeaturesUrlForgeoJson( rootUri, links );
+        return findFeaturesUrlForGeoJson( rootUri, links );
     }
 
-    private static String findFeaturesUrlForgeoJson( URI rootUri, List<Object> links ) {
+    private static String findFeaturesUrlForGeoJson( URI rootUri, List<Object> links ) {
         for ( Object linkObject : links ) {
             Map<String, Object> link = (Map<String, Object>) linkObject;
             Object rel = link.get( "rel" );
             Object type = link.get( "type" );
-            if ("items".equals(rel) && GEOJSON_MIME_TYPE.equals(type)) {
-                String url = (String) link.get("href");
-                if (!url.startsWith("http")) {
+            if ( "items".equals( rel ) && GEOJSON_MIME_TYPE.equals( type ) ) {
+                String url = (String) link.get( "href" );
+                if ( !url.startsWith( "http" ) ) {
                     String path = url;
-                    if ( null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
+                    if ( null != rootUri.getScheme() && !rootUri.getScheme().isEmpty() )
                         url = rootUri.getScheme() + ":";
-                    if ( null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
+                    if ( null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty() )
                         url = url + "//" + rootUri.getAuthority();
                     url = url + path;
-                    if ( null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
+                    if ( null != rootUri.getQuery() && !rootUri.getQuery().isEmpty() )
                         url = url + "?" + rootUri.getQuery();
-                    if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
+                    if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty() )
                         url = url + "#" + rootUri.getFragment();
                 }
                 return url;
@@ -463,32 +464,101 @@ public class JsonUtils {
         return null;
     }
 
+    /**
+     * Finds the URL to the resource /collections/{collectionId}/items/{featureId} from the path /collections and
+     * creates an valid url to this resource
+     *
+     * @param rootUri
+     *            never <code>null</code>
+     * @param collection
+     *            the /collections/{collectionId} response, never <code>null</code>
+     * @param featureId
+     *            id of the feature, never <code>null</code>
+     * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
+     */
+    public static String findFeatureUrlForGeoJson( URI rootUri, JsonPath collection, String featureId ) {
+        List<Object> links = collection.get( "links" );
+        return findFeaturesUrlForGeoJson( rootUri, links );
+    }
+
+    /**
+     * Finds the URL to the resource /collections/{collectionId}/items/{featureId} from the path /collections and
+     * creates an valid url to this resource
+     *
+     * @param rootUri
+     *            never <code>null</code>
+     * @param collection
+     *            the collection object /collections response, never <code>null</code>
+     * @param featureId
+     *            id of the feature, never <code>null</code>
+     * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
+     */
+    public static String findFeatureUrlForGeoJson( URI rootUri, Map<String, Object> collection, String featureId ) {
+        List<Object> links = (List<Object>) collection.get( "links" );
+        return findFeatureUrlForGeoJson( rootUri, featureId, links );
+    }
+
+    private static String findFeatureUrlForGeoJson( URI rootUri, String featureId, List<Object> links ) {
+        for ( Object linkObject : links ) {
+            Map<String, Object> link = (Map<String, Object>) linkObject;
+            Object rel = link.get( "rel" );
+            Object type = link.get( "type" );
+            if ( "items".equals( rel ) && GEOJSON_MIME_TYPE.equals( type ) ) {
+                String url = (String) link.get( "href" );
+                if ( !url.startsWith( "http" ) ) {
+                    String path = url;
+                    if ( null != rootUri.getScheme() && !rootUri.getScheme().isEmpty() )
+                        url = rootUri.getScheme() + ":";
+                    if ( null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty() )
+                        url = url + "//" + rootUri.getAuthority();
+                    url = url + path;
+                    if ( null != rootUri.getQuery() && !rootUri.getQuery().isEmpty() )
+                        url = url + "?" + rootUri.getQuery();
+                    if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty() )
+                        url = url + "#" + rootUri.getFragment();
+                }
+                return createFeatureUrl( url, featureId );
+            }
+        }
+        return null;
+    }
+
+    private static String createFeatureUrl( String getFeatureUrl, String featureId ) {
+        if ( getFeatureUrl.indexOf( "?" ) != -1 ) {
+            return getFeatureUrl.substring( 0, getFeatureUrl.indexOf( "?" ) ) + "/" + featureId;
+        } else if ( getFeatureUrl.indexOf( "." ) != -1 ) {
+            return getFeatureUrl.substring( 0, getFeatureUrl.lastIndexOf( "." ) ) + "/" + featureId
+                   + getFeatureUrl.substring( getFeatureUrl.lastIndexOf( "." ) );
+        }
+        return getFeatureUrl + "/" + featureId;
+    }
+
     private static boolean isSameMediaType( String mediaType1, String mediaType2 ) {
-        if ( mediaType1.contains(";") || mediaType2.contains(";") ) {
+        if ( mediaType1.contains( ";" ) || mediaType2.contains( ";" ) ) {
             // media types are not case sensitive
-            String[] components1 = mediaType1.toLowerCase().split(";");
-            String[] components2 = mediaType2.toLowerCase().split(";");
+            String[] components1 = mediaType1.toLowerCase().split( ";" );
+            String[] components2 = mediaType2.toLowerCase().split( ";" );
             // type and subtype must match
-            if ( !components1[0].trim().equals(components2[0].trim()) )
+            if ( !components1[0].trim().equals( components2[0].trim() ) )
                 return false;
             Set<String> parameters1 = new HashSet<>();
             Set<String> parameters2 = new HashSet<>();
             // normalize parameter values and compare them
-            for ( int i=1; i<components1.length; i++ ) {
-                String parameter = components1[i].trim().replace("\"","");
-                if (!parameter.isEmpty())
-                    parameters1.add(parameter);
+            for ( int i = 1; i < components1.length; i++ ) {
+                String parameter = components1[i].trim().replace( "\"", "" );
+                if ( !parameter.isEmpty() )
+                    parameters1.add( parameter );
             }
-            for ( int i=1; i<components2.length; i++ ) {
-                String parameter = components2[i].trim().replace("\"","");
-                if (!parameter.isEmpty())
-                    parameters2.add(parameter);
+            for ( int i = 1; i < components2.length; i++ ) {
+                String parameter = components2[i].trim().replace( "\"", "" );
+                if ( !parameter.isEmpty() )
+                    parameters2.add( parameter );
             }
             if ( parameters1.size() != parameters2.size() )
                 return false;
-            if ( !parameters1.containsAll(parameters2) )
+            if ( !parameters1.containsAll( parameters2 ) )
                 return false;
-        } else if ( !mediaType1.trim().equalsIgnoreCase(mediaType2.trim()) )
+        } else if ( !mediaType1.trim().equalsIgnoreCase( mediaType2.trim() ) )
             return false;
 
         return true;

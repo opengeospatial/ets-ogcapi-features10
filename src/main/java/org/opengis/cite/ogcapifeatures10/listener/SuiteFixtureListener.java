@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.opengis.cite.ogcapifeatures10.TestNGController;
 import org.opengis.cite.ogcapifeatures10.TestRunArg;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.util.ClientUtils;
@@ -67,7 +68,7 @@ public class SuiteFixtureListener implements ISuiteListener {
         }
         URI iutRef = URI.create( iutParam.trim() );
         suite.setAttribute( SuiteAttribute.IUT.getName(), iutRef );
-        File entityFile = null;
+        File entityFile;
         try {
             entityFile = URIUtils.dereferenceURI( iutRef );
         } catch ( IOException iox ) {
@@ -86,7 +87,7 @@ public class SuiteFixtureListener implements ISuiteListener {
         } catch ( NumberFormatException e ) {
             TestSuiteLogger.log( WARNING,
                                  String.format( "Could not parse parameter %s: %s. Expected is a valid integer",
-                                                TestRunArg.NOOFCOLLECTIONS.toString(), noOfCollections ) );
+                                                TestRunArg.NOOFCOLLECTIONS, noOfCollections ) );
         }
     }
 
@@ -124,7 +125,7 @@ public class SuiteFixtureListener implements ISuiteListener {
     private void processProperties( ISuite suite ) {
         try {
             Properties properties = new Properties();
-            properties.load( SuiteFixtureListener.class.getResourceAsStream( "../ets.properties" ) );
+            properties.load( TestNGController.class.getResourceAsStream( "ets.properties" ) );
             String noOfFeatures = properties.getProperty( "noOfFeatures", "0" );
             int noOfFeaturesInt = Integer.parseInt( noOfFeatures );
             suite.setAttribute( SuiteAttribute.NO_OF_FEATURES.getName(), noOfFeaturesInt );

@@ -3,6 +3,7 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutRelOrType;
@@ -10,10 +11,17 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findUnsupportedTy
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
 import static org.testng.Assert.assertNotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
@@ -76,19 +84,10 @@ public class Feature extends CommonDataFixture {
         if ( featureId == null )
             throw new SkipException( "No featureId available for collection '" + collectionId + "'" );
 
-        String getFeatureUrl = findGetFeatureUrlForGeoJson( collection );
-        if ( getFeatureUrl == null )
+        String getFeatureUrlWithFeatureId = JsonUtils.findFeatureUrlForGeoJson( rootUri, collection, featureId );
+        if ( getFeatureUrlWithFeatureId == null )
             throw new SkipException( "Could not find url for collection with name " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        String getFeatureUrlWithFeatureId;
-        if ( getFeatureUrl.indexOf( "?" ) != -1 ) {
-            getFeatureUrlWithFeatureId = getFeatureUrl.substring( 0, getFeatureUrl.indexOf( "?" ) ) + "/" + featureId;
-        } else if (getFeatureUrl.indexOf(".") != -1) {
-            getFeatureUrlWithFeatureId = getFeatureUrl.substring(0, getFeatureUrl.lastIndexOf(".")) + "/" + featureId
-                    + getFeatureUrl.substring(getFeatureUrl.lastIndexOf("."));
-        } else {
-            getFeatureUrlWithFeatureId = getFeatureUrl + "/" + featureId;
-        }
 
         Response response = init().baseUri( getFeatureUrlWithFeatureId ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
@@ -159,39 +158,13 @@ public class Feature extends CommonDataFixture {
 
         // Verify that all "self"/"alternate"/"collection" links include the rel and type link parameters.
         Set<String> rels = new HashSet<String>();
-        rels.add("self");
-        rels.add("alternate");
-        rels.add("collection");
+        rels.add( "self" );
+        rels.add( "alternate" );
+        rels.add( "collection" );
         List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links, rels );
         assertTrue( linksWithoutRelOrType.isEmpty(),
                     "Links with link relation types 'self', 'alternate' and 'collection' in Get Feature Operation Response must include a rel and type parameter. Missing for links "
                                                      + linksWithoutRelOrType );
-    }
-
-    private String findGetFeatureUrlForGeoJson( Map<String, Object> collection ) {
-        List<Object> links = (List<Object>) collection.get( "links" );
-        for ( Object linkObject : links ) {
-            Map<String, Object> link = (Map<String, Object>) linkObject;
-            Object rel = link.get( "rel" );
-            Object type = link.get( "type" );
-            if ("items".equals(rel) && GEOJSON_MIME_TYPE.equals(type)) {
-                String url = (String) link.get("href");
-                if (!url.startsWith("http")) {
-                    String path = url;
-                    if (null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
-                        url = rootUri.getScheme() + ":";
-                    if (null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
-                        url = url + "//" + rootUri.getAuthority();
-                    url = url + path;
-                    if (null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
-                        url = url + "?" + rootUri.getQuery();
-                    if (null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
-                        url = url + "#" + rootUri.getFragment();
-                }
-                return url;
-            }
-        }
-        return null;
     }
 
 }
