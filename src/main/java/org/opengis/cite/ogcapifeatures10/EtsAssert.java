@@ -105,6 +105,26 @@ public class EtsAssert {
         }
     }
 
+    /**
+     * Assert that one of the default CRS
+     *
+     * <pre>
+     *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
+     *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
+     * </pre>
+     * 
+     * @param crsHeaderValue
+     *            the value from the header, never <code>null</code>
+     * @param failureMsg
+     *            the message to throw in case of a failure, should not be <code>null</code>
+     */
+    public static void assertDefaultCrsHeader( String crsHeaderValue, String failureMsg ) {
+        if ( !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS + ">" )
+             && !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT + ">" ) ) {
+            throw new AssertionError( failureMsg );
+        }
+    }
+
     private static void assertValidHttpCrsIdentifier( String valueToAssert, String failureMsg ) {
         UrlValidator urlValidator = new UrlValidator();
         if ( !urlValidator.isValid( valueToAssert ) ) {
