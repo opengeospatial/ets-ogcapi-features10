@@ -46,7 +46,7 @@ import io.restassured.response.Response;
  * 
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class ValidCrsParameter extends CommonFixture {
+public class FeaturesValidCrsParameter extends CommonFixture {
 
     @DataProvider(name = "collectionIdAndJsonAndCrs")
     public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {

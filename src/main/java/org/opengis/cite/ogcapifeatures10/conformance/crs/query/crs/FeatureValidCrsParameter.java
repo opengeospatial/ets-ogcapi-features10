@@ -73,6 +73,8 @@ public class FeatureValidCrsParameter extends CommonFixture {
      *            id id of the collection, never <code>null</code>
      * @param collection
      *            the /collection object, never <code>null</code>
+     * @param featureId
+     *            id id of the feature, never <code>null</code>
      * @param crs
      *            the crs to test, never <code>null</code>
      */

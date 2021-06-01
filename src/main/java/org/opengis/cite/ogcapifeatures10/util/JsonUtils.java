@@ -413,7 +413,7 @@ public class JsonUtils {
 
     /**
      * Finds the URL to the resource /collections/{collectionId}/items from the path /collections/{collectionId}
-     * 
+     *
      * @param rootUri
      *            never <code>null</code>
      * @param collection
@@ -478,7 +478,7 @@ public class JsonUtils {
      */
     public static String findFeatureUrlForGeoJson( URI rootUri, JsonPath collection, String featureId ) {
         List<Object> links = collection.get( "links" );
-        return findFeaturesUrlForGeoJson( rootUri, links );
+        return findFeatureUrlForGeoJson( rootUri, featureId, links );
     }
 
     /**
