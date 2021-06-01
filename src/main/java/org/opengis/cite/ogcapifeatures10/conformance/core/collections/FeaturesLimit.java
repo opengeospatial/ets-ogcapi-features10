@@ -8,6 +8,7 @@ import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.IUT;
 import static org.opengis.cite.ogcapifeatures10.conformance.core.collections.FeaturesAssertions.assertIntegerGreaterZero;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -136,7 +137,7 @@ public class FeaturesLimit extends AbstractFeatures {
     public void validateFeaturesWithLimitOperation( Map<String, Object> collection, int limit, int max ) {
         String collectionId = (String) collection.get( "id" );
 
-        String getFeaturesUrl = findFeaturesUrlForGeoJson( collection );
+        String getFeaturesUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( getFeaturesUrl == null || getFeaturesUrl.isEmpty() )
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );

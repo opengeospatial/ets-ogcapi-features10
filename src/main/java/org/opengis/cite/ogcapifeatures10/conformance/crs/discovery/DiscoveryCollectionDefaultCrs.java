@@ -16,11 +16,6 @@ import io.restassured.path.json.JsonPath;
  * Verifies object in the paths /collection
  *
  * <pre>
- * Abstract Test 1:  /conf/crs/crs-uri
- * Test Purpose: Verify that each CRS identifier is a valid value
- * Requirement: /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global
- *
- * <pre>
  * Abstract Test 2: /conf/crs/default-crs
  * Test Purpose: Verify that the list of supported CRSs includes the default CRS.
  * Requirement: /req/crs/fc-md-crs-list B

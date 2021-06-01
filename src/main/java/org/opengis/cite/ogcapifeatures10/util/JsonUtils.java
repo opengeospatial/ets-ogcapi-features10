@@ -405,6 +405,33 @@ public class JsonUtils {
         return numberOfAllReturnedFeatures;
     }
 
+
+    public static String findFeaturesUrlForGeoJson( URI rootUri, Map<String, Object> collection ) {
+        List<Object> links = (List<Object>) collection.get( "links" );
+        for ( Object linkObject : links ) {
+            Map<String, Object> link = (Map<String, Object>) linkObject;
+            Object rel = link.get( "rel" );
+            Object type = link.get( "type" );
+            if ("items".equals(rel) && GEOJSON_MIME_TYPE.equals(type)) {
+                String url = (String) link.get("href");
+                if (!url.startsWith("http")) {
+                    String path = url;
+                    if (null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
+                        url = rootUri.getScheme() + ":";
+                    if (null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
+                        url = url + "//" + rootUri.getAuthority();
+                    url = url + path;
+                    if (null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
+                        url = url + "?" + rootUri.getQuery();
+                    if (null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
+                        url = url + "#" + rootUri.getFragment();
+                }
+                return url;
+            }
+        }
+        return null;
+    }
+
     private static boolean isSameMediaType( String mediaType1, String mediaType2 ) {
         if ( mediaType1.contains(";") || mediaType2.contains(";") ) {
             // media types are not case sensitive

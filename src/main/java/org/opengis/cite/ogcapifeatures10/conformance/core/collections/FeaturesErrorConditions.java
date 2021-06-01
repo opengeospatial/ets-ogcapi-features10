@@ -2,6 +2,7 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,7 +72,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
     public void validateFeaturesOperation_QueryParamInvalid( Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
 
-        String featuresUrl = findFeaturesUrlForGeoJson( collection );
+        String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
@@ -119,7 +120,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
             throw new SkipException( "Free-form parameters are supported for collection with id " + collectionId );
         }
 
-        String featuresUrl = findFeaturesUrlForGeoJson( collection );
+        String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null ) {
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
