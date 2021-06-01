@@ -1,13 +1,17 @@
 package org.opengis.cite.ogcapifeatures10.listener;
 
+import static java.util.logging.Level.WARNING;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.TestRunArg;
+import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.util.ClientUtils;
 import org.opengis.cite.ogcapifeatures10.util.TestSuiteLogger;
 import org.opengis.cite.ogcapifeatures10.util.URIUtils;
@@ -29,9 +33,12 @@ import com.sun.jersey.api.client.Client;
  */
 public class SuiteFixtureListener implements ISuiteListener {
 
+    private static final Logger LOG = Logger.getLogger( SuiteFixtureListener.class.getName() );
+
     @Override
     public void onStart( ISuite suite ) {
         processSuiteParameters( suite );
+        processProperties( suite );
         registerClientComponent( suite );
     }
 
@@ -77,7 +84,7 @@ public class SuiteFixtureListener implements ISuiteListener {
                 suite.setAttribute( SuiteAttribute.NO_OF_COLLECTIONS.getName(), noOfCollectionsInt );
             }
         } catch ( NumberFormatException e ) {
-            TestSuiteLogger.log( Level.WARNING,
+            TestSuiteLogger.log( WARNING,
                                  String.format( "Could not parse parameter %s: %s. Expected is a valid integer",
                                                 TestRunArg.NOOFCOLLECTIONS.toString(), noOfCollections ) );
         }
@@ -111,6 +118,19 @@ public class SuiteFixtureListener implements ISuiteListener {
         File testSubjFile = (File) suite.getAttribute( SuiteAttribute.TEST_SUBJ_FILE.getName() );
         if ( testSubjFile.exists() ) {
             testSubjFile.delete();
+        }
+    }
+
+    private void processProperties( ISuite suite ) {
+        try {
+            Properties properties = new Properties();
+            properties.load( SuiteFixtureListener.class.getResourceAsStream( "../ets.properties" ) );
+            String noOfFeatures = properties.getProperty( "noOfFeatures", "0" );
+            int noOfFeaturesInt = Integer.parseInt( noOfFeatures );
+            suite.setAttribute( SuiteAttribute.NO_OF_FEATURES.getName(), noOfFeaturesInt );
+        } catch ( IOException e ) {
+            LOG.log( WARNING, "Could not parse noOfFeatures from ets.properties. All features will be tested.", e );
+            suite.setAttribute( SuiteAttribute.NO_OF_FEATURES.getName(), 0 );
         }
     }
 }
