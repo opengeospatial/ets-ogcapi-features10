@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.collectNumberOfAllReturnedFeatures;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutRelOrType;
@@ -27,6 +28,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExten
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseTemporalExtent;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
@@ -219,6 +221,18 @@ public class JsonUtilsTest {
     }
 
     @Test
+    public void testFindFeaturesUrlForGeoJson()
+                            throws Exception {
+        InputStream collectionJson = JsonUtilsTest.class.getResourceAsStream( "../conformance/core/collections/collection-flurstueck.json" );
+        JsonPath flurstueckCollection = new JsonPath( collectionJson );
+        URI rootUri = new URI( "http://localhost:8090/rest/services" );
+        String featuresUrlForGeoJson = findFeaturesUrlForGeoJson( rootUri, flurstueckCollection );
+
+        assertThat( featuresUrlForGeoJson,
+                    is( "http://localhost:8090/rest/services/kataster/collections/flurstueck/items?f=json" ) );
+    }
+
+    @Test
     public void testCollectNumberOfAllReturnedFeatures()
                             throws Exception {
         prepareJadler();
@@ -229,7 +243,6 @@ public class JsonUtilsTest {
 
         assertThat( numberOfAllFeatures, is( 25 ) );
     }
-
     private void prepareJadler() {
         InputStream item1_10 = getClass().getResourceAsStream( "items_1-10.json" );
         onRequest().havingParameter( "startindex", nullValue() ).respond().withBody( item1_10 );

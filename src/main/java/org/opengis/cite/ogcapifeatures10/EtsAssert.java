@@ -91,6 +91,20 @@ public class EtsAssert {
             throw new AssertionError( failureMsg );
     }
 
+    /**
+     * @param crsHeaderValue
+     *            the value from the header, never <code>null</code>
+     * @param expectedValue
+     *            th expected value, never <code>null</code>
+     * @param failureMsg
+     *            the message to throw in case of a failure, should not be <code>null</code>
+     */
+    public static void assertCrsHeader( String crsHeaderValue, String expectedValue, String failureMsg ) {
+        if ( !crsHeaderValue.matches( "<" + expectedValue + ">" ) ) {
+            throw new AssertionError( failureMsg );
+        }
+    }
+
     private static void assertValidHttpCrsIdentifier( String valueToAssert, String failureMsg ) {
         UrlValidator urlValidator = new UrlValidator();
         if ( !urlValidator.isValid( valueToAssert ) ) {

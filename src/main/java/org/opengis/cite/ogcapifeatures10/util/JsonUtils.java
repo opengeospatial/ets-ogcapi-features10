@@ -10,7 +10,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -405,9 +410,35 @@ public class JsonUtils {
         return numberOfAllReturnedFeatures;
     }
 
+    /**
+     * Finds the URL to the resource /collections/{collectionId}/items from the path /collections/{collectionId}
+     * 
+     * @param rootUri
+     *            never <code>null</code>
+     * @param collection
+     *            the /collections/{collectionId} response
+     * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
+     */
+    public static String findFeaturesUrlForGeoJson( URI rootUri, JsonPath collection ) {
+        List<Object> links = collection.get( "links" );
+        return findFeaturesUrlForgeoJson( rootUri, links );
+    }
 
+    /**
+     * Finds the URL to the resource /collections/{collectionId}/items from the path /collections
+     * 
+     * @param rootUri
+     *            never <code>null</code>
+     * @param collection
+     *            the collection object /collections response
+     * @return the url to the resource /collections/{collectionId}/items or <code>null</code>
+     */
     public static String findFeaturesUrlForGeoJson( URI rootUri, Map<String, Object> collection ) {
         List<Object> links = (List<Object>) collection.get( "links" );
+        return findFeaturesUrlForgeoJson( rootUri, links );
+    }
+
+    private static String findFeaturesUrlForgeoJson( URI rootUri, List<Object> links ) {
         for ( Object linkObject : links ) {
             Map<String, Object> link = (Map<String, Object>) linkObject;
             Object rel = link.get( "rel" );
@@ -416,14 +447,14 @@ public class JsonUtils {
                 String url = (String) link.get("href");
                 if (!url.startsWith("http")) {
                     String path = url;
-                    if (null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
+                    if ( null != rootUri.getScheme() && !rootUri.getScheme().isEmpty())
                         url = rootUri.getScheme() + ":";
-                    if (null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
+                    if ( null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty())
                         url = url + "//" + rootUri.getAuthority();
                     url = url + path;
-                    if (null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
+                    if ( null != rootUri.getQuery() && !rootUri.getQuery().isEmpty())
                         url = url + "?" + rootUri.getQuery();
-                    if (null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
+                    if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty())
                         url = url + "#" + rootUri.getFragment();
                 }
                 return url;

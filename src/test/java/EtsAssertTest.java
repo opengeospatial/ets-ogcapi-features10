@@ -1,3 +1,4 @@
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertCrsHeader;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifier;
 
@@ -70,5 +71,23 @@ public class EtsAssertTest {
     @Test(expected = AssertionError.class)
     public void testAssertDefaultCrs_Missing() {
         assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84" ), "OK" );
+    }
+
+    @Test
+    public void testAssertCrsHeader() {
+        assertCrsHeader( "<http://www.opengis.net/def/crs/OGC/1.3/CRS84>",
+                         "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "OK" );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertCrsHeader_UnexpectedCode() {
+        assertCrsHeader( "<http://www.opengis.net/def/crs/OGC/0/25832>", "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+                         "FAIlURE" );
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertCrsHeader_MissingBracket() {
+        assertCrsHeader( "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+                         "FAIlURE" );
     }
 }
