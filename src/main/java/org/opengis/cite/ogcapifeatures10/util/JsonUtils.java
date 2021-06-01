@@ -439,31 +439,6 @@ public class JsonUtils {
         return findFeaturesUrlForGeoJson( rootUri, links );
     }
 
-    private static String findFeaturesUrlForGeoJson( URI rootUri, List<Object> links ) {
-        for ( Object linkObject : links ) {
-            Map<String, Object> link = (Map<String, Object>) linkObject;
-            Object rel = link.get( "rel" );
-            Object type = link.get( "type" );
-            if ( "items".equals( rel ) && GEOJSON_MIME_TYPE.equals( type ) ) {
-                String url = (String) link.get( "href" );
-                if ( !url.startsWith( "http" ) ) {
-                    String path = url;
-                    if ( null != rootUri.getScheme() && !rootUri.getScheme().isEmpty() )
-                        url = rootUri.getScheme() + ":";
-                    if ( null != rootUri.getAuthority() && !rootUri.getAuthority().isEmpty() )
-                        url = url + "//" + rootUri.getAuthority();
-                    url = url + path;
-                    if ( null != rootUri.getQuery() && !rootUri.getQuery().isEmpty() )
-                        url = url + "?" + rootUri.getQuery();
-                    if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty() )
-                        url = url + "#" + rootUri.getFragment();
-                }
-                return url;
-            }
-        }
-        return null;
-    }
-
     /**
      * Finds the URL to the resource /collections/{collectionId}/items/{featureId} from the path /collections and
      * creates an valid url to this resource
@@ -498,7 +473,7 @@ public class JsonUtils {
         return findFeatureUrlForGeoJson( rootUri, featureId, links );
     }
 
-    private static String findFeatureUrlForGeoJson( URI rootUri, String featureId, List<Object> links ) {
+    private static String findFeaturesUrlForGeoJson( URI rootUri, List<Object> links ) {
         for ( Object linkObject : links ) {
             Map<String, Object> link = (Map<String, Object>) linkObject;
             Object rel = link.get( "rel" );
@@ -517,8 +492,16 @@ public class JsonUtils {
                     if ( null != rootUri.getFragment() && !rootUri.getFragment().isEmpty() )
                         url = url + "#" + rootUri.getFragment();
                 }
-                return createFeatureUrl( url, featureId );
+                return url;
             }
+        }
+        return null;
+    }
+
+    private static String findFeatureUrlForGeoJson( URI rootUri, String featureId, List<Object> links ) {
+        String featuresUrlForGeoJson = findFeaturesUrlForGeoJson( rootUri, links );
+        if ( featuresUrlForGeoJson != null ) {
+            return createFeatureUrl( featuresUrlForGeoJson, featureId );
         }
         return null;
     }
