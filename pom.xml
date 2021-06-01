@@ -54,7 +54,7 @@
     <soapui.test.fail.ignore>false</soapui.test.fail.ignore>
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.iut>https://demo.ldproxy.net/daraa</soapui.iut>
-    <soapui.tests.passed>132</soapui.tests.passed>
+    <soapui.tests.passed>168</soapui.tests.passed>
     <soapui.tests.skipped>4</soapui.tests.skipped>
     <soapui.tests.failed>0</soapui.tests.failed>
   </properties>
