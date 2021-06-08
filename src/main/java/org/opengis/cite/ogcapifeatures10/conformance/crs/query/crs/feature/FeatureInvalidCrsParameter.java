@@ -1,21 +1,12 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
-import static org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.FeaturesInvalidCrsParameter.UNSUPPORTED_CRS;
+import static org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesInvalidCrsParameter.UNSUPPORTED_CRS;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
-import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.testng.ITestContext;
 import org.testng.SkipException;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -41,23 +32,7 @@ import io.restassured.response.Response;
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureInvalidCrsParameter extends CommonFixture {
-
-    @DataProvider(name = "collectionFeatureId")
-    public Iterator<Object[]> collectionFeatureId( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
-        Map<String, String> collectionNameToFeatureId = (Map<String, String>) testContext.getSuite().getAttribute( SuiteAttribute.FEATUREIDS.getName() );
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            if ( collectionNameToFeatureId != null && collectionNameToFeatureId.containsKey( collectionId ) ) {
-                String featureId = collectionNameToFeatureId.get( collectionId );
-                JsonPath json = collection.getValue();
-                collectionsData.add( new Object[] { collectionId, json, featureId } );
-            }
-        }
-        return collectionsData.iterator();
-    }
+public class FeatureInvalidCrsParameter extends AbstractFeatureCrs {
 
     /**
      * Test: invalid CRS requesting /collections/{collectionId}/items
@@ -74,8 +49,8 @@ public class FeatureInvalidCrsParameter extends CommonFixture {
     public void verifyFeatureInvalidCrs( String collectionId, JsonPath collection, String featureId ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+            throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
+                                                    collectionId, GEOJSON_MIME_TYPE ) );
 
         Response response = init().baseUri( featureUrl ).queryParam( CRS_PARAMETER,
                                                                      UNSUPPORTED_CRS ).accept( GEOJSON_MIME_TYPE ).when().request( GET );

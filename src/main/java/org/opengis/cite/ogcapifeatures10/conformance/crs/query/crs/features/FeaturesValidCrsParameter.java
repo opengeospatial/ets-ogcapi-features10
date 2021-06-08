@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertCrsHeader;
@@ -6,17 +6,7 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
-import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
-import org.testng.ITestContext;
 import org.testng.SkipException;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -46,21 +36,7 @@ import io.restassured.response.Response;
  * 
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesValidCrsParameter extends CommonFixture {
-
-    @DataProvider(name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            for ( String crs : JsonUtils.parseAsList( "crs", json ) ) {
-                collectionsData.add( new Object[] { collectionId, json, crs } );
-            }
-        }
-        return collectionsData.iterator();
-    }
+public class FeaturesValidCrsParameter extends AbstractFeaturesCrs {
 
     /**
      * Test: Content-Crs header in the path /collections/{collectionId}/items

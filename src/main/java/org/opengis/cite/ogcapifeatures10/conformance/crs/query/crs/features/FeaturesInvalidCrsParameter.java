@@ -1,20 +1,11 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
-import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.testng.ITestContext;
 import org.testng.SkipException;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -40,21 +31,9 @@ import io.restassured.response.Response;
  * 
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesInvalidCrsParameter extends CommonFixture {
+public class FeaturesInvalidCrsParameter extends AbstractFeaturesCrs {
 
-    static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
-
-    @DataProvider(name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            collectionsData.add( new Object[] { collectionId, json } );
-        }
-        return collectionsData.iterator();
-    }
+    public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 
     /**
      * Test: invalid CRS requesting /collections/{collectionId}/items
@@ -65,12 +44,12 @@ public class FeaturesInvalidCrsParameter extends CommonFixture {
      *            the /collection object, never <code>null</code>
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-valid-value), "
-                        + "Invalid CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance")
+                        + "Invalid CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
     public void verifyFeaturesInvalidCrs( String collectionId, JsonPath collection ) {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+            throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
+                                                    collectionId, GEOJSON_MIME_TYPE ) );
 
         Response response = init().baseUri( featuresUrl ).queryParam( CRS_PARAMETER,
                                                                       UNSUPPORTED_CRS ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
