@@ -92,6 +92,26 @@ public class EtsAssert {
     }
 
     /**
+     * Assert that the passed string is one of the the default CRS
+     *
+     * <pre>
+     *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
+     *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
+     * </pre>
+     *
+     * @param crsHeaderValue
+     *            CRS which should be the default crs, never <code>null</code>
+     * @param failureMsg
+     *            the message to throw in case of a failure, should not be <code>null</code>
+     */
+    public static void assertDefaultCrs( String crsHeaderValue, String failureMsg ) {
+        if ( !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS + ">" )
+             && !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT + ">" ) ) {
+            throw new AssertionError( failureMsg );
+        }
+    }
+    
+    /**
      * @param crsHeaderValue
      *            the value from the header, never <code>null</code>
      * @param expectedValue
