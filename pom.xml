@@ -65,6 +65,16 @@
       <artifactId>teamengine-spi</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.locationtech.jts</groupId>
+      <artifactId>jts-core</artifactId>
+      <version>1.18.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.locationtech.jts.io</groupId>
+      <artifactId>jts-io-common</artifactId>
+      <version>1.18.1</version>
+    </dependency>
+    <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
     </dependency>

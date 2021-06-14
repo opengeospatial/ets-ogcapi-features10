@@ -5,12 +5,14 @@ import static net.jadler.Jadler.initJadlerListeningOn;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.collectNumberOfAllReturnedFeatures;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
@@ -23,6 +25,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasAtLeastOneSpat
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasProperty;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseFeatureGeometry;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseTemporalExtent;
@@ -33,12 +36,18 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.MultiPolygon;
 
 import io.restassured.path.json.JsonPath;
 
@@ -166,7 +175,8 @@ public class JsonUtilsTest {
         List<Map<String, Object>> links = jsonCollection.getList( "links" );
         Map<String, Object> linkToItself = findLinkByRel( links, "self" );
 
-        assertThat( linkToItself.get( "href" ), is( "http://localhost:8090/rest/services/kataster/collections/?f=json" ) );
+        assertThat( linkToItself.get( "href" ),
+                    is( "http://localhost:8090/rest/services/kataster/collections/?f=json" ) );
         assertThat( linkToItself.get( "rel" ), is( "self" ) );
         assertThat( linkToItself.get( "type" ), is( "application/json" ) );
         assertThat( linkToItself.get( "title" ), is( "this document" ) );
@@ -185,8 +195,8 @@ public class JsonUtilsTest {
     public void testFindLinksWithoutRelOrType() {
         List<Map<String, Object>> links = jsonCollection.getList( "links" );
         Set<String> rels = new HashSet<>();
-        rels.add("self");
-        rels.add("alternate");
+        rels.add( "self" );
+        rels.add( "alternate" );
         List<String> linksWithoutRelOrType = findLinksWithoutRelOrType( links, rels );
 
         assertThat( linksWithoutRelOrType.size(), is( 0 ) );
@@ -243,6 +253,16 @@ public class JsonUtilsTest {
 
         assertThat( numberOfAllFeatures, is( 25 ) );
     }
+
+    @Test
+    public void testParseFeatureGeometry()
+                            throws Exception {
+        List<Map<String, Object>> features = jsonCollectionItem.getList( "features" );
+        Map<String, Object> firstFeature = features.get( 0 );
+        Geometry geometry = parseFeatureGeometry( firstFeature, DEFAULT_CRS );
+        assertThat( geometry, instanceOf( MultiPolygon.class ) );
+    }
+
     private void prepareJadler() {
         InputStream item1_10 = getClass().getResourceAsStream( "items_1-10.json" );
         onRequest().havingParameter( "startindex", nullValue() ).respond().withBody( item1_10 );
@@ -254,8 +274,8 @@ public class JsonUtilsTest {
         onRequest().havingParameterEqualTo( "startindex", "20" ).respond().withBody( item21_30 );
 
         InputStream item31_40 = getClass().getResourceAsStream( "items_31-40.json" );
-        onRequest().havingParameter( "startindex",
-                                     allOf( notNullValue(), not( hasItems( "10" ) ), not( hasItems( "20" ) ) ) ).respond().withBody( item31_40 );
+        onRequest().havingParameter( "startindex", allOf( notNullValue(), not( hasItems( "10" ) ),
+                                                          not( hasItems( "20" ) ) ) ).respond().withBody( item31_40 );
     }
 
 }

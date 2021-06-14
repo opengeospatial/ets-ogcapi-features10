@@ -11,6 +11,10 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlFo
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.MultiKeyMap;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
@@ -42,6 +46,8 @@ import io.restassured.response.Response;
  */
 public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
 
+    private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
+
     /**
      * Test: transformed geometries in the path /collections/{collectionId}/items
      *
@@ -52,7 +58,8 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
-    public void verifyFeaturesPathGeometriesDefaultCrs( String collectionId, JsonPath collection ) {
+    public void verifyFeaturesPathGeometriesDefaultCrs( String collectionId, JsonPath collection )
+                            throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
@@ -73,7 +80,9 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> features = jsonPath.getList( "features" );
         for ( Map<String, Object> feature : features ) {
-            // TODO: parse geometry and store collectionId, CRS and Geometry
+            String featureId = (String) feature.get( "id" );
+            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
+            collectionIdAndFeatureIdToGeometry.put( collectionId, featureId, geometry );
         }
     }
 
@@ -89,7 +98,8 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs")
-    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection, String crs ) {
+    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection, String crs )
+                            throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
@@ -99,7 +109,15 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
                                                                       crs ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
 
-        // TODO: assert that geometries are correctly transformed, use stored geometries
+        JsonPath jsonPath = response.jsonPath();
+        List<Map<String, Object>> features = jsonPath.getList( "features" );
+        for ( Map<String, Object> feature : features ) {
+            String featureId = (String) feature.get( "id" );
+            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
+            Geometry geometryInDefaultCrs = (Geometry) collectionIdAndFeatureIdToGeometry.get( collectionId,
+                                                                                               featureId );
+            // TODO: assert that geometries are correctly transformed
+        }
     }
 
 }
