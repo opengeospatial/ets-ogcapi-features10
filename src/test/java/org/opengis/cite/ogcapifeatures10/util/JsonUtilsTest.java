@@ -28,6 +28,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsDate;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseFeatureGeometry;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseFeatureId;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSridFromCrs;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseTemporalExtent;
 
 import java.io.InputStream;
@@ -261,6 +262,27 @@ public class JsonUtilsTest {
         Map<String, Object> firstFeature = features.get( 0 );
         Geometry geometry = parseFeatureGeometry( firstFeature, DEFAULT_CRS );
         assertThat( geometry, instanceOf( MultiPolygon.class ) );
+    }
+
+    @Test
+    public void testParseSridFromCrs_CRS84()
+                            throws Exception {
+        int srid = parseSridFromCrs( DEFAULT_CRS );
+        assertThat( srid, is( 4326 ) );
+    }
+
+    @Test
+    public void testParseSridFromCrs_HTTP()
+                            throws Exception {
+        int srid = parseSridFromCrs( "http://www.opengis.net/def/crs/EPSG/0/3163" );
+        assertThat( srid, is( 3163 ) );
+    }
+
+    @Test
+    public void testParseSridFromCrs_URN()
+                            throws Exception {
+        int srid = parseSridFromCrs( "urn:ogc:def:crs:EPSG::3163" );
+        assertThat( srid, is( 3163 ) );
     }
 
     private void prepareJadler() {

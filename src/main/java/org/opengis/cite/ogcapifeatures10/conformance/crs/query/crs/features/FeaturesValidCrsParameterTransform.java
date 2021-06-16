@@ -80,7 +80,7 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> features = jsonPath.getList( "features" );
         for ( Map<String, Object> feature : features ) {
-            String featureId = (String) feature.get( "id" );
+            String featureId = feature.get( "id" ).toString();
             Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
             collectionIdAndFeatureIdToGeometry.put( collectionId, featureId, geometry );
         }
@@ -112,7 +112,7 @@ public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> features = jsonPath.getList( "features" );
         for ( Map<String, Object> feature : features ) {
-            String featureId = (String) feature.get( "id" );
+            String featureId = feature.get( "id" ).toString();
             Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
             Geometry geometryInDefaultCrs = (Geometry) collectionIdAndFeatureIdToGeometry.get( collectionId,
                                                                                                featureId );
