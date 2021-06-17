@@ -29,6 +29,7 @@
       <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.discovery" />
       <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features" />
       <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs" />
     </packages>
   </test>
 

@@ -37,6 +37,19 @@ public class JsonUtils {
     }
 
     /**
+     * Parse value ass string.
+     * 
+     * @param value
+     *            to parse, may be <code>null</code>
+     * @return the value as string, <code>null</code> if the passed value was <code>null</code>
+     */
+    public static String parseAsString( Object value ) {
+        if ( value == null )
+            return null;
+        return value.toString();
+    }
+    
+    /**
      * Parses the id of the first feature from the passed json.
      * 
      * @param collectionItemJson
@@ -181,7 +194,7 @@ public class JsonUtils {
 
     private static BBox parseBbox( List<Object> coords, Map<String, Object> spatial ) {
         if ( coords.size() == 4 ) {
-            String crs = parseValueAsString( spatial.get( "crs" ) );
+            String crs = parseAsString( spatial.get( "crs" ) );
             double minX = parseValueAsDouble( coords.get( 0 ) );
             double minY = parseValueAsDouble( coords.get( 1 ) );
             double maxX = parseValueAsDouble( coords.get( 2 ) );
@@ -658,11 +671,4 @@ public class JsonUtils {
             return Double.parseDouble( value.toString() );
         }
     }
-
-    private static String parseValueAsString( Object value ) {
-        if ( value == null )
-            return null;
-        return value.toString();
-    }
-
 }
