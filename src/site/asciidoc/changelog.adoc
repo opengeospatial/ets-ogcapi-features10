@@ -1,5 +1,15 @@
 = Release Notes OGC API - Features
 
+== 1.2 (2021-05-28)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/133[#133]: Wrong construction of feature path for implementations using file extensions
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/131[#131]: Failure to handle relative links
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/128[#128]: Add template to get an XML/JSON response via rest endpoint
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/144[#144]: Set Docker TEAM Engine version to 5.4.1
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/132[#132]: Confusing report of missing datetime parameter as time rather than datetime
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/134[#134]: Noisy many "Tests skipped" when only some of the collections support the Features API, timeStamps
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/129[#129]: fix typo in function name
+
 == 1.1 (2020-10-21)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/107[#107]: HTML report when running tests from command line
