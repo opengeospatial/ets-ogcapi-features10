@@ -3,6 +3,7 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.UNSUPPORTED_CRS;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
 import org.testng.SkipException;
@@ -32,8 +33,6 @@ import io.restassured.response.Response;
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeaturesInvalidCrsParameter extends AbstractFeaturesCrs {
-
-    public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 
     /**
      * Test: invalid CRS requesting /collections/{collectionId}/items

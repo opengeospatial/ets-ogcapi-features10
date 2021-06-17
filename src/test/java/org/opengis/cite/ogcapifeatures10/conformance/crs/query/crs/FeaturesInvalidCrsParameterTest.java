@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesInvalidCrsParameter.UNSUPPORTED_CRS;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.UNSUPPORTED_CRS;
 
 import java.net.URLEncoder;
 

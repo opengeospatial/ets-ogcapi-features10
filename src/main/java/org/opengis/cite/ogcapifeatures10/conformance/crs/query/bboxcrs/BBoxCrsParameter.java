@@ -1,6 +1,5 @@
 package org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs;
 
-import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsString;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
@@ -10,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.restassured.http.Method;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
+import io.restassured.http.Method;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 

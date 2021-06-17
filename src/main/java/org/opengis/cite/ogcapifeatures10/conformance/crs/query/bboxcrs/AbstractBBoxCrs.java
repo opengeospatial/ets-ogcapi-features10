@@ -18,9 +18,9 @@ import io.restassured.path.json.JsonPath;
  */
 public class AbstractBBoxCrs extends CommonFixture {
 
-    static final String BBOX_PARAM = "bbox";
+    public static final String BBOX_PARAM = "bbox";
 
-    static final String BBOX_CRS_PARAM = "bbox-crs";
+    public static final String BBOX_CRS_PARAM = "bbox-crs";
 
     @DataProvider(name = "collectionCrs")
     public Iterator<Object[]> collectionCrs( ITestContext testContext ) {
