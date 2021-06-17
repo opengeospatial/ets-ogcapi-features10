@@ -1,9 +1,14 @@
 package org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs;
 
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsString;
+import static org.testng.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
@@ -34,6 +39,30 @@ public class AbstractBBoxCrs extends CommonFixture {
             }
         }
         return collectionsData.iterator();
+    }
+
+    @DataProvider(name = "collectionDefaultCrs")
+    public Iterator<Object[]> collectionDefaultCrs( ITestContext testContext ) {
+        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            String collectionId = collection.getKey();
+            JsonPath json = collection.getValue();
+            // TODO: use correct default CRS!
+            collectionsData.add( new Object[] { collectionId, json, DEFAULT_CRS } );
+        }
+        return collectionsData.iterator();
+    }
+
+    void assertSameFeatures( JsonPath responseWithBBox, JsonPath responseWithoutBBox ) {
+        List<String> responseWithBBoxIds = parseFeatureIds( responseWithBBox );
+        List<String> responseWithoutBBoxIds = parseFeatureIds( responseWithoutBBox );
+        assertEquals( responseWithBBoxIds, responseWithoutBBoxIds );
+    }
+
+    private List<String> parseFeatureIds( JsonPath responseWithBBox ) {
+        List<Map<String, Object>> features = responseWithBBox.getList( "features" );
+        return features.stream().map( feature -> parseAsString( feature.get( "id" ) ) ).collect( Collectors.toList() );
     }
 
 }
