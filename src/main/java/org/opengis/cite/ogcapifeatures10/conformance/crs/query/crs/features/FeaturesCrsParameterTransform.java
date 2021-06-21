@@ -44,7 +44,7 @@ import io.restassured.response.Response;
  * 
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesValidCrsParameterTransform extends AbstractFeaturesCrs {
+public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
 
     private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
 

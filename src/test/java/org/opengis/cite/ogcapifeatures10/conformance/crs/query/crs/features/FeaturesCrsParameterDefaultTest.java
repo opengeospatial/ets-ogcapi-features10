@@ -22,7 +22,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesDefaultCrsParameterTest {
+public class FeaturesCrsParameterDefaultTest {
 
     private static ITestContext testContext;
 
@@ -49,7 +49,7 @@ public class FeaturesDefaultCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeaturesDefaultCrsParameter featuresDefaultCrsParameter = new FeaturesDefaultCrsParameter();
+        FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
         featuresDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
@@ -59,7 +59,7 @@ public class FeaturesDefaultCrsParameterTest {
     @Test(expected = AssertionError.class)
     public void test_unexpectedHeader() {
         prepareJadlerContentCrsHeaderUnexpected();
-        FeaturesDefaultCrsParameter featuresDefaultCrsParameter = new FeaturesDefaultCrsParameter();
+        FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
         featuresDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
@@ -67,7 +67,7 @@ public class FeaturesDefaultCrsParameterTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesDefaultCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesCrsParameterDefaultTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {

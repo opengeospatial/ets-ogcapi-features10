@@ -22,7 +22,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesValidCrsParameterTest {
+public class FeaturesCrsParameterTest {
 
     private static ITestContext testContext;
 
@@ -49,7 +49,7 @@ public class FeaturesValidCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeaturesValidCrsParameter featuresValidCrsParameter = new FeaturesValidCrsParameter();
+        FeaturesCrsParameter featuresValidCrsParameter = new FeaturesCrsParameter();
         featuresValidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
@@ -57,7 +57,7 @@ public class FeaturesValidCrsParameterTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesValidCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {

@@ -32,7 +32,7 @@ import io.restassured.response.Response;
  * 
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesInvalidCrsParameter extends AbstractFeaturesCrs {
+public class FeaturesCrsParameterInvalid extends AbstractFeaturesCrs {
 
     /**
      * Test: invalid CRS requesting /collections/{collectionId}/items

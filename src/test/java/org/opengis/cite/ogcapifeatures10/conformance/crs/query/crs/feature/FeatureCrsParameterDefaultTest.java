@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesInvalidCrsParameterTest;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesCrsParameterInvalidTest;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -23,7 +23,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureDefaultCrsParameterTest {
+public class FeatureCrsParameterDefaultTest {
 
     private static ITestContext testContext;
 
@@ -50,7 +50,7 @@ public class FeatureDefaultCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeatureDefaultCrsParameter featureDefaultCrsParameter = new FeatureDefaultCrsParameter();
+        FeatureCrsParameterDefault featureDefaultCrsParameter = new FeatureCrsParameterDefault();
         featureDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
@@ -60,7 +60,7 @@ public class FeatureDefaultCrsParameterTest {
     @Test(expected = AssertionError.class)
     public void test_unexpectedHeader() {
         prepareJadlerContentCrsHeaderUnexpected();
-        FeatureDefaultCrsParameter featureDefaultCrsParameter = new FeatureDefaultCrsParameter();
+        FeatureCrsParameterDefault featureDefaultCrsParameter = new FeatureCrsParameterDefault();
         featureDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
@@ -68,7 +68,7 @@ public class FeatureDefaultCrsParameterTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesCrsParameterInvalidTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {
