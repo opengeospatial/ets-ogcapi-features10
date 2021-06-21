@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
@@ -14,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesDefaultCrsParameter;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -68,7 +67,7 @@ public class FeaturesDefaultCrsParameterTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesDefaultCrsParameterTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesDefaultCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {

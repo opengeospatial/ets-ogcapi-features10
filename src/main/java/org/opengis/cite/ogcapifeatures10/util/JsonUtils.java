@@ -19,14 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
 import org.opengis.cite.ogcapifeatures10.exception.UnknownCrsException;
+
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -48,7 +49,7 @@ public class JsonUtils {
             return null;
         return value.toString();
     }
-    
+
     /**
      * Parses the id of the first feature from the passed json.
      * 
@@ -528,6 +529,7 @@ public class JsonUtils {
      *            the crs of the geometry, may be <code>null</code>
      * @return the parsed geometry, <code>null</code> if the feature has no geometry property
      * @throws ParseException
+     *             if the geometry could not be parsed
      */
     public static Geometry parseFeatureGeometry( Map<String, Object> feature, String crs )
                             throws ParseException {

@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature;
 
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
@@ -14,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesValidCrsParameter;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -23,7 +22,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesValidCrsParameterTest {
+public class FeatureValidCrsParameterTest {
 
     private static ITestContext testContext;
 
@@ -50,22 +49,22 @@ public class FeaturesValidCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeaturesValidCrsParameter featuresValidCrsParameter = new FeaturesValidCrsParameter();
-        featuresValidCrsParameter.initCommonFixture( testContext );
+        FeatureValidCrsParameter featureValidCrsParameter = new FeatureValidCrsParameter();
+        featureValidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featuresValidCrsParameter.verifyFeaturesPathCrsHeader( "flurstueck", collection, DEFAULT_CRS );
+        featureValidCrsParameter.verifyFeaturePathCrsHeader( "flurstueck", collection, "testId", DEFAULT_CRS );
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesValidCrsParameterTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeatureValidCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {
-        InputStream flurstueckItems = getClass().getResourceAsStream( "../../../core/collections/collectionItems-flurstueck.json" );
+        InputStream flurstueckItem = getClass().getResourceAsStream( "../../../../core/collections/collectionItem1-flurstueck.json" );
         String expectedHeader = "<" + DEFAULT_CRS + ">";
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).respond().withBody( flurstueckItems ).withHeader( "Content-Crs",
-                                                                                                                               expectedHeader );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).respond().withBody( flurstueckItem ).withHeader( "Content-Crs",
+                                                                                                                                     expectedHeader );
     }
 
 }

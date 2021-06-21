@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature;
 
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
@@ -15,7 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesInvalidCrsParameter;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features.FeaturesInvalidCrsParameterTest;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -24,7 +24,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeaturesInvalidCrsParameterTest {
+public class FeatureInvalidCrsParameterTest {
 
     private static ITestContext testContext;
 
@@ -51,34 +51,34 @@ public class FeaturesInvalidCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeaturesInvalidCrsParameter featuresInvalidCrsParameter = new FeaturesInvalidCrsParameter();
-        featuresInvalidCrsParameter.initCommonFixture( testContext );
+        FeatureInvalidCrsParameter featureInvalidCrsParameter = new FeatureInvalidCrsParameter();
+        featureInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
+        featureInvalidCrsParameter.verifyFeatureInvalidCrs( "flurstueck", collection, "testId" );
     }
 
     @Test(expected = AssertionError.class)
     public void test_unexpectedResponse() {
         prepareJadlerResponseStatusCode200();
-        FeaturesInvalidCrsParameter featuresInvalidCrsParameter = new FeaturesInvalidCrsParameter();
-        featuresInvalidCrsParameter.initCommonFixture( testContext );
+        FeatureInvalidCrsParameter featureInvalidCrsParameter = new FeatureInvalidCrsParameter();
+        featureInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
+        featureInvalidCrsParameter.verifyFeatureInvalidCrs( "flurstueck", collection, "testId" );
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "crs="
-                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
+                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
     }
 
     private void prepareJadlerResponseStatusCode200() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "crs="
-                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
+                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
     }
 }

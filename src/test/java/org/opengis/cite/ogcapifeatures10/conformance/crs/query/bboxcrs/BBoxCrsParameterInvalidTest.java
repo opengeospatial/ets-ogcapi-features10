@@ -15,7 +15,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.FeaturesInvalidCrsParameterTest;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -69,7 +68,7 @@ public class BBoxCrsParameterInvalidTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( BBoxCrsParameterInvalidTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {

@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadlerListeningOn;
@@ -15,7 +15,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature.FeatureInvalidCrsParameter;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -24,7 +23,7 @@ import io.restassured.path.json.JsonPath;
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class FeatureInvalidCrsParameterTest {
+public class FeaturesInvalidCrsParameterTest {
 
     private static ITestContext testContext;
 
@@ -51,34 +50,34 @@ public class FeatureInvalidCrsParameterTest {
     @Test
     public void test() {
         prepareJadler();
-        FeatureInvalidCrsParameter featureInvalidCrsParameter = new FeatureInvalidCrsParameter();
-        featureInvalidCrsParameter.initCommonFixture( testContext );
+        FeaturesInvalidCrsParameter featuresInvalidCrsParameter = new FeaturesInvalidCrsParameter();
+        featuresInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featureInvalidCrsParameter.verifyFeatureInvalidCrs( "flurstueck", collection, "testId" );
+        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
     }
 
     @Test(expected = AssertionError.class)
     public void test_unexpectedResponse() {
         prepareJadlerResponseStatusCode200();
-        FeatureInvalidCrsParameter featureInvalidCrsParameter = new FeatureInvalidCrsParameter();
-        featureInvalidCrsParameter.initCommonFixture( testContext );
+        FeaturesInvalidCrsParameter featuresInvalidCrsParameter = new FeaturesInvalidCrsParameter();
+        featuresInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featureInvalidCrsParameter.verifyFeatureInvalidCrs( "flurstueck", collection, "testId" );
+        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( FeaturesInvalidCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
     }
 
     private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
-                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "crs="
+                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
     }
 
     private void prepareJadlerResponseStatusCode200() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
-                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "crs="
+                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
     }
 }
