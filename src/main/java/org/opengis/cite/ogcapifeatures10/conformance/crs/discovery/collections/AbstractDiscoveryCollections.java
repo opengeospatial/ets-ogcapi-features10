@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collections;
 
 import java.util.ArrayList;
 import java.util.Iterator;

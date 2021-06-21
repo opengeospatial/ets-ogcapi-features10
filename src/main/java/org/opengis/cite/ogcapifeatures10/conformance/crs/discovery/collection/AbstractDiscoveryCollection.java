@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collection;
 
 import io.restassured.path.json.JsonPath;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;

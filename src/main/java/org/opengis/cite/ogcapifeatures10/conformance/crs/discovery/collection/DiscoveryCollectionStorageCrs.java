@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collection;
 
 import java.util.List;
 

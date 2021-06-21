@@ -1,4 +1,4 @@
-package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery;
+package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collections;
 
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifier;
 
@@ -29,7 +29,7 @@ import io.restassured.path.json.JsonPath;
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class DiscoveryCollections extends AbstractDiscoveryCollections {
+public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
     /**
      * Test: crs property in the collections object in the path /collections
