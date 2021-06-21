@@ -83,12 +83,14 @@ public class EtsAssert {
      * @param valueToAssert
      *            list of CRS which should contain the default crs, never <code>null</code>
      * @param failureMsg
-     *            the message to throw in case of a failure, should not be <code>null</code>
+     * @return the default CRS
      */
-    public static void assertDefaultCrs( List<String> valueToAssert, String failureMsg ) {
-        if ( !valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS )
-             && !valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT ) )
-            throw new AssertionError( failureMsg );
+    public static String assertDefaultCrs( List<String> valueToAssert, String failureMsg ) {
+        if ( valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS ) )
+            return OgcApiFeatures10.DEFAULT_CRS;
+        if ( valueToAssert.contains( OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT ) )
+            return OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+        throw new AssertionError( failureMsg );
     }
 
     /**

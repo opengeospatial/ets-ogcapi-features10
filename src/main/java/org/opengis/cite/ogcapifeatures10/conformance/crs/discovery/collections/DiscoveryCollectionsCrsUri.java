@@ -41,7 +41,7 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
      */
     @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
                         + "crs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsCrsIdentifierOfCrsPrperty( TestPoint testPoint, JsonPath jsonPath ) {
+    public void verifyCollectionsCrsIdentifierOfCrsProperty( TestPoint testPoint, JsonPath jsonPath ) {
         List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
         for ( String crsValue : crs ) {
             assertValidCrsIdentifier( crsValue,

@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 import io.restassured.path.json.JsonPath;
@@ -27,14 +27,25 @@ public class AbstractBBoxCrs extends CommonFixture {
 
     public static final String BBOX_CRS_PARAM = "bbox-crs";
 
+    private Map<String, JsonPath> collectionsResponses;
+
+    private Map<String, List<String>> collectionIdToCrs;
+
+    private Map<String, String> collectionIdToFeatureId;
+
+    @BeforeClass
+    public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
+        this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
+        this.collectionIdToCrs = (Map<String, List<String>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
+    }
+
     @DataProvider(name = "collectionCrs")
     public Iterator<Object[]> collectionCrs( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();
             JsonPath json = collection.getValue();
-            for ( String crs : JsonUtils.parseAsList( "crs", json ) ) {
+            for ( String crs : collectionIdToCrs.get( collectionId ) ) {
                 collectionsData.add( new Object[] { collectionId, json, crs } );
             }
         }
@@ -43,7 +54,6 @@ public class AbstractBBoxCrs extends CommonFixture {
 
     @DataProvider(name = "collectionDefaultCrs")
     public Iterator<Object[]> collectionDefaultCrs( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();

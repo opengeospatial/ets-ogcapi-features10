@@ -18,7 +18,7 @@ public class AbstractDiscoveryCollection {
     @DataProvider(name = "collectionIdAndJson")
     public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
         Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute(
-                        SuiteAttribute.COLLECTION_TO_ID.getName() );
+                        SuiteAttribute.COLLECTION_BY_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );

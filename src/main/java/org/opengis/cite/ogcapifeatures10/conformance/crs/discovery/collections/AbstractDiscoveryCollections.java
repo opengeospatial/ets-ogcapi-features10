@@ -21,9 +21,12 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 
     private Map<TestPoint, JsonPath> collectionsResponses;
 
+    private List<Map<String, Object>> collections;
+
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.collectionsResponses = (Map<TestPoint, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS_RESPONSE.getName() );
+        this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
     }
 
     @DataProvider(name = "collectionsResponses")
@@ -40,7 +43,6 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
         // First test point is used! This may be simplified.
         TestPoint testPoint = collectionsResponses.keySet().stream().findFirst().get();
         JsonPath jsonPath = collectionsResponses.get( testPoint );
-        List<Map<String, Object>> collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map<String, Object> collection : collections ) {
             collectionsData.add( new Object[] { testPoint, jsonPath, collection } );

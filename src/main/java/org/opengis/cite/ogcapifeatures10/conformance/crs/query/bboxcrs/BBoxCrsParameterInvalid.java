@@ -42,7 +42,7 @@ public class BBoxCrsParameterInvalid extends CommonFixture {
 
     @DataProvider(name = "collectionIdAndJson")
     public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
+        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );
@@ -56,7 +56,7 @@ public class BBoxCrsParameterInvalid extends CommonFixture {
      * @param collection
      *            the /collection object, never <code>null</code>
      */
-    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 9 (Requirement /conf/crs/bbox-crs-parameter-invalid)", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
+    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 9 (Requirement /conf/crs/bbox-crs-parameter-invalid)", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyBboxCrsParameterInvalid( String collectionId, JsonPath collection ) {
         String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuredUrl == null )

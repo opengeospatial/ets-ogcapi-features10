@@ -60,9 +60,19 @@ public enum SuiteAttribute {
     COLLECTIONS( "collections", List.class ),
 
     /**
-     * Responses of resource /collection/{collectionId}, mapped to collectionId; Added during execution.
+     * collectionId mapped to response of resource /collection/{collectionId}; Added during execution.
      */
-    COLLECTION_TO_ID( "collectionToId", Map.class ),
+    COLLECTION_BY_ID( "collectionById", Map.class ),
+
+    /**
+     * collectionId mapped to parsed CRSs of resource /collection/{collectionId}; Added during execution.
+     */
+    COLLECTION_CRS_BY_ID( "collectionCrsById", Map.class ),
+
+    /**
+     * collectionId mapped to parsed default CRS of resource /collection/{collectionId}; Added during execution.
+     */
+    COLLECTION_DEFAULT_CRS_BY_ID( "collectionDefaultCrsById", Map.class ),
 
     /**
      * Collection names assigned to a feature id parsed from resource /collections/{name}/items; Added during execution.

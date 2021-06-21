@@ -49,7 +49,7 @@ public class FeaturesCrsParameter extends AbstractFeaturesCrs {
      *            the crs to test, never <code>null</code>
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-definition, /req/crs/fc-crs-valid-value B, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value, /req/crs/geojson), "
-                        + "Content-Crs header in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance")
+                        + "Content-Crs header in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeaturesPathCrsHeader( String collectionId, JsonPath collection, String crs ) {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )

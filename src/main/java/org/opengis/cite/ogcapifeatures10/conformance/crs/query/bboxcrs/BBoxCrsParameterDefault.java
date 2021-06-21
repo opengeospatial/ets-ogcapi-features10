@@ -34,7 +34,7 @@ public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
      * @param defaultCrs
      *            the defaultCrs of the collection, never <code>null</code>
      */
-    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 10 (Requirement /req/crs/fc-bbox-crs-default-value)", dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance")
+    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 10 (Requirement /req/crs/fc-bbox-crs-default-value)", dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyBboxCrsParameter( String collectionId, JsonPath collection, String defaultCrs ) {
         String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuredUrl == null )

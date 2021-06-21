@@ -59,7 +59,7 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
+                        + "Geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeaturesPathGeometriesDefaultCrs( String collectionId, JsonPath collection )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
@@ -101,7 +101,7 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs")
+                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs", priority = 1)
     public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection, String crs )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );

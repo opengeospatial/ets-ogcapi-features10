@@ -1,9 +1,11 @@
+import static org.hamcrest.CoreMatchers.is;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertCrsHeader;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifier;
 
 import java.util.Arrays;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
 import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
@@ -65,7 +67,9 @@ public class EtsAssertTest {
 
     @Test
     public void testAssertDefaultCrs() {
-        assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84", OgcApiFeatures10.DEFAULT_CRS ), "OK" );
+        String defaultCrs = assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84", OgcApiFeatures10.DEFAULT_CRS ),
+                                              "OK" );
+        Assert.assertThat( defaultCrs, is( OgcApiFeatures10.DEFAULT_CRS ) );
     }
 
     @Test(expected = AssertionError.class)

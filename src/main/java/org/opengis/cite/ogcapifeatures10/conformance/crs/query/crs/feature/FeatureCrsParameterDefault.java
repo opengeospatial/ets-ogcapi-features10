@@ -41,7 +41,7 @@ public class FeatureCrsParameterDefault extends AbstractFeatureCrs {
      *            id id of the feature, never <code>null</code>
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 6 (Requirement /req/crs/fc-crs-default-value, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value),  "
-                        + "Default CRS requesting path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance")
+                        + "Default CRS requesting path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeatureDefaultCrs( String collectionId, JsonPath collection, String featureId ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )

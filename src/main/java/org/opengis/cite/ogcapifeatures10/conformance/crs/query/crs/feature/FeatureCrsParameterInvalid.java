@@ -45,7 +45,7 @@ public class FeatureCrsParameterInvalid extends AbstractFeatureCrs {
      *            id id of the feature, never <code>null</code>
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-valid-value), "
-                        + "Invalid CRS requesting path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance")
+                        + "Invalid CRS requesting path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeatureInvalidCrs( String collectionId, JsonPath collection, String featureId ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )

@@ -35,7 +35,7 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
      * @param crs
      *            the crs to test, never <code>null</code>
      */
-    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)", dataProvider = "collectionCrs", dependsOnGroups = "crs-conformance")
+    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)", dataProvider = "collectionCrs", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyBboxCrsParameter( String collectionId, JsonPath collection, String crs ) {
         String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuredUrl == null )

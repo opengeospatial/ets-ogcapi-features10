@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
-import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 import io.restassured.path.json.JsonPath;
@@ -18,9 +18,18 @@ import io.restassured.path.json.JsonPath;
  */
 public class AbstractFeaturesCrs extends CommonFixture {
 
+    private Map<String, JsonPath> collectionsResponses;
+
+    private Map<String, List<String>> collectionIdToCrs;
+
+    @BeforeClass
+    public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
+        this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
+        this.collectionIdToCrs = (Map<String, List<String>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
+    }
+
     @DataProvider(name = "collectionIdAndJson")
     public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();
@@ -32,12 +41,11 @@ public class AbstractFeaturesCrs extends CommonFixture {
 
     @DataProvider(name = "collectionIdAndJsonAndCrs")
     public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_TO_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();
             JsonPath json = collection.getValue();
-            for ( String crs : JsonUtils.parseAsList( "crs", json ) ) {
+            for ( String crs : collectionIdToCrs.get( collectionId ) ) {
                 collectionsData.add( new Object[] { collectionId, json, crs } );
             }
         }

@@ -55,7 +55,7 @@ public class FeatureCollection extends CommonDataFixture {
                 collectionsResponses.put( collectionIdAndResponseEntry.getKey(), jsonPath );
             }
         }
-        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_TO_ID.getName(), collectionsResponses );
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_BY_ID.getName(), collectionsResponses );
     }
 
     /**
