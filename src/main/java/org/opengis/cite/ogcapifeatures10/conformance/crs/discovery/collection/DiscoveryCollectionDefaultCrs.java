@@ -41,7 +41,7 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
 
     @AfterClass
     public void storeCollectionInTestContext( ITestContext testContext ) {
-        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName(), collectionIdAndDefaultCrs );
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName(), collectionIdAndDefaultCrs );
     }
 
     /**
