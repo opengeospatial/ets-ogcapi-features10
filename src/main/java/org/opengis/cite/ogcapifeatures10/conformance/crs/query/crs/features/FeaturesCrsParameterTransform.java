@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
+import org.opengis.cite.ogcapifeatures10.util.GeometryTransformer;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
@@ -120,7 +121,11 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
             Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
             Geometry geometryInDefaultCrs = (Geometry) collectionIdAndFeatureIdToGeometry.get( collectionId,
                                                                                                featureId );
-            // TODO: assert that geometries are correctly transformed
+            // TODO: codes with correct authority
+            GeometryTransformer geometryTransformer = new GeometryTransformer( "EPSG:" + geometryInDefaultCrs.getSRID(),
+                                                                               "EPSG:4326" );
+            Geometry transformedGeometry = geometryTransformer.transform( geometry );
+            geometryInDefaultCrs.equalsExact( transformedGeometry, 0.001 );
         }
     }
 
