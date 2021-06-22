@@ -2,8 +2,6 @@ package org.opengis.cite.ogcapifeatures10.util;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.Method.GET;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 
 import java.net.URI;
@@ -23,7 +21,7 @@ import org.json.simple.JSONObject;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
-import org.opengis.cite.ogcapifeatures10.exception.UnknownCrsException;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -531,7 +529,7 @@ public class JsonUtils {
      * @throws ParseException
      *             if the geometry could not be parsed
      */
-    public static Geometry parseFeatureGeometry( Map<String, Object> feature, String crs )
+    public static Geometry parseFeatureGeometry( Map<String, Object> feature, CoordinateSystem crs )
                             throws ParseException {
         Map<String, Object> geometry = (Map<String, Object>) feature.get( "geometry" );
         if ( geometry == null )
@@ -540,36 +538,10 @@ public class JsonUtils {
         String geomAsString = jsonObject.toJSONString();
         GeoJsonReader geoJsonReader = new GeoJsonReader();
         Geometry parsedGeometry = geoJsonReader.read( geomAsString );
-        parsedGeometry.setSRID( parseSridFromCrs( crs ) );
+        parsedGeometry.setSRID( crs.getSrid() );
         return parsedGeometry;
     }
 
-    /**
-     * Parse the srid from the passed crs
-     * 
-     * @param crs
-     *            to parse, may be <code>null</code>
-     * @return the parsed srid, -1 if the crs is <code>null</code>
-     * @throws UnknownCrsException
-     *             if the srid could not be parsed
-     */
-    public static int parseSridFromCrs( String crs ) {
-        if ( crs == null )
-            return -1;
-        if ( DEFAULT_CRS.equals( crs ) || DEFAULT_CRS_WITH_HEIGHT.equals( crs ) )
-            return 4326;
-        try {
-            if ( crs.startsWith( "http://www.opengis.net/def/crs/" ) )
-                return Integer.parseInt( crs.substring( crs.lastIndexOf( "/" ) + 1 ) );
-            if ( crs.startsWith( "urn:ogc:def:crs:" ) )
-                return Integer.parseInt( crs.substring( crs.lastIndexOf( ":" ) + 1 ) );
-        } catch ( NumberFormatException e ) {
-            throw new UnknownCrsException( String.format( "Could not parse srid from crs '%s', crs is not supported.",
-                                                          crs ) );
-        }
-        throw new UnknownCrsException( String.format( "Could not parse srid from crs '%s', crs is not supported.",
-                                                      crs ) );
-    }
 
     private static String findFeaturesUrlForGeoJson( URI rootUri, List<Object> links ) {
         for ( Object linkObject : links ) {

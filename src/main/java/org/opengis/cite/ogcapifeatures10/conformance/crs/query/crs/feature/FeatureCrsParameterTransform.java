@@ -3,11 +3,12 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
@@ -67,7 +68,7 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
         }
         assertDefaultCrs( crsHeader,
                           String.format( "Feature response at '%s' does not provide default 'Content-Crs' header, was: '%s', expected: '%s' or '%s'",
-                                         featureUrl, crsHeader, DEFAULT_CRS, DEFAULT_CRS_WITH_HEIGHT ) );
+                                         featureUrl, crsHeader, DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
         String crs = crsHeader.substring( 1, crsHeader.length() - 1 );
 
         JsonPath jsonPath = response.jsonPath();
@@ -89,14 +90,14 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Transformed geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturePathGeometriesDefaultCrs", priority = 1)
     public void verifyFeaturePathTransformedGeometries( String collectionId, JsonPath collection, String featureId,
-                                                        String crs ) {
+                                                        CoordinateSystem crs ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
                                                     collectionId, GEOJSON_MIME_TYPE ) );
 
         Response response = init().baseUri( featureUrl ).queryParam( CRS_PARAMETER,
-                                                                     crs ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
+                                                                     crs.getCode() ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
         // TODO: assert that geometries are correctly transformed, use stored geometries
     }

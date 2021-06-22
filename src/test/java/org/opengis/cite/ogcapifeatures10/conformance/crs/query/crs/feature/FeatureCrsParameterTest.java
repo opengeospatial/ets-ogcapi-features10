@@ -62,7 +62,7 @@ public class FeatureCrsParameterTest {
 
     private void prepareJadler() {
         InputStream flurstueckItem = getClass().getResourceAsStream( "../../../../core/collections/collectionItem1-flurstueck.json" );
-        String expectedHeader = "<" + DEFAULT_CRS + ">";
+        String expectedHeader = DEFAULT_CRS.getAsHeaderValue();
         onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).respond().withBody( flurstueckItem ).withHeader( "Content-Crs",
                                                                                                                                      expectedHeader );
     }

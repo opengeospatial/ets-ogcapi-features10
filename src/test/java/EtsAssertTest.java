@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
 import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -37,22 +38,22 @@ public class EtsAssertTest {
 
     @Test
     public void testAssertValidCrsIdentifier_OGC_URL() {
-        assertValidCrsIdentifier( "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "OK" );
+        assertValidCrsIdentifier( new CoordinateSystem( "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ), "OK" );
     }
 
     @Test
     public void testAssertValidCrsIdentifier_OGC_URN() {
-        assertValidCrsIdentifier( "urn:ogc:def:crs:OGC:1.3:CRS84", "OK" );
+        assertValidCrsIdentifier( new CoordinateSystem( "urn:ogc:def:crs:OGC:1.3:CRS84" ), "OK" );
     }
 
     @Test
     public void testAssertValidCrsIdentifier_URL() {
-        assertValidCrsIdentifier( "http://www.test.de/crs/4326", "OK" );
+        assertValidCrsIdentifier( new CoordinateSystem( "http://www.test.de/crs/4326" ), "OK" );
     }
 
     @Test
     public void testAssertValidCrsIdentifier_URN() {
-        assertValidCrsIdentifier( "urn:test:crs:CRS84", "OK" );
+        assertValidCrsIdentifier( new CoordinateSystem( "urn:test:crs:CRS84" ), "OK" );
     }
 
     @Test(expected = AssertionError.class)
@@ -62,13 +63,14 @@ public class EtsAssertTest {
 
     @Test(expected = AssertionError.class)
     public void testAssertValidCrsIdentifier_empty() {
-        assertValidCrsIdentifier( "", "FAIlURE" );
+        assertValidCrsIdentifier( new CoordinateSystem( "" ), "FAIlURE" );
     }
 
     @Test
     public void testAssertDefaultCrs() {
-        String defaultCrs = assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84", OgcApiFeatures10.DEFAULT_CRS ),
-                                              "OK" );
+        CoordinateSystem defaultCrs = assertDefaultCrs( Arrays.asList( "urn:test:crs:CRS84",
+                                                                       OgcApiFeatures10.DEFAULT_CRS_CODE ),
+                                                        "OK" );
         Assert.assertThat( defaultCrs, is( OgcApiFeatures10.DEFAULT_CRS ) );
     }
 
@@ -80,18 +82,18 @@ public class EtsAssertTest {
     @Test
     public void testAssertCrsHeader() {
         assertCrsHeader( "<http://www.opengis.net/def/crs/OGC/1.3/CRS84>",
-                         "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "OK" );
+                         new CoordinateSystem( "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ), "OK" );
     }
 
     @Test(expected = AssertionError.class)
     public void testAssertCrsHeader_UnexpectedCode() {
-        assertCrsHeader( "<http://www.opengis.net/def/crs/OGC/0/25832>", "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
-                         "FAIlURE" );
+        assertCrsHeader( "<http://www.opengis.net/def/crs/OGC/0/25832>",
+                         new CoordinateSystem( "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ), "FAIlURE" );
     }
 
     @Test(expected = AssertionError.class)
     public void testAssertCrsHeader_MissingBracket() {
-        assertCrsHeader( "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
-                         "FAIlURE" );
+        assertCrsHeader( "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+                         new CoordinateSystem( "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ), "FAIlURE" );
     }
 }

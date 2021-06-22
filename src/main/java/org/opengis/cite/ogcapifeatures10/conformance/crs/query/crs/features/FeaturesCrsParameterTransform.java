@@ -3,8 +3,8 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.GeometryTransformer;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.SkipException;
@@ -77,14 +78,14 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
         }
         assertDefaultCrs( crsHeader,
                           String.format( "Features response at '%s' does not provide default 'Content-Crs' header, was: '%s', expected: '%s' or '%s'",
-                                         featuresUrl, crsHeader, DEFAULT_CRS, DEFAULT_CRS_WITH_HEIGHT ) );
+                                         featuresUrl, crsHeader, DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
         String crs = crsHeader.substring( 1, crsHeader.length() - 1 );
 
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> features = jsonPath.getList( "features" );
         for ( Map<String, Object> feature : features ) {
             String featureId = feature.get( "id" ).toString();
-            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
+            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, new CoordinateSystem( crs ) );
             collectionIdAndFeatureIdToGeometry.put( collectionId, featureId, geometry );
         }
     }
@@ -103,7 +104,8 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs", priority = 1)
-    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection, String crs )
+    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection,
+                                                         CoordinateSystem crs )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
@@ -111,7 +113,7 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
                                                     collectionId, GEOJSON_MIME_TYPE ) );
 
         Response response = init().baseUri( featuresUrl ).queryParam( CRS_PARAMETER,
-                                                                      crs ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
+                                                                      crs.getCode() ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
 
         JsonPath jsonPath = response.jsonPath();

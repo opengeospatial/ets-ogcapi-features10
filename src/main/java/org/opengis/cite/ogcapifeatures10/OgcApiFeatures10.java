@@ -1,5 +1,7 @@
 package org.opengis.cite.ogcapifeatures10;
 
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
+
 /**
  * Contains various constants pertaining to WFS 3.0 specification and related standards.
  *
@@ -16,9 +18,13 @@ public class OgcApiFeatures10 {
 
     /** Conformance class: CRS **/
 
-    public static final String DEFAULT_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_CRS_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-    public static final String DEFAULT_CRS_WITH_HEIGHT = "http://www.opengis.net/def/crs/OGC/1.3/CRS84h";
+    public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84h";
+
+    public static final CoordinateSystem DEFAULT_CRS = new CoordinateSystem( DEFAULT_CRS_CODE );
+
+    public static final CoordinateSystem DEFAULT_CRS_WITH_HEIGHT = new CoordinateSystem( DEFAULT_CRS_WITH_HEIGHT_CODE );
 
     public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 

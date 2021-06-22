@@ -6,6 +6,7 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.CRS_PARAMETER;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
@@ -50,14 +51,14 @@ public class FeaturesCrsParameter extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-definition, /req/crs/fc-crs-valid-value B, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value, /req/crs/geojson), "
                         + "Content-Crs header in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturesPathCrsHeader( String collectionId, JsonPath collection, String crs ) {
+    public void verifyFeaturesPathCrsHeader( String collectionId, JsonPath collection, CoordinateSystem crs ) {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
                                      + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
 
         Response response = init().baseUri( featuresUrl ).queryParam( CRS_PARAMETER,
-                                                                      crs ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
+                                                                      crs.getCode() ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
         String actualHeader = response.getHeader( "Content-Crs" );
         if ( actualHeader == null ) {

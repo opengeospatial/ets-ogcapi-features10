@@ -1,8 +1,8 @@
 package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collections;
 
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasAtLeastOneSpatialFeatureCollection;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
             List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
             assertDefaultCrs( crs,
                               String.format( "Collections path %s does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                             testPoint.getPath(), DEFAULT_CRS, DEFAULT_CRS_WITH_HEIGHT ) );
+                                             testPoint.getPath(), DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
         }
     }
 
@@ -77,8 +77,8 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
             } else {
                 assertDefaultCrs( crs,
                                   String.format( "Collection with id '%s' at collections path %s does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                                 collectionId, testPoint.getPath(), DEFAULT_CRS,
-                                                 DEFAULT_CRS_WITH_HEIGHT ) );
+                                                 collectionId, testPoint.getPath(), DEFAULT_CRS_CODE,
+                                                 DEFAULT_CRS_WITH_HEIGHT_CODE ) );
             }
         }
     }

@@ -1,8 +1,8 @@
 package org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collection;
 
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasAtLeastOneSpatialFeatureCollection;
 
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
@@ -37,11 +38,12 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
 
-    private Map<String, String> collectionIdAndDefaultCrs = new HashMap<>();
+    private Map<String, CoordinateSystem> collectionIdAndDefaultCrs = new HashMap<>();
 
     @AfterClass
     public void storeCollectionInTestContext( ITestContext testContext ) {
-        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName(), collectionIdAndDefaultCrs );
+        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName(),
+                                             collectionIdAndDefaultCrs );
     }
 
     /**
@@ -58,9 +60,10 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
         Object extent = collection.get( "extent" );
         if ( hasAtLeastOneSpatialFeatureCollection( extent ) ) {
             List<String> crs = JsonUtils.parseAsList( "crs", collection );
-            String defaultCrs = assertDefaultCrs( crs,
-                                                  String.format( "Collection with id '%s' does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                                                 collectionId, DEFAULT_CRS, DEFAULT_CRS_WITH_HEIGHT ) );
+            CoordinateSystem defaultCrs = assertDefaultCrs( crs,
+                                                            String.format( "Collection with id '%s' does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
+                                                                           collectionId, DEFAULT_CRS_CODE,
+                                                                           DEFAULT_CRS_WITH_HEIGHT_CODE ) );
             collectionIdAndDefaultCrs.put( collectionId, defaultCrs );
         }
     }

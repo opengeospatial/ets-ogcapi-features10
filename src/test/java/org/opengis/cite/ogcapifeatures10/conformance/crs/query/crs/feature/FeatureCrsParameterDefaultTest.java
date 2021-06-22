@@ -73,8 +73,7 @@ public class FeatureCrsParameterDefaultTest {
 
     private void prepareJadler() {
         onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( not( containsString( "crs=" ) ) ).respond().withHeader( "Content-Crs",
-                                                                                                                                                               "<" + DEFAULT_CRS
-                                                                                                                                                                              + ">" ).withStatus( 200 );
+                                                                                                                                                               DEFAULT_CRS.getAsHeaderValue() ).withStatus( 200 );
     }
 
     private void prepareJadlerContentCrsHeaderUnexpected() {

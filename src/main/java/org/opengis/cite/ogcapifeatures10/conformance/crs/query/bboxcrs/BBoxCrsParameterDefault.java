@@ -3,6 +3,7 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
 
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.SkipException;
@@ -35,7 +36,7 @@ public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
      *            the defaultCrs of the collection, never <code>null</code>
      */
     @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 10 (Requirement /req/crs/fc-bbox-crs-default-value)", dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyBboxCrsParameter( String collectionId, JsonPath collection, String defaultCrs ) {
+    public void verifyBboxCrsParameterDefault( String collectionId, JsonPath collection, CoordinateSystem defaultCrs ) {
         String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuredUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
@@ -47,8 +48,8 @@ public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
         String bboxParameterValue = transformedBbox.asQueryParameter();
 
         Response responseWithBBox = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
-                                                                         defaultCrs ).param( BBOX_PARAM,
-                                                                                             bboxParameterValue ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
+                                                                         defaultCrs.getCode() ).param( BBOX_PARAM,
+                                                                                                       bboxParameterValue ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
         responseWithBBox.then().statusCode( 200 );
 
         Response responseWithoutBBox = init().baseUri( featuredUrl ).param( BBOX_PARAM,
@@ -58,7 +59,7 @@ public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
         assertSameFeatures( responseWithBBox.jsonPath(), responseWithoutBBox.jsonPath() );
     }
 
-    private BBox transformBbox( BBox bbox, String targetCrs ) {
+    private BBox transformBbox( BBox bbox, CoordinateSystem targetCrs ) {
         // TODO: transform BBox to targetCrs
         return bbox;
     }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -20,14 +21,14 @@ public class AbstractFeatureCrs extends CommonFixture {
 
     private Map<String, JsonPath> collectionsResponses;
 
-    private Map<String, List<String>> collectionIdToCrs;
+    private Map<String, List<CoordinateSystem>> collectionIdToCrs;
 
     private Map<String, String> collectionIdToFeatureId;
 
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
-        this.collectionIdToCrs = (Map<String, List<String>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
+        this.collectionIdToCrs = (Map<String, List<CoordinateSystem>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
         this.collectionIdToFeatureId = (Map<String, String>) testContext.getSuite().getAttribute( SuiteAttribute.FEATUREIDS.getName() );
     }
 
@@ -40,7 +41,7 @@ public class AbstractFeatureCrs extends CommonFixture {
             if ( collectionIdToFeatureId != null )
                 featureId = collectionIdToFeatureId.get( collectionId );
             JsonPath json = collection.getValue();
-            for ( String crs : collectionIdToCrs.get( collectionId ) ) {
+            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
                 collectionsData.add( new Object[] { collectionId, json, featureId, crs } );
             }
         }

@@ -5,6 +5,7 @@ import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifi
 import java.util.List;
 import java.util.Map;
 
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.annotations.Test;
@@ -44,9 +45,11 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
     public void verifyCollectionsCrsIdentifierOfCrsProperty( TestPoint testPoint, JsonPath jsonPath ) {
         List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
         for ( String crsValue : crs ) {
-            assertValidCrsIdentifier( crsValue,
-                                      String.format( "Collections path %s contains invalid CRS identifier property 'crs': '%s'",
-                                                     testPoint.getPath(), crsValue ) );
+            if ( crsValue != null ) {
+                assertValidCrsIdentifier( new CoordinateSystem( crsValue ),
+                                          String.format( "Collections path %s contains invalid CRS identifier property 'crs': '%s'",
+                                                         testPoint.getPath(), crsValue ) );
+            }
         }
     }
 
@@ -61,11 +64,11 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
     @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
                         + "storageCrs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
     public void verifyCollectionsCrsIdentifierOfStorageCrs( TestPoint testPoint, JsonPath jsonPath ) {
-        List<String> crs = JsonUtils.parseAsList( "storageCrs", jsonPath );
-        for ( String crsValue : crs ) {
-            assertValidCrsIdentifier( crsValue,
+        String crs = JsonUtils.parseAsString( jsonPath.get( "storageCrs" ) );
+        if ( crs != null ) {
+            assertValidCrsIdentifier( new CoordinateSystem( crs ),
                                       String.format( "Collections path %s contains invalid CRS identifier property 'storageCrs': '%s'",
-                                                     testPoint.getPath(), crsValue ) );
+                                                     testPoint.getPath(), crs ) );
         }
     }
 
@@ -123,7 +126,7 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
         if ( "#/crs".equals( crsValue ) && collectionsHasCrsProperty ) {
             return;
         }
-        assertValidCrsIdentifier( crsValue,
+        assertValidCrsIdentifier( new CoordinateSystem( crsValue ),
                                   String.format( "Collection with id '%s' at collections path %s contains invalid CRS identifier property '%s': '%s'",
                                                  collectionId, testPoint.getPath(), propertyName, crsValue ) );
     }

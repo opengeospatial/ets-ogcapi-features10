@@ -2,8 +2,8 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrsHeader;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 
@@ -57,7 +57,8 @@ public class FeatureCrsParameterDefault extends AbstractFeatureCrs {
         }
         assertDefaultCrsHeader( actualHeader,
                                 String.format( "Feature response at '%s' does not provide default 'Content-Crs' header, was: '%s', expected: '%s' or '%s",
-                                               featureUrl, actualHeader, DEFAULT_CRS, DEFAULT_CRS_WITH_HEIGHT ) );
+                                               featureUrl, actualHeader, DEFAULT_CRS_CODE,
+                                               DEFAULT_CRS_WITH_HEIGHT_CODE ) );
     }
 
 }

@@ -8,7 +8,7 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
 
 import org.junit.After;
 import org.junit.Before;
@@ -72,8 +72,8 @@ public class FeaturesCrsParameterDefaultTest {
 
     private void prepareJadler() {
         onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( not( containsString( "crs=" ) ) ).respond().withHeader( "Content-Crs",
-                                                                                                                                                        "<" + DEFAULT_CRS
-                                                                                                                                                                       + ">" ).withStatus( 200 );
+                                                                                                                                                        "<" + DEFAULT_CRS_CODE
+                                                                                                                                                        + ">" ).withStatus( 200 );
     }
 
     private void prepareJadlerContentCrsHeaderUnexpected() {
