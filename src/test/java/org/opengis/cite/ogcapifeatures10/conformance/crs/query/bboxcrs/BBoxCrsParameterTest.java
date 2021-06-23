@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 
 import java.net.URLEncoder;
 
@@ -57,7 +58,7 @@ public class BBoxCrsParameterTest {
         bBoxCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832 );
+        bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832, DEFAULT_CRS );
     }
 
     @Test(expected = AssertionError.class)
@@ -67,7 +68,7 @@ public class BBoxCrsParameterTest {
         bBoxCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832 );
+        bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832, DEFAULT_CRS );
     }
 
     private static JsonPath prepareCollection() {
