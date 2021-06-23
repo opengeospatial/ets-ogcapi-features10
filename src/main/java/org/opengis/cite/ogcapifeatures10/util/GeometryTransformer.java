@@ -19,6 +19,7 @@ import org.locationtech.proj4j.CRSFactory;
 import org.locationtech.proj4j.CoordinateTransform;
 import org.locationtech.proj4j.CoordinateTransformFactory;
 import org.locationtech.proj4j.ProjCoordinate;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -29,11 +30,38 @@ public class GeometryTransformer {
 
     private final CoordinateTransform transformer;
 
-    public GeometryTransformer( String srcCrs, String targetCrs ) {
+    private final CoordinateSystem srcCrs;
+
+    private final CoordinateSystem targetCrs;
+
+    /**
+     * @param srcCrs
+     *            source crs, , never <code>null</code>
+     * @param targetCrs
+     *            target crs, , never <code>null</code>
+     */
+    public GeometryTransformer( CoordinateSystem srcCrs, CoordinateSystem targetCrs ) {
+        this.srcCrs = srcCrs;
+        this.targetCrs = targetCrs;
         CoordinateTransformFactory coordinateTransformFactory = new CoordinateTransformFactory();
         CRSFactory crsFactory = new CRSFactory();
-        this.transformer = coordinateTransformFactory.createTransform( crsFactory.createFromName( srcCrs ),
-                                                                       crsFactory.createFromName( targetCrs ) );
+        this.transformer = coordinateTransformFactory.createTransform( crsFactory.createFromName( srcCrs.getCodeWithAuthority() ),
+                                                                       crsFactory.createFromName( targetCrs.getCodeWithAuthority() ) );
+    }
+
+    /**
+     * @param bbox
+     *            the bbox to transform, never <code>null</code>
+     * @return the transformed bbox (or the same if srcCrs and targetCrs) are the same, never <code>null</code>
+     */
+    public BBox transform( BBox bbox ) {
+        if ( srcCrs.equals( targetCrs ) )
+            return bbox;
+        Coordinate min = new Coordinate( bbox.getMinX(), bbox.getMinY() );
+        Coordinate max = new Coordinate( bbox.getMaxX(), bbox.getMaxY() );
+        Coordinate transformedMin = transform( min );
+        Coordinate transformedMax = transform( max );
+        return new BBox( transformedMin.x, transformedMin.y, transformedMax.x, transformedMax.y, targetCrs );
     }
 
     public Geometry transform( Geometry geometryToTransform ) {

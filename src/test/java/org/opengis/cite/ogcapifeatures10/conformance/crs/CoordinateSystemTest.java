@@ -6,6 +6,7 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 
 import org.junit.Test;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
+import org.opengis.cite.ogcapifeatures10.exception.UnknownCrsException;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -13,23 +14,42 @@ import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSys
 public class CoordinateSystemTest {
 
     @Test
-    public void testSridFromCrs_CRS84()
-                            throws Exception {
+    public void testGetSrid_CRS84() {
         assertThat( DEFAULT_CRS.getSrid(), is( 4326 ) );
     }
 
     @Test
-    public void testSridFromCrs_HTTP()
-                            throws Exception {
+    public void testGetSrid_HTTP() {
         CoordinateSystem coordinateSystem = new CoordinateSystem( "http://www.opengis.net/def/crs/EPSG/0/3163" );
         assertThat( coordinateSystem.getSrid(), is( 3163 ) );
     }
 
     @Test
-    public void testSridFromCrs_URN()
-                            throws Exception {
+    public void testGetSrid_URN() {
         CoordinateSystem coordinateSystem = new CoordinateSystem( "urn:ogc:def:crs:EPSG::3163" );
         assertThat( coordinateSystem.getSrid(), is( 3163 ) );
     }
 
+    @Test
+    public void testGetCodeWithAuthority_CRS84() {
+        assertThat( DEFAULT_CRS.getCodeWithAuthority(), is( "EPSG:4326" ) );
+    }
+
+    @Test
+    public void testGetCodeWithAuthority_HTTP() {
+        CoordinateSystem coordinateSystem = new CoordinateSystem( "http://www.opengis.net/def/crs/EPSG/0/3163" );
+        assertThat( coordinateSystem.getCodeWithAuthority(), is( "EPSG:3163" ) );
+    }
+
+    @Test
+    public void testGetCodeWithAuthority_URN() {
+        CoordinateSystem coordinateSystem = new CoordinateSystem( "urn:ogc:def:crs:EPSG::3163" );
+        assertThat( coordinateSystem.getCodeWithAuthority(), is( "EPSG:3163" ) );
+    }
+
+    @Test(expected = UnknownCrsException.class)
+    public void testGetCodeWithAuthority_Unknown() {
+        CoordinateSystem coordinateSystem = new CoordinateSystem( "urn:io:crs:EPSG::3163" );
+        coordinateSystem.getCodeWithAuthority();
+    }
 }

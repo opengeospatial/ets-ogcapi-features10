@@ -5,13 +5,21 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExten
 
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
+import org.opengis.cite.ogcapifeatures10.util.GeometryTransformer;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
+import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.http.Method;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <pre>
@@ -27,6 +35,19 @@ import io.restassured.response.Response;
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class BBoxCrsParameter extends AbstractBBoxCrs {
+
+    @DataProvider(name = "collectionCrs")
+    public Iterator<Object[]> collectionCrs( ITestContext testContext ) {
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            String collectionId = collection.getKey();
+            JsonPath json = collection.getValue();
+            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                collectionsData.add( new Object[] { collectionId, json, crs } );
+            }
+        }
+        return collectionsData.iterator();
+    }
 
     /**
      * @param collectionId
@@ -45,7 +66,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
         BBox bbox = parseSpatialExtent( collection.get() );
         if ( bbox == null )
             throw new SkipException( "Collection with id " + collectionId + " has no spatial extent" );
-        BBox transformedBbox = transformBbox( bbox, crs );
+
+        GeometryTransformer geometryTransformer = new GeometryTransformer( bbox.getCrs(), crs );
+        BBox transformedBbox = geometryTransformer.transform( bbox );
         String bboxParameterValue = transformedBbox.asQueryParameter();
 
         Response responseWithBBox = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
@@ -57,11 +80,6 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
         responseWithoutBBox.then().statusCode( 200 );
 
         assertSameFeatures( responseWithBBox.jsonPath(), responseWithoutBBox.jsonPath() );
-    }
-
-    private BBox transformBbox( BBox bbox, CoordinateSystem targetCrs ) {
-        // TODO: transform BBox to targetCrs
-        return bbox;
     }
 
 }

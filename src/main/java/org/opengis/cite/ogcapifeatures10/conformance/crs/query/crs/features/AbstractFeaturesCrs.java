@@ -23,10 +23,13 @@ public class AbstractFeaturesCrs extends CommonFixture {
 
     private Map<String, List<CoordinateSystem>> collectionIdToCrs;
 
+    private Map<String, CoordinateSystem> collectionIdToDefaultCrs;
+
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
         this.collectionIdToCrs = (Map<String, List<CoordinateSystem>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
+        this.collectionIdToDefaultCrs = (Map<String, CoordinateSystem>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName() );
     }
 
     @DataProvider(name = "collectionIdAndJson")
@@ -48,6 +51,22 @@ public class AbstractFeaturesCrs extends CommonFixture {
             JsonPath json = collection.getValue();
             for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
                 collectionsData.add( new Object[] { collectionId, json, crs } );
+            }
+        }
+        return collectionsData.iterator();
+    }
+
+    @DataProvider(name = "collectionIdAndJsonAndCrsAndDefaultCrs")
+    public Iterator<Object[]> collectionIdAndJsonAndCrsAndDefaultCrs( ITestContext testContext ) {
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            String collectionId = collection.getKey();
+            JsonPath json = collection.getValue();
+            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+            if ( defaultCrs != null ) {
+                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                    collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
+                }
             }
         }
         return collectionsData.iterator();

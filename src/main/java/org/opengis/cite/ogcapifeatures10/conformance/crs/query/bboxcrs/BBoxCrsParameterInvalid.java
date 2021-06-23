@@ -2,8 +2,6 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs;
 
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.UNSUPPORTED_CRS;
-import static org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs.AbstractBBoxCrs.BBOX_CRS_PARAM;
-import static org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs.AbstractBBoxCrs.BBOX_PARAM;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
 
 import java.util.ArrayList;
@@ -11,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
-import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
@@ -36,13 +32,12 @@ import io.restassured.response.Response;
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public class BBoxCrsParameterInvalid extends CommonFixture {
+public class BBoxCrsParameterInvalid extends AbstractBBoxCrs {
 
     private static final BBox invalidBBox = new BBox( 5, 49, 6, 50 );
 
     @DataProvider(name = "collectionIdAndJson")
     public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );

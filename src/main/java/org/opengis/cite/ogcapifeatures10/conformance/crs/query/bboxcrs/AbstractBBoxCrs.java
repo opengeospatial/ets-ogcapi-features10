@@ -27,42 +27,17 @@ public class AbstractBBoxCrs extends CommonFixture {
 
     public static final String BBOX_CRS_PARAM = "bbox-crs";
 
-    private Map<String, JsonPath> collectionsResponses;
+    protected Map<String, JsonPath> collectionsResponses;
 
-    private Map<String, List<CoordinateSystem>> collectionIdToCrs;
+    protected Map<String, List<CoordinateSystem>> collectionIdToCrs;
 
-    private Map<String, CoordinateSystem> collectionIdToDefaultCrs;
+    protected Map<String, CoordinateSystem> collectionIdToDefaultCrs;
 
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
         this.collectionIdToCrs = (Map<String, List<CoordinateSystem>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
         this.collectionIdToDefaultCrs = (Map<String, CoordinateSystem>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName() );
-    }
-
-    @DataProvider(name = "collectionCrs")
-    public Iterator<Object[]> collectionCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                collectionsData.add( new Object[] { collectionId, json, crs } );
-            }
-        }
-        return collectionsData.iterator();
-    }
-
-    @DataProvider(name = "collectionDefaultCrs")
-    public Iterator<Object[]> collectionDefaultCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            collectionsData.add( new Object[] { collectionId, json, defaultCrs } );
-        }
-        return collectionsData.iterator();
     }
 
     void assertSameFeatures( JsonPath responseWithBBox, JsonPath responseWithoutBBox ) {

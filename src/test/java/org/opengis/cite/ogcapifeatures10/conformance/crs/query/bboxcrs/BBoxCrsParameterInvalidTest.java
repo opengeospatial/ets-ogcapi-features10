@@ -54,7 +54,7 @@ public class BBoxCrsParameterInvalidTest {
         bBoxCrsParameterInvalid.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        bBoxCrsParameterInvalid.verifyBboxCrsParameterInvalid( "flurstueck", collection );
+        bBoxCrsParameterInvalid.verifyBboxCrsParameterInvalid( "vineyards", collection );
     }
 
     @Test(expected = AssertionError.class)
@@ -64,20 +64,20 @@ public class BBoxCrsParameterInvalidTest {
         bBoxCrsParameterInvalid.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        bBoxCrsParameterInvalid.verifyBboxCrsParameterInvalid( "flurstueck", collection );
+        bBoxCrsParameterInvalid.verifyBboxCrsParameterInvalid( "vineyards", collection );
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( BBoxCrsParameterInvalidTest.class.getResourceAsStream( "../../../core/collections/collection-flurstueck.json" ) );
+        return new JsonPath( BBoxCrsParameterInvalidTest.class.getResourceAsStream( "collection-vineyards.json" ) );
     }
 
     private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
+                                                                                                               + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
     }
 
     private void prepareJadlerResponseStatusCode200() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                                + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
+                                                                                                               + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
     }
 }

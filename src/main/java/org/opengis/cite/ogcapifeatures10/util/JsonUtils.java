@@ -2,6 +2,7 @@ package org.opengis.cite.ogcapifeatures10.util;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 
 import java.net.URI;
@@ -193,7 +194,7 @@ public class JsonUtils {
 
     private static BBox parseBbox( List<Object> coords, Map<String, Object> spatial ) {
         if ( coords.size() == 4 ) {
-            String crs = parseAsString( spatial.get( "crs" ) );
+            CoordinateSystem crs = parseCrs( spatial );
             double minX = parseValueAsDouble( coords.get( 0 ) );
             double minY = parseValueAsDouble( coords.get( 1 ) );
             double maxX = parseValueAsDouble( coords.get( 2 ) );
@@ -204,6 +205,13 @@ public class JsonUtils {
                                                 + " coordinates is currently not supported" );
         }
         throw new IllegalArgumentException( "BBox with " + coords.size() + " coordinates is invalid" );
+    }
+
+    private static CoordinateSystem parseCrs( Map<String, Object> spatial ) {
+        String crs = parseAsString( spatial.get( "crs" ) );
+        if ( crs != null )
+            return new CoordinateSystem( crs );
+        return DEFAULT_CRS;
     }
 
     private static boolean containsMultipleBboxes( List<Object> bboxes ) {

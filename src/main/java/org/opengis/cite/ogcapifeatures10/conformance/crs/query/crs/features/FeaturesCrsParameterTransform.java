@@ -99,13 +99,15 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      *            the /collection object, never <code>null</code>
      * @param crs
      *            the crs to test, never <code>null</code>
+     * @param defaultCRS
+     *            the defaultCRS of the collection, never <code>null</code>
      * @throws ParseException
      *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs", priority = 1)
-    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection,
-                                                         CoordinateSystem crs )
+                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrsAndDefaultCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesPathGeometriesDefaultCrs", priority = 1)
+    public void verifyFeaturesPathTransformedGeometries( String collectionId, JsonPath collection, CoordinateSystem crs,
+                                                         CoordinateSystem defaultCRS )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
@@ -123,9 +125,7 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
             Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
             Geometry geometryInDefaultCrs = (Geometry) collectionIdAndFeatureIdToGeometry.get( collectionId,
                                                                                                featureId );
-            // TODO: codes with correct authority
-            GeometryTransformer geometryTransformer = new GeometryTransformer( "EPSG:" + geometryInDefaultCrs.getSRID(),
-                                                                               "EPSG:4326" );
+            GeometryTransformer geometryTransformer = new GeometryTransformer( crs, defaultCRS );
             Geometry transformedGeometry = geometryTransformer.transform( geometry );
             geometryInDefaultCrs.equalsExact( transformedGeometry, 0.001 );
         }

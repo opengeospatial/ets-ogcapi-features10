@@ -8,6 +8,8 @@ import org.opengis.cite.ogcapifeatures10.exception.UnknownCrsException;
 import org.opengis.cite.ogcapifeatures10.util.OgcNameValidator;
 import org.opengis.cite.ogcapifeatures10.util.UrnValidator;
 
+import java.util.Objects;
+
 /**
  * Encapsulates an CRS from
  * 
@@ -62,10 +64,21 @@ public class CoordinateSystem {
                                                       code ) );
     }
 
+    /**
+     * @return the code with the authority: EPSG:CODE, may be <code>null</code>
+     * @throws UnknownCrsException
+     *             if the crs is not a OGC URN (starting with urn:ogc:def:crs:epsg) or OGC http-URIs (starting with
+     *             http://www.opengis.net/def/crs/epsg) with EPSG auhority
+     */
     public String getCodeWithAuthority() {
         if ( isDefaultCrs() )
             return "EPSG:4326";
-        return "TODO";
+        if ( code.startsWith( "urn:ogc:def:crs:EPSG" ) || code.startsWith( "http://www.opengis.net/def/crs/EPSG" ) ) {
+            int srid = getSrid();
+            return String.format( "EPSG:%s", srid );
+        }
+        throw new UnknownCrsException( String.format( "CRS %s is not supported, only OGC URNs (starting with urn:ogc:def:crs:epsg) and OGC http-URIs (starting with http://www.opengis.net/def/crs/epsg) with EPSG auhority are supported.",
+                                                      code ) );
     }
 
     /**
@@ -93,6 +106,21 @@ public class CoordinateSystem {
             return assertValidOgcNameCrsIdentifier( code );
         }
         return false;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o )
+            return true;
+        if ( o == null || getClass() != o.getClass() )
+            return false;
+        CoordinateSystem that = (CoordinateSystem) o;
+        return code.equals( that.code );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( code );
     }
 
     private boolean assertValidHttpCrsIdentifier( String valueToAssert ) {
