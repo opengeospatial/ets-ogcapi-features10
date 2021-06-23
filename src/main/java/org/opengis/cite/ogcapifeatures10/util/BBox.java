@@ -20,6 +20,8 @@ public class BBox {
 
     private final double maxY;
 
+    private final String crs;
+
     /**
      * @param minX
      *            Lower left corner, coordinate axis 1
@@ -31,10 +33,27 @@ public class BBox {
      *            Upper right corner, coordinate axis 2
      */
     public BBox( double minX, double minY, double maxX, double maxY ) {
+        this( minX, minY, maxX, maxY, null );
+    }
+
+    /**
+     * @param minX
+     *            Lower left corner, coordinate axis 1
+     * @param minY
+     *            Lower left corner, coordinate axis 2
+     * @param maxX
+     *            Upper right corner, coordinate axis 1
+     * @param maxY
+     *            Upper right corner, coordinate axis 2
+     * @param crs
+     *            CRS of the bbox, may be <code>null</code>
+     */
+    public BBox( double minX, double minY, double maxX, double maxY, String crs ) {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
+        this.crs = crs;
     }
 
     /**
@@ -71,11 +90,17 @@ public class BBox {
         return Objects.hash( minX, minY, maxX, maxY );
     }
 
+    /**
+     * @return CRS of the bbox, may be <code>null</code>
+     */
+    public String getCrs() {
+        return crs;
+    }
+
     private DecimalFormat formatter() {
         NumberFormat nf = NumberFormat.getNumberInstance( Locale.ENGLISH );
         DecimalFormat df = (DecimalFormat) nf;
         df.applyPattern( PATTERN );
         return df;
     }
-
 }

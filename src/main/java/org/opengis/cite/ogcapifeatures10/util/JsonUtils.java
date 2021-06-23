@@ -145,20 +145,46 @@ public class JsonUtils {
         if ( extent == null || !( extent instanceof Map ) )
             return null;
         Object spatial = ( (Map<String, Object>) extent ).get( "spatial" );
-        if ( spatial == null || !( spatial instanceof List ) )
+        if ( spatial == null || !( spatial instanceof Map ) )
             return null;
-        List<Object> coords = (List<Object>) spatial;
+        Object bbox = ( (Map<String, Object>) spatial ).get( "bbox" );
+        if ( bbox == null || !( bbox instanceof List ) )
+            return null;
+        List<Object> bboxesOrCoordinates = (List<Object>) bbox;
+        if ( bboxesOrCoordinates.isEmpty() )
+            return null;
+        if ( containsMultipleBboxes( bboxesOrCoordinates ) ) {
+            if ( bboxesOrCoordinates.isEmpty() )
+                return null;
+            Object firstBbox = bboxesOrCoordinates.get( 0 );
+            if ( firstBbox == null || !( firstBbox instanceof List ) ) {
+                return null;
+            }
+            List<Object> coordinatesOfFirstBBox = (List<Object>) firstBbox;
+            return parseBbox( coordinatesOfFirstBBox, (Map<String, Object>) spatial );
+        } else {
+            return parseBbox( bboxesOrCoordinates, (Map<String, Object>) spatial );
+        }
+    }
+
+    private static BBox parseBbox( List<Object> coords, Map<String, Object> spatial ) {
         if ( coords.size() == 4 ) {
+            String crs = parseValueAsString( spatial.get( "crs" ) );
             double minX = parseValueAsDouble( coords.get( 0 ) );
             double minY = parseValueAsDouble( coords.get( 1 ) );
             double maxX = parseValueAsDouble( coords.get( 2 ) );
             double maxY = parseValueAsDouble( coords.get( 3 ) );
-            return new BBox( minX, minY, maxX, maxY );
+            return new BBox( minX, minY, maxX, maxY, crs );
         } else if ( coords.size() == 6 ) {
             throw new IllegalArgumentException( "BBox with " + coords.size()
                                                 + " coordinates is currently not supported" );
         }
         throw new IllegalArgumentException( "BBox with " + coords.size() + " coordinates is invalid" );
+    }
+
+    private static boolean containsMultipleBboxes( List<Object> bboxes ) {
+        Object first = bboxes.get( 0 );
+        return first instanceof List;
     }
 
     /**
@@ -373,16 +399,22 @@ public class JsonUtils {
         return false;
     }
 
-    private static double parseValueAsDouble( Object cords ) {
-        if ( cords instanceof Integer ) {
-            return ( (Integer) cords ).doubleValue();
-        } else if ( cords instanceof Float ) {
-            return ( (Float) cords ).doubleValue();
-        } else if ( cords instanceof Double ) {
-            return (Double) cords;
+    private static double parseValueAsDouble( Object value ) {
+        if ( value instanceof Integer ) {
+            return ( (Integer) value ).doubleValue();
+        } else if ( value instanceof Float ) {
+            return ( (Float) value ).doubleValue();
+        } else if ( value instanceof Double ) {
+            return (Double) value;
         } else {
-            return Double.parseDouble( cords.toString() );
+            return Double.parseDouble( value.toString() );
         }
+    }
+
+    private static String parseValueAsString( Object value ) {
+        if ( value == null )
+            return null;
+        return value.toString();
     }
 
 }
