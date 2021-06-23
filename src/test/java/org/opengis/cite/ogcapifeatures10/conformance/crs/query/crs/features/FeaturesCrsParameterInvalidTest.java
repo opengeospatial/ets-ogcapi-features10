@@ -54,7 +54,7 @@ public class FeaturesCrsParameterInvalidTest {
         featuresInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
+        featuresInvalidCrsParameter.verifyFeaturesCrsParameterInvalid( "flurstueck", collection );
     }
 
     @Test(expected = AssertionError.class)
@@ -64,7 +64,7 @@ public class FeaturesCrsParameterInvalidTest {
         featuresInvalidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featuresInvalidCrsParameter.verifyFeaturesInvalidCrs( "flurstueck", collection );
+        featuresInvalidCrsParameter.verifyFeaturesCrsParameterInvalid( "flurstueck", collection );
     }
 
     private static JsonPath prepareCollection() {

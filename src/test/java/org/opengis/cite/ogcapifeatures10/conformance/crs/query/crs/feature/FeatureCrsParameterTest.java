@@ -53,7 +53,7 @@ public class FeatureCrsParameterTest {
         featureValidCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featureValidCrsParameter.verifyFeaturePathCrsHeader( "flurstueck", collection, "testId", DEFAULT_CRS );
+        featureValidCrsParameter.verifyFeatureCrsParameter( "flurstueck", collection, "testId", DEFAULT_CRS );
     }
 
     private static JsonPath prepareCollection() {

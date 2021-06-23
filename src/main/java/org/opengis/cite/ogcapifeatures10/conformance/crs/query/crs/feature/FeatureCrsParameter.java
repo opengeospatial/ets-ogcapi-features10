@@ -53,7 +53,7 @@ public class FeatureCrsParameter extends AbstractFeatureCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-definition, /req/crs/fc-crs-valid-value B, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value, /req/crs/geojson), "
                         + "Content-Crs header in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturePathCrsHeader( String collectionId, JsonPath collection, String featureId, CoordinateSystem crs ) {
+    public void verifyFeatureCrsParameter( String collectionId, JsonPath collection, String featureId, CoordinateSystem crs ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId

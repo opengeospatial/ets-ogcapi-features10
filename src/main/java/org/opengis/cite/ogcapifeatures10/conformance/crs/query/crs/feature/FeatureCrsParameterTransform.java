@@ -53,7 +53,7 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturePathGeometriesDefaultCrs( String collectionId, JsonPath collection, String featureId ) {
+    public void verifyFeatureCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection, String featureId ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
@@ -88,9 +88,9 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
      *            the crs to test, never <code>null</code>
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Transformed geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturePathGeometriesDefaultCrs", priority = 1)
-    public void verifyFeaturePathTransformedGeometries( String collectionId, JsonPath collection, String featureId,
-                                                        CoordinateSystem crs ) {
+                        + "Transformed geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeatureCrsParameterTransformWithCrsParameter", priority = 1)
+    public void verifyFeatureCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection, String featureId,
+                                                                       CoordinateSystem crs ) {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",

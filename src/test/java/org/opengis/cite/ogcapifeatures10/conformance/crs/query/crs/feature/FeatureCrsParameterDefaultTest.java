@@ -54,7 +54,7 @@ public class FeatureCrsParameterDefaultTest {
         featureDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featureDefaultCrsParameter.verifyFeatureDefaultCrs( "flurstueck", collection, "testId" );
+        featureDefaultCrsParameter.verifyFeatureCrsParameterDefault( "flurstueck", collection, "testId" );
     }
 
     @Test(expected = AssertionError.class)
@@ -64,7 +64,7 @@ public class FeatureCrsParameterDefaultTest {
         featureDefaultCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
-        featureDefaultCrsParameter.verifyFeatureDefaultCrs( "flurstueck", collection, "testId" );
+        featureDefaultCrsParameter.verifyFeatureCrsParameterDefault( "flurstueck", collection, "testId" );
     }
 
     private static JsonPath prepareCollection() {

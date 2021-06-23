@@ -40,7 +40,7 @@ public class FeaturesCrsParameterDefault extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 6 (Requirement /req/crs/fc-crs-default-value, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value), "
                         + "Default CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturesDefaultCrs( String collectionId, JsonPath collection ) {
+    public void verifyFeaturesCrsParameterDefault( String collectionId, JsonPath collection ) {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
