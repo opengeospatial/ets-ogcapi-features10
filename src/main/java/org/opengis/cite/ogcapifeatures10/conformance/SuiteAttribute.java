@@ -35,11 +35,6 @@ public enum SuiteAttribute {
     NO_OF_COLLECTIONS( "noOfCollections", Integer.class ),
 
     /**
-     * The number of features to test.
-     */
-    NO_OF_FEATURES( "noOfFeatures", Integer.class ),
-
-    /**
      * Parsed OpenApi3 document resource /api; Added during execution.
      */
     API_MODEL( "apiModel", OpenApi3.class ),
