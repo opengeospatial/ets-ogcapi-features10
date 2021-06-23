@@ -19,33 +19,20 @@ import io.restassured.path.json.JsonPath;
  */
 public class AbstractFeatureCrs extends CommonFixture {
 
-    private Map<String, JsonPath> collectionsResponses;
+    protected Map<String, JsonPath> collectionsResponses;
 
-    private Map<String, List<CoordinateSystem>> collectionIdToCrs;
+    protected Map<String, List<CoordinateSystem>> collectionIdToCrs;
 
-    private Map<String, String> collectionIdToFeatureId;
+    protected Map<String, CoordinateSystem> collectionIdToDefaultCrs;
+
+    protected Map<String, String> collectionIdToFeatureId;
 
     @BeforeClass
     public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
         this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
         this.collectionIdToCrs = (Map<String, List<CoordinateSystem>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName() );
+        this.collectionIdToDefaultCrs = (Map<String, CoordinateSystem>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName() );
         this.collectionIdToFeatureId = (Map<String, String>) testContext.getSuite().getAttribute( SuiteAttribute.FEATUREIDS.getName() );
-    }
-
-    @DataProvider(name = "collectionFeatureIdCrs")
-    public Iterator<Object[]> collectionFeatureIdCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            String featureId = null;
-            if ( collectionIdToFeatureId != null )
-                featureId = collectionIdToFeatureId.get( collectionId );
-            JsonPath json = collection.getValue();
-            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                collectionsData.add( new Object[] { collectionId, json, featureId, crs } );
-            }
-        }
-        return collectionsData.iterator();
     }
 
     @DataProvider(name = "collectionFeatureId")

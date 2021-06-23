@@ -72,18 +72,18 @@ public class BBoxCrsParameterTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( BBoxCrsParameterTest.class.getResourceAsStream( "collection-vineyards.json" ) );
+        return new JsonPath( BBoxCrsParameterTest.class.getResourceAsStream( "../collection-vineyards.json" ) );
     }
 
     private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "collectionItems-vineyards.json" ) ).withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) ).withStatus( 200 );
         onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( EPSG_25832.getCode() ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "collectionItems-vineyards-25832.json" ) ).withStatus( 200 );
+                                                                                                               + URLEncoder.encode( EPSG_25832.getCode() ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "../collectionItems-vineyards-25832.json" ) ).withStatus( 200 );
     }
 
     private void prepareJadlerUnexpectedResponse() {
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "collectionItems-vineyards-offset-9.json" ) ).withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "../collectionItems-vineyards-offset-9.json" ) ).withStatus( 200 );
         onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( EPSG_25832.getCode() ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "collectionItems-vineyards-25832.json" ) ).withStatus( 200 );
+                                                                                                               + URLEncoder.encode( EPSG_25832.getCode() ) ) ).respond().withBody( BBoxCrsParameterTest.class.getResourceAsStream( "../collectionItems-vineyards-25832.json" ) ).withStatus( 200 );
     }
 }

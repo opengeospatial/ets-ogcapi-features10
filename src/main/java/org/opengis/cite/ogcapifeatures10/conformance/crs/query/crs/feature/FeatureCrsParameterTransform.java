@@ -8,8 +8,20 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WIT
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.map.MultiKeyMap;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
+import org.opengis.cite.ogcapifeatures10.util.GeometryTransformer;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
+import org.testng.ITestContext;
 import org.testng.SkipException;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -41,6 +53,23 @@ import io.restassured.response.Response;
  */
 public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
+    private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
+
+    @DataProvider(name = "collectionFeatureIdCrsAndDefaultCrs")
+    public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs( ITestContext testContext ) {
+        List<Object[]> collectionsData = new ArrayList<>();
+        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            String collectionId = collection.getKey();
+            String featureId = collectionIdToFeatureId.get( collectionId );
+            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+            JsonPath json = collection.getValue();
+            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                collectionsData.add( new Object[] { collectionId, json, featureId, crs, defaultCrs } );
+            }
+        }
+        return collectionsData.iterator();
+    }
+
     /**
      * Test: invalid CRS requesting /collections/{collectionId}/items
      *
@@ -50,10 +79,14 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
      *            the /collection object, never <code>null</code>
      * @param featureId
      *            id id of the feature, never <code>null</code>
+     * @throws ParseException
+     *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeatureCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection, String featureId ) {
+    public void verifyFeatureCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection,
+                                                                    String featureId )
+                            throws ParseException {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
@@ -71,8 +104,9 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
                                          featureUrl, crsHeader, DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
         String crs = crsHeader.substring( 1, crsHeader.length() - 1 );
 
-        JsonPath jsonPath = response.jsonPath();
-        // TODO: parse geometry and store collectionId, featureId, CRS and Geometry
+        Map<String, Object> feature = response.jsonPath().get();
+        Geometry geometry = JsonUtils.parseFeatureGeometry( feature, new CoordinateSystem( crs ) );
+        collectionIdAndFeatureIdToGeometry.put( collectionId, featureId, geometry );
     }
 
     /**
@@ -86,11 +120,17 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
      *            id id of the feature, never <code>null</code>
      * @param crs
      *            the crs to test, never <code>null</code>
+     * @param defaultCRS
+     *            the defaultCRS of the collection, never <code>null</code>
+     * @throws ParseException
+     *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Transformed geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeatureCrsParameterTransformWithCrsParameter", priority = 1)
-    public void verifyFeatureCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection, String featureId,
-                                                                       CoordinateSystem crs ) {
+                        + "Transformed geometries in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrsAndDefaultCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeatureCrsParameterTransformWithCrsParameter", priority = 1)
+    public void verifyFeatureCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection,
+                                                                       String featureId, CoordinateSystem crs,
+                                                                       CoordinateSystem defaultCRS )
+                            throws ParseException {
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
@@ -99,7 +139,12 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
         Response response = init().baseUri( featureUrl ).queryParam( CRS_PARAMETER,
                                                                      crs.getCode() ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
         response.then().statusCode( 200 );
-        // TODO: assert that geometries are correctly transformed, use stored geometries
+        Map<String, Object> feature = response.jsonPath().get();
+        Geometry geometry = JsonUtils.parseFeatureGeometry( feature, crs );
+        Geometry geometryInDefaultCrs = (Geometry) collectionIdAndFeatureIdToGeometry.get( collectionId, featureId );
+        GeometryTransformer geometryTransformer = new GeometryTransformer( crs, defaultCRS );
+        Geometry transformedGeometry = geometryTransformer.transform( geometry );
+        geometryInDefaultCrs.equalsExact( transformedGeometry, 0.001 );
     }
 
 }

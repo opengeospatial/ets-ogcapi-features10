@@ -62,7 +62,7 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
                         + "Geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturesCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection )
+    public void verifyFeaturesCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
@@ -105,9 +105,9 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
      *             if the geometry could not be parsed
      */
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
-                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrsAndDefaultCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesCrsParameterTransformWithCrsParameter", priority = 1)
-    public void verifyFeaturesCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection, CoordinateSystem crs,
-                                                                        CoordinateSystem defaultCRS )
+                        + "Transformed geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJsonAndCrsAndDefaultCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyFeaturesCrsParameterTransformWithoutCrsParameter", priority = 1)
+    public void verifyFeaturesCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection, CoordinateSystem crs,
+                                                                     CoordinateSystem defaultCRS )
                             throws ParseException {
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )

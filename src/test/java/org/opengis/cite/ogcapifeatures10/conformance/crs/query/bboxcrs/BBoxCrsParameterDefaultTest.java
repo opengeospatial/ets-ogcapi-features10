@@ -69,18 +69,18 @@ public class BBoxCrsParameterDefaultTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "collection-vineyards.json" ) );
+        return new JsonPath( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collection-vineyards.json" ) );
     }
 
     private void prepareJadler() {
         onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "collectionItems-vineyards.json" ) ).withStatus( 200 );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "collectionItems-vineyards.json" ) ).withStatus( 200 );
+                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) ).withStatus( 200 );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) ).withStatus( 200 );
     }
 
     private void prepareJadlerUnexpectedResponse() {
         onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "collectionItems-vineyards.json" ) );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "collectionItems-vineyards-offset-9.json" ) );
+                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) );
+        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards-offset-9.json" ) );
     }
 }

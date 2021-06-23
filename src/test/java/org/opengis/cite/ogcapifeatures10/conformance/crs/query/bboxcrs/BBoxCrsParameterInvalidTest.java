@@ -68,7 +68,7 @@ public class BBoxCrsParameterInvalidTest {
     }
 
     private static JsonPath prepareCollection() {
-        return new JsonPath( BBoxCrsParameterInvalidTest.class.getResourceAsStream( "collection-vineyards.json" ) );
+        return new JsonPath( BBoxCrsParameterInvalidTest.class.getResourceAsStream( "../collection-vineyards.json" ) );
     }
 
     private void prepareJadler() {
