@@ -58,6 +58,7 @@ public class BBoxCrsParameterTest {
         bBoxCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
+        bBoxCrsParameter.verifyBboxCrsParameterWithDefaultCrs( "vineyards", collection, DEFAULT_CRS );
         bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832, DEFAULT_CRS );
     }
 
@@ -68,6 +69,7 @@ public class BBoxCrsParameterTest {
         bBoxCrsParameter.initCommonFixture( testContext );
 
         JsonPath collection = prepareCollection();
+        bBoxCrsParameter.verifyBboxCrsParameterWithDefaultCrs( "vineyards", collection, DEFAULT_CRS );
         bBoxCrsParameter.verifyBboxCrsParameter( "vineyards", collection, EPSG_25832, DEFAULT_CRS );
     }
 
