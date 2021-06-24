@@ -12,8 +12,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.collectNumberOfAllReturnedFeatures;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
@@ -37,6 +40,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +55,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
 
 import io.restassured.path.json.JsonPath;
+import org.mockito.Mockito;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -243,6 +249,45 @@ public class JsonUtilsTest {
     }
 
     @Test
+    public void testFindFeatureUrlForGeoJson()
+                            throws Exception {
+        Map<String, Object> link = createItemsLinks( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items" );
+        JsonPath collection = Mockito.mock( JsonPath.class );
+        when( collection.get( "links" ) ).thenReturn( Collections.singletonList( link ) );
+        URI rootUri = new URI( "http://localhost:8090/rest/services" );
+        String featuresUrlForGeoJson = findFeatureUrlForGeoJson( rootUri, collection, "testId" );
+
+        assertThat( featuresUrlForGeoJson,
+                    is( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items/testId" ) );
+    }
+
+    @Test
+    public void testFindFeatureUrlForGeoJson_withParam()
+                            throws Exception {
+        Map<String, Object> link = createItemsLinks( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items?f=json" );
+        JsonPath collection = Mockito.mock( JsonPath.class );
+        when( collection.get( "links" ) ).thenReturn( Collections.singletonList( link ) );
+        URI rootUri = new URI( "http://localhost:8090/rest/services" );
+        String featuresUrlForGeoJson = findFeatureUrlForGeoJson( rootUri, collection, "testId" );
+
+        assertThat( featuresUrlForGeoJson,
+                    is( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items/testId" ) );
+    }
+
+    @Test
+    public void testFindFeatureUrlForGeoJson_withExtension()
+                            throws Exception {
+        Map<String, Object> link = createItemsLinks( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items.json" );
+        JsonPath collection = Mockito.mock( JsonPath.class );
+        when( collection.get( "links" ) ).thenReturn( Collections.singletonList( link ) );
+        URI rootUri = new URI( "http://localhost:8090/rest/services" );
+        String featuresUrlForGeoJson = findFeatureUrlForGeoJson( rootUri, collection, "testId" );
+
+        assertThat( featuresUrlForGeoJson,
+                    is( "https://test.service.de/ogcapi/datasets/kitaeinrichtung/items/testId.json" ) );
+    }
+
+    @Test
     public void testCollectNumberOfAllReturnedFeatures()
                             throws Exception {
         prepareJadler();
@@ -276,6 +321,14 @@ public class JsonUtilsTest {
         InputStream item31_40 = getClass().getResourceAsStream( "items_31-40.json" );
         onRequest().havingParameter( "startindex", allOf( notNullValue(), not( hasItems( "10" ) ),
                                                           not( hasItems( "20" ) ) ) ).respond().withBody( item31_40 );
+    }
+
+    private Map<String, Object> createItemsLinks( String href ) {
+        Map<String, Object> link = new HashMap<>();
+        link.put( "rel", "items" );
+        link.put( "type", GEOJSON_MIME_TYPE );
+        link.put( "href", href );
+        return link;
     }
 
 }
