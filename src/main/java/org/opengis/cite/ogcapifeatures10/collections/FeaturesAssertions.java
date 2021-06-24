@@ -7,6 +7,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.collectNumberOfAl
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.formatDate;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasProperty;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsDate;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsList;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -69,7 +70,7 @@ public class FeaturesAssertions {
                 return;
 
         int numberReturned = jsonPath.getInt( "numberReturned" );
-        int numberOfFeatures = jsonPath.getList( "features" ).size();
+        int numberOfFeatures = parseAsList( "features", jsonPath ).size();
         assertEquals( numberReturned, numberOfFeatures,
                       "Value of numberReturned (" + numberReturned
                                                         + ") does not match the number of features in the response ("

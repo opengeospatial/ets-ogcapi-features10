@@ -298,6 +298,40 @@ public class JsonUtils {
     }
 
     /**
+     * Retrieves the property values as list.
+     *
+     * @param propertyName
+     *            name of the property, never <code>null</code>
+     * @param jsonPath
+     *            the json document to retrieve properties from, never <code>null</code>
+     * @return the property values as list, may be empty but never <code>null</code>
+     */
+    public static List<String> parseAsList( String propertyName, JsonPath jsonPath ) {
+        Object value = jsonPath.get( propertyName );
+        if ( value == null )
+            return Collections.emptyList();
+        if ( value instanceof String )
+            return Collections.singletonList( (String) value );
+        return jsonPath.getList( propertyName );
+    }
+
+    /**
+     * Retrieves the property values as list.
+     *
+     * @param propertyName
+     *            name of the property, never <code>null</code>
+     * @param jsonPath
+     *            the json document to retrieve properties from, never <code>null</code>
+     * @return the property values as list, may be empty but never <code>null</code>
+     */
+    public static List<Map<String, Object>> parseAsListOfMaps( String propertyName, JsonPath jsonPath ) {
+        Object value = jsonPath.get( propertyName );
+        if ( value == null )
+            return Collections.emptyList();
+        return jsonPath.getList( propertyName );
+    }
+
+    /**
      * Collects the number of all returned features by iterating over all 'next' links and summarizing the size of
      * features in 'features' array property.
      * 
@@ -311,7 +345,7 @@ public class JsonUtils {
      */
     public static int collectNumberOfAllReturnedFeatures( JsonPath jsonPath, int maximumLimit )
                             throws URISyntaxException {
-        int numberOfAllReturnedFeatures = jsonPath.getList( "features" ).size();
+        int numberOfAllReturnedFeatures = parseAsList( "features", jsonPath ).size();
         Map<String, Object> nextLink = findLinkByRel( jsonPath.getList( "links" ), "next" );
         while ( nextLink != null ) {
             String nextUrl = (String) nextLink.get( "href" );
@@ -340,7 +374,7 @@ public class JsonUtils {
             response.then().statusCode( 200 );
 
             JsonPath nextJsonPath = response.jsonPath();
-            int features = nextJsonPath.getList( "features" ).size();
+            int features = parseAsList( "features", nextJsonPath ).size();
             if ( features > 0 ) {
                 numberOfAllReturnedFeatures += features;
                 nextLink = findLinkByRel( nextJsonPath.getList( "links" ), "next" );
