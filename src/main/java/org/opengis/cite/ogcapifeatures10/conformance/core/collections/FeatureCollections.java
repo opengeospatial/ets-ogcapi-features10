@@ -10,6 +10,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupp
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsListOfMaps;
 import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
@@ -123,7 +124,7 @@ public class FeatureCollections extends CommonDataFixture {
             throw new SkipException( "Could not find a response for test point " + testPoint );
 
         JsonPath jsonPath = response.jsonPath();
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = parseAsListOfMaps( "links", jsonPath );
 
         // Requirement 13 A (1): a link to this response document (relation: self)
         Map<String, Object> linkToSelf = findLinkByRel( links, "self" );
@@ -226,11 +227,11 @@ public class FeatureCollections extends CommonDataFixture {
             throw new SkipException( "Could not find a response for test point " + testPoint );
 
         JsonPath jsonPath = response.jsonPath();
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = parseAsListOfMaps( "links", jsonPath );
         boolean linksAreAvailable = links != null && !links.isEmpty();
         assertTrue( linksAreAvailable, "Feature Collections Metadata document does not contain links." );
 
-        List<Map<String, Object>> collections = jsonPath.getList( "collections" );
+        List<Map<String, Object>> collections = parseAsListOfMaps( "collections", jsonPath );
         boolean collectionssAreAvailable = collections != null && !collections.isEmpty();
         assertTrue( collectionssAreAvailable, "Feature Collections Metadata document does not contain collections." );
     }

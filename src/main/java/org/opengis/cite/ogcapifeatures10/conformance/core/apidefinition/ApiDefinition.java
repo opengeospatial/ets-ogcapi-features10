@@ -5,6 +5,7 @@ import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.OPEN_API_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.API_MODEL;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsListOfMaps;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -90,7 +91,7 @@ public class ApiDefinition extends CommonFixture {
     }
 
     private String parseApiUrl( JsonPath jsonPath ) {
-        for ( Object link : jsonPath.getList( "links" ) ) {
+        for ( Object link : parseAsListOfMaps( "links", jsonPath ) ) {
             Map<String, Object> linkMap = (Map<String, Object>) link;
             Object rel = linkMap.get( "rel" );
             Object type = linkMap.get( "type" );
