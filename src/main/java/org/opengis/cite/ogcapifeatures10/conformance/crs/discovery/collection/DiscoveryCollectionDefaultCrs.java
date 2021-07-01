@@ -54,7 +54,7 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
      * @param collection
      *            the /collection object, never <code>null</code>
      */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
                         + "crs property contains default crs in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
     public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, JsonPath collection ) {
         Object extent = collection.get( "extent" );

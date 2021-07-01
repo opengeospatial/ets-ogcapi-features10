@@ -38,7 +38,7 @@ public class JsonUtils {
 
     /**
      * Parse value ass string.
-     * 
+     *
      * @param value
      *            to parse, may be <code>null</code>
      * @return the value as string, <code>null</code> if the passed value was <code>null</code>
@@ -376,7 +376,7 @@ public class JsonUtils {
 
     /**
      * Retrieves the property values as list.
-     * 
+     *
      * @param propertyName
      *            name of the property, never <code>null</code>
      * @param jsonPath
@@ -394,7 +394,23 @@ public class JsonUtils {
 
     /**
      * Retrieves the property values as list.
-     * 
+     *
+     * @param propertyName
+     *            name of the property, never <code>null</code>
+     * @param jsonPath
+     *            the json document to retrieve properties from, never <code>null</code>
+     * @return the property values as list, may be empty but never <code>null</code>
+     */
+    public static List<Map<String, Object>> parseAsListOfMaps( String propertyName, JsonPath jsonPath ) {
+        Object value = jsonPath.get( propertyName );
+        if ( value == null )
+            return Collections.emptyList();
+        return jsonPath.getList( propertyName );
+    }
+
+    /**
+     * Retrieves the property values as list.
+     *
      * @param propertyName
      *            name of the property, never <code>null</code>
      * @param json
@@ -424,7 +440,7 @@ public class JsonUtils {
      */
     public static int collectNumberOfAllReturnedFeatures( JsonPath jsonPath, int maximumLimit )
                             throws URISyntaxException {
-        int numberOfAllReturnedFeatures = jsonPath.getList( "features" ).size();
+        int numberOfAllReturnedFeatures = parseAsList( "features", jsonPath ).size();
         Map<String, Object> nextLink = findLinkByRel( jsonPath.getList( "links" ), "next" );
         while ( nextLink != null ) {
             String nextUrl = (String) nextLink.get( "href" );
@@ -453,7 +469,7 @@ public class JsonUtils {
             response.then().statusCode( 200 );
 
             JsonPath nextJsonPath = response.jsonPath();
-            int features = nextJsonPath.getList( "features" ).size();
+            int features = parseAsList( "features", nextJsonPath ).size();
             if ( features > 0 ) {
                 numberOfAllReturnedFeatures += features;
                 nextLink = findLinkByRel( nextJsonPath.getList( "links" ), "next" );
@@ -480,7 +496,7 @@ public class JsonUtils {
 
     /**
      * Finds the URL to the resource /collections/{collectionId}/items from the path /collections
-     * 
+     *
      * @param rootUri
      *            never <code>null</code>
      * @param collection
@@ -528,7 +544,7 @@ public class JsonUtils {
 
     /**
      * Parse the geometry property as geometry.
-     * 
+     *
      * @param feature
      *            to parse, never <code>null</code>
      * @param crs

@@ -9,6 +9,7 @@ import static org.opengis.cite.ogcapifeatures10.conformance.core.collections.Fea
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsList;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -177,7 +178,7 @@ public class FeaturesLimit extends AbstractFeatures {
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
-        int numberOfFeatures = jsonPath.getList( "features" ).size();
+        int numberOfFeatures = parseAsList( "features", jsonPath ).size();
         int expectedLimit = limit > max ? max : limit;
         assertTrue( numberOfFeatures <= expectedLimit,
                     "Number of features for collection with name " + collectionId + " is unexpected (was "

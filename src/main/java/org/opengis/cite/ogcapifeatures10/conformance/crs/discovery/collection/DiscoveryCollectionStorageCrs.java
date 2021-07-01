@@ -32,7 +32,7 @@ public class DiscoveryCollectionStorageCrs extends AbstractDiscoveryCollection {
      * @param collection
      *            the /collection object, never <code>null</code>
      */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
+    @Test(description = "Implements A.1 Discovery, Abstract Test 3 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
                         + "storageCrs property in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
     public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, JsonPath collection ) {
         String storageCrs = collection.get( "storageCrs" );

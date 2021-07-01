@@ -8,6 +8,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupp
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutRelOrType;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsListOfMaps;
 import static org.testng.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class Feature extends CommonDataFixture {
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         JsonPath jsonPath = response.jsonPath();
-        List<Map<String, Object>> links = jsonPath.getList( "links" );
+        List<Map<String, Object>> links = parseAsListOfMaps( "links", jsonPath );
 
         // 1. a link to this response document (relation: self),
         Map<String, Object> linkToSelf = findLinkByRel( links, "self" );
