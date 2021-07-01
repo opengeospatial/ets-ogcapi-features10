@@ -65,6 +65,8 @@ public class GeometryTransformer {
     }
 
     public Geometry transform( Geometry geometryToTransform ) {
+        if ( geometryToTransform == null )
+            return null;
         if ( geometryToTransform instanceof Point ) {
             return transform( (Point) geometryToTransform );
         } else if ( geometryToTransform instanceof Polygon ) {
