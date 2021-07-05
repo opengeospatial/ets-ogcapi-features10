@@ -4,6 +4,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsString;
 import static org.testng.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,8 @@ public class AbstractBBoxCrs extends CommonFixture {
 
     private List<String> parseFeatureIds( JsonPath responseWithBBox ) {
         List<Map<String, Object>> features = responseWithBBox.getList( "features" );
+        if ( features == null )
+            return Collections.emptyList();
         return features.stream().map( feature -> parseAsString( feature.get( "id" ) ) ).collect( Collectors.toList() );
     }
 
