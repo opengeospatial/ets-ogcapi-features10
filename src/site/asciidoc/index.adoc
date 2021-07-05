@@ -29,7 +29,7 @@ There are some requirements the test suite expects to be satisfied by the servic
     - Feature collections and features must be available in GeoJSON.
 
 * CRS - Part 2:
-    - CRS definitions must start with `urn:ogc:def:crs:EPSG` or `http://www.opengis.net/def/crs/EPSG`.
+    - CRS definitions must start with `urn:ogc:def:crs:EPSG` or `http://www.opengis.net/def/crs/EPSG` (Tests of A.2.1. and A.2.2. of Abstract Test Suite).
 
 == Test suite structure
 
@@ -58,6 +58,10 @@ The general structure of the test suite is shown in Table 1.
 
 The Javadoc documentation provides more detailed information about the test 
 methods that constitute the suite.
+
+== Implementation details
+
+* Whenever features are tested by a single test, the number of features is limited to one.
 
 include::how-to-run-the-tests.adoc[]
 
