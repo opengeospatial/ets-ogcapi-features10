@@ -36,25 +36,6 @@ import io.restassured.path.json.JsonPath;
 public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections {
 
     /**
-     * Test: crs property in the collections object in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
-                        + "crs property contains default crs in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsPathCrsPropertyContainsDefaultCrs( TestPoint testPoint, JsonPath jsonPath ) {
-        if ( hasAtLeastOneSpatialFeatureCollection( jsonPath ) ) {
-            List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
-            assertDefaultCrs( crs,
-                              String.format( "Collections path %s does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                             testPoint.getPath(), DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
-        }
-    }
-
-    /**
      * Test: crs property in the collection objects in the path /collections
      *
      * @param testPoint
