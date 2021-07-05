@@ -118,8 +118,8 @@ public class GeometryTransformer {
     public MultiPoint transform( MultiPoint geometryToTransform ) {
         Point[] points = new Point[geometryToTransform.getNumGeometries()];
         for ( int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++ ) {
-            Geometry geoemtryN = geometryToTransform.getGeometryN( numGeometry );
-            points[numGeometry] = transform( (Point) geoemtryN );
+            Geometry geometryN = geometryToTransform.getGeometryN( numGeometry );
+            points[numGeometry] = transform( (Point) geometryN );
         }
         return geometryFactory.createMultiPoint( points );
     }
@@ -127,8 +127,8 @@ public class GeometryTransformer {
     public MultiLineString transform( MultiLineString geometryToTransform ) {
         LineString[] lineStrings = new LineString[geometryToTransform.getNumGeometries()];
         for ( int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++ ) {
-            Geometry geoemtryN = geometryToTransform.getGeometryN( numGeometry );
-            lineStrings[numGeometry] = transform( (LineString) geoemtryN );
+            Geometry geometryN = geometryToTransform.getGeometryN( numGeometry );
+            lineStrings[numGeometry] = transform( (LineString) geometryN );
         }
         return geometryFactory.createMultiLineString( lineStrings );
 
@@ -137,8 +137,8 @@ public class GeometryTransformer {
     public MultiPolygon transform( MultiPolygon geometryToTransform ) {
         Polygon[] polygons = new Polygon[geometryToTransform.getNumGeometries()];
         for ( int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++ ) {
-            Geometry geoemtryN = geometryToTransform.getGeometryN( numGeometry );
-            polygons[numGeometry] = transform( (Polygon) geoemtryN );
+            Geometry geometryN = geometryToTransform.getGeometryN( numGeometry );
+            polygons[numGeometry] = transform( (Polygon) geometryN );
         }
         return geometryFactory.createMultiPolygon( polygons );
     }

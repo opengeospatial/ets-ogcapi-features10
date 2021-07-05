@@ -124,11 +124,10 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
         BBox bbox = collectionIdToSpatialExtent.get( collectionId );
         GeometryTransformer geometryTransformer = new GeometryTransformer( bbox.getCrs(), crs );
         BBox transformedBbox = geometryTransformer.transform( bbox );
-        String bboxParameterValue = transformedBbox.asQueryParameter();
 
         Response response = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
-                                                                 crs.getCode() ).param( BBOX_PARAM,
-                                                                                        bboxParameterValue ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
+                                                                 transformedBbox.getCrs().getCode() ).param( BBOX_PARAM,
+                                                                                                             transformedBbox.asQueryParameter() ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
         response.then().statusCode( 200 );
 
         Response responseWithBBoxInDefaultCrs = collectionIdToResponseWithDefaultCRs.get( collectionId );

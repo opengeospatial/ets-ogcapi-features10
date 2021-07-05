@@ -15,7 +15,7 @@ public class CoordinateSystemTest {
 
     @Test
     public void testGetSrid_CRS84() {
-        assertThat( DEFAULT_CRS.getSrid(), is( 4326 ) );
+        assertThat( DEFAULT_CRS.getSrid(), is( 84 ) );
     }
 
     @Test
@@ -32,7 +32,7 @@ public class CoordinateSystemTest {
 
     @Test
     public void testGetCodeWithAuthority_CRS84() {
-        assertThat( DEFAULT_CRS.getCodeWithAuthority(), is( "EPSG:4326" ) );
+        assertThat( DEFAULT_CRS.getCodeWithAuthority(), is( "ogc:crs84" ) );
     }
 
     @Test
