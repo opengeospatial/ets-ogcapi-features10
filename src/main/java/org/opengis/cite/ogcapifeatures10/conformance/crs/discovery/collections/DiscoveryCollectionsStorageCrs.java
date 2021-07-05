@@ -27,29 +27,6 @@ import io.restassured.path.json.JsonPath;
 public class DiscoveryCollectionsStorageCrs extends AbstractDiscoveryCollections {
 
     /**
-     * Test: storageCrs property in the collections object in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
-                        + "storageCrs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsPathCrsPropertyContainsDefaultCrs( TestPoint testPoint, JsonPath jsonPath ) {
-        String storageCrs = jsonPath.get( "storageCrs" );
-        if ( storageCrs == null ) {
-            throw new SkipException( String.format( "Collections path %s does not specify a storageCrs",
-                                                    testPoint.getPath() ) );
-        }
-        List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
-        if ( !crs.contains( storageCrs ) ) {
-            throw new AssertionError( String.format( "Collections path %s specifies the storageCrs '%s' which is not declared as crs property",
-                                                     testPoint.getPath(), storageCrs ) );
-        }
-    }
-
-    /**
      * Test: storageCrs property in the collection objects in the path /collections
      *
      * @param testPoint
