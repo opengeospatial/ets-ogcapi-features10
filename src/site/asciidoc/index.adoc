@@ -9,7 +9,7 @@ listed below are covered by this test suite:
 
 * Core
     - The Core specifies requirements that all OGC API - Features instances have to fulfill.
-* CRS - Part 2
+* Coordinate Reference Systems by Reference
     - Optional conformance class to fulfill requirements of http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] specification.
 
 == Test requirements
@@ -28,7 +28,7 @@ There are some requirements the test suite expects to be satisfied by the servic
     - The feature collections metadata response and feature collection metadata responses must be available in JSON.
     - Feature collections and features must be available in GeoJSON.
 
-* CRS - Part 2:
+* Coordinate Reference Systems by Reference:
     - CRS definitions must start with `urn:ogc:def:crs:EPSG` or `http://www.opengis.net/def/crs/EPSG` (Tests of A.2.1. and A.2.2. of Abstract Test Suite).
 
 == Test suite structure
