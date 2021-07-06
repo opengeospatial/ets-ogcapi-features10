@@ -32,7 +32,7 @@ public class CoordinateSystemTest {
 
     @Test
     public void testGetCodeWithAuthority_CRS84() {
-        assertThat( DEFAULT_CRS.getCodeWithAuthority(), is( "ogc:crs84" ) );
+        assertThat( DEFAULT_CRS.getCodeWithAuthority(), is( "OGC:CRS84" ) );
     }
 
     @Test
