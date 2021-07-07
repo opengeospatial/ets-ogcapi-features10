@@ -3,12 +3,12 @@ package org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 
+import java.util.Objects;
+
 import org.apache.commons.validator.routines.UrlValidator;
 import org.opengis.cite.ogcapifeatures10.exception.UnknownCrsException;
 import org.opengis.cite.ogcapifeatures10.util.OgcNameValidator;
 import org.opengis.cite.ogcapifeatures10.util.UrnValidator;
-
-import java.util.Objects;
 
 /**
  * Encapsulates an CRS from
@@ -50,7 +50,7 @@ public class CoordinateSystem {
      */
     public int getSrid() {
         if ( isDefaultCrs() )
-            return 4326;
+            return 84;
         try {
             if ( code.startsWith( "http://www.opengis.net/def/crs/" ) )
                 return Integer.parseInt( code.substring( code.lastIndexOf( "/" ) + 1 ) );
@@ -72,7 +72,7 @@ public class CoordinateSystem {
      */
     public String getCodeWithAuthority() {
         if ( isDefaultCrs() )
-            return "EPSG:4326";
+            return "OGC:CRS84";
         if ( code.startsWith( "urn:ogc:def:crs:EPSG" ) || code.startsWith( "http://www.opengis.net/def/crs/EPSG" ) ) {
             int srid = getSrid();
             return String.format( "EPSG:%s", srid );
@@ -106,6 +106,11 @@ public class CoordinateSystem {
             return assertValidOgcNameCrsIdentifier( code );
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return code;
     }
 
     @Override

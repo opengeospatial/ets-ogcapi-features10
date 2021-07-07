@@ -42,7 +42,7 @@
             <p>The following conformance levels are defined:</p>
             <ul>
               <li>Core</li>
-              <li>CRS - Part 2</li>
+              <li>Coordinate Reference Systems by Reference</li>
             </ul>
           </div>
           <fieldset style="background:#ccffff">
