@@ -1,9 +1,13 @@
 package org.opengis.cite.ogcapifeatures10.util;
 
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
+
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -20,7 +24,7 @@ public class BBox {
 
     private final double maxY;
 
-    private final String crs;
+    private final CoordinateSystem crs;
 
     /**
      * @param minX
@@ -33,7 +37,7 @@ public class BBox {
      *            Upper right corner, coordinate axis 2
      */
     public BBox( double minX, double minY, double maxX, double maxY ) {
-        this( minX, minY, maxX, maxY, null );
+        this( minX, minY, maxX, maxY, DEFAULT_CRS );
     }
 
     /**
@@ -48,12 +52,47 @@ public class BBox {
      * @param crs
      *            CRS of the bbox, may be <code>null</code>
      */
-    public BBox( double minX, double minY, double maxX, double maxY, String crs ) {
+    public BBox( double minX, double minY, double maxX, double maxY, CoordinateSystem crs ) {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
         this.crs = crs;
+    }
+
+    /**
+     * @return Lower left corner, coordinate axis 1
+     */
+    public double getMinX() {
+        return minX;
+    }
+
+    /**
+     * @return Lower left corner, coordinate axis 2
+     */
+    public double getMinY() {
+        return minY;
+    }
+
+    /**
+     * @return Upper right corner, coordinate axis 1
+     */
+    public double getMaxX() {
+        return maxX;
+    }
+
+    /**
+     * @return Upper right corner, coordinate axis 2
+     */
+    public double getMaxY() {
+        return maxY;
+    }
+
+    /**
+     * @return CRS of the bbox, never <code>null</code>
+     */
+    public CoordinateSystem getCrs() {
+        return crs;
     }
 
     /**
@@ -88,13 +127,6 @@ public class BBox {
     @Override
     public int hashCode() {
         return Objects.hash( minX, minY, maxX, maxY );
-    }
-
-    /**
-     * @return CRS of the bbox, may be <code>null</code>
-     */
-    public String getCrs() {
-        return crs;
     }
 
     private DecimalFormat formatter() {

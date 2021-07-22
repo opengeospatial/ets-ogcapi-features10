@@ -2,13 +2,15 @@
 
 == Scope
 
-This executable test suite (ETS) verifies that an OGC API - Features instance conforms to http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] (OGC 17-069r3) and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
+This executable test suite (ETS) verifies that an OGC API - Features instance conforms to http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] (OGC 17-069r3), http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] (OGC 18-058) and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
 
 Several conformance classes are defined in the principal specifications. The ones
 listed below are covered by this test suite:
 
 * Core
     - The Core specifies requirements that all OGC API - Features instances have to fulfill.
+* Coordinate Reference Systems by Reference
+    - Optional conformance class to fulfill requirements of http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] specification.
 
 == Test requirements
 
@@ -19,11 +21,15 @@ conforming implementation.
 
 There are some requirements the test suite expects to be satisfied by the service under test:
 
-* The API landing page response must be available in JSON.
-* The API definition response must be available in OpenAPI 3.0.
-* The conformance classes response must be available in JSON.
-* The feature collections metadata response and feature collection metadata responses must be available in JSON.
-* Feature collections and features must be available in GeoJSON.
+* General:
+    - The API landing page response must be available in JSON.
+    - The API definition response must be available in OpenAPI 3.0.
+    - The conformance classes response must be available in JSON.
+    - The feature collections metadata response and feature collection metadata responses must be available in JSON.
+    - Feature collections and features must be available in GeoJSON.
+
+* Coordinate Reference Systems by Reference:
+    - CRS definitions must start with `urn:ogc:def:crs:EPSG` or `http://www.opengis.net/def/crs/EPSG` (Tests of A.2.1. and A.2.2. of Abstract Test Suite).
 
 == Test suite structure
 
@@ -40,15 +46,22 @@ The general structure of the test suite is shown in Table 1.
 
 |Core
 |
- * org.opengis.cite.ogcapifeatures10.general.*
- * org.opengis.cite.ogcapifeatures10.apidescription.*
- * org.opengis.cite.ogcapifeatures10.conformance.*
- * org.opengis.cite.ogcapifeatures10.collections.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.general.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.landingpage.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.apidescription.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.conformance.*
+ * org.opengis.cite.ogcapifeatures10.conformance.core.collections.*
+ * org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.*
+ * org.opengis.cite.ogcapifeatures10.conformance.crs.query.*
 
 |===
 
 The Javadoc documentation provides more detailed information about the test 
 methods that constitute the suite.
+
+== Implementation details
+
+* Whenever features are tested by a single test, the number of features is limited to one.
 
 include::how-to-run-the-tests.adoc[]
 

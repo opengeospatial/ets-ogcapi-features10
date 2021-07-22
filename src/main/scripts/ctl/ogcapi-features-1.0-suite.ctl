@@ -35,10 +35,14 @@
               <li>
                 <a href="http://docs.opengeospatial.org/is/17-069r3/17-069r3.html">OGC API - Features - Part 1: Core</a>
               </li>
+              <li>
+                <a href="http://docs.opengeospatial.org/is/18-058/18-058.html">OGC API - Features - Part 2: Coordinate Reference Systems by Reference</a>
+              </li>
             </ul>
             <p>The following conformance levels are defined:</p>
             <ul>
               <li>Core</li>
+              <li>Coordinate Reference Systems by Reference</li>
             </ul>
           </div>
           <fieldset style="background:#ccffff">

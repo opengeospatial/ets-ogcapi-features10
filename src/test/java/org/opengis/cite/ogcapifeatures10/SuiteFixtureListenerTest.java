@@ -14,6 +14,8 @@ import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.listener.SuiteFixtureListener;
 import org.testng.ISuite;
 import org.testng.xml.XmlSuite;
 

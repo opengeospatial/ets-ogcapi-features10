@@ -3,10 +3,10 @@
 	<title>OGC API - Features Conformance Test Suite</title>
 	<description>
 	    This executable test suite (ETS) verifies that an OGC API - Features instance conforms to
-		OGC API - Features - Part 1: Core (OGC 17-069r3) and related standards. Conformance testing 
+		OGC API - Features - Part 1: Core (OGC 17-069r3), OGC API - Features - Part 2: Coordinate Reference Systems by Reference (OGC 18-058) and related standards. Conformance testing
 		is a kind of black box testing that examines externally visible characteristics or behaviors 
 		of the SUT and is independent of any implementation details. The following conformance levels 
-		currently tested: Core The test run arguments are summarized in the following table. The obligation 
+		are tested: Core, Coordinate Reference Systems by Reference. The test run arguments are summarized in the following table. The obligation
 		descriptor can have the following values: M (mandatory), O (optional), or C (conditional).
 	</description>
 	<testrunarguments>

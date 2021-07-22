@@ -1,0 +1,55 @@
+{
+  "title" : "Vineyards",
+  "description" : "The vineyard register constitutes the authorized list of names of single vineyards, vineyards clusters (Großlagen), sub-regions (Bereiche) and wine-growing regions (Anbaugebiete) for the protected designation of origin for wines in the German state Rhineland-Palatinate. It is managed by the Chamber of Agriculture of Rhineland-Palatinate (Landwirtschaftskammer RLP). <br> The data for each vineyard includes the vineyard register number, the wine-growing region, the sub-region, the vineyard cluster, the name of the single vineyard, the village(s), the cadastral district(s) and the area with vines in hectares. The six-digit vineyard register number contains in the first digit the wine-growing region, in the second digit the sub-region, in the third and fourth digit the vineyard cluster and in the fifth and sixth digit the single vineyard.",
+  "links" : [ {
+    "rel" : "self",
+    "type" : "application/json",
+    "title" : "Dieses Dokument",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards?f=json"
+  }, {
+    "rel" : "alternate",
+    "type" : "text/html",
+    "title" : "Dieses Dokument als HTML",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards?f=html"
+  }, {
+    "rel" : "license",
+    "title" : "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+    "href" : "https://www.govdata.de/dl-de/by-2-0"
+  }, {
+    "rel" : "http://www.opengis.net/def/rel/ogc/1.0/queryables",
+    "title" : "Suchbare Attribute",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards/queryables"
+  }, {
+    "rel" : "http://www.opengis.net/def/rel/ogc/1.0/tilesets-vector",
+    "title" : "Zu den Daten als Vector Tiles",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards/tiles"
+  }, {
+    "rel" : "describedby",
+    "title" : "Schema der Objekte",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards/schema"
+  }, {
+    "rel" : "items",
+    "type" : "application/geo+json",
+    "title" : "Zu den 'Vineyards'-Objekten als GeoJSON",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards/items?f=json"
+  }, {
+    "rel" : "items",
+    "type" : "text/html",
+    "title" : "Zu den 'Vineyards'-Objekten als HTML",
+    "href" : "http://localhost:8090/vineyards/collections/vineyards/items?f=html"
+  } ],
+  "id" : "vineyards",
+  "extent" : {
+    "spatial" : {
+      "bbox" : [ [ 6.302134844797123, 49.008701775993174, 8.417903391872924, 50.61389352668837 ] ],
+      "crs" : "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+    },
+    "temporal" : {
+      "interval" : [ [ "2020-09-01T00:00:00Z", "2020-09-01T00:00:00Z" ] ],
+      "trs" : "http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"
+    }
+  },
+  "itemType" : "feature",
+  "crs" : [ "http://www.opengis.net/def/crs/OGC/1.3/CRS84", "http://www.opengis.net/def/crs/EPSG/0/25832", "http://www.opengis.net/def/crs/EPSG/0/4258", "http://www.opengis.net/def/crs/EPSG/0/4326", "http://www.opengis.net/def/crs/EPSG/0/3857" ],
+  "storageCrs" : "http://www.opengis.net/def/crs/EPSG/0/25832"
+}

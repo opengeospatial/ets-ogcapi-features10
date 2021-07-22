@@ -5,22 +5,33 @@
   <parameter name="ics" value="" />
 
   <listeners>
-    <listener class-name="org.opengis.cite.ogcapifeatures10.TestRunListener" />
-    <listener class-name="org.opengis.cite.ogcapifeatures10.SuiteFixtureListener" />
-    <listener class-name="org.opengis.cite.ogcapifeatures10.TestFailureListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.listener.TestRunListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.listener.SuiteFixtureListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.listener.TestFailureListener" />
   </listeners>
 
   <test name="Core">
     <packages>
-      <package name="org.opengis.cite.ogcapifeatures10.general" />
-      <package name="org.opengis.cite.ogcapifeatures10.landingpage" />
-      <package name="org.opengis.cite.ogcapifeatures10.apidefinition" />
-      <package name="org.opengis.cite.ogcapifeatures10.conformance" />
-      <package name="org.opengis.cite.ogcapifeatures10.collections" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.core.general" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.core.landingpage" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.core.apidefinition" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.core.conformance" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.core.collections" />
     </packages>
     <classes>
-      <class name="org.opengis.cite.ogcapifeatures10.SuitePreconditions" />
+      <class name="org.opengis.cite.ogcapifeatures10.conformance.SuitePreconditions" />
     </classes>
+  </test>
+
+  <test name="Coordinate Reference Systems by Reference">
+    <packages>
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collection" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.discovery.collections" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.features" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.feature" />
+      <package name="org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs" />
+    </packages>
   </test>
 
 </suite>
