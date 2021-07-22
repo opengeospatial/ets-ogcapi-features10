@@ -603,7 +603,7 @@ public class JsonUtils {
     private static String createFeatureUrl( String getFeatureUrl, String featureId ) {
         if ( getFeatureUrl.indexOf( "?" ) != -1 ) {
             return getFeatureUrl.substring( 0, getFeatureUrl.indexOf( "?" ) ) + "/" + featureId;
-        } else if ( getFeatureUrl.indexOf( "." ) != -1 ) {
+        } else if ( getFeatureUrl.matches( "^.*\\/items.[a-zA-Z]*$" ) ) {
             return getFeatureUrl.substring( 0, getFeatureUrl.lastIndexOf( "." ) ) + "/" + featureId
                    + getFeatureUrl.substring( getFeatureUrl.lastIndexOf( "." ) );
         }

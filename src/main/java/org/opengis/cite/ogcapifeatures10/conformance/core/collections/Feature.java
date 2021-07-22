@@ -3,7 +3,6 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
-import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeatureUrlForGeoJson;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithSupportedMediaTypeByRel;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutRelOrType;
