@@ -3,6 +3,8 @@ package org.opengis.cite.ogcapifeatures10.openapi3;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.isFreeFormParameterSupportedForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.isParameterSupportedForCollection;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPoints;
@@ -10,16 +12,20 @@ import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTe
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionMetadata;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollections;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
+import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForConformance;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForFeature;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.reprezen.kaizen.oasparser.model3.Path;
+import com.reprezen.kaizen.oasparser.model3.Server;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -101,7 +107,25 @@ public class OpenApiUtilsTest {
     }
 
     @Test
-    public void testRetrieveTestPoints_COLLECTIONS()
+    public void testRetrieveTestPointsForConformance()
+                            throws Exception {
+        OpenApi3Parser parser = new OpenApi3Parser();
+
+        URL openApiDocument = OpenApiUtilsTest.class.getResource( "openapi_serverWithoutPath.json" );
+        OpenApi3 apiModel = parser.parse( openApiDocument, true );
+
+        URI iut = new URI( "http://localhost:8090" );
+        List<TestPoint> testPoints = retrieveTestPointsForConformance( apiModel, iut );
+
+        assertThat( testPoints.size(), is( 1 ) );
+        TestPoint testPoint = testPoints.get( 0 );
+        String conformanceUrl = new UriBuilder( testPoint ).buildUrl();
+
+        assertThat( conformanceUrl, is( "http://localhost:8090/conformance" ) );
+    }
+
+    @Test
+    public void testRetrieveTestPointsForCollectionsMetadata()
                             throws Exception {
         OpenApi3Parser parser = new OpenApi3Parser();
 
