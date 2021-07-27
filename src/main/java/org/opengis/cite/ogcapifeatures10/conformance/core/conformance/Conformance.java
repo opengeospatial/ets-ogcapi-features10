@@ -88,7 +88,7 @@ public class Conformance extends CommonFixture {
      * @param testPoint
      *            the test point to test, never <code>null</code>
      */
-    @Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op) and /req/core/conformance-success", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
+    @Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op and /req/core/conformance-success)", groups = "conformance", dataProvider = "conformanceUris", dependsOnGroups = "apidefinition")
     public void validateConformanceOperationAndResponse( TestPoint testPoint ) {
         String testPointUri = new UriBuilder( testPoint ).buildUrl();
 
