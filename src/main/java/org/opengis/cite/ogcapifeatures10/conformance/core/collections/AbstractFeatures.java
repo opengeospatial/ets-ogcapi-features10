@@ -108,7 +108,7 @@ public class AbstractFeatures extends CommonDataFixture {
 
         JsonPath jsonPath = response.jsonPath();
         List<Object> type = jsonPath.get( "features" );
-        assertNotNull( type, "features property is missing" );
+        assertNotNull( type, "features property is missing:" );
     }
 
     /**
