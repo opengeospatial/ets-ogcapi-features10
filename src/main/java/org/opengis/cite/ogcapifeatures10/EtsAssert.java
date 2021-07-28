@@ -2,6 +2,8 @@ package org.opengis.cite.ogcapifeatures10;
 
 import java.util.List;
 
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
@@ -13,6 +15,8 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WIT
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class EtsAssert {
+
+    private static Envelope CRS84_BBOX = new Envelope( -180, 180, -90, 90 );
 
     /**
      * @param valueToAssert
@@ -135,6 +139,22 @@ public class EtsAssert {
     public static void assertDefaultCrsHeader( String crsHeaderValue, String failureMsg ) {
         if ( !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS_CODE + ">" )
              && !crsHeaderValue.matches( "<" + OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE + ">" ) ) {
+            throw new AssertionError( failureMsg );
+        }
+    }
+
+    /**
+     * Assert that the passed geometry is in the valid area of CRS84.
+     * 
+     * @param geometry
+     *            to check, may be <code>null</code>
+     * @param failureMsg
+     *            the message to throw in case of a failure, should not be <code>null</code>
+     */
+    public static void assertInCrs84( Geometry geometry, String failureMsg ) {
+        if ( geometry == null )
+            return;
+        if ( !CRS84_BBOX.contains( geometry.getEnvelopeInternal() ) ) {
             throw new AssertionError( failureMsg );
         }
     }

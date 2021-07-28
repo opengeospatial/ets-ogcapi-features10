@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.locationtech.jts.io.ParseException;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
+import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.opengis.cite.ogcapifeatures10.util.TemporalExtent;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -190,6 +192,40 @@ public class FeaturesTime extends AbstractFeatures {
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
         // TODO: assert returned features
+    }
+
+    /**
+     * Abstract Test 2, Test Method 1
+     *
+     * <pre>
+     * Abstract Test 2: /ats/core/crs84
+     * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+     * Requirement: /req/core/crs84
+     *
+     * Test Method
+     *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
+     *  2. Validate retrieved spatial data using the CRS84 reference system.
+     * </pre>
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     * @param queryParameter
+     *            time parameter as string to use as query parameter, never <code>null</code>
+     * @param begin
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the begin of the interval (or instant), never
+     *            <code>null</code>
+     * @param end
+     *            a {@link ZonedDateTime} or {@link LocalDate}, the end of the interval, never <code>null</code> if the
+     *            request is an instant
+     * @throws ParseException
+     *             if the geometry could not be parsed
+     */
+    @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 2, Test Method 2 (Requirement /req/core/crs84)", dataProvider = "collectionItemUrisWithDateTimes", dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
+    public void validateFeaturesWithDateTimeResponse_GeometryInCRS84( Map<String, Object> collection,
+                                                                      String queryParameter, Object begin, Object end )
+                            throws ParseException {
+        String collectionId = (String) collection.get( "id" );
+        validateGeometriesInCrs84( asKey( collectionId, queryParameter ) );
     }
 
     /**

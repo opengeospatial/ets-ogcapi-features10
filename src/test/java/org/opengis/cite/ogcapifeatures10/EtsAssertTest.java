@@ -1,15 +1,25 @@
+package org.opengis.cite.ogcapifeatures10;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertCrsHeader;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertInCrs84;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertValidCrsIdentifier;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseFeatureGeometry;
 
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.opengis.cite.ogcapifeatures10.EtsAssert;
-import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtilsTest;
+
+import io.restassured.path.json.JsonPath;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -95,5 +105,16 @@ public class EtsAssertTest {
     public void testAssertCrsHeader_MissingBracket() {
         assertCrsHeader( "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
                          new CoordinateSystem( "http://www.opengis.net/def/crs/OGC/1.3/CRS84" ), "FAIlURE" );
+    }
+
+    @Test
+    public void testAssertInCrs84()
+                            throws Exception {
+        InputStream collectionItemsJson = EtsAssertTest.class.getResourceAsStream( "conformance/core/collections/collectionItems-flurstueck.json" );
+        JsonPath jsonCollectionItem = new JsonPath( collectionItemsJson );
+        List<Map<String, Object>> features = jsonCollectionItem.getList( "features" );
+        Map<String, Object> firstFeature = features.get( 0 );
+        Geometry geometry = parseFeatureGeometry( firstFeature, DEFAULT_CRS );
+        assertInCrs84( geometry, "OK" );
     }
 }

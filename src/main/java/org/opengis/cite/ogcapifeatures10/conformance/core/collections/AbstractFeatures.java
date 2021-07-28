@@ -1,6 +1,8 @@
 package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertInCrs84;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.IUT;
 import static org.opengis.cite.ogcapifeatures10.conformance.core.collections.FeaturesAssertions.assertNumberMatched;
@@ -19,9 +21,14 @@ import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.opengis.cite.ogcapifeatures10.EtsAssert;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
@@ -273,6 +280,41 @@ public class AbstractFeatures extends CommonDataFixture {
         JsonPath jsonPath = response.jsonPath();
 
         assertNumberReturned( collection.id, jsonPath, true );
+    }
+
+    /**
+     * Abstract Test 2, Test Method 1
+     *
+     * <pre>
+     * Abstract Test 2: /ats/core/crs84
+     * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+     * Requirement: /req/core/crs84
+     *
+     * Test Method
+     *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
+     *  2. Validate retrieved spatial data using the CRS84 reference system.
+     * </pre>
+     * @throws ParseException
+     *             if the geometry could not be parsed
+     *
+     * @param collection
+     *            the collection under test, never <code>null</code>
+     */
+    void validateGeometriesInCrs84( CollectionResponseKey collection )
+                            throws ParseException {
+        ResponseData response = collectionIdAndResponse.get( collection );
+        if ( response == null )
+            throw new SkipException( "Could not find a response for collection with id " + collection.id );
+
+        JsonPath jsonPath = response.jsonPath();
+        List<Map<String, Object>> features = jsonPath.getList( "features" );
+        for ( Map<String, Object> feature : features ) {
+            String featureId = feature.get( "id" ).toString();
+            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, DEFAULT_CRS );
+            assertInCrs84( geometry,
+                           String.format( "Geometry of feature with id {} in collection with id {} is outside the valid area of the  ",
+                                          featureId, collection.id ) );
+        }
     }
 
     protected boolean isRequired( Parameter param ) {
