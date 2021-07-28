@@ -50,10 +50,10 @@ public class LandingPage extends CommonFixture {
      * Requirement: /req/core/root-success
      *
      * Test Method: Validate the landing page for all supported media types using the resources and tests identified in
-     * Schema and Tests for Landing Pages. For formats that require manual inspection, perform the following: a)
-     * Validate that the landing page includes a "service-desc" and/or "service-doc" link to an API Definition b)
-     * Validate that the landing page includes a "conformance" link to the conformance class declaration c) Validate
-     * that the landing page includes a "data" link to the Feature contents.
+     * Schema and Tests for Landing Pages. For formats that require manual inspection, perform the following:
+     *   a) Validate that the landing page includes a "service-desc" and/or "service-doc" link to an API Definition
+     *   b) Validate that the landing page includes a "conformance" link to the conformance class declaration
+     *   c) Validate that the landing page includes a "data" link to the Feature contents.
      * </pre>
      */
     @Test(description = "Implements A.2.2. Landing Page {root}/, Abstract Test 4 (Requirement /req/core/root-success)", groups = "landingpage", dependsOnMethods = "landingPageRetrieval")
