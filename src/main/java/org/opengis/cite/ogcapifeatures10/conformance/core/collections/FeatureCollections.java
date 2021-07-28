@@ -2,7 +2,11 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.http.Method.GET;
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrs;
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertDefaultCrsAtFirst;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_WITH_HEIGHT_CODE;
 import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.IUT;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollectionsMetadata;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinkByRel;
@@ -11,16 +15,20 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findLinksWithoutR
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findUnsupportedTypes;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.linkIncludesRelAndType;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsListOfMaps;
+import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsString;
 import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.opengis.cite.ogcapifeatures10.EtsAssert;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.openapi3.UriBuilder;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
@@ -201,8 +209,13 @@ public class FeatureCollections extends CommonDataFixture {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
             throw new SkipException( "Could not find a response for test point " + testPoint );
-
-        // Dev: Requirement?
+        JsonPath jsonPath = response.jsonPath();
+        if ( jsonPath.get( "crs" ) != null ) {
+            List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
+            assertDefaultCrsAtFirst( crs,
+                                     String.format( "Feature Collections Metadata document does not specify one of the default CRS '%s' or '%s' as first value.",
+                                                    DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE ) );
+        }
     }
 
     /**
@@ -232,8 +245,8 @@ public class FeatureCollections extends CommonDataFixture {
         assertTrue( linksAreAvailable, "Feature Collections Metadata document does not contain links." );
 
         List<Map<String, Object>> collections = parseAsListOfMaps( "collections", jsonPath );
-        boolean collectionssAreAvailable = collections != null && !collections.isEmpty();
-        assertTrue( collectionssAreAvailable, "Feature Collections Metadata document does not contain collections." );
+        boolean collectionsAreAvailable = collections != null && !collections.isEmpty();
+        assertTrue( collectionsAreAvailable, "Feature Collections Metadata document does not contain collections." );
     }
 
     private List<Map<String, Object>> createCollectionsMap( List<Object> collections ) {
