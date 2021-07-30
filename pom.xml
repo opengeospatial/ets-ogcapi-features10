@@ -340,8 +340,8 @@
             </dependency>
           </dependencies>
           <configuration>
-            <projectFile>src/test/resources/soapui/ets-ogcapi-feature10-soapui-project.xml</projectFile>
-            <settingsFile>src/test/resources/soapui/ets-ogcapi-feature10-soapui-settings.xml</settingsFile>
+            <projectFile>src/test/resources/soapui/ets-ogcapi-features10-soapui-project.xml</projectFile>
+            <settingsFile>src/test/resources/soapui/ets-ogcapi-features10-soapui-settings.xml</settingsFile>
             <outputFolder>${project.build.directory}/soapui</outputFolder>
             <junitReport>true</junitReport>
             <testFailIgnore>${soapui.test.fail.ignore}</testFailIgnore>
