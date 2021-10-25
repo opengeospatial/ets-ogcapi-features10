@@ -336,14 +336,29 @@ public class OpenApiUtils {
                                                   PathMatcherFunction<Boolean, String, String> pathMatch ) {
         List<Path> pathItems = new ArrayList<>();
         Map<String, Path> pathItemObjects = apiModel.getPaths();
+        String apiRoot = getApiRoot(pathItemObjects);
         for ( Path pathItemObject : pathItemObjects.values() ) {
             String pathString = pathItemObject.getPathString();
-            if ( pathMatch.apply( pathString, path ) ) {
+            if ( pathMatch.apply( pathString, apiRoot + path ) ) {
                 pathItems.add( pathItemObject );
             }
         }
         return pathItems;
     }
+    
+    
+    private static String getApiRoot(Map<String, Path> pathItemObjects) {
+    	for ( Path pathItemObject : pathItemObjects.values() ) {
+    		String pathString = pathItemObject.getPathString();
+    		Map<String, Operation> operationObjects = pathItemObject.getOperations();
+            for ( Operation operationObject : operationObjects.values() ) {
+            	if (operationObject.getOperationId() == "getRoot") {
+            		return pathString;
+            	}
+            }
+    	}
+		return "";
+	}
 
     /**
      * A.4.3.2. Identify Server URIs:
@@ -403,7 +418,7 @@ public class OpenApiUtils {
                 List<String> serverUrls = identifyServerObjects( apiModel, pathItemObject, operationObject );
                 for ( String serverUrl : serverUrls ) {
                     if ( DEFAULT_SERVER_URL.equalsIgnoreCase( serverUrl ) ) {
-                        serverUrl = iut.toString();
+                    	serverUrl = iut.getScheme() + "://" + iut.getHost();
                     }  else if ( serverUrl.startsWith( "/" ) ) {
                         URI resolvedUri = iut.resolve( serverUrl );
                         serverUrl = resolvedUri.toString();
