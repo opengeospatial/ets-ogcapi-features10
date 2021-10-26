@@ -352,7 +352,11 @@ public class OpenApiUtils {
     		String pathString = pathItemObject.getPathString();
     		Map<String, Operation> operationObjects = pathItemObject.getOperations();
             for ( Operation operationObject : operationObjects.values() ) {
-            	if (operationObject.getOperationId() == "getRoot") {
+            	String operationId = operationObject.getOperationId();
+            	if (operationId != null && operationId.equals("getRoot")) {
+            		if (pathString.endsWith("/")) {
+            			pathString = pathString.substring(0, pathString.length() - 1);
+            		}
             		return pathString;
             	}
             }
