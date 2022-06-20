@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -31,6 +32,10 @@ public class CrsRequirementClassPrecondition {
     public void verifyRequirementClass() {
         boolean requirementClassIsImplemented = this.requirementClasses != null
                                                 && this.requirementClasses.contains( CRS );
+        if (!requirementClassIsImplemented) {
+            throw new SkipException("Requirement class " + CRS.name()
+                    + " is not supported by the test instance. Tests will be skipped." );
+        }
         assertTrue( requirementClassIsImplemented, "Requirement class " + CRS.name()
                                                    + " is not supported by the test instance. Tests will be skipped." );
     }
