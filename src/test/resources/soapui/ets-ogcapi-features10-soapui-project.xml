@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="1476c0be-8f92-4fc1-9925-9543b4950036" activeEnvironment="Default" name="TEAM Engine" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project id="1476c0be-8f92-4fc1-9925-9543b4950036" activeEnvironment="Default" name="TEAM Engine" resourceRoot="" soapui-version="5.7.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config">
   <con:settings/>
   <con:testSuite id="c6ce07d7-2e98-4b79-8b92-044b2687a974" name="OGC API - Features 1.0">
     <con:settings/>
@@ -35,7 +35,11 @@
             </con:configuration>
           </con:assertion>
           <con:credentials>
-            <con:authType>No Authorization</con:authType>
+            <con:username>${#Project#teamengine.user}</con:username>
+            <con:password>${#Project#teamengine.password}</con:password>
+            <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+            <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+            <con:authType>Global HTTP Settings</con:authType>
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:jmsPropertyConfig/>
@@ -63,7 +67,11 @@
             </con:configuration>
           </con:assertion>
           <con:credentials>
-            <con:authType>No Authorization</con:authType>
+            <con:username>${#Project#teamengine.user}</con:username>
+            <con:password>${#Project#teamengine.password}</con:password>
+            <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+            <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+            <con:authType>Global HTTP Settings</con:authType>
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:jmsPropertyConfig/>
@@ -99,7 +107,11 @@ assert headers != null &amp;&amp; headers[0] != null &amp;&amp; headers[0].index
             </con:configuration>
           </con:assertion>
           <con:credentials>
-            <con:authType>No Authorization</con:authType>
+            <con:username>${#Project#teamengine.user}</con:username>
+            <con:password>${#Project#teamengine.password}</con:password>
+            <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+            <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+            <con:authType>Global HTTP Settings</con:authType>
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:jmsPropertyConfig/>
@@ -141,7 +153,11 @@ assert headers != null &amp;&amp; headers[0] != null &amp;&amp; headers[0].index
             </con:configuration>
           </con:assertion>
           <con:credentials>
-            <con:authType>No Authorization</con:authType>
+            <con:username>${#Project#teamengine.user}</con:username>
+            <con:password>${#Project#teamengine.password}</con:password>
+            <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+            <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+            <con:authType>Global HTTP Settings</con:authType>
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:jmsPropertyConfig/>
@@ -224,7 +240,11 @@ declare namespace cite="http://cite.opengeospatial.org/";
             </con:configuration>
           </con:assertion>
           <con:credentials>
-            <con:authType>No Authorization</con:authType>
+            <con:username>${#Project#teamengine.user}</con:username>
+            <con:password>${#Project#teamengine.password}</con:password>
+            <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+            <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+            <con:authType>Global HTTP Settings</con:authType>
           </con:credentials>
           <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
           <con:jmsPropertyConfig/>
@@ -261,6 +281,14 @@ declare namespace cite="http://cite.opengeospatial.org/";
     <con:property>
       <con:name>tests.failed</con:name>
       <con:value>0</con:value>
+    </con:property>
+    <con:property>
+      <con:name>teamengine.user</con:name>
+      <con:value>ogctest</con:value>
+    </con:property>
+    <con:property>
+      <con:name>teamengine.password</con:name>
+      <con:value>ogctest</con:value>
     </con:property>
   </con:properties>
   <con:wssContainer/>
