@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+  tools {
+    maven 'mvn'
+    jdk 'JDK 8'
+  }
+  stages {
+    stage('Preparation') {
+      steps{
+        deleteDir()
+        sh 'git clone git@github.com:opengeospatial/ets-ogcapi-features10.git .'
+      }
+    }
+    stage('Test') {
+      steps{
+        sh 'mvn --version'
+        sh 'mvn clean com.smartbear.soapui:soapui-maven-plugin:test -Dsoapui.test.fail.ignore=true -Dsoapui.teamengine.endpoint=${teamengineEndpoint} -Dsoapui.teamengine.user=${teamengineUser} -Dsoapui.teamengine.password=${teamenginePassword} -Dsoapui.iut=${iut} -Dsoapui.tests.passed=${testsPassed} -Dsoapui.tests.skipped=${testsSkipped} -Dsoapui.tests.failed=${testsFailed}'
+      }
+    }
+    stage('Results') {
+      steps{
+        junit '**/target/soapui/TEST-*.xml'
+        archive 'target/*'
+      }
+    }
+  }
+}
