@@ -16,22 +16,22 @@ import org.testng.annotations.Test;
  */
 public class CrsRequirementClassPrecondition {
 
-    private List<RequirementClass> requirementClasses;
+    private List<RequirementClass> conformanceClasses;
 
     @BeforeClass
-    public void requirementClasses( ITestContext testContext ) {
-        this.requirementClasses = (List<RequirementClass>) testContext.getSuite().getAttribute( REQUIREMENTCLASSES.getName() );
+    public void conformanceClasses( ITestContext testContext ) {
+        this.conformanceClasses = (List<RequirementClass>) testContext.getSuite().getAttribute( REQUIREMENTCLASSES.getName() );
     }
 
     /**
-     * Verifies that the referenced implements the requirement class
-     * http://www.opengis.net/spec/ogcapi-features-2/1.0/req/crs.
+     * Verifies that the referenced implements the conformance class
+     * http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs.
      */
-    @Test(description = "Precondition: requirement class http://www.opengis.net/spec/ogcapi-features-2/1.0/req/crs must be implemented", groups = "crs-conformance")
-    public void verifyRequirementClass() {
-        boolean requirementClassIsImplemented = this.requirementClasses != null
-                                                && this.requirementClasses.contains( CRS );
-        assertTrue( requirementClassIsImplemented, "Requirement class " + CRS.name()
+    @Test(description = "Precondition: conformance class http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs must be implemented", groups = "crs-conformance")
+    public void verifyConformanceClass() {
+        boolean conformanceClassIsImplemented = this.conformanceClasses != null
+                                                && this.conformanceClasses.contains( CRS );
+        assertTrue( conformanceClassIsImplemented, "Conformance class " + CRS.name()
                                                    + " is not supported by the test instance. Tests will be skipped." );
     }
 
