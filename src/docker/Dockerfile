@@ -1,7 +1,12 @@
-FROM tomcat:7.0-jre8
+FROM debian:11
 
 MAINTAINER Dirk Stenger <stenger@lat-lon.de>
 MAINTAINER Torsten Friebe <friebe@lat-lon.de>
+
+RUN apt update && apt install -y openjdk-17-jre wget unzip
+RUN wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
+RUN tar -xvf apache-tomcat-7.0.109.tar.gz
+RUN mv apache-tomcat-7.0.109 /usr/local/tomcat
 
 # add TEAM engine webapp
 ADD maven/dependency/teamengine-web-*.war /root/
@@ -25,4 +30,4 @@ ADD maven/ets-ogcapi-features10-*-deps.zip /root/
 RUN cd /root/ && unzip -q -o ets-ogcapi-features10-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib
 
 # run tomcat
-CMD ["catalina.sh", "jpda", "run"]
+CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
