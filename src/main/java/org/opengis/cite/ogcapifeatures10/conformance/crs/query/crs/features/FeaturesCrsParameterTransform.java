@@ -64,6 +64,9 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
                         + "Geometries in the path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeaturesCrsParameterTransformWithoutCrsParameter( String collectionId, JsonPath collection )
                             throws ParseException {
+    	if((collectionId == null) & (collection == null)) {
+    		throw new AssertionError("No crs information for collection available.");
+    	}
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId
@@ -109,6 +112,9 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
     public void verifyFeaturesCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection, CoordinateSystem crs,
                                                                      CoordinateSystem defaultCRS )
                             throws ParseException {
+    	if((collectionId == null) & (collection == null) & (crs == null) & (defaultCRS == null)) {
+    		throw new AssertionError("No crs information for collection available.");
+    	}
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
