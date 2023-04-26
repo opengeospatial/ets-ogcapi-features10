@@ -8,6 +8,13 @@ RUN wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tom
 RUN tar -xvf apache-tomcat-7.0.109.tar.gz
 RUN mv apache-tomcat-7.0.109 /usr/local/tomcat
 
+# Workaround to enable Tomcat 7 to use JSP with Java 17 (should not be necessary with Tomcat 10), error message documented in https://github.com/opengeospatial/teamengine/issues/511#issuecomment-1522181441
+RUN wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.tar.gz
+RUN tar -xvf apache-tomcat-10.1.8.tar.gz
+RUN cp apache-tomcat-10.1.8/lib/ecj-4.27.jar /usr/local/tomcat/lib
+RUN rm /usr/local/tomcat/lib/ecj-4.4.2.jar
+RUN rm -r apache-tomcat-10.1.8
+
 # add TEAM engine webapp
 ADD maven/dependency/teamengine-web-*.war /root/
 RUN cd /root/ && unzip -q teamengine-web-*.war -d /usr/local/tomcat/webapps/teamengine
