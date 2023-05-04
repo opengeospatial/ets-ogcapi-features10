@@ -50,7 +50,7 @@
   <properties>
     <ets-code>ogcapi-features-1.0</ets-code>
     <spec-version>1.0</spec-version>
-    <docker.teamengine.version>5.4.1</docker.teamengine.version>
+    <docker.teamengine.version>6.0-SNAPSHOT</docker.teamengine.version>
     <soapui.test.fail.ignore>false</soapui.test.fail.ignore>
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>

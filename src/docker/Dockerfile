@@ -1,7 +1,9 @@
-FROM tomcat:7.0-jre8
+FROM tomcat:10-jre17
 
 MAINTAINER Dirk Stenger <stenger@lat-lon.de>
 MAINTAINER Torsten Friebe <friebe@lat-lon.de>
+
+RUN apt update && apt install -y unzip
 
 # add TEAM engine webapp
 ADD maven/dependency/teamengine-web-*.war /root/
