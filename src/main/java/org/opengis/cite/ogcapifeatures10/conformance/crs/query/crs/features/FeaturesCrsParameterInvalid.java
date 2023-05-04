@@ -45,9 +45,9 @@ public class FeaturesCrsParameterInvalid extends AbstractFeaturesCrs {
     @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 5 (Requirement /req/crs/fc-crs-valid-value), "
                         + "Invalid CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeaturesCrsParameterInvalid( String collectionId, JsonPath collection ) {
-    	if((collectionId == null) & (collection == null)) {
-    		throw new AssertionError("No crs information for collection available.");
-    	}
+        if((collectionId == null) & (collection == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuresUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",

@@ -58,9 +58,9 @@ public class FeatureCrsParameter extends AbstractFeatureCrs {
                     collectionsData.add( new Object[] { collectionId, json, featureId, crs } );
                 }
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null, null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 
@@ -80,9 +80,9 @@ public class FeatureCrsParameter extends AbstractFeatureCrs {
                         + "Content-Crs header in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyFeatureCrsParameter( String collectionId, JsonPath collection, String featureId,
                                            CoordinateSystem crs ) {
-    	if((collectionId == null) & (collection == null) & (featureId == null) & (crs == null)) {
-    		throw new AssertionError("No crs information for collection available.");
-    	}
+        if((collectionId == null) & (collection == null) & (featureId == null) & (crs == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( "Could not find url for collection with id " + collectionId

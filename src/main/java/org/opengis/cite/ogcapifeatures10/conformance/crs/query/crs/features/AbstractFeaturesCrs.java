@@ -40,10 +40,10 @@ public class AbstractFeaturesCrs extends CommonFixture {
                 String collectionId = collection.getKey();
                 JsonPath json = collection.getValue();
                 collectionsData.add( new Object[] { collectionId, json } );
-            }			
-		} catch (Exception e) {
+            }            
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 
@@ -58,9 +58,9 @@ public class AbstractFeaturesCrs extends CommonFixture {
                     collectionsData.add( new Object[] { collectionId, json, crs } );
                 }
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 
@@ -77,10 +77,10 @@ public class AbstractFeaturesCrs extends CommonFixture {
                         collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
                     }
                 }
-            }			
-		} catch (Exception e) {
+            }            
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null, null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 

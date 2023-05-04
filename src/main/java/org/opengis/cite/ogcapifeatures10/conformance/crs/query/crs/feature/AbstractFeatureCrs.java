@@ -47,9 +47,9 @@ public class AbstractFeatureCrs extends CommonFixture {
                     collectionsData.add( new Object[] { collectionId, json, featureId } );
                 }
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 }

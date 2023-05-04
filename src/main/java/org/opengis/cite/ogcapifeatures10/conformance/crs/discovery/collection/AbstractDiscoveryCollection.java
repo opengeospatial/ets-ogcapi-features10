@@ -24,9 +24,9 @@ public class AbstractDiscoveryCollection {
             for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
                 collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 

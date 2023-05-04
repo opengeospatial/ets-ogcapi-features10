@@ -43,8 +43,8 @@ public class DiscoveryCollectionCrsUri {
 
     @DataProvider(name = "collectionIdAndJsonAndCrs")
     public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) throws AssertionError {
-    	List<Object[]> collectionsData = new ArrayList<>();
-    	try {
+        List<Object[]> collectionsData = new ArrayList<>();
+        try {
             Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
             for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
                 List<CoordinateSystem> crs = parseCrs( collection.getValue() );
@@ -52,25 +52,25 @@ public class DiscoveryCollectionCrsUri {
                     collectionsData.add( new Object[] { collection.getKey(), coordinateSystem } );
                 }
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 
     @DataProvider(name = "collectionIdAndJsonAndStorageCrs")
     public Iterator<Object[]> collectionIdAndJsonAndStorageCrs( ITestContext testContext ) {
-    	List<Object[]> collectionsData = new ArrayList<>();
-    	try {
+        List<Object[]> collectionsData = new ArrayList<>();
+        try {
             Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
             for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
                 CoordinateSystem storageCrs = parseStorageCrs( collection.getValue() );
                 if ( storageCrs != null )
                     collectionsData.add( new Object[] { collection.getKey(), storageCrs } );
             }
-		} catch (Exception e) {
+        } catch (Exception e) {
             collectionsData.add( new Object[] { null, null } );
-		}
+        }
         return collectionsData.iterator();
     }
 
@@ -90,9 +90,9 @@ public class DiscoveryCollectionCrsUri {
     @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
                         + "crs property in the collection object in the path /collection", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
     public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, CoordinateSystem crs ) {
-    	if((collectionId == null) & (crs == null)) {
-    		throw new AssertionError("No crs information for collection available.");
-    	}
+        if((collectionId == null) & (crs == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         addCrs( collectionId, crs );
         assertValidCrsIdentifier( crs,
                                   String.format( "Collection with id '%s' contains invalid CRS identifier property 'crs': '%s'",
@@ -110,9 +110,9 @@ public class DiscoveryCollectionCrsUri {
     @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
                         + "storageCrs property in the collection object in the path /collection", dataProvider = "collectionIdAndJsonAndStorageCrs", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
     public void verifyCollectionCrsIdentifierOfStorageCrsProperty( String collectionId, CoordinateSystem storageCrs ) {
-    	if((collectionId == null) & (storageCrs == null)) {
-    		throw new AssertionError("No crs data for collection available.");
-    	}
+        if((collectionId == null) & (storageCrs == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         assertValidCrsIdentifier( storageCrs,
                                   String.format( "Collection with id '%s' contains invalid CRS identifier property 'storageCrs': '%s'",
                                                  collectionId, storageCrs ) );
