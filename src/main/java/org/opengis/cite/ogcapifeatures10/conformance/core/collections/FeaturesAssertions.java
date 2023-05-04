@@ -95,7 +95,7 @@ public class FeaturesAssertions {
             if ( limitParameter != null && limitParameter.getSchema() != null ) {
             	Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
             	if(maximumLimitNumber != null) {
-                    maximumLimit = limitParameter.getSchema().getMaximum().intValue();
+                    maximumLimit = maximumLimitNumber.intValue();
             	}
             }
         }
