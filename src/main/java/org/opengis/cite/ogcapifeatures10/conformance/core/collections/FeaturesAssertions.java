@@ -93,10 +93,10 @@ public class FeaturesAssertions {
             TestPoint testPoint = testPoints.get( 0 );
             Parameter limitParameter = OpenApiUtils.retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
             if ( limitParameter != null && limitParameter.getSchema() != null ) {
-            	Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
-            	if(maximumLimitNumber != null) {
+                Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
+                if(maximumLimitNumber != null) {
                     maximumLimit = maximumLimitNumber.intValue();
-            	}
+                }
             }
         }
         int numberMatched = jsonPath.getInt( "numberMatched" );

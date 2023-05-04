@@ -55,10 +55,10 @@ public class FeaturesLimit extends AbstractFeatures {
                 if ( limit != null && limit.getSchema() != null ) {
                     int min = limit.getSchema().getMinimum().intValue();
                     int max = -1;
-                	Number maximumLimitNumber = limit.getSchema().getMaximum();
-                	if(maximumLimitNumber != null) {
-                		max = maximumLimitNumber.intValue();
-                	}
+                    Number maximumLimitNumber = limit.getSchema().getMaximum();
+                    if(maximumLimitNumber != null) {
+                        max = maximumLimitNumber.intValue();
+                    }
                     if ( min == max ) {
                         collectionsWithLimits.add( new Object[] { collection, min, max } );
                     } else {
