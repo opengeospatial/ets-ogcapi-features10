@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
@@ -47,8 +48,13 @@ public class DiscoveryCollectionCrsUri {
         List<Object[]> collectionsData = new ArrayList<>();
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             List<CoordinateSystem> crs = parseCrs( collection.getValue() );
+            int count = 0;
             for ( CoordinateSystem coordinateSystem : crs ) {
+            	if(count >= OgcApiFeatures10.CRS_LIMIT) {
+            		break;
+            	}
                 collectionsData.add( new Object[] { collection.getKey(), coordinateSystem } );
+                count++;
             }
         }
         return collectionsData.iterator();
