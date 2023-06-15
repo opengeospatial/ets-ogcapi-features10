@@ -50,9 +50,9 @@ public class DiscoveryCollectionCrsUri {
             List<CoordinateSystem> crs = parseCrs( collection.getValue() );
             int count = 0;
             for ( CoordinateSystem coordinateSystem : crs ) {
-            	if(count >= OgcApiFeatures10.CRS_LIMIT) {
-            		break;
-            	}
+                if(count >= OgcApiFeatures10.CRS_LIMIT) {
+                    break;
+                }
                 collectionsData.add( new Object[] { collection.getKey(), coordinateSystem } );
                 count++;
             }

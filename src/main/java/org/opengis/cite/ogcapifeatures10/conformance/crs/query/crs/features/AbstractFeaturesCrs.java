@@ -52,11 +52,11 @@ public class AbstractFeaturesCrs extends CommonFixture {
             JsonPath json = collection.getValue();
             int count = 0;
             for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-            	if(count >= OgcApiFeatures10.CRS_LIMIT) {
-            		break;
-            	}
+                if(count >= OgcApiFeatures10.CRS_LIMIT) {
+                    break;
+                }
                 collectionsData.add( new Object[] { collectionId, json, crs } );
-            	count++;
+                count++;
             }
         }
         return collectionsData.iterator();
