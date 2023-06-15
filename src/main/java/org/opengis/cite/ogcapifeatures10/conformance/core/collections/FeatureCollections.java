@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
@@ -267,6 +268,8 @@ public class FeatureCollections extends CommonDataFixture {
                 }
                 if (noOfCollections > 0 && collectionsMap.size() >= noOfCollections) {
                     return collectionsMap;
+                } else if (collectionsMap.size() >= OgcApiFeatures10.COLLECTIONS_LIMIT) {
+                    return collectionsMap.subList( 0, OgcApiFeatures10.COLLECTIONS_LIMIT );
                 }
             }
         }

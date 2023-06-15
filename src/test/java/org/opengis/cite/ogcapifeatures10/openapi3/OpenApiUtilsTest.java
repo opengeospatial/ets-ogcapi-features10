@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 
 import com.reprezen.kaizen.oasparser.OpenApi3Parser;
 import com.reprezen.kaizen.oasparser.model3.MediaType;
@@ -292,7 +293,7 @@ public class OpenApiUtilsTest {
         OpenApi3 apiModel = parser.parse( openApiDocument, true );
         List<TestPoint> testPoints = retrieveTestPointsForCollections( apiModel, iut, -1 );
 
-        assertThat( testPoints.size(), is( 118 ) );
+        assertThat( testPoints.size(), is( OgcApiFeatures10.COLLECTIONS_LIMIT ) );
         assertThat( testPoints.get( 0 ).getPath(), is( "/collections/{collectionId}/items" ) );
     }
 
