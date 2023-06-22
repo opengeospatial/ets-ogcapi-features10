@@ -21,13 +21,24 @@ import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.operation.predicate.RectangleContains;
+import org.locationtech.jts.operation.predicate.RectangleIntersects;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
+import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.CollectionResponseKey;
+import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.ResponseData;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
+import org.opengis.cite.ogcapifeatures10.util.BBox;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -315,6 +326,31 @@ public class AbstractFeatures extends CommonDataFixture {
                            String.format( "Geometry of feature with id {} in collection with id {} is outside the valid area of the  ",
                                           featureId, collection.id ) );
         }
+    }
+
+    void validateGeometriesInBBox(CollectionResponseKey collection, BBox bbox) 
+                            throws ParseException {
+        ResponseData response = collectionIdAndResponse.get(collection);
+        if (response == null)
+            throw new SkipException("Could not find a response for collection with id " + collection.id);
+
+        JsonPath jsonPath = response.jsonPath();
+        List<Map<String, Object>> features = jsonPath.getList("features");
+
+        if (features.isEmpty()) {
+            throw new SkipException("No features were returned for collection.");
+        }
+        Coordinate min1 = new Coordinate(bbox.getMinX(), bbox.getMinY());
+        Coordinate min2 = new Coordinate(bbox.getMinX(), bbox.getMaxY());
+        Coordinate max1 = new Coordinate(bbox.getMaxX(), bbox.getMinY());
+        Coordinate max2 = new Coordinate(bbox.getMaxX(), bbox.getMaxY());
+        Polygon bboxPolygon = new GeometryFactory().createPolygon(new Coordinate [] {min1, min2, max1, max2, min1});
+        for (Map<String, Object> feature : features) {
+            Geometry geometry = JsonUtils.parseFeatureGeometry(feature, DEFAULT_CRS);
+            boolean insideBBox = RectangleIntersects.intersects(bboxPolygon, geometry);
+            assertTrue(insideBBox, String.format("Geometry '%s' outside bounding box: '%s'.", geometry.toString(), bbox.toString()));
+        }
+
     }
 
     protected boolean isRequired( Parameter param ) {

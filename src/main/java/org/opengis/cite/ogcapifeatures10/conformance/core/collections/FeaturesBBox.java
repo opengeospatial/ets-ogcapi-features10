@@ -2,6 +2,8 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertFalse;
+import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertInCrs84;
+import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
@@ -17,9 +19,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
+import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.CollectionResponseKey;
+import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.ResponseData;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
+import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
@@ -28,6 +34,7 @@ import org.testng.annotations.Test;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
@@ -163,7 +170,7 @@ public class FeaturesBBox extends AbstractFeatures {
     /**
      * <pre>
      * Abstract Test 15: /ats/core/fc-bbox-response
-     * Test Purpose: Validate that the bounding box query parameters are processed corrrectly.
+     * Test Purpose: Validate that the bounding box query parameters are processed correctly.
      * Requirement: /req/core/fc-bbox-response
      *
      * Test Method
@@ -176,15 +183,19 @@ public class FeaturesBBox extends AbstractFeatures {
      *            the collection under test, never <code>null</code>
      * @param bbox
      *            bbox parameter to request, never <code>null</code>
+     * @throws ParseException 
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
-    public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) {
-        String collectionId = (String) collection.get( "id" );
-        ResponseData response = collectionIdAndResponse.get( asKey( collectionId, bbox ) );
-        if ( response == null )
-            throw new SkipException( "Could not find a response for collection with id " + collectionId );
+    public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) throws ParseException {
 
+        String collectionId = (String) collection.get( "id" );
         // TODO: assert returned features
+
+        // Test Method 1
+        validateGeometriesInBBox( asKey( collectionId, bbox ), bbox );
+        
+        // Test Method 3
+        validateGeometriesInCrs84( asKey( collectionId, bbox ) );
     }
 
     /**
