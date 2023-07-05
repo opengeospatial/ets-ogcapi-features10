@@ -123,6 +123,15 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
                                                     collectionId, GEOJSON_MIME_TYPE ) );
         BBox bbox = collectionIdToSpatialExtent.get( collectionId );
         GeometryTransformer geometryTransformer = new GeometryTransformer( bbox.getCrs(), crs );
+        
+        BBox maxExtent = new BBox(-180, -90, 180, 90);
+        
+        if(bbox.equals(maxExtent)) {
+        	if(!(crs.getCode().equals("http://www.opengis.net/def/crs/EPSG/0/4326") || crs.getCode().equals("http://www.opengis.net/def/crs/OGC/1.3/CRS84"))) {
+        		bbox = new BBox(-175, -85, 175, 85);
+        	}
+        }
+        
         BBox transformedBbox = geometryTransformer.transform( bbox );
 
         Response response = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
