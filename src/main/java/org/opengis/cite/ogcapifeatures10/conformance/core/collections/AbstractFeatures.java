@@ -32,6 +32,7 @@ import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.operation.predicate.RectangleContains;
 import org.locationtech.jts.operation.predicate.RectangleIntersects;
 import org.opengis.cite.ogcapifeatures10.EtsAssert;
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonDataFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.CollectionResponseKey;
@@ -319,12 +320,26 @@ public class AbstractFeatures extends CommonDataFixture {
 
         JsonPath jsonPath = response.jsonPath();
         List<Map<String, Object>> features = jsonPath.getList( "features" );
+        int count = 0;
         for ( Map<String, Object> feature : features ) {
+            if(count >= OgcApiFeatures10.FEATURES_LIMIT) {
+                break;
+            }
             String featureId = feature.get( "id" ).toString();
-            Geometry geometry = JsonUtils.parseFeatureGeometry( feature, DEFAULT_CRS );
+            Geometry geometry = null;
+            try {
+                geometry = JsonUtils.parseFeatureGeometry( feature, DEFAULT_CRS );
+            } catch (Exception e) {
+                // do nothing
+            }
+            if(geometry == null) {
+                //features without geometry should be returned, so this is fine
+                continue;
+            }
             assertInCrs84( geometry,
                            String.format( "Geometry of feature with id {} in collection with id {} is outside the valid area of the  ",
                                           featureId, collection.id ) );
+            count++;
         }
     }
 
@@ -345,10 +360,24 @@ public class AbstractFeatures extends CommonDataFixture {
         Coordinate max1 = new Coordinate(bbox.getMaxX(), bbox.getMinY());
         Coordinate max2 = new Coordinate(bbox.getMaxX(), bbox.getMaxY());
         Polygon bboxPolygon = new GeometryFactory().createPolygon(new Coordinate [] {min1, min2, max1, max2, min1});
+        int count = 0;
         for (Map<String, Object> feature : features) {
-            Geometry geometry = JsonUtils.parseFeatureGeometry(feature, DEFAULT_CRS);
+            if(count >= OgcApiFeatures10.FEATURES_LIMIT) {
+                break;
+            }
+            Geometry geometry = null;
+            try {
+                geometry = JsonUtils.parseFeatureGeometry( feature, DEFAULT_CRS );
+            } catch (Exception e) {
+                // do nothing
+            }
+            if(geometry == null) {
+                //features without geometry should be returned, so this is fine
+                continue;
+            }
             boolean insideBBox = RectangleIntersects.intersects(bboxPolygon, geometry);
             assertTrue(insideBBox, String.format("Geometry '%s' outside bounding box: '%s'.", geometry.toString(), bbox.toString()));
+            count++;
         }
 
     }

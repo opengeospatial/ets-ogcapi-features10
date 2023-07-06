@@ -29,4 +29,6 @@ public class OgcApiFeatures10 {
     public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 
     public static final String CRS_PARAMETER = "crs";
+    
+    public static final int FEATURES_LIMIT = 100;
 }

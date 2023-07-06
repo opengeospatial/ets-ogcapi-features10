@@ -189,8 +189,6 @@ public class FeaturesBBox extends AbstractFeatures {
     public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) throws ParseException {
 
         String collectionId = (String) collection.get( "id" );
-        // TODO: assert returned features
-
         // Test Method 1
         validateGeometriesInBBox( asKey( collectionId, bbox ), bbox );
         
