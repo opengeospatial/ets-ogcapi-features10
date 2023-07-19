@@ -52,7 +52,7 @@ public class FeaturesAssertions {
         String timeStamp = jsonPath.getString( "timeStamp" );
         if ( timeStamp == null )
             if ( skipIfNoTimeStamp )
-                throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+                throw new SkipException( "No server response timeStamp set for collection items request ( '" + collectionName + "')." );
             else
                 return;
 
