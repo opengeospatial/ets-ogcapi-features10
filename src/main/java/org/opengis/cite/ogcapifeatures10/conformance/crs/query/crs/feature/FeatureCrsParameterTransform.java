@@ -61,6 +61,9 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();
             String featureId = collectionIdToFeatureId.get( collectionId );
+            if(featureId == null) {            	
+            	continue;
+            }
             CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
             JsonPath json = collection.getValue();
             for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
