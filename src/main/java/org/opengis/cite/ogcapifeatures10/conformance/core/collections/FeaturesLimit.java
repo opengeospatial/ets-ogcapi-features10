@@ -5,7 +5,7 @@ import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertFalse;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertTrue;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.IUT;
-import static org.opengis.cite.ogcapifeatures10.conformance.core.collections.FeaturesAssertions.assertIntegerGreaterZero;
+import static org.opengis.cite.ogcapifeatures10.conformance.core.collections.FeaturesAssertions.assertIntegerGreaterOrEqualsZero;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveTestPointsForCollection;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
@@ -112,8 +112,8 @@ public class FeaturesLimit extends AbstractFeatures {
         Schema schema = limit.getSchema();
         assertEquals( schema.getType(), "integer",
                       String.format( msg, "schema -> type", "integer", schema.getType() ) );
-        assertIntegerGreaterZero( schema.getMinimum(), "schema -> minimum" );
-        assertIntegerGreaterZero( schema.getDefault(), "schema -> default" );
+        assertIntegerGreaterOrEqualsZero( schema.getMinimum(), "schema -> minimum" );
+        assertIntegerGreaterOrEqualsZero( schema.getDefault(), "schema -> default" );
     }
 
     /**
