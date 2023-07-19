@@ -31,6 +31,10 @@ There are some requirements the test suite expects to be satisfied by the servic
 * Coordinate Reference Systems by Reference:
     - CRS definitions must start with `urn:ogc:def:crs:EPSG` or `http://www.opengis.net/def/crs/EPSG` (Tests of A.2.1. and A.2.2. of Abstract Test Suite).
 
+=== Reserved identifiers
+
+The collection identifier `dUmmYColLection` is reserved and must not be used by a service under test.
+
 == Test suite structure
 
 The test suite definition file (testng.xml) is located in the root package, 
@@ -62,6 +66,11 @@ methods that constitute the suite.
 == Implementation details
 
 * Whenever features are tested by a single test, the number of features is limited to one.
+
+* The following limits for tests apply:
+** Paging iterations: 3
+** Number of tested collections, if no limit is specified: 20
+** Number of tested CRSs: 20
 
 include::how-to-run-the-tests.adoc[]
 

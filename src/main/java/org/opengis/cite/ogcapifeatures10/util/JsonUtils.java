@@ -22,6 +22,7 @@ import org.json.simple.JSONObject;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 import io.restassured.path.json.JsonPath;
@@ -442,7 +443,8 @@ public class JsonUtils {
                             throws URISyntaxException {
         int numberOfAllReturnedFeatures = parseAsList( "features", jsonPath ).size();
         Map<String, Object> nextLink = findLinkByRel( jsonPath.getList( "links" ), "next" );
-        while ( nextLink != null ) {
+        int count = 0;
+        while ( nextLink != null && (count <= OgcApiFeatures10.PAGING_LIMIT)) {
             String nextUrl = (String) nextLink.get( "href" );
             URI uri = new URI( nextUrl );
 
@@ -476,6 +478,7 @@ public class JsonUtils {
             } else {
                 nextLink = null;
             }
+            count++;
         }
         return numberOfAllReturnedFeatures;
     }
