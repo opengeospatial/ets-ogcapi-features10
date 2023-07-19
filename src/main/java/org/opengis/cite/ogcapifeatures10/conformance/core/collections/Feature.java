@@ -38,6 +38,8 @@ import io.restassured.response.Response;
  */
 public class Feature extends CommonDataFixture {
 
+    public static final String DUMMY_COLLECTION_ID = "dUmmYColLection";
+
     private List<Map<String, Object>> collections;
 
     private final Map<String, Response> collectionNameAndResponse = new HashMap<>();
@@ -49,10 +51,23 @@ public class Feature extends CommonDataFixture {
         for ( Map<String, Object> collection : collections ) {
             String collectionId = (String) collection.get( "id" );
             String featureId = null;
-            if ( collectionNameToFeatureId != null )
+            if ( collectionNameToFeatureId != null ) {
                 featureId = collectionNameToFeatureId.get( collectionId );
-            collectionsData.add( new Object[] { collection, featureId } );
+            }
+            if(featureId != null) {
+                collectionsData.add( new Object[] { collection, featureId } );
+            }
         }
+        
+        //https://github.com/opengeospatial/ets-ogcapi-features10/issues/215
+        //Add dummy collection ID if no feature IDs were found.
+        //Throw assertionError in feature tests, if dummy ID is found.
+        if(collectionsData.isEmpty()) {
+            Map<String, Object> dummyCollection = new HashMap<String, Object>();
+            dummyCollection.put("id", DUMMY_COLLECTION_ID);
+            collectionsData.add( new Object[] { dummyCollection, null } );
+        }
+        
         return collectionsData.iterator();
     }
 
@@ -81,6 +96,10 @@ public class Feature extends CommonDataFixture {
     @Test(description = "Implements A.2.8. Feature, Abstract Test 27 (Requirement /req/core/f-op)", dataProvider = "collectionFeatureId", dependsOnGroups = "featuresBase", alwaysRun = true)
     public void featureOperation( Map<String, Object> collection, String featureId ) {
         String collectionId = (String) collection.get( "id" );
+        //https://github.com/opengeospatial/ets-ogcapi-features10/issues/215
+        if ( collectionId == DUMMY_COLLECTION_ID ) {
+            throw new AssertionError( "No feature Ids found in tested collections." );
+        }
         if ( featureId == null )
             throw new SkipException( "No featureId available for collection '" + collectionId + "'" );
 
@@ -127,6 +146,10 @@ public class Feature extends CommonDataFixture {
     @Test(description = "Implements A.2.8. Feature, Abstract Test 28 + 29 (Requirements /req/core/f-success, /req/core/f-links)", dataProvider = "collectionFeatureId", dependsOnMethods = "featureOperation", alwaysRun = true)
     public void validateFeatureResponse( Map<String, Object> collection, String featureId ) {
         String collectionId = (String) collection.get( "id" );
+        //https://github.com/opengeospatial/ets-ogcapi-features10/issues/215
+        if ( collectionId == DUMMY_COLLECTION_ID ) {
+            throw new AssertionError( "No feature Ids found in tested collections." );
+        }
         Response response = collectionNameAndResponse.get( collectionId );
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
