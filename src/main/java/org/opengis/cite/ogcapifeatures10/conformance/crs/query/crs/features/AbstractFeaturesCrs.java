@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
@@ -49,8 +50,13 @@ public class AbstractFeaturesCrs extends CommonFixture {
         for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
             String collectionId = collection.getKey();
             JsonPath json = collection.getValue();
+            int count = 0;
             for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                if(count >= OgcApiFeatures10.CRS_LIMIT) {
+                    break;
+                }
                 collectionsData.add( new Object[] { collectionId, json, crs } );
+                count++;
             }
         }
         return collectionsData.iterator();

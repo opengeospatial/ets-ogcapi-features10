@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
+
 import com.reprezen.kaizen.oasparser.model3.MediaType;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 import com.reprezen.kaizen.oasparser.model3.Operation;
@@ -177,7 +179,9 @@ public class OpenApiUtils {
 
         List<TestPoint> allTestPoints = retrieveTestPoints( apiModel, iut, requestedPath.toString(),
                                                             ( a, b ) -> a.matches( b ), true );
-        if ( noOfCollection < 0 || allTestPoints.size() <= noOfCollection ) {
+        if(noOfCollection < 0 && allTestPoints.size() > OgcApiFeatures10.COLLECTIONS_LIMIT) {
+            return allTestPoints.subList( 0, OgcApiFeatures10.COLLECTIONS_LIMIT );
+        } else if ( noOfCollection < 0 || allTestPoints.size() <= noOfCollection) {
             return allTestPoints;
         }
         return allTestPoints.subList( 0, noOfCollection );

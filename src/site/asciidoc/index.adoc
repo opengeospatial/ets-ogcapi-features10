@@ -67,6 +67,11 @@ methods that constitute the suite.
 
 * Whenever features are tested by a single test, the number of features is limited to one.
 
+* The following limits for tests apply:
+** Paging iterations: 3
+** Number of tested collections, if no limit is specified: 20
+** Number of tested CRSs: 20
+
 include::how-to-run-the-tests.adoc[]
 
 == Using the REST API
