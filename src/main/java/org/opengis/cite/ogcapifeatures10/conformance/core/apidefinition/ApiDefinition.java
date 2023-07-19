@@ -117,11 +117,10 @@ public class ApiDefinition extends CommonFixture {
 
     private String createValidationMsg( OpenApi3 model ) {
         StringBuilder sb = new StringBuilder();
-        sb.append( "Landing Page is not valid. Found following validation items:" );
+        sb.append( "API definition document is not valid. Found following validation items:" );
         if ( !model.isValid() ) {
             for ( ValidationResults.ValidationItem item : model.getValidationItems() ) {
-                sb.append( "  - " ).append( item.getSeverity() ).append( ": " ).append( item.getMsg() );
-
+                sb.append( "  - " ).append( item.getSeverity() ).append( ": " ).append( item.toString() ).append("\n");
             }
         }
         return sb.toString();
