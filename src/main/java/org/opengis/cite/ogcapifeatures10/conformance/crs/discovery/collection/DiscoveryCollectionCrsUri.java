@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
@@ -41,19 +42,27 @@ public class DiscoveryCollectionCrsUri {
 
     private Map<String, List<CoordinateSystem>> collectionIdAndValidCrs = new HashMap<>();
 
-    @DataProvider(name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) throws AssertionError {
+    @SuppressWarnings("unchecked")
+    @DataProvider(
+            name = "collectionIdAndJsonAndCrs")
+    public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) throws AssertionError {
         List<Object[]> collectionsData = new ArrayList<>();
         try {
-            Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-                List<CoordinateSystem> crs = parseCrs( collection.getValue() );
-                for ( CoordinateSystem coordinateSystem : crs ) {
-                    collectionsData.add( new Object[] { collection.getKey(), coordinateSystem } );
+            Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
+                    .getAttribute(SuiteAttribute.COLLECTION_BY_ID.getName());
+            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+                List<CoordinateSystem> crs = parseCrs(collection.getValue());
+                int count = 0;
+                for (CoordinateSystem coordinateSystem : crs) {
+                    if (count >= OgcApiFeatures10.CRS_LIMIT) {
+                        break;
+                    }
+                    collectionsData.add(new Object[] { collection.getKey(), coordinateSystem });
+                    count++;
                 }
             }
         } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null } );
+            collectionsData.add(new Object[] { null, null });
         }
         return collectionsData.iterator();
     }

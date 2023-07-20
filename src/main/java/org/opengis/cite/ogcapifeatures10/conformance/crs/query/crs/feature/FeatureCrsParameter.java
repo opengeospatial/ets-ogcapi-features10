@@ -97,7 +97,7 @@ public class FeatureCrsParameter extends AbstractFeatureCrs {
                                                      featureUrl ) );
         }
         assertCrsHeader( actualHeader, crs,
-                         String.format( "Features response at '%s' does not provide expected 'Content-Crs' header, was: '%s', expected: '%s'",
+                         String.format( "Features response at '%s' does not provide expected 'Content-Crs' header, was: '%s', expected: '<%s>'",
                                         featureUrl, actualHeader, crs ) );
     }
 

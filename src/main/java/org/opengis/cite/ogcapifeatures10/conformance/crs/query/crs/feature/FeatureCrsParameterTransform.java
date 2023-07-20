@@ -55,21 +55,25 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
     private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
 
-    @DataProvider(name = "collectionFeatureIdCrsAndDefaultCrs")
-    public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs( ITestContext testContext ) {
+    @DataProvider(
+            name = "collectionFeatureIdCrsAndDefaultCrs")
+    public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs(ITestContext testContext) {
         List<Object[]> collectionsData = new ArrayList<>();
         try {
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
                 String collectionId = collection.getKey();
-                String featureId = collectionIdToFeatureId.get( collectionId );
-                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+                String featureId = collectionIdToFeatureId.get(collectionId);
+                if (featureId == null) {
+                    continue;
+                }
+                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get(collectionId);
                 JsonPath json = collection.getValue();
-                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                    collectionsData.add( new Object[] { collectionId, json, featureId, crs, defaultCrs } );
+                for (CoordinateSystem crs : collectionIdToCrs.get(collectionId)) {
+                    collectionsData.add(new Object[] { collectionId, json, featureId, crs, defaultCrs });
                 }
             }
         } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null, null, null, null } );
+            collectionsData.add(new Object[] { null, null, null, null, null });
         }
         return collectionsData.iterator();
     }

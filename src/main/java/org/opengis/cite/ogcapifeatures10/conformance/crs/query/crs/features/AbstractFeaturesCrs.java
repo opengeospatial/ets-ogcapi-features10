@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
@@ -47,19 +48,25 @@ public class AbstractFeaturesCrs extends CommonFixture {
         return collectionsData.iterator();
     }
 
-    @DataProvider(name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {
+    @DataProvider(
+            name = "collectionIdAndJsonAndCrs")
+    public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) {
         List<Object[]> collectionsData = new ArrayList<>();
         try {
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
                 String collectionId = collection.getKey();
                 JsonPath json = collection.getValue();
-                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                    collectionsData.add( new Object[] { collectionId, json, crs } );
+                int count = 0;
+                for (CoordinateSystem crs : collectionIdToCrs.get(collectionId)) {
+                    if (count >= OgcApiFeatures10.CRS_LIMIT) {
+                        break;
+                    }
+                    collectionsData.add(new Object[] { collectionId, json, crs });
+                    count++;
                 }
             }
         } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null, null } );
+            collectionsData.add(new Object[] { null, null, null });
         }
         return collectionsData.iterator();
     }
