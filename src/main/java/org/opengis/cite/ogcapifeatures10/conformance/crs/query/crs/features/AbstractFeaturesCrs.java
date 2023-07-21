@@ -36,28 +36,37 @@ public class AbstractFeaturesCrs extends CommonFixture {
     @DataProvider(name = "collectionIdAndJson")
     public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            collectionsData.add( new Object[] { collectionId, json } );
+        try {
+            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+                String collectionId = collection.getKey();
+                JsonPath json = collection.getValue();
+                collectionsData.add( new Object[] { collectionId, json } );
+            }            
+        } catch (Exception e) {
+            collectionsData.add( new Object[] { null, null } );
         }
         return collectionsData.iterator();
     }
 
-    @DataProvider(name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs( ITestContext testContext ) {
+    @DataProvider(
+            name = "collectionIdAndJsonAndCrs")
+    public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            int count = 0;
-            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                if(count >= OgcApiFeatures10.CRS_LIMIT) {
-                    break;
+        try {
+            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+                String collectionId = collection.getKey();
+                JsonPath json = collection.getValue();
+                int count = 0;
+                for (CoordinateSystem crs : collectionIdToCrs.get(collectionId)) {
+                    if (count >= OgcApiFeatures10.CRS_LIMIT) {
+                        break;
+                    }
+                    collectionsData.add(new Object[] { collectionId, json, crs });
+                    count++;
                 }
-                collectionsData.add( new Object[] { collectionId, json, crs } );
-                count++;
             }
+        } catch (Exception e) {
+            collectionsData.add(new Object[] { null, null, null });
         }
         return collectionsData.iterator();
     }
@@ -65,15 +74,19 @@ public class AbstractFeaturesCrs extends CommonFixture {
     @DataProvider(name = "collectionIdAndJsonAndCrsAndDefaultCrs")
     public Iterator<Object[]> collectionIdAndJsonAndCrsAndDefaultCrs( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            if ( defaultCrs != null ) {
-                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                    collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
+        try {
+            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+                String collectionId = collection.getKey();
+                JsonPath json = collection.getValue();
+                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+                if ( defaultCrs != null ) {
+                    for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                        collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
+                    }
                 }
-            }
+            }            
+        } catch (Exception e) {
+            collectionsData.add( new Object[] { null, null, null, null } );
         }
         return collectionsData.iterator();
     }

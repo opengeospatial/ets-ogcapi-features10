@@ -38,13 +38,17 @@ public class AbstractFeatureCrs extends CommonFixture {
     @DataProvider(name = "collectionFeatureId")
     public Iterator<Object[]> collectionFeatureId( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            if ( collectionIdToFeatureId != null && collectionIdToFeatureId.containsKey( collectionId ) ) {
-                String featureId = collectionIdToFeatureId.get( collectionId );
-                JsonPath json = collection.getValue();
-                collectionsData.add( new Object[] { collectionId, json, featureId } );
+        try {
+            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+                String collectionId = collection.getKey();
+                if ( collectionIdToFeatureId != null && collectionIdToFeatureId.containsKey( collectionId ) ) {
+                    String featureId = collectionIdToFeatureId.get( collectionId );
+                    JsonPath json = collection.getValue();
+                    collectionsData.add( new Object[] { collectionId, json, featureId } );
+                }
             }
+        } catch (Exception e) {
+            collectionsData.add( new Object[] { null, null, null } );
         }
         return collectionsData.iterator();
     }

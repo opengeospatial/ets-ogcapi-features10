@@ -44,13 +44,17 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
     @DataProvider(name = "collectionDefaultCrs")
     public Iterator<Object[]> collectionDefaultCrs( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            if ( defaultCrs != null ) {
-                collectionsData.add( new Object[] { collectionId, json, defaultCrs } );
+        try {
+            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+                String collectionId = collection.getKey();
+                JsonPath json = collection.getValue();
+                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+                if ( defaultCrs != null ) {
+                    collectionsData.add( new Object[] { collectionId, json, defaultCrs } );
+                }
             }
+        } catch (Exception e) {
+            collectionsData.add( new Object[] { null, null, null } );
         }
         return collectionsData.iterator();
     }
@@ -58,15 +62,19 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
     @DataProvider(name = "collectionCrsAndDefaultCrs")
     public Iterator<Object[]> collectionCrs( ITestContext testContext ) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            if ( defaultCrs != null ) {
-                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                    collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
+        try {
+            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
+                String collectionId = collection.getKey();
+                JsonPath json = collection.getValue();
+                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
+                if ( defaultCrs != null ) {
+                    for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
+                        collectionsData.add( new Object[] { collectionId, json, crs, defaultCrs } );
+                    }
                 }
             }
+        } catch (Exception e) {
+            collectionsData.add( new Object[] { null, null, null, null } );
         }
         return collectionsData.iterator();
     }
@@ -82,6 +90,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
     @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)", dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
     public void verifyBboxCrsParameterWithDefaultCrs( String collectionId, JsonPath collection,
                                                       CoordinateSystem defaultCrs ) {
+        if((collectionId == null) & (collection == null) & (defaultCrs == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
         if ( featuredUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type 5s)",
@@ -114,6 +125,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
     @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)", dataProvider = "collectionCrsAndDefaultCrs", dependsOnGroups = "crs-conformance", dependsOnMethods = "verifyBboxCrsParameterWithDefaultCrs", priority = 1)
     public void verifyBboxCrsParameter( String collectionId, JsonPath collection, CoordinateSystem crs,
                                         CoordinateSystem defaultCrs ) {
+        if((collectionId == null) & (collection == null) & (crs == null) & (defaultCrs == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         if ( !collectionIdToResponseWithDefaultCRs.containsKey( collectionId ) )
             throw new SkipException( String.format( "Collection with id %s could not be requested with bbox in default crs",
                                                     collectionId ) );
