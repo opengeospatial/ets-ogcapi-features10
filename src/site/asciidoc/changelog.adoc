@@ -1,5 +1,26 @@
 = Release Notes OGC API - Features
 
+== 1.5 (2023-07-28)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/184[#184]: Part 2: CRS should fail if it key tests were skipped
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/139[#139]: Update Dockerfile; reduce number of layers
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/185[#185]: Running tests against a non CRS service results in test failure.
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/194[#194]: crs: conformance class, not requirements class
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/176[#176]: White space shall be allowed between tokens in a MIME-type string
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/195[#195]: Abstract Test 16 - limit parameter tests fail if minimum is 0
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/196[#196]: Abstract Test 22 - maximum behaviour check if maximum is not specified crashes
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/198[#198]: Abstract Test 6 - Misleading error message and missing positional info
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/200[#200]: Improve error message on Features ContentCrs parameter checks
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/177[#177]: UriBuilder.retrieveCollectionNameTemplateName does not support prefix in testPoint path
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/201[#201]: CRS tests fail against empty feature collections
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/202[#202]: Introduce limits to prevent long test runs and OutOfMemoryErrors
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/215[#215]: Introduce check that at least one collection contains one or more features
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/143[#143]: Produce a single "tests were skipped" for multiple collections not having a timeStamp property
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/199[#199]: Part 2/bbox-crs validation: Using transformed extent as bbox fails in many cases
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/18[#18]: Assert that features in response are in requested BoundingBox
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/193[#193]: Create test Jenkinsfile
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/192[#192]: Add credentials to SoapUI project
+
 == 1.4 (2022-05-31)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/pull/189[#189]: Update dependency rest-assured to v4.5.1
