@@ -24,6 +24,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.config.JsonPathConfig;
+import io.restassured.path.json.config.JsonPathConfig.NumberReturnType;
 import io.restassured.response.Response;
 
 /**
@@ -110,7 +112,7 @@ public class FeatureCollection extends CommonDataFixture {
         if ( response == null )
             throw new SkipException( "Could not find a response for collection with id " + collectionId );
 
-        JsonPath jsonPath = response.jsonPath();
+        JsonPath jsonPath = response.jsonPath(JsonPathConfig.jsonPathConfig().numberReturnType(NumberReturnType.DOUBLE));
 
         assertEqualStringContent( collection, jsonPath, "id" );
         assertEqualStringContent( collection, jsonPath, "title" );

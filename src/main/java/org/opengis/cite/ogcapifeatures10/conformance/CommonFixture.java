@@ -12,8 +12,12 @@ import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
+import io.restassured.config.JsonConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.path.json.config.JsonPathConfig;
+import io.restassured.path.json.config.JsonPathConfig.NumberReturnType;
 import io.restassured.specification.RequestSpecification;
 
 /**
@@ -58,7 +62,9 @@ public class CommonFixture {
     }
 
     protected RequestSpecification init() {
-        return given().filters( requestLoggingFilter, responseLoggingFilter ).log().all();
+        JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(NumberReturnType.DOUBLE);
+        RestAssuredConfig config = RestAssuredConfig.newConfig().jsonConfig(jsonConfig) ;
+        return given().filters( requestLoggingFilter, responseLoggingFilter ).log().all().with().config(config);
     }
 
     /**
