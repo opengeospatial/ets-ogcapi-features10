@@ -184,6 +184,7 @@ public class FeaturesBBox extends AbstractFeatures {
      * @param bbox
      *            bbox parameter to request, never <code>null</code>
      * @throws ParseException 
+     *            If the JSON cannot be parsed
      */
     @Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)", dataProvider = "collectionItemUrisWithBboxes", dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
     public void validateFeaturesWithBoundingBoxResponse( Map<String, Object> collection, BBox bbox ) throws ParseException {

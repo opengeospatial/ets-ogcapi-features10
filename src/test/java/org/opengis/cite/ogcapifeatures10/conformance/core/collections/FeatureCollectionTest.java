@@ -28,6 +28,8 @@ import com.reprezen.kaizen.oasparser.OpenApi3Parser;
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
 
 import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.config.JsonPathConfig;
+import io.restassured.path.json.config.JsonPathConfig.NumberReturnType;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -96,8 +98,10 @@ public class FeatureCollectionTest {
 
     private static List<Map<String, Object>> prepareCollections() {
         List<Map<String, Object>> collections = new ArrayList<>();
-        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).get() );
-        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-gebaeudebauwerk.json" ) ).get() );
+
+        JsonPathConfig config = JsonPathConfig.jsonPathConfig().numberReturnType(NumberReturnType.DOUBLE);
+        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).using(config).get() );
+        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-gebaeudebauwerk.json" ) ).using(config).get() );
         return collections;
     }
 

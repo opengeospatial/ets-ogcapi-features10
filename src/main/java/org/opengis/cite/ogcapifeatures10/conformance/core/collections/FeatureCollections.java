@@ -36,7 +36,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import io.restassured.path.json.config.JsonPathConfig;
+import io.restassured.path.json.config.JsonPathConfig.NumberReturnType;
 import io.restassured.response.Response;
 
 /**
@@ -182,7 +185,8 @@ public class FeatureCollections extends CommonDataFixture {
         Response response = testPointAndResponses.get( testPoint );
         if ( response == null )
             throw new SkipException( "Could not find a response for test point " + testPoint );
-        JsonPath jsonPath = response.jsonPath();
+        JsonPathConfig config = JsonPathConfig.jsonPathConfig().numberReturnType(NumberReturnType.DOUBLE);
+        JsonPath jsonPath = response.jsonPath(config);
         List<Object> collections = jsonPath.getList( "collections" );
 
         // Test method cannot be verified as the provided collections are not known.
