@@ -20,7 +20,7 @@ public class OgcApiFeatures10 {
 
     public static final String DEFAULT_CRS_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-    public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84h";
+    public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/0/CRS84h";
 
     public static final CoordinateSystem DEFAULT_CRS = new CoordinateSystem( DEFAULT_CRS_CODE );
 
