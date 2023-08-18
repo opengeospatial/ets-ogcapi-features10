@@ -55,10 +55,10 @@
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>
     <soapui.teamengine.password>ogctest</soapui.teamengine.password>
-    <soapui.iut>https://demo.ldproxy.net/daraa</soapui.iut>
-    <soapui.tests.passed>382</soapui.tests.passed>
-    <soapui.tests.skipped>16</soapui.tests.skipped>
-    <soapui.tests.failed>3</soapui.tests.failed>
+    <soapui.iut>https://ri.ldproxy.net/daraa</soapui.iut>
+    <soapui.tests.passed>386</soapui.tests.passed>
+    <soapui.tests.skipped>15</soapui.tests.skipped>
+    <soapui.tests.failed>0</soapui.tests.failed>
   </properties>
 
   <dependencies>
