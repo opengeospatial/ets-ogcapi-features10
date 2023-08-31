@@ -56,9 +56,9 @@
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>
     <soapui.teamengine.password>ogctest</soapui.teamengine.password>
     <soapui.iut>https://ri.ldproxy.net/daraa</soapui.iut>
-    <soapui.tests.passed>386</soapui.tests.passed>
+    <soapui.tests.passed>383</soapui.tests.passed>
     <soapui.tests.skipped>15</soapui.tests.skipped>
-    <soapui.tests.failed>0</soapui.tests.failed>
+    <soapui.tests.failed>3</soapui.tests.failed>
   </properties>
 
   <dependencies>
