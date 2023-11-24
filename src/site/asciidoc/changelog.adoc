@@ -1,5 +1,9 @@
 = Release Notes OGC API - Features
 
+== 1.7 (2023-11-24)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/228[#228]: Improved logging in order to follow progress
+
 == 1.6 (2023-08-31)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/221[#221]: 1.3/CRS84h required but link is not working
