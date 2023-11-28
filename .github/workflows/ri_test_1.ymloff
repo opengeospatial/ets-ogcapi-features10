@@ -1,0 +1,28 @@
+name: generate_test
+on:
+  schedule:
+    - cron:  '0 0 1 * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Run the Maven verify phase
+        run: |
+          mvn clean package -Dsource=8
+          cd target
+          sed  's|https://www.ldproxy.nrw.de/rest/services/kataster/|https://demo.ldproxy.net/vineyards|' ../src/main/config/test-run-props.xml > ../src/main/config/test-run-props-ldproxy.xml
+          java -jar ets-ogcapi-features10-1.8-SNAPSHOT-aio.jar -o .. ../src/main/config/test-run-props-ldproxy.xml
+          cd ..
+          python3 parsetestresults.py https://demo.ldproxy.net/vineyards
+          mv referenceimplementationscheck.adoc referenceimplementationscheck_ldproxy.adoc
+          git config --global user.name 'opengeospatial'
+          git config --global user.email 'opengeospatial@users.noreply.github.com'          
+          git add referenceimplementationscheck_ldproxy.adoc
+          git commit -am "Automated RI check"
+          git push
