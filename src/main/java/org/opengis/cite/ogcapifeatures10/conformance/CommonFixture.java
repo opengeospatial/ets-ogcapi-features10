@@ -65,7 +65,7 @@ public class CommonFixture {
     protected RequestSpecification init() {
         JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(NumberReturnType.DOUBLE);
         RestAssuredConfig config = RestAssuredConfig.newConfig().jsonConfig(jsonConfig) ;
-        return given().filters( requestLoggingFilter, responseLoggingFilter , new RequestLimitFilter()).log().all().with().config(config);
+        return given().filters( new RequestLimitFilter(), requestLoggingFilter, responseLoggingFilter ).log().all().with().config(config);
     }
 
     /**
