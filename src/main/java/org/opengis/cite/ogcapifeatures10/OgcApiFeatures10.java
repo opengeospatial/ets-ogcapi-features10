@@ -37,4 +37,6 @@ public class OgcApiFeatures10 {
     public static final int CRS_LIMIT = 20;
 
     public static final int FEATURES_LIMIT = 100;
+    
+    public static final int NUMBERMATCHED_LIMIT = 10000;
 }
