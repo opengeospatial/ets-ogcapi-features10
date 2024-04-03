@@ -8,6 +8,7 @@ import java.net.URI;
 
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.util.ClientUtils;
+import org.opengis.cite.ogcapifeatures10.util.RequestLimitFilter;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -64,7 +65,7 @@ public class CommonFixture {
     protected RequestSpecification init() {
         JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(NumberReturnType.DOUBLE);
         RestAssuredConfig config = RestAssuredConfig.newConfig().jsonConfig(jsonConfig) ;
-        return given().filters( requestLoggingFilter, responseLoggingFilter ).log().all().with().config(config);
+        return given().filters( requestLoggingFilter, responseLoggingFilter , new RequestLimitFilter()).log().all().with().config(config);
     }
 
     /**
