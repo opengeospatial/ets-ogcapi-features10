@@ -71,7 +71,7 @@ methods that constitute the suite.
 ** Paging iterations: 3
 ** Number of tested collections, if no limit is specified: 20
 ** Number of tested CRSs: 20
-** A limit of 10 is set  for all requests to collection items (features), except if a limit is already set by the test.
+** A limit of 10 is set for all requests to collection items (features), except if a limit is already set by the test.
 ** For tests for correct matched numbers of features a maximum of 10000 is set. Tests are skipped for collections that contain more features.
 
 include::how-to-run-the-tests.adoc[]
