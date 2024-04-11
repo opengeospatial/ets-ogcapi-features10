@@ -100,10 +100,11 @@ public class FeaturesAssertions {
                 }
             }
         }
-//        maximumLimit = Math.min(maximumLimit, 100);
         int numberMatched = jsonPath.getInt( "numberMatched" );
-        if(numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
-            throw new SkipException(String.format("Number of matched features too large to check, was %d, test suite limit is %d.", numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
+        if (numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
+            throw new SkipException(
+                    String.format("Number of matched features too large to check, was %d, test suite limit is %d.",
+                            numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
         }
         int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath, maximumLimit );
         assertEquals( numberMatched, numberOfAllReturnedFeatures,
