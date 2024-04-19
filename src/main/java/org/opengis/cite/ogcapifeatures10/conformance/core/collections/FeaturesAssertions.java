@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.testng.SkipException;
@@ -100,6 +101,11 @@ public class FeaturesAssertions {
             }
         }
         int numberMatched = jsonPath.getInt( "numberMatched" );
+        if (numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
+            throw new SkipException(
+                    String.format("Number of matched features too large to check, was %d, test suite limit is %d.",
+                            numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
+        }
         int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath, maximumLimit );
         assertEquals( numberMatched, numberOfAllReturnedFeatures,
                       "Value of numberReturned (" + numberMatched + ") does not match the number of features in all responses ("
