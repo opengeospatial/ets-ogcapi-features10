@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opengis.cite</groupId>
   <artifactId>ets-ogcapi-features10</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.7.1</version>
   <packaging>jar</packaging>
 
   <name>OGC API-Features 1.0 Conformance Test Suite</name>
@@ -30,7 +30,7 @@
     <connection>scm:git:https://github.com/opengeospatial/ets-ogcapi-features10.git</connection>
     <developerConnection>scm:git:git@github.com:opengeospatial/ets-ogcapi-features10.git</developerConnection>
     <url>https://github.com/opengeospatial/ets-ogcapi-features10</url>
-    <tag>HEAD</tag>
+    <tag>1.7.1</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issue Tracker</system>
