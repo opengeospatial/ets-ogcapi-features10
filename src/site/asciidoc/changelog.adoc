@@ -1,5 +1,9 @@
 = Release Notes OGC API - Features
 
+== 1.7.1 (2024-04-19)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/236[#236]: Limit requested features to prevent too large responses
+
 == 1.7 (2023-11-24)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/228[#228]: Improved logging in order to follow progress
