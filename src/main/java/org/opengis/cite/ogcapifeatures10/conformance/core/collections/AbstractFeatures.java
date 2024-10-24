@@ -325,7 +325,11 @@ public class AbstractFeatures extends CommonDataFixture {
             if(count >= OgcApiFeatures10.FEATURES_LIMIT) {
                 break;
             }
-            String featureId = feature.get( "id" ).toString();
+            Object featureIdOrNull = feature.get( "id" );
+            if(featureIdOrNull == null) {
+                featureIdOrNull = "N/A";
+            }
+            String featureId = featureIdOrNull.toString();
             Geometry geometry = null;
             try {
                 geometry = JsonUtils.parseFeatureGeometry( feature, DEFAULT_CRS );
