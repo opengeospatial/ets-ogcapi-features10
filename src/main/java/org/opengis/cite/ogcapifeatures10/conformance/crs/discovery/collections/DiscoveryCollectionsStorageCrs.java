@@ -38,7 +38,7 @@ public class DiscoveryCollectionsStorageCrs extends AbstractDiscoveryCollections
      */
     @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
                         + "storageCrs property in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsPathCollectionCrsPropertyContainsDefaultCrs( TestPoint testPoint, JsonPath jsonPath,
+    public void verifyCollectionsPathCollectionCrsPropertyContainsStorageCrs( TestPoint testPoint, JsonPath jsonPath,
                                                                               Map<String, Object> collection ) {
         String collectionId = (String) collection.get( "id" );
         String storageCrs = (String) collection.get( "storageCrs" );
@@ -47,15 +47,18 @@ public class DiscoveryCollectionsStorageCrs extends AbstractDiscoveryCollections
                                                     collectionId, testPoint.getPath() ) );
         }
         List<String> crs = JsonUtils.parseAsList( "crs", collection );
-        if ( crs.size() == 1 && "#/crs".equals( crs.get( 0 ) ) ) {
-            List<String> globalCrsList = JsonUtils.parseAsList( "crs", jsonPath );
-            if ( !globalCrsList.contains( storageCrs ) ) {
-                throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared in the global list of CRSs",
-                                                         collectionId, testPoint.getPath(), storageCrs ) );
-            }
-        } else if ( !crs.contains( storageCrs ) ) {
-            throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared as crs property",
+
+        if ( !crs.contains( storageCrs ) ) {
+            if( crs.contains("#/crs") ) {
+                List<String> globalCrsList = JsonUtils.parseAsList( "crs", jsonPath );
+                if ( !globalCrsList.contains( storageCrs ) ) {
+                    throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared in the global list of CRSs",
+                                                             collectionId, testPoint.getPath(), storageCrs ) );
+                }
+            } else {
+                throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared as crs property",
                                                      collectionId, testPoint.getPath(), storageCrs ) );
+            }
         }
     }
 
