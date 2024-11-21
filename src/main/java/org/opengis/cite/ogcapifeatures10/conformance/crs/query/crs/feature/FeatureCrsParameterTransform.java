@@ -145,6 +145,11 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
         if((collectionId == null) & (collection == null) & (featureId == null) & (crs == null) & (defaultCRS == null)) {
             throw new AssertionError("No crs information for collection available.");
         }
+        //https://github.com/opengeospatial/ets-ogcapi-features10/issues/227
+        if(defaultCRS == null) {
+            //use default crs
+            defaultCRS = new CoordinateSystem(org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE);
+        }
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
