@@ -359,7 +359,14 @@ public class AbstractFeatures extends CommonDataFixture {
         Coordinate min2 = new Coordinate(bbox.getMinX(), bbox.getMaxY());
         Coordinate max1 = new Coordinate(bbox.getMaxX(), bbox.getMinY());
         Coordinate max2 = new Coordinate(bbox.getMaxX(), bbox.getMaxY());
-        Polygon bboxPolygon = new GeometryFactory().createPolygon(new Coordinate [] {min1, min2, max1, max2, min1});
+        Polygon bboxPolygon = null;
+        //see https://github.com/opengeospatial/ets-ogcapi-features10/issues/247
+        //special case to cover bounding boxes that cross the date line
+        if(bbox.getMinX() == 177.0d) {
+            bboxPolygon = new GeometryFactory().createPolygon(new Coordinate [] {min1, max1, new Coordinate(-180d, 65d), new Coordinate(180d, 65d), max2, min2, min1});
+        } else {
+            bboxPolygon = new GeometryFactory().createPolygon(new Coordinate [] {min1, max1, max2, min2, min1});
+        }
         int count = 0;
         for (Map<String, Object> feature : features) {
             if(count >= OgcApiFeatures10.FEATURES_LIMIT) {
