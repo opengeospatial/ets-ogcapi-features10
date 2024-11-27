@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.glassfish.jersey.uri.UriTemplate;
+import org.glassfish.jersey.uri.internal.UriTemplateParser;
 import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 
 import com.reprezen.kaizen.oasparser.model3.MediaType;
@@ -25,8 +27,6 @@ import com.reprezen.kaizen.oasparser.model3.Path;
 import com.reprezen.kaizen.oasparser.model3.Response;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 import com.reprezen.kaizen.oasparser.model3.Server;
-import com.sun.jersey.api.uri.UriTemplate;
-import com.sun.jersey.api.uri.UriTemplateParser;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>

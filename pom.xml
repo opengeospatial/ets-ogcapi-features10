@@ -3,13 +3,12 @@
   <parent>
     <groupId>org.opengis.cite</groupId>
     <artifactId>ets-common</artifactId>
-    <version>9</version>
+    <version>13</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.opengis.cite</groupId>
   <artifactId>ets-ogcapi-features10</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>OGC API-Features 1.0 Conformance Test Suite</name>
@@ -55,10 +54,10 @@
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>
     <soapui.teamengine.password>ogctest</soapui.teamengine.password>
-    <soapui.iut>https://ri.ldproxy.net/daraa</soapui.iut>
-    <soapui.tests.passed>383</soapui.tests.passed>
-    <soapui.tests.skipped>15</soapui.tests.skipped>
-    <soapui.tests.failed>3</soapui.tests.failed>
+    <soapui.iut>https://demo.ldproxy.net/daraa</soapui.iut>
+    <soapui.tests.passed>401</soapui.tests.passed>
+    <soapui.tests.skipped>0</soapui.tests.skipped>
+    <soapui.tests.failed>0</soapui.tests.failed>
   </properties>
 
   <dependencies>
@@ -69,7 +68,6 @@
     <dependency>
       <groupId>org.locationtech.jts</groupId>
       <artifactId>jts-core</artifactId>
-      <version>1.18.1</version>
     </dependency>
     <dependency>
       <groupId>org.locationtech.proj4j</groupId>
@@ -82,23 +80,12 @@
       <version>1.18.1</version>
     </dependency>
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-core</artifactId>
-      <version>1.19.4</version>
-    </dependency>
-    <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
-      <version>4.5.1</version>
     </dependency>
     <dependency>
       <groupId>com.reprezen.kaizen</groupId>
       <artifactId>openapi-parser</artifactId>
-      <version>4.0.4</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -123,62 +110,35 @@
     <dependency>
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>
-      <version>1.81</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>jsr311-api</artifactId>
-      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <version>1.3</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.9.10</version>
-    </dependency>
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>1.4.01</version>
     </dependency>
     <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
-      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.connectors</groupId>
+      <artifactId>jersey-apache-connector</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
-        <configuration>
-          <source>8</source> 
-          <docfilessubdirs>true</docfilessubdirs>
-          <show>package</show>
-          <links>
-            <link>http://testng.org/javadocs/</link>
-          </links>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -201,59 +161,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <tagNameFormat>@{project.version}</tagNameFormat>
-          <releaseProfiles>release</releaseProfiles>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.7.1</version>
-        <executions>
-          <execution>
-            <id>site-package</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>1.5.7.1</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <relativizeDecorationLinks>false</relativizeDecorationLinks>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-scm-publish-plugin</artifactId>
-        <version>1.1</version>
-        <configuration>
-          <scmBranch>gh-pages</scmBranch>
-        </configuration>
       </plugin>
     </plugins>
     <pluginManagement>
@@ -300,34 +207,6 @@
                 </run>
               </image>
             </images>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.0.0</version>
-          <configuration>
-            <artifactItems>
-              <artifactItem>
-                <groupId>org.opengis.cite.teamengine</groupId>
-                <artifactId>teamengine-web</artifactId>
-                <version>${docker.teamengine.version}</version>
-                <type>war</type>
-              </artifactItem>
-              <artifactItem>
-                <groupId>org.opengis.cite.teamengine</groupId>
-                <artifactId>teamengine-web</artifactId>
-                <version>${docker.teamengine.version}</version>
-                <classifier>common-libs</classifier>
-                <type>zip</type>
-              </artifactItem>
-              <artifactItem>
-                <groupId>org.opengis.cite.teamengine</groupId>
-                <artifactId>teamengine-console</artifactId>
-                <version>${docker.teamengine.version}</version>
-                <classifier>base</classifier>
-                <type>zip</type>
-              </artifactItem>
-            </artifactItems>
           </configuration>
         </plugin>
         <plugin>
@@ -455,32 +334,6 @@
                 <goals>
                   <goal>copy</goal>
                 </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <configuration>
-                  <gpgArguments>
-                    <arg>--pinentry-mode</arg>
-                    <arg>loopback</arg>
-                  </gpgArguments>
-                </configuration>
               </execution>
             </executions>
           </plugin>

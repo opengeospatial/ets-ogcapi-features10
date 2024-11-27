@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.testng.ITestContext;
+import org.testng.Reporter;
 import org.testng.annotations.BeforeSuite;
 
 /**
@@ -23,9 +24,12 @@ public class SuitePreconditions {
      */
     @BeforeSuite
     @SuppressWarnings("rawtypes")
-    public void verifyTestSubject(ITestContext testContext) {
-        SuiteAttribute testFileAttr = SuiteAttribute.TEST_SUBJ_FILE;
-        Object sutObj = testContext.getSuite().getAttribute(testFileAttr.getName());
+    public void verifyTestSubject() {
+        // ITestcontext was removed from the BeforeSuite annotation, see here:
+        // https://github.com/testng-team/testng/issues/3032
+            ITestContext testContext = Reporter.getCurrentTestResult().getTestContext();
+            SuiteAttribute testFileAttr = SuiteAttribute.TEST_SUBJ_FILE;
+            Object sutObj = testContext.getSuite().getAttribute(testFileAttr.getName());
         Class expectedType = testFileAttr.getType();
         if (null != sutObj && expectedType.isInstance(sutObj)) {
             // TODO: Verify test subject
