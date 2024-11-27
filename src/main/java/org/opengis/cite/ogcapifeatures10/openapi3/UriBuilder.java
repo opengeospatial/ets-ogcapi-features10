@@ -69,7 +69,7 @@ public class UriBuilder {
         String path = testPoint.getPath();
         UriTemplateParser uriTemplateParser = new UriTemplateParser( path );
         for ( String templateName : uriTemplateParser.getNames() ) {
-            if ( path.startsWith( "/collections/{" + templateName + "}" ) )
+            if ( path.contains( "/collections/{" + templateName + "}" ) )
                 return templateName;
         }
         return null;

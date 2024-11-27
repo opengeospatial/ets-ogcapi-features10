@@ -1,0 +1,115 @@
+{
+  "links": [
+    {
+      "href": "http://localhost/api/ogc/features/v1/collections?f=json",
+      "rel": "self",
+      "type": "application/json",
+      "title": "This document"
+    }
+  ],
+  "collections": [
+    {
+      "id": "sf:archsites",
+      "title": "Spearfish archeological sites",
+      "description": "Sample collection with a crs property having both its storageCrs and the #/crs JSON pointer",
+      "extent": {
+        "spatial": {
+          "crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+          "bbox": [
+            [ -103.8725637911543, 44.37740330855979, -103.63794182141925, 44.48804280772808 ]
+          ]
+        }
+      },
+     "crs": [
+        "http://www.opengis.net/def/crs/EPSG/0/26713",
+        "#/crs"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/26713"
+    },
+    {
+      "id": "ne:populated_places",
+      "title": "Populated Places",
+      "description": "Sample collection whose crs property contains only the #/crs JSON pointer and the root crs list contains its storageCrs",
+      "extent": {
+        "spatial": {
+          "crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+          "bbox": [
+            [ -175.2205644999999, -41.29206799231509, 179.2166470999999, 64.14345946317033 ]
+          ]
+        }
+      },
+      "crs": [
+        "#/crs"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+    },
+    {
+      "id": "sf:bugsites",
+      "title": "Spearfish bug locations",
+      "description": "Sample collection with no #/crs pointer",
+      "extent": {
+        "spatial": {
+          "crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+          "bbox": [
+            [ -103.86796132, 44.37393882, -103.63773523, 44.43418821 ]
+          ]
+        }
+      },
+      "crs": [
+        "http://www.opengis.net/def/crs/EPSG/0/26713",
+        "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/26713"
+    },
+    {
+      "id": "no_default_crs",
+      "title": "Bogus crs sample",
+      "description": "Sample collection with no #/crs pointer and no default crs declared",
+      "extent": {
+        "spatial": {
+          "crs": "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+          "bbox": [
+            [ -103.86796132, 44.37393882, -103.63773523, 44.43418821 ]
+          ]
+        }
+      },
+      "crs": [
+        "http://www.opengis.net/def/crs/EPSG/0/26713"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/26713"
+    },
+    {
+      "id": "storageCrsInGlobalCrs",
+      "title": "Storage Crs In Global Crs",
+      "description": "Sampe collection whose storageCrs is only declared in the global crs, but has more codes on its crs property",
+      "crs": [
+        "http://www.opengis.net/def/crs/EPSG/0/3786",
+        "#/crs"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/4087"
+    },
+    {
+      "id": "storageCrsUndeclared",
+      "title": "Storage Crs Undeclared In Global crs",
+      "description": "Sample whose storageCrs is not declared in its crs",
+      "crs": [
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/4088"
+    },
+    {
+      "id": "storageCrsUndeclaredInGlobalCrs",
+      "title": "Storage Crs Undeclared In Global crs",
+      "description": "Sample whose storageCrs is not declared in its crs nor in the global crs",
+      "crs": [
+        "#/crs"
+      ],
+      "storageCrs": "http://www.opengis.net/def/crs/EPSG/0/4088"
+    }    
+  ],
+  "crs": [
+    "http://www.opengis.net/def/crs/OGC/1.3/CRS84",
+    "http://www.opengis.net/def/crs/EPSG/0/4326",
+    "http://www.opengis.net/def/crs/EPSG/0/3857",
+    "http://www.opengis.net/def/crs/EPSG/0/4087"
+  ]
+}

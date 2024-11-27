@@ -30,7 +30,7 @@ import io.restassured.path.json.JsonPath;
  * For each string value in a crs property in a collection object (for each path /collections and /collections/{collectionId})
  * validate that either
  * http://www.opengis.net/def/crs/OGC/1.3/CRS84 or
- * http://www.opengis.net/def/crs/OGC/1.3/CRS84h
+ * http://www.opengis.net/def/crs/OGC/0/CRS84h
  * is included in the array, if the collection has a spatial extent, i.e., is a spatial feature collection.
  * </pre>
  *

@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import org.opengis.cite.ogcapifeatures10.OgcApiFeatures10;
 import org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.testng.SkipException;
@@ -29,22 +30,22 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesAssertions {
 
-    static void assertIntegerGreaterZero( Object value, String propertyName ) {
+    static void assertIntegerGreaterOrEqualsZero( Object value, String propertyName ) {
         if ( value instanceof Number )
-            assertIntegerGreaterZero( ( (Number) value ).intValue(), propertyName );
+            assertIntegerGreaterOrEqualsZero( ( (Number) value ).intValue(), propertyName );
         else if ( value instanceof String )
             try {
                 int valueAsInt = Integer.parseInt( (String) value );
-                assertIntegerGreaterZero( valueAsInt, propertyName );
+                assertIntegerGreaterOrEqualsZero( valueAsInt, propertyName );
             } catch ( NumberFormatException e ) {
                 String msg = "Expected property '%s' to be an integer, but was '%s'";
                 throw new AssertionError( String.format( msg, propertyName, value ) );
             }
     }
 
-    static void assertIntegerGreaterZero( int value, String propertyName ) {
-        String msg = "Expected property '%s' to be an integer greater than 0, but was '%s'";
-        assertTrue( value > 0, String.format( msg, propertyName, value ) );
+    static void assertIntegerGreaterOrEqualsZero( int value, String propertyName ) {
+        String msg = "Expected property '%s' to be an integer greater than or equals 0, but was '%s'";
+        assertTrue( value >= 0, String.format( msg, propertyName, value ) );
     }
 
     static void assertTimeStamp( String collectionName, JsonPath jsonPath, ZonedDateTime timeStampBeforeResponse,
@@ -52,7 +53,7 @@ public class FeaturesAssertions {
         String timeStamp = jsonPath.getString( "timeStamp" );
         if ( timeStamp == null )
             if ( skipIfNoTimeStamp )
-                throw new SkipException( "Property timeStamp is not set in collection items '" + collectionName + "'" );
+                throw new SkipException( "No server response timeStamp set for collection items request ( '" + collectionName + "')." );
             else
                 return;
 
@@ -93,10 +94,18 @@ public class FeaturesAssertions {
             TestPoint testPoint = testPoints.get( 0 );
             Parameter limitParameter = OpenApiUtils.retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
             if ( limitParameter != null && limitParameter.getSchema() != null ) {
-                maximumLimit = limitParameter.getSchema().getMaximum().intValue();
+                Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
+                if(maximumLimitNumber != null) {
+                    maximumLimit = maximumLimitNumber.intValue();
+                }
             }
         }
         int numberMatched = jsonPath.getInt( "numberMatched" );
+        if (numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
+            throw new SkipException(
+                    String.format("Number of matched features too large to check, was %d, test suite limit is %d.",
+                            numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
+        }
         int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath, maximumLimit );
         assertEquals( numberMatched, numberOfAllReturnedFeatures,
                       "Value of numberReturned (" + numberMatched + ") does not match the number of features in all responses ("

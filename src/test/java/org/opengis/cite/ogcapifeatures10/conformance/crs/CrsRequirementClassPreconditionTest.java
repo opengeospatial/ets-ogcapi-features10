@@ -14,6 +14,7 @@ import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.testng.ISuite;
 import org.testng.ITestContext;
+import org.testng.SkipException;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -21,34 +22,34 @@ import org.testng.ITestContext;
 public class CrsRequirementClassPreconditionTest {
 
     @Test
-    public void verifyRequirementClass_ImplementsCrs() {
+    public void verifyConformanceClass_ImplementsCrs() {
         CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
         List<RequirementClass> allRequirementClasses = Arrays.asList( RequirementClass.values() );
-        requirementClassPrecondition.requirementClasses( mockTestContext( allRequirementClasses ) );
-        requirementClassPrecondition.verifyRequirementClass();
+        requirementClassPrecondition.conformanceClasses( mockTestContext( allRequirementClasses ) );
+        requirementClassPrecondition.verifyConformanceClass();
     }
 
-    @Test(expected = AssertionError.class)
-    public void verifyRequirementClass_NotImplementsCrs() {
+    @Test(expected = SkipException.class)
+    public void verifyConformanceClass_NotImplementsCrs() {
         CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
         List<RequirementClass> requirementClasses = Arrays.asList( CORE, OPENAPI30 );
-        requirementClassPrecondition.requirementClasses( mockTestContext( requirementClasses ) );
-        requirementClassPrecondition.verifyRequirementClass();
+        requirementClassPrecondition.conformanceClasses( mockTestContext( requirementClasses ) );
+        requirementClassPrecondition.verifyConformanceClass();
     }
 
-    @Test(expected = AssertionError.class)
-    public void verifyRequirementClass_Null() {
+    @Test(expected = SkipException.class)
+    public void verifyConformanceClass_Null() {
         CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
-        requirementClassPrecondition.requirementClasses( mockTestContext( null ) );
-        requirementClassPrecondition.verifyRequirementClass();
+        requirementClassPrecondition.conformanceClasses( mockTestContext( null ) );
+        requirementClassPrecondition.verifyConformanceClass();
     }
 
-    @Test(expected = AssertionError.class)
-    public void verifyRequirementClass_Empty() {
+    @Test(expected = SkipException.class)
+    public void verifyConformanceClass_Empty() {
         CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
         List<RequirementClass> requirementClasses = Collections.emptyList();
-        requirementClassPrecondition.requirementClasses( mockTestContext( requirementClasses ) );
-        requirementClassPrecondition.verifyRequirementClass();
+        requirementClassPrecondition.conformanceClasses( mockTestContext( requirementClasses ) );
+        requirementClassPrecondition.verifyConformanceClass();
     }
 
     private ITestContext mockTestContext( List<RequirementClass> requirementClasses ) {

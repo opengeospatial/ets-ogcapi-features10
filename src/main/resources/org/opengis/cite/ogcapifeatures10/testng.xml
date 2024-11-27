@@ -8,6 +8,7 @@
     <listener class-name="org.opengis.cite.ogcapifeatures10.listener.TestRunListener" />
     <listener class-name="org.opengis.cite.ogcapifeatures10.listener.SuiteFixtureListener" />
     <listener class-name="org.opengis.cite.ogcapifeatures10.listener.TestFailureListener" />
+    <listener class-name="org.opengis.cite.ogcapifeatures10.listener.LoggingTestListener" />
   </listeners>
 
   <test name="Core">

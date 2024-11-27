@@ -1,11 +1,9 @@
 package org.opengis.cite.ogcapifeatures10.conformance.crs.query.bboxcrs;
 
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsString;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,7 +13,6 @@ import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 
 import io.restassured.path.json.JsonPath;
 
@@ -44,7 +41,7 @@ public class AbstractBBoxCrs extends CommonFixture {
     void assertSameFeatures( JsonPath responseWithBBox, JsonPath responseWithoutBBox ) {
         List<String> responseWithBBoxIds = parseFeatureIds( responseWithBBox );
         List<String> responseWithoutBBoxIds = parseFeatureIds( responseWithoutBBox );
-        assertEquals( responseWithBBoxIds, responseWithoutBBoxIds );
+        assertTrue( responseWithoutBBoxIds.containsAll(responseWithBBoxIds) );
     }
 
     private List<String> parseFeatureIds( JsonPath responseWithBBox ) {

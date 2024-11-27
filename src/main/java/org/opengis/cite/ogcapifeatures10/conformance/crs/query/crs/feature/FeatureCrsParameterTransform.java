@@ -55,17 +55,25 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
     private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
 
-    @DataProvider(name = "collectionFeatureIdCrsAndDefaultCrs")
-    public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs( ITestContext testContext ) {
+    @DataProvider(
+            name = "collectionFeatureIdCrsAndDefaultCrs")
+    public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs(ITestContext testContext) {
         List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            String featureId = collectionIdToFeatureId.get( collectionId );
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            JsonPath json = collection.getValue();
-            for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                collectionsData.add( new Object[] { collectionId, json, featureId, crs, defaultCrs } );
+        try {
+            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+                String collectionId = collection.getKey();
+                String featureId = collectionIdToFeatureId.get(collectionId);
+                if (featureId == null) {
+                    continue;
+                }
+                CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get(collectionId);
+                JsonPath json = collection.getValue();
+                for (CoordinateSystem crs : collectionIdToCrs.get(collectionId)) {
+                    collectionsData.add(new Object[] { collectionId, json, featureId, crs, defaultCrs });
+                }
             }
+        } catch (Exception e) {
+            collectionsData.add(new Object[] { null, null, null, null, null });
         }
         return collectionsData.iterator();
     }
@@ -87,6 +95,9 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
     public void verifyFeatureCrsParameterTransformWithCrsParameter( String collectionId, JsonPath collection,
                                                                     String featureId )
                             throws ParseException {
+        if((collectionId == null) & (collection == null) & (featureId == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
@@ -131,6 +142,14 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
                                                                        String featureId, CoordinateSystem crs,
                                                                        CoordinateSystem defaultCRS )
                             throws ParseException {
+        if((collectionId == null) & (collection == null) & (featureId == null) & (crs == null) & (defaultCRS == null)) {
+            throw new AssertionError("No crs information for collection available.");
+        }
+        //https://github.com/opengeospatial/ets-ogcapi-features10/issues/227
+        if(defaultCRS == null) {
+            //use default crs
+            defaultCRS = new CoordinateSystem(org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS_CODE);
+        }
         String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
         if ( featureUrl == null )
             throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
