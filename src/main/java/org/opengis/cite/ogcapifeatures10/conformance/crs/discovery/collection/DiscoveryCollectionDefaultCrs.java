@@ -38,33 +38,31 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
 
-    private Map<String, CoordinateSystem> collectionIdAndDefaultCrs = new HashMap<>();
+	private Map<String, CoordinateSystem> collectionIdAndDefaultCrs = new HashMap<>();
 
-    @AfterClass
-    public void storeCollectionInTestContext( ITestContext testContext ) {
-        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName(),
-                                             collectionIdAndDefaultCrs );
-    }
+	@AfterClass
+	public void storeCollectionInTestContext(ITestContext testContext) {
+		testContext.getSuite()
+			.setAttribute(SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName(), collectionIdAndDefaultCrs);
+	}
 
-    /**
-     * Test: crs property in the collection objects in the path /collections
-     *
-     * @param collectionId
-     *            id of the collection under test, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
-                        + "crs property contains default crs in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
-    public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, JsonPath collection ) {
-        Object extent = collection.get( "extent" );
-        if ( hasAtLeastOneSpatialFeatureCollection( extent ) ) {
-            List<String> crs = JsonUtils.parseAsList( "crs", collection );
-            CoordinateSystem defaultCrs = assertDefaultCrs( crs,
-                                                            String.format( "Collection with id '%s' does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
-                                                                           collectionId, DEFAULT_CRS_CODE,
-                                                                           DEFAULT_CRS_WITH_HEIGHT_CODE ) );
-            collectionIdAndDefaultCrs.put( collectionId, defaultCrs );
-        }
-    }
+	/**
+	 * Test: crs property in the collection objects in the path /collections
+	 * @param collectionId id of the collection under test, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-crs-list B), "
+			+ "crs property contains default crs in the collection object in the path /collection",
+			dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
+	public void verifyCollectionCrsIdentifierOfCrsProperty(String collectionId, JsonPath collection) {
+		Object extent = collection.get("extent");
+		if (hasAtLeastOneSpatialFeatureCollection(extent)) {
+			List<String> crs = JsonUtils.parseAsList("crs", collection);
+			CoordinateSystem defaultCrs = assertDefaultCrs(crs, String.format(
+					"Collection with id '%s' does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
+					collectionId, DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE));
+			collectionIdAndDefaultCrs.put(collectionId, defaultCrs);
+		}
+	}
+
 }

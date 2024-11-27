@@ -32,68 +32,73 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesErrorConditionsTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeaturesTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testValidateFeaturesOperation_QueryParamInvalid() {
-        prepareJadler();
-        FeaturesErrorConditions featuresErrorConditions = new FeaturesErrorConditions();
-        featuresErrorConditions.initCommonFixture( testContext );
-        featuresErrorConditions.retrieveRequiredInformationFromTestContext( testContext );
-        featuresErrorConditions.requirementClasses( testContext );
+	@Test
+	public void testValidateFeaturesOperation_QueryParamInvalid() {
+		prepareJadler();
+		FeaturesErrorConditions featuresErrorConditions = new FeaturesErrorConditions();
+		featuresErrorConditions.initCommonFixture(testContext);
+		featuresErrorConditions.retrieveRequiredInformationFromTestContext(testContext);
+		featuresErrorConditions.requirementClasses(testContext);
 
-        Map<String, Object> parameter = prepareCollection();
-        featuresErrorConditions.validateFeaturesOperation_QueryParamInvalid( parameter );
-    }
+		Map<String, Object> parameter = prepareCollection();
+		featuresErrorConditions.validateFeaturesOperation_QueryParamInvalid(parameter);
+	}
 
-    @Ignore
-    @Test
-    public void testValidateFeaturesOperation_QueryParamUnknown() {
-        prepareJadler();
-        FeaturesErrorConditions featuresErrorConditions = new FeaturesErrorConditions();
-        featuresErrorConditions.initCommonFixture( testContext );
-        featuresErrorConditions.retrieveRequiredInformationFromTestContext( testContext );
-        featuresErrorConditions.requirementClasses( testContext );
+	@Ignore
+	@Test
+	public void testValidateFeaturesOperation_QueryParamUnknown() {
+		prepareJadler();
+		FeaturesErrorConditions featuresErrorConditions = new FeaturesErrorConditions();
+		featuresErrorConditions.initCommonFixture(testContext);
+		featuresErrorConditions.retrieveRequiredInformationFromTestContext(testContext);
+		featuresErrorConditions.requirementClasses(testContext);
 
-        Map<String, Object> parameter = prepareCollection();
-        featuresErrorConditions.validateFeaturesOperation_QueryParamUnknown( parameter );
-    }
+		Map<String, Object> parameter = prepareCollection();
+		featuresErrorConditions.validateFeaturesOperation_QueryParamUnknown(parameter);
+	}
 
-    private static Map<String, Object> prepareCollection() {
-        return new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).get();
-    }
+	private static Map<String, Object> prepareCollection() {
+		return new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-flurstueck.json")).get();
+	}
 
-    private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameterEqualTo( "limit",
-                                                                                                     INVALID_QUERY_PARAM_VALUE ).respond().withStatus( 400 );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameter( UNKNOWN_QUERY_PARAM ).respond().withStatus( 400 );
-    }
+	private void prepareJadler() {
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingParameterEqualTo("limit", INVALID_QUERY_PARAM_VALUE)
+			.respond()
+			.withStatus(400);
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingParameter(UNKNOWN_QUERY_PARAM)
+			.respond()
+			.withStatus(400);
+	}
+
 }

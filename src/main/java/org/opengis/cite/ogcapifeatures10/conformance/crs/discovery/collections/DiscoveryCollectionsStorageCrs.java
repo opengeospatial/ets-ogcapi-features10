@@ -26,40 +26,41 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionsStorageCrs extends AbstractDiscoveryCollections {
 
-    /**
-     * Test: storageCrs property in the collection objects in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
-                        + "storageCrs property in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsPathCollectionCrsPropertyContainsStorageCrs( TestPoint testPoint, JsonPath jsonPath,
-                                                                              Map<String, Object> collection ) {
-        String collectionId = (String) collection.get( "id" );
-        String storageCrs = (String) collection.get( "storageCrs" );
-        if ( storageCrs == null ) {
-            throw new SkipException( String.format( "Collection with id '%s' at collections path %s does not specify a storageCrs",
-                                                    collectionId, testPoint.getPath() ) );
-        }
-        List<String> crs = JsonUtils.parseAsList( "crs", collection );
+	/**
+	 * Test: storageCrs property in the collection objects in the path /collections
+	 * @param testPoint test point to test, never <code>null</code>
+	 * @param jsonPath the /collections JSON, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 2 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
+			+ "storageCrs property in the collection objects in the path /collections",
+			dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
+	public void verifyCollectionsPathCollectionCrsPropertyContainsStorageCrs(TestPoint testPoint, JsonPath jsonPath,
+			Map<String, Object> collection) {
+		String collectionId = (String) collection.get("id");
+		String storageCrs = (String) collection.get("storageCrs");
+		if (storageCrs == null) {
+			throw new SkipException(
+					String.format("Collection with id '%s' at collections path %s does not specify a storageCrs",
+							collectionId, testPoint.getPath()));
+		}
+		List<String> crs = JsonUtils.parseAsList("crs", collection);
 
-        if ( !crs.contains( storageCrs ) ) {
-            if( crs.contains("#/crs") ) {
-                List<String> globalCrsList = JsonUtils.parseAsList( "crs", jsonPath );
-                if ( !globalCrsList.contains( storageCrs ) ) {
-                    throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared in the global list of CRSs",
-                                                             collectionId, testPoint.getPath(), storageCrs ) );
-                }
-            } else {
-                throw new AssertionError( String.format( "Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared as crs property",
-                                                     collectionId, testPoint.getPath(), storageCrs ) );
-            }
-        }
-    }
+		if (!crs.contains(storageCrs)) {
+			if (crs.contains("#/crs")) {
+				List<String> globalCrsList = JsonUtils.parseAsList("crs", jsonPath);
+				if (!globalCrsList.contains(storageCrs)) {
+					throw new AssertionError(String.format(
+							"Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared in the global list of CRSs",
+							collectionId, testPoint.getPath(), storageCrs));
+				}
+			}
+			else {
+				throw new AssertionError(String.format(
+						"Collection with id '%s' at collections path %s specifies the storageCrs '%s' which is not declared as crs property",
+						collectionId, testPoint.getPath(), storageCrs));
+			}
+		}
+	}
 
 }

@@ -9,34 +9,35 @@ import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSys
  */
 public class OgcApiFeatures10 {
 
-    private OgcApiFeatures10() {
-    }
+	private OgcApiFeatures10() {
+	}
 
-    public static final String OPEN_API_MIME_TYPE = "application/vnd.oai.openapi+json;version=3.0";
+	public static final String OPEN_API_MIME_TYPE = "application/vnd.oai.openapi+json;version=3.0";
 
-    public static final String GEOJSON_MIME_TYPE = "application/geo+json";
+	public static final String GEOJSON_MIME_TYPE = "application/geo+json";
 
-    /** Conformance class: CRS **/
+	/** Conformance class: CRS **/
 
-    public static final String DEFAULT_CRS_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+	public static final String DEFAULT_CRS_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-    public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/0/CRS84h";
+	public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/0/CRS84h";
 
-    public static final CoordinateSystem DEFAULT_CRS = new CoordinateSystem( DEFAULT_CRS_CODE );
+	public static final CoordinateSystem DEFAULT_CRS = new CoordinateSystem(DEFAULT_CRS_CODE);
 
-    public static final CoordinateSystem DEFAULT_CRS_WITH_HEIGHT = new CoordinateSystem( DEFAULT_CRS_WITH_HEIGHT_CODE );
+	public static final CoordinateSystem DEFAULT_CRS_WITH_HEIGHT = new CoordinateSystem(DEFAULT_CRS_WITH_HEIGHT_CODE);
 
-    public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
+	public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 
-    public static final String CRS_PARAMETER = "crs";
+	public static final String CRS_PARAMETER = "crs";
 
-    public static final int PAGING_LIMIT = 3;
+	public static final int PAGING_LIMIT = 3;
 
-    public static final int COLLECTIONS_LIMIT = 20;
+	public static final int COLLECTIONS_LIMIT = 20;
 
-    public static final int CRS_LIMIT = 20;
+	public static final int CRS_LIMIT = 20;
 
-    public static final int FEATURES_LIMIT = 100;
-    
-    public static final int NUMBERMATCHED_LIMIT = 10000;
+	public static final int FEATURES_LIMIT = 100;
+
+	public static final int NUMBERMATCHED_LIMIT = 10000;
+
 }

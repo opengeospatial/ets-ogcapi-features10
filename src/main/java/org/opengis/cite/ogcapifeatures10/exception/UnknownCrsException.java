@@ -7,8 +7,8 @@ import org.testng.SkipException;
  */
 public class UnknownCrsException extends SkipException {
 
-    public UnknownCrsException( String skipMessage ) {
-        super( skipMessage );
-    }
+	public UnknownCrsException(String skipMessage) {
+		super(skipMessage);
+	}
 
 }

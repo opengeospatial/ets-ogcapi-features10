@@ -7,21 +7,21 @@ import java.time.ZonedDateTime;
  */
 public class TemporalExtent {
 
-    private ZonedDateTime begin;
+	private ZonedDateTime begin;
 
-    private ZonedDateTime end;
+	private ZonedDateTime end;
 
-    public TemporalExtent( ZonedDateTime begin, ZonedDateTime end ) {
-        this.begin = begin;
-        this.end = end;
-    }
+	public TemporalExtent(ZonedDateTime begin, ZonedDateTime end) {
+		this.begin = begin;
+		this.end = end;
+	}
 
-    public ZonedDateTime getBegin() {
-        return begin;
-    }
+	public ZonedDateTime getBegin() {
+		return begin;
+	}
 
-    public ZonedDateTime getEnd() {
-        return end;
-    }
+	public ZonedDateTime getEnd() {
+		return end;
+	}
 
 }

@@ -26,61 +26,76 @@ import io.restassured.path.json.JsonPath;
  */
 public class BBoxCrsParameterDefaultTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
-    }
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testVerifyBboxCrsParameterDefault() {
-        prepareJadler();
-        BBoxCrsParameterDefault bBoxCrsParameterDefault = new BBoxCrsParameterDefault();
-        bBoxCrsParameterDefault.initCommonFixture( testContext );
+	@Test
+	public void testVerifyBboxCrsParameterDefault() {
+		prepareJadler();
+		BBoxCrsParameterDefault bBoxCrsParameterDefault = new BBoxCrsParameterDefault();
+		bBoxCrsParameterDefault.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        bBoxCrsParameterDefault.verifyBboxCrsParameterDefault( "vineyards", collection, DEFAULT_CRS );
-    }
+		JsonPath collection = prepareCollection();
+		bBoxCrsParameterDefault.verifyBboxCrsParameterDefault("vineyards", collection, DEFAULT_CRS);
+	}
 
-    @Test(expected = AssertionError.class)
-    public void testVerifyBboxCrsParameterDefault_unexpectedResponse() {
-        prepareJadlerUnexpectedResponse();
-        BBoxCrsParameterDefault bBoxCrsParameterDefault = new BBoxCrsParameterDefault();
-        bBoxCrsParameterDefault.initCommonFixture( testContext );
+	@Test(expected = AssertionError.class)
+	public void testVerifyBboxCrsParameterDefault_unexpectedResponse() {
+		prepareJadlerUnexpectedResponse();
+		BBoxCrsParameterDefault bBoxCrsParameterDefault = new BBoxCrsParameterDefault();
+		bBoxCrsParameterDefault.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        bBoxCrsParameterDefault.verifyBboxCrsParameterDefault( "vineyards", collection, DEFAULT_CRS );
-    }
+		JsonPath collection = prepareCollection();
+		bBoxCrsParameterDefault.verifyBboxCrsParameterDefault("vineyards", collection, DEFAULT_CRS);
+	}
 
-    private static JsonPath prepareCollection() {
-        return new JsonPath( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collection-vineyards.json" ) );
-    }
+	private static JsonPath prepareCollection() {
+		return new JsonPath(BBoxCrsParameterDefaultTest.class.getResourceAsStream("../collection-vineyards.json"));
+	}
 
-    private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) ).withStatus( 200 );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) ).withStatus( 200 );
-    }
+	private void prepareJadler() {
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(containsString("bbox-crs=" + URLEncoder.encode(DEFAULT_CRS.getCode())))
+			.respond()
+			.withBody(BBoxCrsParameterDefaultTest.class.getResourceAsStream("../collectionItems-vineyards.json"))
+			.withStatus(200);
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(not(containsString("bbox-crs=")))
+			.respond()
+			.withBody(BBoxCrsParameterDefaultTest.class.getResourceAsStream("../collectionItems-vineyards.json"))
+			.withStatus(200);
+	}
 
-    private void prepareJadlerUnexpectedResponse() {
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "bbox-crs="
-                                                                                                               + URLEncoder.encode( DEFAULT_CRS.getCode() ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards.json" ) );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "bbox-crs=" ) ) ).respond().withStatus( 200 ).withBody( BBoxCrsParameterDefaultTest.class.getResourceAsStream( "../collectionItems-vineyards-offset-9.json" ) );
-    }
+	private void prepareJadlerUnexpectedResponse() {
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(containsString("bbox-crs=" + URLEncoder.encode(DEFAULT_CRS.getCode())))
+			.respond()
+			.withStatus(200)
+			.withBody(BBoxCrsParameterDefaultTest.class.getResourceAsStream("../collectionItems-vineyards.json"));
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(not(containsString("bbox-crs=")))
+			.respond()
+			.withStatus(200)
+			.withBody(BBoxCrsParameterDefaultTest.class
+				.getResourceAsStream("../collectionItems-vineyards-offset-9.json"));
+	}
+
 }

@@ -36,87 +36,91 @@ import io.restassured.path.json.config.JsonPathConfig.NumberReturnType;
  */
 public class FeatureCollectionTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    private static URI iut;
+	private static URI iut;
 
-    @BeforeClass
-    public static void instantiateUri()
-                            throws URISyntaxException {
-        iut = new URI( "http://localhost:8080/oaf" );
-    }
+	@BeforeClass
+	public static void instantiateUri() throws URISyntaxException {
+		iut = new URI("http://localhost:8080/oaf");
+	}
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeatureCollectionTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
-        List<Map<String, Object>> collections = prepareCollections();
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
+		List<Map<String, Object>> collections = prepareCollections();
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-        when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+		when(suite.getAttribute(SuiteAttribute.COLLECTIONS.getName())).thenReturn(collections);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testValidateFeatureCollectionMetadataOperationResponse() {
-        prepareJadler();
-        FeatureCollection featureCollection = new FeatureCollection();
-        featureCollection.initCommonFixture( testContext );
-        featureCollection.retrieveApiModel( testContext );
-        featureCollection.requirementClasses( testContext );
+	@Test
+	public void testValidateFeatureCollectionMetadataOperationResponse() {
+		prepareJadler();
+		FeatureCollection featureCollection = new FeatureCollection();
+		featureCollection.initCommonFixture(testContext);
+		featureCollection.retrieveApiModel(testContext);
+		featureCollection.requirementClasses(testContext);
 
-        Object[][] collections = featureCollection.collections( testContext );
-        for ( Object[] object : collections ) {
-            Map<String, Object> collection = (Map<String, Object>) object[0];
-            featureCollection.validateFeatureCollectionMetadataOperation( testContext, collection );
-            featureCollection.validateFeatureCollectionMetadataResponse( collection );
-        }
-    }
+		Object[][] collections = featureCollection.collections(testContext);
+		for (Object[] object : collections) {
+			Map<String, Object> collection = (Map<String, Object>) object[0];
+			featureCollection.validateFeatureCollectionMetadataOperation(testContext, collection);
+			featureCollection.validateFeatureCollectionMetadataResponse(collection);
+		}
+	}
 
-    private static List<Map<String, Object>> prepareCollections() {
-        List<Map<String, Object>> collections = new ArrayList<>();
+	private static List<Map<String, Object>> prepareCollections() {
+		List<Map<String, Object>> collections = new ArrayList<>();
 
-        JsonPathConfig config = JsonPathConfig.jsonPathConfig().numberReturnType(NumberReturnType.DOUBLE);
-        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).using(config).get() );
-        collections.add( new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-gebaeudebauwerk.json" ) ).using(config).get() );
-        return collections;
-    }
+		JsonPathConfig config = JsonPathConfig.jsonPathConfig().numberReturnType(NumberReturnType.DOUBLE);
+		collections.add(new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-flurstueck.json"))
+			.using(config)
+			.get());
+		collections.add(new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-gebaeudebauwerk.json"))
+			.using(config)
+			.get());
+		return collections;
+	}
 
-    private void prepareJadler() {
-        InputStream collections = getClass().getResourceAsStream( "collections.json" );
-        onRequest().havingPath( endsWith( "collections" ) ).respond().withBody( collections );
+	private void prepareJadler() {
+		InputStream collections = getClass().getResourceAsStream("collections.json");
+		onRequest().havingPath(endsWith("collections")).respond().withBody(collections);
 
-        InputStream collectionFlurstueck = getClass().getResourceAsStream( "collection-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck" ) ).respond().withBody( collectionFlurstueck );
+		InputStream collectionFlurstueck = getClass().getResourceAsStream("collection-flurstueck.json");
+		onRequest().havingPath(endsWith("collections/flurstueck")).respond().withBody(collectionFlurstueck);
 
-        InputStream collectionGebaeudebauwerk = getClass().getResourceAsStream( "collection-gebaeudebauwerk.json" );
-        onRequest().havingPath( endsWith( "collections/gebaeudebauwerk" ) ).respond().withBody( collectionGebaeudebauwerk );
+		InputStream collectionGebaeudebauwerk = getClass().getResourceAsStream("collection-gebaeudebauwerk.json");
+		onRequest().havingPath(endsWith("collections/gebaeudebauwerk")).respond().withBody(collectionGebaeudebauwerk);
 
-        InputStream collectionVerwaltungseinheit = getClass().getResourceAsStream( "collection-verwaltungseinheit.json" );
-        onRequest().havingPath( endsWith( "collections/verwaltungseinheit" ) ).respond().withBody( collectionVerwaltungseinheit );
-    }
+		InputStream collectionVerwaltungseinheit = getClass().getResourceAsStream("collection-verwaltungseinheit.json");
+		onRequest().havingPath(endsWith("collections/verwaltungseinheit"))
+			.respond()
+			.withBody(collectionVerwaltungseinheit);
+	}
 
 }

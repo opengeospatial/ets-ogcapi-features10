@@ -15,19 +15,20 @@ import java.util.Map;
  */
 public class AbstractDiscoveryCollection {
 
-    @DataProvider(name = "collectionIdAndJson")
-    public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
-        Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute(
-                        SuiteAttribute.COLLECTION_BY_ID.getName() );
-        List<Object[]> collectionsData = new ArrayList<>();
-        try {
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-                collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );
-            }
-        } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null } );
-        }
-        return collectionsData.iterator();
-    }
+	@DataProvider(name = "collectionIdAndJson")
+	public Iterator<Object[]> collectionIdAndJson(ITestContext testContext) {
+		Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
+			.getAttribute(SuiteAttribute.COLLECTION_BY_ID.getName());
+		List<Object[]> collectionsData = new ArrayList<>();
+		try {
+			for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+				collectionsData.add(new Object[] { collection.getKey(), collection.getValue() });
+			}
+		}
+		catch (Exception e) {
+			collectionsData.add(new Object[] { null, null });
+		}
+		return collectionsData.iterator();
+	}
 
 }

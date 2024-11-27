@@ -29,33 +29,35 @@ import io.restassured.response.Response;
  * Verify that the response has status code 400.
  * Unsupported CRS identifiers are all strings not included in the crs property of the collection and also not included in the global CRS list, if #/crs is included in the crs property.
  * </pre>
- * 
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeaturesCrsParameterInvalid extends AbstractFeaturesCrs {
 
-    /**
-     * Test: invalid CRS requesting /collections/{collectionId}/items
-     *
-     * @param collectionId
-     *            id id of the collection, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 5 (Requirement /req/crs/fc-crs-valid-value), "
-                        + "Invalid CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeaturesCrsParameterInvalid( String collectionId, JsonPath collection ) {
-        if((collectionId == null) & (collection == null)) {
-            throw new AssertionError("No crs information for collection available.");
-        }
-        String featuresUrl = findFeaturesUrlForGeoJson( rootUri, collection );
-        if ( featuresUrl == null )
-            throw new SkipException( String.format( "Could not find url for collection with id %s supporting GeoJson (type %s)",
-                                                    collectionId, GEOJSON_MIME_TYPE ) );
+	/**
+	 * Test: invalid CRS requesting /collections/{collectionId}/items
+	 * @param collectionId id id of the collection, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 5 (Requirement /req/crs/fc-crs-valid-value), "
+			+ "Invalid CRS requesting path /collections/{collectionId}/items", dataProvider = "collectionIdAndJson",
+			dependsOnGroups = "crs-conformance", priority = 1)
+	public void verifyFeaturesCrsParameterInvalid(String collectionId, JsonPath collection) {
+		if ((collectionId == null) & (collection == null)) {
+			throw new AssertionError("No crs information for collection available.");
+		}
+		String featuresUrl = findFeaturesUrlForGeoJson(rootUri, collection);
+		if (featuresUrl == null)
+			throw new SkipException(
+					String.format("Could not find url for collection with id %s supporting GeoJson (type %s)",
+							collectionId, GEOJSON_MIME_TYPE));
 
-        Response response = init().baseUri( featuresUrl ).queryParam( CRS_PARAMETER,
-                                                                      UNSUPPORTED_CRS ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
-        response.then().statusCode( 400 );
-    }
+		Response response = init().baseUri(featuresUrl)
+			.queryParam(CRS_PARAMETER, UNSUPPORTED_CRS)
+			.accept(GEOJSON_MIME_TYPE)
+			.when()
+			.request(GET);
+		response.then().statusCode(400);
+	}
 
 }

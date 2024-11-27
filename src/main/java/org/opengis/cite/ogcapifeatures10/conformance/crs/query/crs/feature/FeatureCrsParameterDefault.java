@@ -30,38 +30,34 @@ import io.restassured.response.Response;
  */
 public class FeatureCrsParameterDefault extends AbstractFeatureCrs {
 
-    /**
-     * Test: default CRS requesting /collections/{collectionId}/items
-     *
-     * @param collectionId
-     *            id id of the collection, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     * @param featureId
-     *            id id of the feature, never <code>null</code>
-     */
-    @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 6 (Requirement /req/crs/fc-crs-default-value, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value),  "
-                        + "Default CRS requesting path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeatureCrsParameterDefault( String collectionId, JsonPath collection, String featureId ) {
-        if((collectionId == null) & (collection == null) & (featureId == null)) {
-            throw new AssertionError("No crs information for collection available.");
-        }
-        String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
-        if ( featureUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+	/**
+	 * Test: default CRS requesting /collections/{collectionId}/items
+	 * @param collectionId id id of the collection, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 * @param featureId id id of the feature, never <code>null</code>
+	 */
+	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 6 (Requirement /req/crs/fc-crs-default-value, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value),  "
+			+ "Default CRS requesting path /collections/{collectionId}/items/{featureId}",
+			dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
+	public void verifyFeatureCrsParameterDefault(String collectionId, JsonPath collection, String featureId) {
+		if ((collectionId == null) & (collection == null) & (featureId == null)) {
+			throw new AssertionError("No crs information for collection available.");
+		}
+		String featureUrl = findFeatureUrlForGeoJson(rootUri, collection, featureId);
+		if (featureUrl == null)
+			throw new SkipException("Could not find url for collection with id " + collectionId
+					+ " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")");
 
-        Response response = init().baseUri( featureUrl ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
-        response.then().statusCode( 200 );
-        String actualHeader = response.getHeader( "Content-Crs" );
-        if ( actualHeader == null ) {
-            throw new AssertionError( String.format( "Feature response at '%s' does not provide the expected header 'Content-Crs'",
-                                                     featureUrl ) );
-        }
-        assertDefaultCrsHeader( actualHeader,
-                                String.format( "Feature response at '%s' does not provide default 'Content-Crs' header, was: '%s', expected: '%s' or '%s",
-                                               featureUrl, actualHeader, DEFAULT_CRS_CODE,
-                                               DEFAULT_CRS_WITH_HEIGHT_CODE ) );
-    }
+		Response response = init().baseUri(featureUrl).accept(GEOJSON_MIME_TYPE).when().request(GET);
+		response.then().statusCode(200);
+		String actualHeader = response.getHeader("Content-Crs");
+		if (actualHeader == null) {
+			throw new AssertionError(String
+				.format("Feature response at '%s' does not provide the expected header 'Content-Crs'", featureUrl));
+		}
+		assertDefaultCrsHeader(actualHeader, String.format(
+				"Feature response at '%s' does not provide default 'Content-Crs' header, was: '%s', expected: '%s' or '%s",
+				featureUrl, actualHeader, DEFAULT_CRS_CODE, DEFAULT_CRS_WITH_HEIGHT_CODE));
+	}
 
 }

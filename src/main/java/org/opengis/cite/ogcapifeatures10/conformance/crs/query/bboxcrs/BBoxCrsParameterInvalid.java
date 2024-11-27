@@ -34,37 +34,39 @@ import io.restassured.response.Response;
  */
 public class BBoxCrsParameterInvalid extends AbstractBBoxCrs {
 
-    private static final BBox invalidBBox = new BBox( 5, 49, 6, 50 );
+	private static final BBox invalidBBox = new BBox(5, 49, 6, 50);
 
-    @DataProvider(name = "collectionIdAndJson")
-    public Iterator<Object[]> collectionIdAndJson( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            collectionsData.add( new Object[] { collection.getKey(), collection.getValue() } );
-        }
-        return collectionsData.iterator();
-    }
+	@DataProvider(name = "collectionIdAndJson")
+	public Iterator<Object[]> collectionIdAndJson(ITestContext testContext) {
+		List<Object[]> collectionsData = new ArrayList<>();
+		for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+			collectionsData.add(new Object[] { collection.getKey(), collection.getValue() });
+		}
+		return collectionsData.iterator();
+	}
 
-    /**
-     * @param collectionId
-     *            the id of the collection, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 9 (Requirement /conf/crs/bbox-crs-parameter-invalid)", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyBboxCrsParameterInvalid( String collectionId, JsonPath collection ) {
-        String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
-        if ( featuredUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        BBox bbox = parseSpatialExtent( collection.get() );
-        if ( bbox == null )
-            throw new SkipException( "Collection with id " + collectionId + " has no spatial extent" );
+	/**
+	 * @param collectionId the id of the collection, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 9 (Requirement /conf/crs/bbox-crs-parameter-invalid)",
+			dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance", priority = 1)
+	public void verifyBboxCrsParameterInvalid(String collectionId, JsonPath collection) {
+		String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson(rootUri, collection);
+		if (featuredUrl == null)
+			throw new SkipException("Could not find url for collection with id " + collectionId
+					+ " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")");
+		BBox bbox = parseSpatialExtent(collection.get());
+		if (bbox == null)
+			throw new SkipException("Collection with id " + collectionId + " has no spatial extent");
 
-        Response responseWithBBox = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
-                                                                         UNSUPPORTED_CRS ).param( BBOX_PARAM,
-                                                                                                  invalidBBox.asQueryParameter() ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
-        responseWithBBox.then().statusCode( 400 );
-    }
+		Response responseWithBBox = init().baseUri(featuredUrl)
+			.param(BBOX_CRS_PARAM, UNSUPPORTED_CRS)
+			.param(BBOX_PARAM, invalidBBox.asQueryParameter())
+			.accept(GEOJSON_MIME_TYPE)
+			.when()
+			.request(Method.GET);
+		responseWithBBox.then().statusCode(400);
+	}
 
 }

@@ -42,87 +42,87 @@ import com.reprezen.kaizen.oasparser.model3.OpenApi3;
  */
 public class FeatureCollectionsTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    private static URI iut;
+	private static URI iut;
 
-    @BeforeClass
-    public static void instantiateUri()
-                            throws URISyntaxException {
-        iut = new URI( "http://localhost:8080/oaf" );
-    }
+	@BeforeClass
+	public static void instantiateUri() throws URISyntaxException {
+		iut = new URI("http://localhost:8080/oaf");
+	}
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureCollectionsTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeatureCollectionsTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testValidateFeatureCollectionsMetadataOperationResponse() {
-        prepareJadler();
-        FeatureCollections featureCollectionsMetadataOperation = new FeatureCollections();
-        featureCollectionsMetadataOperation.initCommonFixture( testContext );
-        featureCollectionsMetadataOperation.retrieveApiModel( testContext );
-        featureCollectionsMetadataOperation.requirementClasses( testContext );
-        TestPoint testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections",
-                                             mediaTypes() );
-        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation( testPoint );
-        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links( testPoint );
-        featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Items( testPoint );
-        featureCollectionsMetadataOperation.storeCollectionsInTestContext( testContext );
+	@Test
+	public void testValidateFeatureCollectionsMetadataOperationResponse() {
+		prepareJadler();
+		FeatureCollections featureCollectionsMetadataOperation = new FeatureCollections();
+		featureCollectionsMetadataOperation.initCommonFixture(testContext);
+		featureCollectionsMetadataOperation.retrieveApiModel(testContext);
+		featureCollectionsMetadataOperation.requirementClasses(testContext);
+		TestPoint testPoint = new TestPoint("http://localhost:8090/rest/services/kataster", "/collections",
+				mediaTypes());
+		featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperation(testPoint);
+		featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Links(testPoint);
+		featureCollectionsMetadataOperation.validateFeatureCollectionsMetadataOperationResponse_Items(testPoint);
+		featureCollectionsMetadataOperation.storeCollectionsInTestContext(testContext);
 
-        ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass( List.class );
-        verify( suite ).setAttribute( eq( COLLECTIONS.getName() ), argumentCaptor.capture() );
-        List capturedArgument = argumentCaptor.getValue();
-        assertThat( capturedArgument.size(), is( 3 ) );
-    }
+		ArgumentCaptor<List> argumentCaptor = ArgumentCaptor.forClass(List.class);
+		verify(suite).setAttribute(eq(COLLECTIONS.getName()), argumentCaptor.capture());
+		List capturedArgument = argumentCaptor.getValue();
+		assertThat(capturedArgument.size(), is(3));
+	}
 
-    private Map<String, MediaType> mediaTypes() {
-        Map<String, MediaType> mediaTypes = new HashMap<>();
-        mediaTypes.put( "application/json", Mockito.mock( MediaType.class ) );
-        mediaTypes.put( "text/html", Mockito.mock( MediaType.class ) );
-        return mediaTypes;
-    }
+	private Map<String, MediaType> mediaTypes() {
+		Map<String, MediaType> mediaTypes = new HashMap<>();
+		mediaTypes.put("application/json", Mockito.mock(MediaType.class));
+		mediaTypes.put("text/html", Mockito.mock(MediaType.class));
+		return mediaTypes;
+	}
 
-    private void prepareJadler() {
-        InputStream collections = getClass().getResourceAsStream( "collections.json" );
-        onRequest().havingPath( endsWith( "collections" ) ).respond().withBody( collections );
+	private void prepareJadler() {
+		InputStream collections = getClass().getResourceAsStream("collections.json");
+		onRequest().havingPath(endsWith("collections")).respond().withBody(collections);
 
-        InputStream collectionFlurstueck = getClass().getResourceAsStream( "collection-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck" ) ).respond().withBody( collectionFlurstueck );
+		InputStream collectionFlurstueck = getClass().getResourceAsStream("collection-flurstueck.json");
+		onRequest().havingPath(endsWith("collections/flurstueck")).respond().withBody(collectionFlurstueck);
 
-        InputStream collectionGebaeudebauwerk = getClass().getResourceAsStream( "collection-gebaeudebauwerk.json" );
-        onRequest().havingPath( endsWith( "collections/gebaeudebauwerk" ) ).respond().withBody( collectionGebaeudebauwerk );
+		InputStream collectionGebaeudebauwerk = getClass().getResourceAsStream("collection-gebaeudebauwerk.json");
+		onRequest().havingPath(endsWith("collections/gebaeudebauwerk")).respond().withBody(collectionGebaeudebauwerk);
 
-        InputStream collectionVerwaltungseinheit = getClass().getResourceAsStream( "collection-verwaltungseinheit.json" );
-        onRequest().havingPath( endsWith( "collections/verwaltungseinheit" ) ).respond().withBody( collectionVerwaltungseinheit );
-    }
+		InputStream collectionVerwaltungseinheit = getClass().getResourceAsStream("collection-verwaltungseinheit.json");
+		onRequest().havingPath(endsWith("collections/verwaltungseinheit"))
+			.respond()
+			.withBody(collectionVerwaltungseinheit);
+	}
 
 }
