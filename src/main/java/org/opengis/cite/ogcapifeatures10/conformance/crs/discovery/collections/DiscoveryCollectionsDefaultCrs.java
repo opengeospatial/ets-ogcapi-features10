@@ -7,10 +7,11 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.hasAtLeastOneSpat
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
-import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import io.restassured.path.json.JsonPath;
@@ -52,12 +53,14 @@ public class DiscoveryCollectionsDefaultCrs extends AbstractDiscoveryCollections
         if ( hasAtLeastOneSpatialFeatureCollection( collection ) ) {
             String collectionId = (String) collection.get( "id" );
             List<String> crs = JsonUtils.parseAsList( "crs", collection );
-            if ( crs.size() == 1 && "#/crs".equals( crs.get( 0 ) ) ) {
+            if(crs.contains("#/crs")) {
                 List<String> globalCrsList = JsonUtils.parseAsList( "crs", jsonPath );
-                assertDefaultCrs( globalCrsList,
-                                  String.format( "Collection with id '%s' at collections path %s references to global crs section but provides at least one spatial feature collections. The global crs section does not specify one of the default CRS '%s' or '%s'",
-                                                 collectionId, testPoint.getPath(), DEFAULT_CRS_CODE,
-                                                 DEFAULT_CRS_WITH_HEIGHT_CODE ) );
+                List<String> expandedCrs = Stream.of(crs, globalCrsList).flatMap(List::stream)
+                        .filter(code -> !"#/crs".equals(code)).collect(Collectors.toList());
+                assertDefaultCrs( expandedCrs,
+                        String.format( "Collection with id '%s' at collections path %s references to global crs section but provides at least one spatial feature collections. The global crs section does not specify one of the default CRS '%s' or '%s'",
+                                       collectionId, testPoint.getPath(), DEFAULT_CRS_CODE,
+                                       DEFAULT_CRS_WITH_HEIGHT_CODE ) );
             } else {
                 assertDefaultCrs( crs,
                                   String.format( "Collection with id '%s' at collections path %s does not specify one of the default CRS '%s' or '%s' but provides at least one spatial feature collections",
