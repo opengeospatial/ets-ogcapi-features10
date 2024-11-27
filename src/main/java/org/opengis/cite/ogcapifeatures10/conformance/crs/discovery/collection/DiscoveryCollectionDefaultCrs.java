@@ -41,8 +41,9 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
 	private Map<String, CoordinateSystem> collectionIdAndDefaultCrs = new HashMap<>();
 
 	/**
-	 * <p>storeCollectionInTestContext.</p>
-	 *
+	 * <p>
+	 * storeCollectionInTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@AfterClass
@@ -53,7 +54,6 @@ public class DiscoveryCollectionDefaultCrs extends AbstractDiscoveryCollection {
 
 	/**
 	 * Test: crs property in the collection objects in the path /collections
-	 *
 	 * @param collectionId id of the collection under test, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 */

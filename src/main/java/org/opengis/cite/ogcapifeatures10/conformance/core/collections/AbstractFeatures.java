@@ -52,7 +52,9 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
- * <p>AbstractFeatures class.</p>
+ * <p>
+ * AbstractFeatures class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -65,8 +67,9 @@ public class AbstractFeatures extends CommonDataFixture {
 	protected URI iut;
 
 	/**
-	 * <p>collectionPaths.</p>
-	 *
+	 * <p>
+	 * collectionPaths.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -82,8 +85,9 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>retrieveRequiredInformationFromTestContext.</p>
-	 *
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -104,7 +108,6 @@ public class AbstractFeatures extends CommonDataFixture {
 	 * Test Method
 	 *   1. Validate that the type property is present and has a value of FeatureCollection
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	public void validateTypeProperty(CollectionResponseKey collection) {
@@ -220,7 +223,6 @@ public class AbstractFeatures extends CommonDataFixture {
 	 *
 	 * Test Method: Validate that the timeStamp value is set to the time when the response was generated.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	public void validateTimeStamp(CollectionResponseKey collection) {
@@ -397,8 +399,9 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>isRequired.</p>
-	 *
+	 * <p>
+	 * isRequired.
+	 * </p>
 	 * @param param a {@link com.reprezen.kaizen.oasparser.model3.Parameter} object
 	 * @return a boolean
 	 */
@@ -407,8 +410,9 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>isExplode.</p>
-	 *
+	 * <p>
+	 * isExplode.
+	 * </p>
 	 * @param param a {@link com.reprezen.kaizen.oasparser.model3.Parameter} object
 	 * @return a {@link java.lang.Boolean} object
 	 */

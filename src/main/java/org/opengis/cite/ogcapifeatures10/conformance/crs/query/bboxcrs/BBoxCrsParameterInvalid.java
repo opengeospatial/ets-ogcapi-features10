@@ -37,8 +37,9 @@ public class BBoxCrsParameterInvalid extends AbstractBBoxCrs {
 	private static final BBox invalidBBox = new BBox(5, 49, 6, 50);
 
 	/**
-	 * <p>collectionIdAndJson.</p>
-	 *
+	 * <p>
+	 * collectionIdAndJson.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -52,8 +53,9 @@ public class BBoxCrsParameterInvalid extends AbstractBBoxCrs {
 	}
 
 	/**
-	 * <p>verifyBboxCrsParameterInvalid.</p>
-	 *
+	 * <p>
+	 * verifyBboxCrsParameterInvalid.
+	 * </p>
 	 * @param collectionId the id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 */

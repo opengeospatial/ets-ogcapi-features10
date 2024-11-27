@@ -1,7 +1,9 @@
 package org.opengis.cite.ogcapifeatures10.util;
 
 /**
- * <p>OgcNameValidator class.</p>
+ * <p>
+ * OgcNameValidator class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -105,7 +107,6 @@ public class OgcNameValidator {
 	 * Checks if the passed urn is a valid urn according OGC Name Type Specification -
 	 * definitions - part 1 – basic name
 	 * (https://docs.opengeospatial.org/pol/09-048r5.html)
-	 *
 	 * @param urn the urn to check, <code>null</code> results in a invalid URN.
 	 * @return <code>true</code> if the urn is valid according to OGC Name Type
 	 * Specification - definitions - part 1 – basic name, <code>false</code> if the urn is

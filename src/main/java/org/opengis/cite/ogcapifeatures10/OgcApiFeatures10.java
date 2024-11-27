@@ -12,7 +12,10 @@ public class OgcApiFeatures10 {
 	private OgcApiFeatures10() {
 	}
 
-	/** Constant <code>OPEN_API_MIME_TYPE="application/vnd.oai.openapi+json;versio"{trunked}</code> */
+	/**
+	 * Constant
+	 * <code>OPEN_API_MIME_TYPE="application/vnd.oai.openapi+json;versio"{trunked}</code>
+	 */
 	public static final String OPEN_API_MIME_TYPE = "application/vnd.oai.openapi+json;version=3.0";
 
 	/** Constant <code>GEOJSON_MIME_TYPE="application/geo+json"</code> */
@@ -22,7 +25,10 @@ public class OgcApiFeatures10 {
 
 	public static final String DEFAULT_CRS_CODE = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-	/** Constant <code>DEFAULT_CRS_WITH_HEIGHT_CODE="http://www.opengis.net/def/crs/OGC/0/CR"{trunked}</code> */
+	/**
+	 * Constant
+	 * <code>DEFAULT_CRS_WITH_HEIGHT_CODE="http://www.opengis.net/def/crs/OGC/0/CR"{trunked}</code>
+	 */
 	public static final String DEFAULT_CRS_WITH_HEIGHT_CODE = "http://www.opengis.net/def/crs/OGC/0/CRS84h";
 
 	/** Constant <code>DEFAULT_CRS</code> */
@@ -31,7 +37,10 @@ public class OgcApiFeatures10 {
 	/** Constant <code>DEFAULT_CRS_WITH_HEIGHT</code> */
 	public static final CoordinateSystem DEFAULT_CRS_WITH_HEIGHT = new CoordinateSystem(DEFAULT_CRS_WITH_HEIGHT_CODE);
 
-	/** Constant <code>UNSUPPORTED_CRS="http://www.opengis.net/def/crs/0/unsupp"{trunked}</code> */
+	/**
+	 * Constant
+	 * <code>UNSUPPORTED_CRS="http://www.opengis.net/def/crs/0/unsupp"{trunked}</code>
+	 */
 	public static final String UNSUPPORTED_CRS = "http://www.opengis.net/def/crs/0/unsupported";
 
 	/** Constant <code>CRS_PARAMETER="crs"</code> */

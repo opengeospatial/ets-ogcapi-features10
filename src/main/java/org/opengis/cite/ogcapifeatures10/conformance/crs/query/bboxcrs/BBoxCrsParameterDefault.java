@@ -39,8 +39,9 @@ import io.restassured.response.Response;
 public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
 
 	/**
-	 * <p>collectionDefaultCrs.</p>
-	 *
+	 * <p>
+	 * collectionDefaultCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -59,8 +60,9 @@ public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
 	}
 
 	/**
-	 * <p>verifyBboxCrsParameterDefault.</p>
-	 *
+	 * <p>
+	 * verifyBboxCrsParameterDefault.
+	 * </p>
 	 * @param collectionId the id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param defaultCrs the defaultCrs of the collection, never <code>null</code>

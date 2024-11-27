@@ -35,7 +35,9 @@ public class ApiDefinition extends CommonFixture {
 	private String apiUrl;
 
 	/**
-	 * <p>retrieveApiUrl.</p>
+	 * <p>
+	 * retrieveApiUrl.
+	 * </p>
 	 */
 	@BeforeClass(dependsOnMethods = "initCommonFixture")
 	public void retrieveApiUrl() {
@@ -77,7 +79,6 @@ public class ApiDefinition extends CommonFixture {
 	 *
 	 * Test Method: Validate the API Definition document against an appropriate schema document.
 	 * </pre>
-	 *
 	 * @param testContext never <code>null</code>
 	 * @throws java.net.MalformedURLException if the apiUrl is malformed
 	 */

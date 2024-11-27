@@ -40,7 +40,6 @@ public class CommonFixture {
 	/**
 	 * Initializes the common test fixture with a client component for interacting with
 	 * HTTP endpoints.
-	 *
 	 * @param testContext The test context that contains all the information for a test
 	 * run, including suite attributes.
 	 */
@@ -51,7 +50,9 @@ public class CommonFixture {
 	}
 
 	/**
-	 * <p>clearMessages.</p>
+	 * <p>
+	 * clearMessages.
+	 * </p>
 	 */
 	@BeforeMethod
 	public void clearMessages() {
@@ -59,8 +60,9 @@ public class CommonFixture {
 	}
 
 	/**
-	 * <p>getRequest.</p>
-	 *
+	 * <p>
+	 * getRequest.
+	 * </p>
 	 * @return a {@link java.lang.String} object
 	 */
 	public String getRequest() {
@@ -68,8 +70,9 @@ public class CommonFixture {
 	}
 
 	/**
-	 * <p>getResponse.</p>
-	 *
+	 * <p>
+	 * getResponse.
+	 * </p>
 	 * @return a {@link java.lang.String} object
 	 */
 	public String getResponse() {
@@ -77,8 +80,9 @@ public class CommonFixture {
 	}
 
 	/**
-	 * <p>init.</p>
-	 *
+	 * <p>
+	 * init.
+	 * </p>
 	 * @return a {@link io.restassured.specification.RequestSpecification} object
 	 */
 	protected RequestSpecification init() {

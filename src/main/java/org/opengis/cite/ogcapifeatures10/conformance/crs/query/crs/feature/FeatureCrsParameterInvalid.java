@@ -36,7 +36,6 @@ public class FeatureCrsParameterInvalid extends AbstractFeatureCrs {
 
 	/**
 	 * Test: invalid CRS requesting /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param featureId id id of the feature, never <code>null</code>

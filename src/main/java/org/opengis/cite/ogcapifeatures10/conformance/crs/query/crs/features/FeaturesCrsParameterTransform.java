@@ -52,7 +52,6 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
 
 	/**
 	 * Test: transformed geometries in the path /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
@@ -93,7 +92,6 @@ public class FeaturesCrsParameterTransform extends AbstractFeaturesCrs {
 
 	/**
 	 * Test: transformed geometries in the path /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param crs the crs to test, never <code>null</code>

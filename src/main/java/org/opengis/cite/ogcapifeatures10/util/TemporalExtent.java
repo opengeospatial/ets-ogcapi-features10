@@ -3,7 +3,9 @@ package org.opengis.cite.ogcapifeatures10.util;
 import java.time.ZonedDateTime;
 
 /**
- * <p>TemporalExtent class.</p>
+ * <p>
+ * TemporalExtent class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -14,8 +16,9 @@ public class TemporalExtent {
 	private ZonedDateTime end;
 
 	/**
-	 * <p>Constructor for TemporalExtent.</p>
-	 *
+	 * <p>
+	 * Constructor for TemporalExtent.
+	 * </p>
 	 * @param begin a {@link java.time.ZonedDateTime} object
 	 * @param end a {@link java.time.ZonedDateTime} object
 	 */
@@ -25,8 +28,9 @@ public class TemporalExtent {
 	}
 
 	/**
-	 * <p>Getter for the field <code>begin</code>.</p>
-	 *
+	 * <p>
+	 * Getter for the field <code>begin</code>.
+	 * </p>
 	 * @return a {@link java.time.ZonedDateTime} object
 	 */
 	public ZonedDateTime getBegin() {
@@ -34,8 +38,9 @@ public class TemporalExtent {
 	}
 
 	/**
-	 * <p>Getter for the field <code>end</code>.</p>
-	 *
+	 * <p>
+	 * Getter for the field <code>end</code>.
+	 * </p>
 	 * @return a {@link java.time.ZonedDateTime} object
 	 */
 	public ZonedDateTime getEnd() {

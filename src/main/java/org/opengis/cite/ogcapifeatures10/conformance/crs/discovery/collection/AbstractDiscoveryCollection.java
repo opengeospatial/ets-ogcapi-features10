@@ -11,15 +11,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>AbstractDiscoveryCollection class.</p>
+ * <p>
+ * AbstractDiscoveryCollection class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractDiscoveryCollection {
 
 	/**
-	 * <p>collectionIdAndJson.</p>
-	 *
+	 * <p>
+	 * collectionIdAndJson.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */

@@ -7,7 +7,9 @@ import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
 /**
- * <p>LoggingTestListener class.</p>
+ * <p>
+ * LoggingTestListener class.
+ * </p>
  *
  */
 public class LoggingTestListener extends TestListenerAdapter {

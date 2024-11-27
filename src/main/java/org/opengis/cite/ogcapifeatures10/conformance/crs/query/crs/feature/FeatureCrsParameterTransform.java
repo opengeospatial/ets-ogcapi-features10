@@ -55,8 +55,9 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 	private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
 
 	/**
-	 * <p>collectionFeatureIdCrsAndDefaultCrs.</p>
-	 *
+	 * <p>
+	 * collectionFeatureIdCrsAndDefaultCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -85,7 +86,6 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
 	/**
 	 * Test: invalid CRS requesting /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param featureId id id of the feature, never <code>null</code>
@@ -124,7 +124,6 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
 	/**
 	 * Test: Content-Crs header in the path /collections/{collectionId}/items/{featureId}
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param featureId id id of the feature, never <code>null</code>

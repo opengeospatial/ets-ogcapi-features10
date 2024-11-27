@@ -15,7 +15,9 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
- * <p>AbstractDiscoveryCollections class.</p>
+ * <p>
+ * AbstractDiscoveryCollections class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -26,8 +28,9 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 	private List<Map<String, Object>> collections;
 
 	/**
-	 * <p>retrieveRequiredInformationFromTestContext.</p>
-	 *
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -39,8 +42,9 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>collectionsResponses.</p>
-	 *
+	 * <p>
+	 * collectionsResponses.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -54,8 +58,9 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>collectionItemUris.</p>
-	 *
+	 * <p>
+	 * collectionItemUris.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */

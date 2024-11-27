@@ -7,7 +7,9 @@ import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 
 /**
- * <p>RequestLimitFilter class.</p>
+ * <p>
+ * RequestLimitFilter class.
+ * </p>
  *
  * @author Benjamin Pross (b.pross @52north.org)
  *

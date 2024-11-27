@@ -13,7 +13,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * <p>CrsRequirementClassPrecondition class.</p>
+ * <p>
+ * CrsRequirementClassPrecondition class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -22,8 +24,9 @@ public class CrsRequirementClassPrecondition {
 	private List<RequirementClass> conformanceClasses;
 
 	/**
-	 * <p>conformanceClasses.</p>
-	 *
+	 * <p>
+	 * conformanceClasses.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass

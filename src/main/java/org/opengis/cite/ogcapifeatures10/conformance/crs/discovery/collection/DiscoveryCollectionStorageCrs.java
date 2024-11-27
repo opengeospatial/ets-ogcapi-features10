@@ -26,7 +26,6 @@ public class DiscoveryCollectionStorageCrs extends AbstractDiscoveryCollection {
 
 	/**
 	 * Test: storageCrs property in the collection objects in the path /collections
-	 *
 	 * @param collectionId id of the collection under test, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 */

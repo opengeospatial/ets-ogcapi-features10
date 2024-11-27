@@ -32,7 +32,6 @@ public class FeaturesCrsParameterDefault extends AbstractFeaturesCrs {
 
 	/**
 	 * Test: default CRS requesting /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 */

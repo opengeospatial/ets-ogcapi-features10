@@ -44,8 +44,9 @@ import io.restassured.response.Response;
 public class FeaturesTime extends AbstractFeatures {
 
 	/**
-	 * <p>collectionItemUrisWithDateTimes.</p>
-	 *
+	 * <p>
+	 * collectionItemUrisWithDateTimes.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -95,7 +96,6 @@ public class FeaturesTime extends AbstractFeatures {
 	 * style: form
 	 * explode: false
 	 * </pre>
-	 *
 	 * @param testPoint the testPoint under test, never <code>null</code>
 	 */
 	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 18: (Requirement /req/core/fc-time-definition)",
@@ -134,14 +134,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *   * Parameter /ats/core/fc-time-definition
 	 *   * Response /ats/core/fc-time-response
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 13: (Requirement /req/core/fc-op)",
 			dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
@@ -177,14 +176,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *   2. Verify that all features in the collection that are not associated with a temporal geometry are included in the result set
 	 *   3. Validate that the datetime parameter complies with the syntax described in /req/core/fc-time-response.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 19: (Requirement /req/core/fc-time-response)",
 			dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
@@ -210,14 +208,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
 	 *  2. Validate retrieved spatial data using the CRS84 reference system.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 2, Test Method 2 (Requirement /req/core/crs84)",
@@ -240,14 +237,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 * Test Method
 	 *   1. Validate that the type property is present and has a value of FeatureCollection
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithDateTimes",
@@ -269,14 +265,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 * Test Method
 	 *   2. Validate the features property is present and that it is populated with an array of feature items.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithDateTimes",
@@ -311,14 +306,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *
 	 * Verify that all links include the rel and type link parameters.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
 			dataProvider = "collectionItemUrisWithDateTimes",
@@ -348,14 +342,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the timeStamp value is set to the time when the response was generated.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)",
 			dataProvider = "collectionItemUrisWithDateTimes",
@@ -385,14 +378,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the value of the numberMatched parameter is identical to the number of features in the feature collections that match the selection parameters like bbox, datetime or additional filter parameters.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
@@ -423,14 +415,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the numberReturned value is identical to the number of features in the response.
 	 * </pre>
-	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
 	 * <code>null</code>
-	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the begin of the
-	 * interval (or instant), never <code>null</code>
-	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the end of the interval,
-	 * never <code>null</code> if the request is an instant
+	 * @param begin a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * begin of the interval (or instant), never <code>null</code>
+	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
+	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)",
 			dataProvider = "collectionItemUrisWithDateTimes",

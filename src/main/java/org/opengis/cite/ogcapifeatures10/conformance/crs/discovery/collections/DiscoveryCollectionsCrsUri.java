@@ -34,7 +34,6 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
 	/**
 	 * Test: crs property in the collections object in the path /collections
-	 *
 	 * @param testPoint test point to test, never <code>null</code>
 	 * @param jsonPath the /collections JSON, never <code>null</code>
 	 */
@@ -54,7 +53,6 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
 	/**
 	 * Test: storageCrs property in the collections object in the path /collections
-	 *
 	 * @param testPoint test point to test, never <code>null</code>
 	 * @param jsonPath the /collections JSON, never <code>null</code>
 	 */
@@ -72,7 +70,6 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
 	/**
 	 * Test: crs property in the collection objects in the path /collections
-	 *
 	 * @param testPoint test point to test, never <code>null</code>
 	 * @param jsonPath the /collections JSON, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
@@ -92,7 +89,6 @@ public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
 	/**
 	 * Test: storageCrs property in the collection objects in the path /collections
-	 *
 	 * @param testPoint test point to test, never <code>null</code>
 	 * @param jsonPath the /collections JSON, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>

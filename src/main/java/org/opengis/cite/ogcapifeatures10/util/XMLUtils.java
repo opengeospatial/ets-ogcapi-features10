@@ -23,7 +23,6 @@ public class XMLUtils {
 	 * Writes the content of a DOM Node to a string. The XML declaration is omitted and
 	 * the character encoding is set to "US-ASCII" (any character outside of this set is
 	 * serialized as a numeric character reference).
-	 *
 	 * @param node The DOM Node to be serialized.
 	 * @return A String representing the content of the given node.
 	 */

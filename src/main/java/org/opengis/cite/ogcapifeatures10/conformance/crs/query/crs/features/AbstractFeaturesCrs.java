@@ -16,7 +16,9 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
- * <p>AbstractFeaturesCrs class.</p>
+ * <p>
+ * AbstractFeaturesCrs class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -29,8 +31,9 @@ public class AbstractFeaturesCrs extends CommonFixture {
 	private Map<String, CoordinateSystem> collectionIdToDefaultCrs;
 
 	/**
-	 * <p>retrieveRequiredInformationFromTestContext.</p>
-	 *
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -44,8 +47,9 @@ public class AbstractFeaturesCrs extends CommonFixture {
 	}
 
 	/**
-	 * <p>collectionIdAndJson.</p>
-	 *
+	 * <p>
+	 * collectionIdAndJson.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -66,8 +70,9 @@ public class AbstractFeaturesCrs extends CommonFixture {
 	}
 
 	/**
-	 * <p>collectionIdAndJsonAndCrs.</p>
-	 *
+	 * <p>
+	 * collectionIdAndJsonAndCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -95,8 +100,9 @@ public class AbstractFeaturesCrs extends CommonFixture {
 	}
 
 	/**
-	 * <p>collectionIdAndJsonAndCrsAndDefaultCrs.</p>
-	 *
+	 * <p>
+	 * collectionIdAndJsonAndCrsAndDefaultCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */

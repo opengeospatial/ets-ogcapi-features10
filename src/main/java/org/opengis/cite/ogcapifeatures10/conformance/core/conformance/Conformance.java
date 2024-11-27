@@ -38,8 +38,9 @@ public class Conformance extends CommonFixture {
 	private List<RequirementClass> requirementClasses;
 
 	/**
-	 * <p>conformanceUris.</p>
-	 *
+	 * <p>
+	 * conformanceUris.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return an array of {@link java.lang.Object} objects
 	 */
@@ -63,8 +64,9 @@ public class Conformance extends CommonFixture {
 	}
 
 	/**
-	 * <p>storeRequirementClassesInTestContext.</p>
-	 *
+	 * <p>
+	 * storeRequirementClassesInTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@AfterClass
@@ -95,7 +97,6 @@ public class Conformance extends CommonFixture {
 	 *  2. Validate that the document includes the conformance class "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core"
 	 *  3. Validate that the document list all OGC API conformance classes that the API implements.
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "Implements A.2.4. Conformance Path {root}/conformance, Abstract Test 7 + 8 (Requirements /req/core/conformance-op and /req/core/conformance-success)",

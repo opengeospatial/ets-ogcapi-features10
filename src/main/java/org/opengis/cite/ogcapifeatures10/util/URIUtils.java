@@ -22,7 +22,6 @@ public class URIUtils {
 	/**
 	 * Dereferences the given URI and stores the resulting resource representation in a
 	 * local file. The file will be located in the default temporary file directory.
-	 *
 	 * @param uriRef An absolute URI specifying the location of some resource.
 	 * @return A File containing the content of the resource; it may be empty if
 	 * resolution failed for any reason.

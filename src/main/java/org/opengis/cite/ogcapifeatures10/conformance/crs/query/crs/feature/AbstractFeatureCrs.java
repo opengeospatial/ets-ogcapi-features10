@@ -15,7 +15,9 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
- * <p>AbstractFeatureCrs class.</p>
+ * <p>
+ * AbstractFeatureCrs class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -30,8 +32,9 @@ public class AbstractFeatureCrs extends CommonFixture {
 	protected Map<String, String> collectionIdToFeatureId;
 
 	/**
-	 * <p>retrieveRequiredInformationFromTestContext.</p>
-	 *
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -47,8 +50,9 @@ public class AbstractFeatureCrs extends CommonFixture {
 	}
 
 	/**
-	 * <p>collectionFeatureId.</p>
-	 *
+	 * <p>
+	 * collectionFeatureId.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */

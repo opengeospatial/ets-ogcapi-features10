@@ -17,7 +17,9 @@ import org.testng.annotations.BeforeClass;
 import io.restassured.path.json.JsonPath;
 
 /**
- * <p>AbstractBBoxCrs class.</p>
+ * <p>
+ * AbstractBBoxCrs class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -36,8 +38,9 @@ public class AbstractBBoxCrs extends CommonFixture {
 	protected Map<String, CoordinateSystem> collectionIdToDefaultCrs;
 
 	/**
-	 * <p>retrieveRequiredInformationFromTestContext.</p>
-	 *
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass

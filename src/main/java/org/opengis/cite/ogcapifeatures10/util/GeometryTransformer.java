@@ -22,7 +22,9 @@ import org.locationtech.proj4j.ProjCoordinate;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 /**
- * <p>GeometryTransformer class.</p>
+ * <p>
+ * GeometryTransformer class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -37,8 +39,9 @@ public class GeometryTransformer {
 	private final CoordinateSystem targetCrs;
 
 	/**
-	 * <p>Constructor for GeometryTransformer.</p>
-	 *
+	 * <p>
+	 * Constructor for GeometryTransformer.
+	 * </p>
 	 * @param srcCrs source crs, , never <code>null</code>
 	 * @param targetCrs target crs, , never <code>null</code>
 	 */
@@ -53,8 +56,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param bbox the bbox to transform, never <code>null</code>
 	 * @return the transformed bbox (or the same if srcCrs and targetCrs) are the same,
 	 * never <code>null</code>
@@ -70,8 +74,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Geometry} object
 	 * @return a {@link org.locationtech.jts.geom.Geometry} object
 	 */
@@ -94,8 +99,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Point} object
 	 * @return a {@link org.locationtech.jts.geom.Point} object
 	 */
@@ -106,8 +112,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.LineString} object
 	 * @return a {@link org.locationtech.jts.geom.LineString} object
 	 */
@@ -118,8 +125,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Polygon} object
 	 * @return a {@link org.locationtech.jts.geom.Polygon} object
 	 */
@@ -137,9 +145,11 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
-	 * @param geometryToTransform a {@link org.locationtech.jts.geom.GeometryCollection} object
+	 * <p>
+	 * transform.
+	 * </p>
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.GeometryCollection}
+	 * object
 	 * @return a {@link org.locationtech.jts.geom.Geometry} object
 	 */
 	public Geometry transform(GeometryCollection geometryToTransform) {
@@ -156,8 +166,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiPoint} object
 	 * @return a {@link org.locationtech.jts.geom.MultiPoint} object
 	 */
@@ -171,9 +182,11 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
-	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiLineString} object
+	 * <p>
+	 * transform.
+	 * </p>
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiLineString}
+	 * object
 	 * @return a {@link org.locationtech.jts.geom.MultiLineString} object
 	 */
 	public MultiLineString transform(MultiLineString geometryToTransform) {
@@ -187,8 +200,9 @@ public class GeometryTransformer {
 	}
 
 	/**
-	 * <p>transform.</p>
-	 *
+	 * <p>
+	 * transform.
+	 * </p>
 	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiPolygon} object
 	 * @return a {@link org.locationtech.jts.geom.MultiPolygon} object
 	 */

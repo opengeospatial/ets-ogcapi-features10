@@ -14,7 +14,9 @@ import org.testng.SkipException;
 import org.testng.annotations.BeforeClass;
 
 /**
- * <p>CommonDataFixture class.</p>
+ * <p>
+ * CommonDataFixture class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -29,8 +31,9 @@ public class CommonDataFixture extends CommonFixture {
 	protected int noOfCollections = DEFAULT_NUMBER_OF_COLLECTIONS;
 
 	/**
-	 * <p>requirementClasses.</p>
-	 *
+	 * <p>
+	 * requirementClasses.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -40,8 +43,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>noOfCollections.</p>
-	 *
+	 * <p>
+	 * noOfCollections.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -53,8 +57,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>retrieveApiModel.</p>
-	 *
+	 * <p>
+	 * retrieveApiModel.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@BeforeClass
@@ -63,8 +68,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>Getter for the field <code>apiModel</code>.</p>
-	 *
+	 * <p>
+	 * Getter for the field <code>apiModel</code>.
+	 * </p>
 	 * @return a {@link com.reprezen.kaizen.oasparser.model3.OpenApi3} object
 	 */
 	public OpenApi3 getApiModel() {
@@ -74,8 +80,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>createListOfMediaTypesToSupportForOtherResources.</p>
-	 *
+	 * <p>
+	 * createListOfMediaTypesToSupportForOtherResources.
+	 * </p>
 	 * @param linkToSelf a {@link java.util.Map} object
 	 * @return a {@link java.util.List} object
 	 */
@@ -92,8 +99,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures.</p>
-	 *
+	 * <p>
+	 * createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures.
+	 * </p>
 	 * @return a {@link java.util.List} object
 	 */
 	protected List<String> createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures() {
@@ -107,8 +115,9 @@ public class CommonDataFixture extends CommonFixture {
 	}
 
 	/**
-	 * <p>createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures.</p>
-	 *
+	 * <p>
+	 * createListOfMediaTypesToSupportForFeatureCollectionsAndFeatures.
+	 * </p>
 	 * @param linkToSelf a {@link java.util.Map} object
 	 * @return a {@link java.util.List} object
 	 */

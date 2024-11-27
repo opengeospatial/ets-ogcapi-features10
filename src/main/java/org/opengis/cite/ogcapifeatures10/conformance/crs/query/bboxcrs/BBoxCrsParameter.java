@@ -42,8 +42,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	private Map<String, BBox> collectionIdToSpatialExtent = new HashMap<String, BBox>();
 
 	/**
-	 * <p>collectionDefaultCrs.</p>
-	 *
+	 * <p>
+	 * collectionDefaultCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -67,8 +68,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	}
 
 	/**
-	 * <p>collectionCrs.</p>
-	 *
+	 * <p>
+	 * collectionCrs.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return a {@link java.util.Iterator} object
 	 */
@@ -94,8 +96,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	}
 
 	/**
-	 * <p>verifyBboxCrsParameterWithDefaultCrs.</p>
-	 *
+	 * <p>
+	 * verifyBboxCrsParameterWithDefaultCrs.
+	 * </p>
 	 * @param collectionId the id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param defaultCrs the defaultCrs of the collection, never <code>null</code>
@@ -131,8 +134,9 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	}
 
 	/**
-	 * <p>verifyBboxCrsParameter.</p>
-	 *
+	 * <p>
+	 * verifyBboxCrsParameter.
+	 * </p>
 	 * @param collectionId the id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param crs the crs to test, never <code>null</code>

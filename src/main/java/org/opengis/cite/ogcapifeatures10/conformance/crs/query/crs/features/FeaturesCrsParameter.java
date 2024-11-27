@@ -41,7 +41,6 @@ public class FeaturesCrsParameter extends AbstractFeaturesCrs {
 
 	/**
 	 * Test: Content-Crs header in the path /collections/{collectionId}/items
-	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param crs the crs to test, never <code>null</code>

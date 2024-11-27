@@ -56,8 +56,9 @@ public class FeatureCollections extends CommonDataFixture {
 	private Object[][] testPointsData;
 
 	/**
-	 * <p>collectionsUris.</p>
-	 *
+	 * <p>
+	 * collectionsUris.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return an array of {@link java.lang.Object} objects
 	 */
@@ -76,8 +77,9 @@ public class FeatureCollections extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>storeCollectionsInTestContext.</p>
-	 *
+	 * <p>
+	 * storeCollectionsInTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@AfterClass
@@ -90,8 +92,9 @@ public class FeatureCollections extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>storeCollectionsResponseInTestContext.</p>
-	 *
+	 * <p>
+	 * storeCollectionsResponseInTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@AfterClass
@@ -117,7 +120,6 @@ public class FeatureCollections extends CommonDataFixture {
 	 *  2. Validate that a document was returned with a status code 200
 	 *  3. Validate the contents of the returned document using test /ats/core/fc-md-success.
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "Implements A.2.5. Feature Collections {root}/collections, Abstract Test 9 (Requirement /req/core/fc-md-op)",
@@ -141,7 +143,6 @@ public class FeatureCollections extends CommonDataFixture {
 	 * Test Method
 	 *  1. Validate that all response documents comply with /ats/core/fc-md-links
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 1 (Requirement /req/core/fc-md-success, /req/core/crs84)",
@@ -196,7 +197,6 @@ public class FeatureCollections extends CommonDataFixture {
 	 * Test Method
 	 *  2. Validate that all response documents comply with /ats/core/fc-md-items
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 2 (Requirement /req/core/fc-md-success, /req/core/crs84)",
@@ -226,7 +226,6 @@ public class FeatureCollections extends CommonDataFixture {
 	 * Test Method
 	 *  3. In case the response includes a "crs" property, validate that the first value is either "http://www.opengis.net/def/crs/OGC/1.3/CRS84" or "http://www.opengis.net/def/crs/OGC/0/CRS84h"
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 3 (Requirement /req/core/fc-md-success, /req/core/crs84)",
@@ -256,7 +255,6 @@ public class FeatureCollections extends CommonDataFixture {
 	 * Test Method
 	 *  4. Validate the collections content for all supported media types using the resources and tests identified in Schema and Tests for Collections content
 	 * </pre>
-	 *
 	 * @param testPoint the test point to test, never <code>null</code>
 	 */
 	@Test(description = "A.2.5. Feature Collections {root}/collections, Abstract Test 10, Test Method 4 (Requirement /req/core/fc-md-success, /req/core/crs84)",

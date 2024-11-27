@@ -38,8 +38,9 @@ public class FeatureCollection extends CommonDataFixture {
 	private Map<String, Response> collectionIdAndResponse = new HashMap<>();
 
 	/**
-	 * <p>collections.</p>
-	 *
+	 * <p>
+	 * collections.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 * @return an array of {@link java.lang.Object} objects
 	 */
@@ -56,8 +57,9 @@ public class FeatureCollection extends CommonDataFixture {
 	}
 
 	/**
-	 * <p>storeCollectionInTestContext.</p>
-	 *
+	 * <p>
+	 * storeCollectionInTestContext.
+	 * </p>
 	 * @param testContext a {@link org.testng.ITestContext} object
 	 */
 	@AfterClass
@@ -80,7 +82,6 @@ public class FeatureCollection extends CommonDataFixture {
 	 *
 	 * Test Method: For every Feature Collection described in the Collections content, issue an HTTP GET request to the URL /collections/{collectionId} where {collectionId} is the id property for the collection. Validate that a Collection was returned with a status code 200. Validate the contents of the returned document using test /ats/core/sfc-md-success.
 	 * </pre>
-	 *
 	 * @param testContext never <code>null</code>
 	 * @param collection the collection to test, never <code>null</code>
 	 */
@@ -111,7 +112,6 @@ public class FeatureCollection extends CommonDataFixture {
 	 *
 	 * Test Method: Verify that the content of the response is consistent with the content for this Feature Collection in the /collections response. That is, the values for id, title, description and extent are identical.
 	 * </pre>
-	 *
 	 * @param collection the collection to test, never <code>null</code>
 	 */
 	@Test(description = "Implements A.2.6. Feature Collection {root}/collections/{collectionId}, Abstract Test 12 (Requirement /req/core/sfc-md-success)",

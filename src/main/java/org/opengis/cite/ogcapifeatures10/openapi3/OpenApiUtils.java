@@ -29,7 +29,9 @@ import com.reprezen.kaizen.oasparser.model3.Schema;
 import com.reprezen.kaizen.oasparser.model3.Server;
 
 /**
- * <p>OpenApiUtils class.</p>
+ * <p>
+ * OpenApiUtils class.
+ * </p>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
@@ -117,7 +119,6 @@ public class OpenApiUtils {
 	/**
 	 * Parse the CONFORMANCE test points from the passed OpenApi3 document as described in
 	 * A.4.3. Identify the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @return the parsed test points, may be empty but never <code>null</code>
@@ -129,7 +130,6 @@ public class OpenApiUtils {
 	/**
 	 * Parse the COLLECTIONS METADATA test points from the passed OpenApi3 document as
 	 * described in A.4.3. Identify the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @return the parsed test points, may be empty but never <code>null</code>
@@ -142,7 +142,6 @@ public class OpenApiUtils {
 	 * Parse the COLLECTION METADATA test points for the passed collectionName including
 	 * the extended path from the passed OpenApi3 document as described in A.4.3. Identify
 	 * the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @param collectionName the extended path, may be <code>null</code>
@@ -163,7 +162,6 @@ public class OpenApiUtils {
 	/**
 	 * Parse the COLLECTIONS test points from the passed OpenApi3 document as described in
 	 * A.4.3. Identify the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @param noOfCollection the number of collections to return test points for (-1 means
@@ -190,7 +188,6 @@ public class OpenApiUtils {
 	/**
 	 * Parse the test points with the passed path including the extended path from the
 	 * passed OpenApi3 document as described in A.4.3. Identify the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @param collectionName the extended path, may be <code>null</code>
@@ -206,7 +203,6 @@ public class OpenApiUtils {
 	/**
 	 * Parse the test points with the passed path including the extended path from the
 	 * passed OpenApi3 document as described in A.4.3. Identify the Test Points.
-	 *
 	 * @param apiModel never <code>null</code>
 	 * @param iut the url of the instance under test, never <code>null</code>
 	 * @param collectionName the extended path, may be <code>null</code>
@@ -228,8 +224,9 @@ public class OpenApiUtils {
 	}
 
 	/**
-	 * <p>retrieveParameterByName.</p>
-	 *
+	 * <p>
+	 * retrieveParameterByName.
+	 * </p>
 	 * @param collectionItemPath a {@link java.lang.String} object
 	 * @param apiModel a {@link com.reprezen.kaizen.oasparser.model3.OpenApi3} object
 	 * @param name a {@link java.lang.String} object
@@ -250,8 +247,9 @@ public class OpenApiUtils {
 	}
 
 	/**
-	 * <p>isFreeFormParameterSupportedForCollection.</p>
-	 *
+	 * <p>
+	 * isFreeFormParameterSupportedForCollection.
+	 * </p>
 	 * @param apiModel a {@link com.reprezen.kaizen.oasparser.model3.OpenApi3} object
 	 * @param iut a {@link java.net.URI} object
 	 * @param collectionName a {@link java.lang.String} object
@@ -273,8 +271,9 @@ public class OpenApiUtils {
 	}
 
 	/**
-	 * <p>isParameterSupportedForCollection.</p>
-	 *
+	 * <p>
+	 * isParameterSupportedForCollection.
+	 * </p>
 	 * @param apiModel a {@link com.reprezen.kaizen.oasparser.model3.OpenApi3} object
 	 * @param iut a {@link java.net.URI} object
 	 * @param collectionName a {@link java.lang.String} object

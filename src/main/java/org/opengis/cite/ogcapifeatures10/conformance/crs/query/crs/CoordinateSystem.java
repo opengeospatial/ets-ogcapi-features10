@@ -20,8 +20,9 @@ public class CoordinateSystem {
 	private final String code;
 
 	/**
-	 * <p>Constructor for CoordinateSystem.</p>
-	 *
+	 * <p>
+	 * Constructor for CoordinateSystem.
+	 * </p>
 	 * @param code the coordinate system, never <code>null</code>
 	 */
 	public CoordinateSystem(String code) {
@@ -29,8 +30,9 @@ public class CoordinateSystem {
 	}
 
 	/**
-	 * <p>Getter for the field <code>code</code>.</p>
-	 *
+	 * <p>
+	 * Getter for the field <code>code</code>.
+	 * </p>
 	 * @return the code of the crs, never <code>null</code>
 	 */
 	public String getCode() {
@@ -38,8 +40,9 @@ public class CoordinateSystem {
 	}
 
 	/**
-	 * <p>getAsHeaderValue.</p>
-	 *
+	 * <p>
+	 * getAsHeaderValue.
+	 * </p>
 	 * @return the crs as header value (like &lt;CODE&gt;, never <code>null</code>
 	 */
 	public String getAsHeaderValue() {
@@ -48,7 +51,6 @@ public class CoordinateSystem {
 
 	/**
 	 * srid from the passed crs
-	 *
 	 * @return the parsed srid, -1 if the crs is <code>null</code>
 	 */
 	public int getSrid() {
@@ -68,8 +70,9 @@ public class CoordinateSystem {
 	}
 
 	/**
-	 * <p>getCodeWithAuthority.</p>
-	 *
+	 * <p>
+	 * getCodeWithAuthority.
+	 * </p>
 	 * @return the code with the authority: EPSG:CODE, may be <code>null</code>
 	 */
 	public String getCodeWithAuthority() {
@@ -95,7 +98,6 @@ public class CoordinateSystem {
 	 *  4. For OGC URNs (starting with urn:ogc:def:crs:) and OGC http-URIs (starting with http://www.opengis.net/def/crs/)
 	 *     validate that the string conforms to the syntax specified by OGC Name Type Specification - definitions - part 1 – basic name.
 	 * </pre>
-	 *
 	 * @return <code>true</code> if the crs is valid, <code>false</code> otherwise
 	 */
 	public boolean isValid() {

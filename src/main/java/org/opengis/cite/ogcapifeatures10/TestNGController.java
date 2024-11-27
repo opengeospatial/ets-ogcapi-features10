@@ -50,12 +50,11 @@ public class TestNGController implements TestSuiteController {
 	 * <pre>
 	 * ets-*-aio.jar [-o|--outputDir $TMPDIR] [-d|--deleteSubjectOnFinish] [-h|--generateHtmlReport] [test-run-props.xml]
 	 * </pre>
-	 *
 	 * @param args Test run arguments (optional). The first argument must refer to an XML
 	 * properties file containing the expected set of test run arguments. If no argument
 	 * is supplied, the file located at ${user.home}/test-run-props.xml will be used.
-	 * @throws java.lang.Exception If the test run cannot be executed (usually due to unsatisfied
-	 * pre-conditions).
+	 * @throws java.lang.Exception If the test run cannot be executed (usually due to
+	 * unsatisfied pre-conditions).
 	 */
 	public static void main(String[] args) throws Exception {
 		CommandLineArguments testRunArgs = new CommandLineArguments();
@@ -90,7 +89,6 @@ public class TestNGController implements TestSuiteController {
 
 	/**
 	 * Construct a controller that writes results to the given output directory.
-	 *
 	 * @param outputDir The location of the directory in which test results will be
 	 * written (a file system path or a 'file' URI). It will be created if it does not
 	 * exist.
@@ -101,7 +99,6 @@ public class TestNGController implements TestSuiteController {
 
 	/**
 	 * Construct a controller that writes results to the given output directory.
-	 *
 	 * @param outputDir The location of the directory in which test results will be
 	 * written (a file system path or a 'file' URI). It will be created if it does not
 	 * exist.
