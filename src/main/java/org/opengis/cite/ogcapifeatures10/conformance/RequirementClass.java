@@ -44,6 +44,8 @@ public enum RequirementClass {
 	}
 
 	/**
+	 * <p>hasMediaTypeForFeaturesAndCollections.</p>
+	 *
 	 * @return <code>true</code> if the RequirementClass has a media type for features and
 	 * collections, <code>true</code> otherwise
 	 */
@@ -52,6 +54,8 @@ public enum RequirementClass {
 	}
 
 	/**
+	 * <p>Getter for the field <code>mediaTypeFeaturesAndCollections</code>.</p>
+	 *
 	 * @return media type for features and collections, <code>null</code> if not available
 	 */
 	public String getMediaTypeFeaturesAndCollections() {
@@ -59,6 +63,8 @@ public enum RequirementClass {
 	}
 
 	/**
+	 * <p>hasMediaTypeForOtherResources.</p>
+	 *
 	 * @return <code>true</code> if the RequirementClass has a media type for other
 	 * resources, <code>true</code> otherwise
 	 */
@@ -67,6 +73,8 @@ public enum RequirementClass {
 	}
 
 	/**
+	 * <p>Getter for the field <code>mediaTypeOtherResources</code>.</p>
+	 *
 	 * @return media type of other resources, <code>null</code> if not available
 	 */
 	public String getMediaTypeOtherResources() {
@@ -74,6 +82,8 @@ public enum RequirementClass {
 	}
 
 	/**
+	 * <p>byConformanceClass.</p>
+	 *
 	 * @param conformanceClass the conformance class of the RequirementClass to return.
 	 * @return the RequirementClass with the passed conformance class, <code>null</code>
 	 * if RequirementClass exists

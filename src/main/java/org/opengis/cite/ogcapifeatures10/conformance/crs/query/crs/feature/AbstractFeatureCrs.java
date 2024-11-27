@@ -15,6 +15,8 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>AbstractFeatureCrs class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractFeatureCrs extends CommonFixture {
@@ -27,6 +29,11 @@ public class AbstractFeatureCrs extends CommonFixture {
 
 	protected Map<String, String> collectionIdToFeatureId;
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
@@ -39,6 +46,12 @@ public class AbstractFeatureCrs extends CommonFixture {
 			.getAttribute(SuiteAttribute.FEATUREIDS.getName());
 	}
 
+	/**
+	 * <p>collectionFeatureId.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionFeatureId")
 	public Iterator<Object[]> collectionFeatureId(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();

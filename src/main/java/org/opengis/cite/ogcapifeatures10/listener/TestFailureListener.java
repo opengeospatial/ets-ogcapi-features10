@@ -21,11 +21,12 @@ import jakarta.ws.rs.core.MediaType;
 public class TestFailureListener extends TestListenerAdapter {
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Sets the "request" and "response" attributes of a test result. The value of these
 	 * attributes is a string that contains information about the content of an outgoing
 	 * or incoming message: target resource, status code, headers, entity (if present).
 	 * The entity is represented as a String with UTF-8 character encoding.
-	 * @param result A description of a test result (with a fail verdict).
 	 */
 	@Override
 	public void onTestFailure(ITestResult result) {

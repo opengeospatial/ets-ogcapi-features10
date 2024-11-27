@@ -20,6 +20,8 @@ public class CoordinateSystem {
 	private final String code;
 
 	/**
+	 * <p>Constructor for CoordinateSystem.</p>
+	 *
 	 * @param code the coordinate system, never <code>null</code>
 	 */
 	public CoordinateSystem(String code) {
@@ -27,6 +29,8 @@ public class CoordinateSystem {
 	}
 
 	/**
+	 * <p>Getter for the field <code>code</code>.</p>
+	 *
 	 * @return the code of the crs, never <code>null</code>
 	 */
 	public String getCode() {
@@ -34,6 +38,8 @@ public class CoordinateSystem {
 	}
 
 	/**
+	 * <p>getAsHeaderValue.</p>
+	 *
 	 * @return the crs as header value (like &lt;CODE&gt;, never <code>null</code>
 	 */
 	public String getAsHeaderValue() {
@@ -42,8 +48,8 @@ public class CoordinateSystem {
 
 	/**
 	 * srid from the passed crs
+	 *
 	 * @return the parsed srid, -1 if the crs is <code>null</code>
-	 * @throws UnknownCrsException if the srid could not be parsed
 	 */
 	public int getSrid() {
 		if (isDefaultCrs())
@@ -62,10 +68,9 @@ public class CoordinateSystem {
 	}
 
 	/**
+	 * <p>getCodeWithAuthority.</p>
+	 *
 	 * @return the code with the authority: EPSG:CODE, may be <code>null</code>
-	 * @throws UnknownCrsException if the crs is not a OGC URN (starting with
-	 * urn:ogc:def:crs:epsg) or OGC http-URIs (starting with
-	 * http://www.opengis.net/def/crs/epsg) with EPSG auhority
 	 */
 	public String getCodeWithAuthority() {
 		if (isDefaultCrs())
@@ -90,6 +95,7 @@ public class CoordinateSystem {
 	 *  4. For OGC URNs (starting with urn:ogc:def:crs:) and OGC http-URIs (starting with http://www.opengis.net/def/crs/)
 	 *     validate that the string conforms to the syntax specified by OGC Name Type Specification - definitions - part 1 – basic name.
 	 * </pre>
+	 *
 	 * @return <code>true</code> if the crs is valid, <code>false</code> otherwise
 	 */
 	public boolean isValid() {
@@ -108,11 +114,13 @@ public class CoordinateSystem {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return code;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -123,6 +131,7 @@ public class CoordinateSystem {
 		return code.equals(that.code);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return Objects.hash(code);

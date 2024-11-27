@@ -26,6 +26,8 @@ import com.reprezen.kaizen.oasparser.model3.Parameter;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>FeaturesAssertions class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeaturesAssertions {

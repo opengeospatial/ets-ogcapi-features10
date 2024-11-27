@@ -54,6 +54,12 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
 	private MultiKeyMap collectionIdAndFeatureIdToGeometry = new MultiKeyMap();
 
+	/**
+	 * <p>collectionFeatureIdCrsAndDefaultCrs.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionFeatureIdCrsAndDefaultCrs")
 	public Iterator<Object[]> collectionFeatureIdCrsAndDefaultCrs(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -79,10 +85,11 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
 	/**
 	 * Test: invalid CRS requesting /collections/{collectionId}/items
+	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param featureId id id of the feature, never <code>null</code>
-	 * @throws ParseException if the geometry could not be parsed
+	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
 			+ "Geometries in the path /collections/{collectionId}/items/{featureId}",
@@ -117,12 +124,13 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 
 	/**
 	 * Test: Content-Crs header in the path /collections/{collectionId}/items/{featureId}
+	 *
 	 * @param collectionId id id of the collection, never <code>null</code>
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param featureId id id of the feature, never <code>null</code>
 	 * @param crs the crs to test, never <code>null</code>
 	 * @param defaultCRS the defaultCRS of the collection, never <code>null</code>
-	 * @throws ParseException if the geometry could not be parsed
+	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
 			+ "Transformed geometries in the path /collections/{collectionId}/items/{featureId}",

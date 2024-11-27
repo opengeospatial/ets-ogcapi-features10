@@ -39,10 +39,18 @@ public class CommandLineArguments {
 	@Parameter(names = { "-h", "--generateHtmlReport" }, arity = 1, description = "Enable HTML report generation")
 	private boolean generateHtmlReport = false;
 
+	/**
+	 * <p>Constructor for CommandLineArguments.</p>
+	 */
 	public CommandLineArguments() {
 		this.xmlProps = new ArrayList<>();
 	}
 
+	/**
+	 * <p>getPropertiesFile.</p>
+	 *
+	 * @return a {@link java.io.File} object
+	 */
 	public File getPropertiesFile() {
 		File fileRef;
 		if (xmlProps.isEmpty()) {
@@ -55,14 +63,29 @@ public class CommandLineArguments {
 		return fileRef;
 	}
 
+	/**
+	 * <p>Getter for the field <code>outputDir</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public String getOutputDir() {
 		return (null != outputDir) ? outputDir : System.getProperty("user.home");
 	}
 
+	/**
+	 * <p>doDeleteSubjectOnFinish.</p>
+	 *
+	 * @return a boolean
+	 */
 	public boolean doDeleteSubjectOnFinish() {
 		return deleteSubjectOnFinish;
 	}
 
+	/**
+	 * <p>isGenerateHtmlReport.</p>
+	 *
+	 * @return a boolean
+	 */
 	public boolean isGenerateHtmlReport() {
 		return generateHtmlReport;
 	}

@@ -17,12 +17,16 @@ import org.testng.annotations.BeforeClass;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>AbstractBBoxCrs class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractBBoxCrs extends CommonFixture {
 
+	/** Constant <code>BBOX_PARAM="bbox"</code> */
 	public static final String BBOX_PARAM = "bbox";
 
+	/** Constant <code>BBOX_CRS_PARAM="bbox-crs"</code> */
 	public static final String BBOX_CRS_PARAM = "bbox-crs";
 
 	protected Map<String, JsonPath> collectionsResponses;
@@ -31,6 +35,11 @@ public class AbstractBBoxCrs extends CommonFixture {
 
 	protected Map<String, CoordinateSystem> collectionIdToDefaultCrs;
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()

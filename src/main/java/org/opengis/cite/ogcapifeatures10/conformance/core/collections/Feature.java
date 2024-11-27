@@ -38,12 +38,19 @@ import io.restassured.response.Response;
  */
 public class Feature extends CommonDataFixture {
 
+	/** Constant <code>DUMMY_COLLECTION_ID="dUmmYColLection"</code> */
 	public static final String DUMMY_COLLECTION_ID = "dUmmYColLection";
 
 	private List<Map<String, Object>> collections;
 
 	private final Map<String, Response> collectionNameAndResponse = new HashMap<>();
 
+	/**
+	 * <p>collectionFeatureId.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionFeatureId")
 	public Iterator<Object[]> collectionFeatureId(ITestContext testContext) {
 		Map<String, String> collectionNameToFeatureId = (Map<String, String>) testContext.getSuite()
@@ -72,6 +79,11 @@ public class Feature extends CommonDataFixture {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.collections = (List<Map<String, Object>>) testContext.getSuite()
@@ -89,6 +101,7 @@ public class Feature extends CommonDataFixture {
 	 *  2. Validate that a feature was returned with a status code 200
 	 *  3. Validate the contents of the returned feature using test /ats/core/f-success.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param featureId the featureId to request, may be <code>null</code> (test will be
 	 * skipped)
@@ -138,6 +151,7 @@ public class Feature extends CommonDataFixture {
 	 *  3. a link to the feature collection that contains this feature (relation: collection).
 	 * Verify that all links include the rel and type link parameters.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param featureId the featureId to request, may be <code>null</code> (test will be
 	 * skipped)

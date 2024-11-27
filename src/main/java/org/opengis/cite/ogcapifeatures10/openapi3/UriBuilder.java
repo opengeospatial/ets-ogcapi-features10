@@ -19,6 +19,8 @@ public class UriBuilder {
 	private final Map<String, String> templateReplacements = new HashMap<>();
 
 	/**
+	 * <p>Constructor for UriBuilder.</p>
+	 *
 	 * @param testPoint never <code>null</code>
 	 */
 	public UriBuilder(TestPoint testPoint) {
@@ -28,6 +30,7 @@ public class UriBuilder {
 
 	/**
 	 * Adds the collectionName to the URI
+	 *
 	 * @param collectionName never <code>null</code>
 	 * @return this UrlBuilder
 	 */
@@ -39,6 +42,7 @@ public class UriBuilder {
 
 	/**
 	 * Adds the featureId to the URI
+	 *
 	 * @param featureId never <code>null</code>
 	 * @return this UrlBuilder
 	 */
@@ -49,6 +53,8 @@ public class UriBuilder {
 	}
 
 	/**
+	 * <p>buildUrl.</p>
+	 *
 	 * @return this URI, never <code>null</code>
 	 */
 	public String buildUrl() {

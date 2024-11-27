@@ -17,7 +17,6 @@ public class SuitePreconditions {
 
 	/**
 	 * Verifies that the referenced test subject exists and has the expected type.
-	 * @param testContext Information about the (pending) test run.
 	 */
 	@BeforeSuite
 	@SuppressWarnings("rawtypes")

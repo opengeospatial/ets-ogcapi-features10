@@ -42,6 +42,13 @@ public class DiscoveryCollectionCrsUri {
 
 	private Map<String, List<CoordinateSystem>> collectionIdAndValidCrs = new HashMap<>();
 
+	/**
+	 * <p>collectionIdAndJsonAndCrs.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 * @throws java.lang.AssertionError if any.
+	 */
 	@SuppressWarnings("unchecked")
 	@DataProvider(name = "collectionIdAndJsonAndCrs")
 	public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) throws AssertionError {
@@ -67,6 +74,12 @@ public class DiscoveryCollectionCrsUri {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>collectionIdAndJsonAndStorageCrs.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionIdAndJsonAndStorageCrs")
 	public Iterator<Object[]> collectionIdAndJsonAndStorageCrs(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -85,6 +98,11 @@ public class DiscoveryCollectionCrsUri {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>storeCollectionInTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@AfterClass
 	public void storeCollectionInTestContext(ITestContext testContext) {
 		testContext.getSuite().setAttribute(SuiteAttribute.COLLECTION_CRS_BY_ID.getName(), collectionIdAndValidCrs);
@@ -92,6 +110,7 @@ public class DiscoveryCollectionCrsUri {
 
 	/**
 	 * Test: crs property in the collection objects in the path /collections
+	 *
 	 * @param collectionId id of the collection under test, never <code>null</code>
 	 * @param crs the coordinate system, never <code>null</code>
 	 */
@@ -109,6 +128,7 @@ public class DiscoveryCollectionCrsUri {
 
 	/**
 	 * Test: storageCrs property in the collection objects in the path /collections
+	 *
 	 * @param collectionId id of the collection under test, never <code>null</code>
 	 * @param storageCrs the storageCrs, never <code>null</code>
 	 */

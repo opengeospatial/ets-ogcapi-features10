@@ -40,6 +40,7 @@ public class CommonFixture {
 	/**
 	 * Initializes the common test fixture with a client component for interacting with
 	 * HTTP endpoints.
+	 *
 	 * @param testContext The test context that contains all the information for a test
 	 * run, including suite attributes.
 	 */
@@ -49,19 +50,37 @@ public class CommonFixture {
 		rootUri = (URI) testContext.getSuite().getAttribute(SuiteAttribute.IUT.getName());
 	}
 
+	/**
+	 * <p>clearMessages.</p>
+	 */
 	@BeforeMethod
 	public void clearMessages() {
 		initLogging();
 	}
 
+	/**
+	 * <p>getRequest.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public String getRequest() {
 		return requestOutputStream.toString();
 	}
 
+	/**
+	 * <p>getResponse.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public String getResponse() {
 		return responseOutputStream.toString();
 	}
 
+	/**
+	 * <p>init.</p>
+	 *
+	 * @return a {@link io.restassured.specification.RequestSpecification} object
+	 */
 	protected RequestSpecification init() {
 		JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(NumberReturnType.DOUBLE);
 		RestAssuredConfig config = RestAssuredConfig.newConfig().jsonConfig(jsonConfig);

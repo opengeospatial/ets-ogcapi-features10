@@ -14,14 +14,15 @@ import org.testng.IExecutionListener;
  * </p>
  *
  * @see com.occamlab.te.spi.executors.FixtureManager FixtureManager
- *
  */
 public class TestRunListener implements IExecutionListener {
 
+	/** {@inheritDoc} */
 	@Override
 	public void onExecutionStart() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void onExecutionFinish() {
 	}

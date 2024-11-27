@@ -19,6 +19,8 @@ public class EtsAssert {
 	private static Envelope CRS84_BBOX = new Envelope(-180, 180, -90, 90);
 
 	/**
+	 * <p>assertTrue.</p>
+	 *
 	 * @param valueToAssert the boolean to assert to be <code>true</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
 	 * <code>null</code>
@@ -29,6 +31,8 @@ public class EtsAssert {
 	}
 
 	/**
+	 * <p>assertFalse.</p>
+	 *
 	 * @param valueToAssert the boolean to assert to be <code>false</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
 	 * <code>null</code>
@@ -49,6 +53,7 @@ public class EtsAssert {
 	 *  4. For OGC URNs (starting with urn:ogc:def:crs:) and OGC http-URIs (starting with http://www.opengis.net/def/crs/)
 	 *     validate that the string conforms to the syntax specified by OGC Name Type Specification - definitions - part 1 – basic name.
 	 * </pre>
+	 *
 	 * @param coordinateSystem the coordinate system to assert as valid identifier (see
 	 * above). If <code>null</code> an AssertionError is thrown.
 	 * @param failureMsg the message to throw in case of a failure, should not be
@@ -70,6 +75,7 @@ public class EtsAssert {
 	 * </pre>
 	 *
 	 * is in the list of passed crs.
+	 *
 	 * @param valueToAssert list of CRS which should contain the default crs, never
 	 * <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
@@ -91,6 +97,7 @@ public class EtsAssert {
 	 *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
 	 *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
 	 * </pre>
+	 *
 	 * @param valueToAssert list of CRS which should contain the default crs, never
 	 * <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
@@ -114,6 +121,7 @@ public class EtsAssert {
 	 *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
 	 *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
 	 * </pre>
+	 *
 	 * @param crsHeaderValue CRS which should be the default crs, never <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
 	 * <code>null</code>
@@ -126,6 +134,8 @@ public class EtsAssert {
 	}
 
 	/**
+	 * <p>assertCrsHeader.</p>
+	 *
 	 * @param crsHeaderValue the value from the header, never <code>null</code>
 	 * @param expectedCrs th expected value, never <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
@@ -144,6 +154,7 @@ public class EtsAssert {
 	 *   * http://www.opengis.net/def/crs/OGC/1.3/CRS84 (for coordinates without height)
 	 *   * http://www.opengis.net/def/crs/OGC/0/CRS84h (for coordinates with height)
 	 * </pre>
+	 *
 	 * @param crsHeaderValue the value from the header, never <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
 	 * <code>null</code>
@@ -157,6 +168,7 @@ public class EtsAssert {
 
 	/**
 	 * Assert that the passed geometry is in the valid area of CRS84.
+	 *
 	 * @param geometry to check, may be <code>null</code>
 	 * @param failureMsg the message to throw in case of a failure, should not be
 	 * <code>null</code>

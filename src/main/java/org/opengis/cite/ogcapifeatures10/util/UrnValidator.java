@@ -88,6 +88,7 @@ public class UrnValidator {
 	/**
 	 * Checks if the passed urn is a valid urn according RFC 8141, Section 2
 	 * (https://tools.ietf.org/html/rfc8141#section-2)
+	 *
 	 * @param urn the urn to check, <code>null</code> results in a invalid URN.
 	 * @return <code>true</code> if the urn is valid according to RFC 8141, Section 2,
 	 * <code>false</code> if the urn is null, empty or not valid.

@@ -44,6 +44,12 @@ import io.restassured.response.Response;
  */
 public class FeaturesBBox extends AbstractFeatures {
 
+	/**
+	 * <p>collectionItemUrisWithBboxes.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionItemUrisWithBboxes")
 	public Iterator<Object[]> collectionItemUrisWithBboxes(ITestContext testContext) {
 		List<Object[]> collectionsWithBboxes = new ArrayList<>();
@@ -92,6 +98,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *  * Upper right corner, WGS 84 longitude
 	 *  * Upper right corner, WGS 84 latitude
 	 * </pre>
+	 *
 	 * @param testPoint the testPoint under test, never <code>null</code>
 	 */
 	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 14: (Requirement /req/core/fc-bbox-definition)",
@@ -143,6 +150,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *   * Parameter /ats/core/fc-bbox-definition
 	 *   * Response /ats/core/fc-bbox-response
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
@@ -178,9 +186,10 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *   2. Verify that the bbox parameter matched all features in the collection that were not associated with a spatial geometry (this is only applicable for datasets that include features without a spatial geometry).
 	 *   3.  Verify that the coordinate reference system of the geometries is WGS 84 longitude/latitude ("http://www.opengis.net/def/crs/OGC/1.3/CRS84" or "http://www.opengis.net/def/crs/OGC/0/CRS84h") since no parameter bbox-crs was specified in the request.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
-	 * @throws ParseException If the JSON cannot be parsed
+	 * @throws org.locationtech.jts.io.ParseException If the JSON cannot be parsed
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)",
 			dataProvider = "collectionItemUrisWithBboxes",
@@ -208,9 +217,10 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
 	 *  2. Validate retrieved spatial data using the CRS84 reference system.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
-	 * @throws ParseException if the geometry could not be parsed
+	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 2, Test Method 2 (Requirement /req/core/crs84)",
 			dataProvider = "collectionItemUrisWithBboxes",
@@ -232,6 +242,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * Test Method
 	 *   1. Validate that the type property is present and has a value of FeatureCollection
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
@@ -254,6 +265,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * Test Method
 	 *   2. Validate the features property is present and that it is populated with an array of feature items.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
@@ -289,6 +301,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *
 	 * Verify that all links include the rel and type link parameters.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
@@ -319,6 +332,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the timeStamp value is set to the time when the response was generated.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
@@ -349,9 +363,10 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the value of the numberMatched parameter is identical to the number of features in the feature collections that match the selection parameters like bbox, datetime or additional filter parameters.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
-	 * @throws URISyntaxException if the creation of a uri fails
+	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
 			dataProvider = "collectionItemUrisWithBboxes",
@@ -381,6 +396,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the numberReturned value is identical to the number of features in the response.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */

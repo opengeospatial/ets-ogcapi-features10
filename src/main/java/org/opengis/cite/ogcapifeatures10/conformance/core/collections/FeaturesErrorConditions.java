@@ -25,10 +25,18 @@ import io.restassured.response.Response;
  */
 public class FeaturesErrorConditions extends AbstractFeatures {
 
+	/** Constant <code>INVALID_QUERY_PARAM_VALUE="unlimited"</code> */
 	public static final String INVALID_QUERY_PARAM_VALUE = "unlimited";
 
+	/** Constant <code>UNKNOWN_QUERY_PARAM="unknownQueryParameter"</code> */
 	public static final String UNKNOWN_QUERY_PARAM = "unknownQueryParameter";
 
+	/**
+	 * <p>collectionItemUris.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionItemUris")
 	public Iterator<Object[]> collectionItemUris(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -64,6 +72,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 *   1. Enter an HTTP request with an invalid query parameter.
 	 *   2. Verify that the API returns the status code 400.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/20 (Requirement /req/core/query-param-invalid)",
@@ -111,6 +120,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 *   1. Enter an HTTP request with an query parameter that is not specified in the API definition.
 	 *   2. Verify that the API returns the status code 400.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/21 (Requirement /req/core/query-param-unknown)",

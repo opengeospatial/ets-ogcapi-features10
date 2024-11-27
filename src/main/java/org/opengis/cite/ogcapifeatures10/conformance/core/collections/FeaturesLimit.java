@@ -43,6 +43,12 @@ import io.restassured.response.Response;
  */
 public class FeaturesLimit extends AbstractFeatures {
 
+	/**
+	 * <p>collectionItemUrisWithLimits.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionItemUrisWithLimits")
 	public Iterator<Object[]> collectionItemUrisWithLimits(ITestContext testContext) {
 		URI iut = (URI) testContext.getSuite().getAttribute(IUT.getName());
@@ -91,6 +97,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Note that the API can define values for "minimum", "maximum" and "default".
 	 * </pre>
+	 *
 	 * @param testPoint the testPoint under test, never <code>null</code>
 	 */
 	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 16: (Requirement /req/core/fc-limit-definition)",
@@ -131,6 +138,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *   * Parameter /ats/core/fc-limit-definition
 	 *   * Response /ats/core/fc-limit-response
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -167,6 +175,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *  2. Verify that this count is not greater than the value specified by the limit parameter.
 	 *  3. If the API definition specifies a maximum value for limit parameter, verify that the count does not exceed this maximum value.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -199,10 +208,11 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
 	 *  2. Validate retrieved spatial data using the CRS84 reference system.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
-	 * @throws ParseException if the geometry could not be parsed
+	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 2, Test Method 2 (Requirement /req/core/crs84)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
@@ -224,6 +234,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * Test Method
 	 *   1. Validate that the type property is present and has a value of FeatureCollection
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -247,6 +258,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * Test Method
 	 *   2. Validate the features property is present and that it is populated with an array of feature items.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -283,6 +295,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Verify that all links include the rel and type link parameters.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -314,6 +327,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the timeStamp value is set to the time when the response was generated.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
@@ -345,10 +359,11 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the value of the numberMatched parameter is identical to the number of features in the feature collections that match the selection parameters like bbox, datetime or additional filter parameters.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
-	 * @throws URISyntaxException if the creation of a uri fails
+	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
 	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
@@ -378,6 +393,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Test Method: Validate that the numberReturned value is identical to the number of features in the response.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>

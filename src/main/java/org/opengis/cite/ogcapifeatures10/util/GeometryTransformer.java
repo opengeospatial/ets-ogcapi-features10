@@ -22,6 +22,8 @@ import org.locationtech.proj4j.ProjCoordinate;
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 
 /**
+ * <p>GeometryTransformer class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class GeometryTransformer {
@@ -35,6 +37,8 @@ public class GeometryTransformer {
 	private final CoordinateSystem targetCrs;
 
 	/**
+	 * <p>Constructor for GeometryTransformer.</p>
+	 *
 	 * @param srcCrs source crs, , never <code>null</code>
 	 * @param targetCrs target crs, , never <code>null</code>
 	 */
@@ -49,6 +53,8 @@ public class GeometryTransformer {
 	}
 
 	/**
+	 * <p>transform.</p>
+	 *
 	 * @param bbox the bbox to transform, never <code>null</code>
 	 * @return the transformed bbox (or the same if srcCrs and targetCrs) are the same,
 	 * never <code>null</code>
@@ -63,6 +69,12 @@ public class GeometryTransformer {
 		return new BBox(transformedMin.x, transformedMin.y, transformedMax.x, transformedMax.y, targetCrs);
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Geometry} object
+	 * @return a {@link org.locationtech.jts.geom.Geometry} object
+	 */
 	public Geometry transform(Geometry geometryToTransform) {
 		if (geometryToTransform == null)
 			return null;
@@ -81,18 +93,36 @@ public class GeometryTransformer {
 		throw new IllegalArgumentException("Unsupported geometry type: " + geometryToTransform.getClass());
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Point} object
+	 * @return a {@link org.locationtech.jts.geom.Point} object
+	 */
 	public Point transform(Point geometryToTransform) {
 		Coordinate coordinate = geometryToTransform.getCoordinate();
 		Coordinate transformedCoordinate = transform(coordinate);
 		return geometryFactory.createPoint(transformedCoordinate);
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.LineString} object
+	 * @return a {@link org.locationtech.jts.geom.LineString} object
+	 */
 	public LineString transform(LineString geometryToTransform) {
 		Coordinate[] coordinates = geometryToTransform.getCoordinates();
 		Coordinate[] transformedCoordinates = transform(coordinates);
 		return geometryFactory.createLineString(transformedCoordinates);
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.Polygon} object
+	 * @return a {@link org.locationtech.jts.geom.Polygon} object
+	 */
 	public Polygon transform(Polygon geometryToTransform) {
 		Coordinate[] coordinatesExteriorRing = geometryToTransform.getExteriorRing().getCoordinates();
 		Coordinate[] transformedCoordinatesExteriorRing = transform(coordinatesExteriorRing);
@@ -106,6 +136,12 @@ public class GeometryTransformer {
 		return geometryFactory.createPolygon(exteriorRing, interiorRings);
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.GeometryCollection} object
+	 * @return a {@link org.locationtech.jts.geom.Geometry} object
+	 */
 	public Geometry transform(GeometryCollection geometryToTransform) {
 		if (geometryToTransform instanceof MultiPoint) {
 			return transform((MultiPoint) geometryToTransform);
@@ -119,6 +155,12 @@ public class GeometryTransformer {
 		throw new IllegalArgumentException("Unsupported geometry type: " + geometryToTransform.getClass());
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiPoint} object
+	 * @return a {@link org.locationtech.jts.geom.MultiPoint} object
+	 */
 	public MultiPoint transform(MultiPoint geometryToTransform) {
 		Point[] points = new Point[geometryToTransform.getNumGeometries()];
 		for (int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++) {
@@ -128,6 +170,12 @@ public class GeometryTransformer {
 		return geometryFactory.createMultiPoint(points);
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiLineString} object
+	 * @return a {@link org.locationtech.jts.geom.MultiLineString} object
+	 */
 	public MultiLineString transform(MultiLineString geometryToTransform) {
 		LineString[] lineStrings = new LineString[geometryToTransform.getNumGeometries()];
 		for (int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++) {
@@ -138,6 +186,12 @@ public class GeometryTransformer {
 
 	}
 
+	/**
+	 * <p>transform.</p>
+	 *
+	 * @param geometryToTransform a {@link org.locationtech.jts.geom.MultiPolygon} object
+	 * @return a {@link org.locationtech.jts.geom.MultiPolygon} object
+	 */
 	public MultiPolygon transform(MultiPolygon geometryToTransform) {
 		Polygon[] polygons = new Polygon[geometryToTransform.getNumGeometries()];
 		for (int numGeometry = 0; numGeometry < geometryToTransform.getNumGeometries(); numGeometry++) {

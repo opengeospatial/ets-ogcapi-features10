@@ -17,6 +17,7 @@ public class TestSuiteLogger {
 
 	/**
 	 * Logs a message at the specified logging level with the given message parameters.
+	 *
 	 * @param level The logging {@link Level level}.
 	 * @param message A String representing the content of the log message.
 	 * @param params An array of message parameters.
@@ -30,6 +31,7 @@ public class TestSuiteLogger {
 	/**
 	 * Logs a message at the specified logging level with the given Exception object that
 	 * represents a noteworthy error condition.
+	 *
 	 * @param level The logging {@link Level level}.
 	 * @param message A String representing the content of the log message.
 	 * @param except An object that indicates an exceptional situation.
@@ -42,6 +44,7 @@ public class TestSuiteLogger {
 
 	/**
 	 * Logs a simple message at the specified logging level.
+	 *
 	 * @param level The logging {@link Level level}.
 	 * @param message A String representing the content of the log message.
 	 */
@@ -54,6 +57,7 @@ public class TestSuiteLogger {
 	/**
 	 * Indicates if the logger is enabled at a given logging level. Message levels lower
 	 * than this value will be discarded.
+	 *
 	 * @param level The logging {@link Level level}.
 	 * @return true if the logger is currently enabled for this logging level; false
 	 * otherwise.

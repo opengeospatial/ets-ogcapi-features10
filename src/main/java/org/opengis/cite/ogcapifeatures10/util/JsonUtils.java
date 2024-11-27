@@ -30,6 +30,8 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 /**
+ * <p>JsonUtils class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class JsonUtils {
@@ -39,6 +41,7 @@ public class JsonUtils {
 
 	/**
 	 * Parse value ass string.
+	 *
 	 * @param value to parse, may be <code>null</code>
 	 * @return the value as string, <code>null</code> if the passed value was
 	 * <code>null</code>
@@ -51,6 +54,7 @@ public class JsonUtils {
 
 	/**
 	 * Parses the id of the first feature from the passed json.
+	 *
 	 * @param collectionItemJson the json document containing the features, never
 	 * <code>null</code>
 	 * @return the parsed id, may be <code>null</code> if no feature could be found
@@ -68,11 +72,11 @@ public class JsonUtils {
 
 	/**
 	 * Parses the temporal extent from the passed collection.
+	 *
 	 * @param collection the collection containing the extent to parse, never
 	 * <code>null</code>
 	 * @return the parsed temporal extent, <code>null</code> if no extent exists
-	 * @throws IllegalArgumentException if the number of items in the extent invalid
-	 *
+	 * @throws java.lang.IllegalArgumentException if the number of items in the extent invalid
 	 */
 	public static TemporalExtent parseTemporalExtent(Map<String, Object> collection) {
 		Object extent = collection.get("extent");
@@ -92,6 +96,7 @@ public class JsonUtils {
 
 	/**
 	 * Parses the passed string as ISO 8601 date.
+	 *
 	 * @param dateTime the dateTime to parse, never <code>null</code>
 	 * @return the parsed date, never <code>null</code>
 	 */
@@ -101,6 +106,7 @@ public class JsonUtils {
 
 	/**
 	 * Formats the passed string as ISO 8601 date. Example: "2018-02-12T23:20:50Z"
+	 *
 	 * @param dateTime the dateTime to format, never <code>null</code>
 	 * @return the formatted date, never <code>null</code>
 	 */
@@ -110,6 +116,7 @@ public class JsonUtils {
 
 	/**
 	 * Formats the passed string as ISO 8601 date. Example: "2018-02-12"
+	 *
 	 * @param date the dateTime to format, never <code>null</code>
 	 * @return the formatted date, never <code>null</code>
 	 */
@@ -120,6 +127,7 @@ public class JsonUtils {
 	/**
 	 * Formats the passed string as a period using a start and end time. Example:
 	 * "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+	 *
 	 * @param beginDateTime the begin dateTime to format, never <code>null</code>
 	 * @param endDateTime the end dateTime to format, never <code>null</code>
 	 * @return the formatted date, never <code>null</code>
@@ -131,6 +139,7 @@ public class JsonUtils {
 	/**
 	 * Formats the passed string as a period using start time and a duration. Example:
 	 * "2018-02-12T00:00:00Z/P1M6DT12H31M12S"
+	 *
 	 * @param beginDate the begin date to format, never <code>null</code>
 	 * @param endDate the end date to format, never <code>null</code>
 	 * @return the formatted date, never <code>null</code>
@@ -142,11 +151,11 @@ public class JsonUtils {
 
 	/**
 	 * Parses the spatial extent from the passed collection.
+	 *
 	 * @param collection the collection containing the extent to parse, never
 	 * <code>null</code>
 	 * @return the parsed bbox, <code>null</code> if no extent exists
-	 * @throws IllegalArgumentException if the number of items in the extent invalid
-	 *
+	 * @throws java.lang.IllegalArgumentException if the number of items in the extent invalid
 	 */
 	public static BBox parseSpatialExtent(Map<String, Object> collection) {
 		Object extent = collection.get("extent");
@@ -207,6 +216,7 @@ public class JsonUtils {
 	/**
 	 * Parses all links with 'type' of one of the passed mediaTypes and the 'rel' property
 	 * with the passed value.
+	 *
 	 * @param links list of all links, never <code>null</code>
 	 * @param mediaTypesToSupport a list of media types the links searched for should
 	 * support, may be empty but never <code>null</code>
@@ -229,6 +239,7 @@ public class JsonUtils {
 
 	/**
 	 * Parsing the media types which does not have a link woth property 'type' for.
+	 *
 	 * @param links list of links to search in, never <code>null</code>
 	 * @param mediaTypesToSuppport a list of media types which should be supported, never
 	 * <code>null</code>
@@ -247,6 +258,7 @@ public class JsonUtils {
 
 	/**
 	 * Parses the links without 'rel' or 'type' property.
+	 *
 	 * @param links list of links to search in, never <code>null</code>
 	 * @param rels Set of relation types, never <code>null</code>
 	 * @return the links without 'rel' or 'type' property
@@ -262,6 +274,7 @@ public class JsonUtils {
 
 	/**
 	 * Parses the link with 'rel=self'.
+	 *
 	 * @param links list of links to search in, never <code>null</code>
 	 * @param expectedRel the expected value of the property 'rel', never
 	 * <code>null</code>
@@ -280,6 +293,7 @@ public class JsonUtils {
 
 	/**
 	 * Checks if the passed link contains 'rel' and 'type' properties.
+	 *
 	 * @param link to check, never <code>null</code>
 	 * @return <code>true</code> if the link contains 'rel' and 'type' properties,
 	 * <code>false</code> otherwise
@@ -294,6 +308,7 @@ public class JsonUtils {
 
 	/**
 	 * Checks if a property with the passed name exists in the jsonPath.
+	 *
 	 * @param propertyName name of the property to check, never <code>null</code>
 	 * @param jsonPath to check, never <code>null</code>
 	 * @return <code>true</code> if the property exists, <code>false</code> otherwise
@@ -305,6 +320,7 @@ public class JsonUtils {
 	/**
 	 * Checks if a at least one of the collection in the /collections response has a
 	 * spatial extent.
+	 *
 	 * @param jsonPath to check, never <code>null</code>
 	 * @return <code>true</code> at least one of the collection has a spatial extent,
 	 * <code>false</code> otherwise
@@ -321,6 +337,7 @@ public class JsonUtils {
 	/**
 	 * Checks if a at least one of the collection in the /collections response has a
 	 * spatial extent.
+	 *
 	 * @param collection to check, never <code>null</code>
 	 * @return <code>true</code> at least one of the collection has a spatial extent,
 	 * <code>false</code> otherwise
@@ -332,6 +349,7 @@ public class JsonUtils {
 
 	/**
 	 * Checks if the extent contains a spatial extent.
+	 *
 	 * @param extent to check, never <code>null</code>
 	 * @return <code>true</code> if extent contains a spatial extent, <code>false</code>
 	 * otherwise
@@ -347,6 +365,7 @@ public class JsonUtils {
 
 	/**
 	 * Retrieves the property values as list.
+	 *
 	 * @param propertyName name of the property, never <code>null</code>
 	 * @param jsonPath the json document to retrieve properties from, never
 	 * <code>null</code>
@@ -363,6 +382,7 @@ public class JsonUtils {
 
 	/**
 	 * Retrieves the property values as list.
+	 *
 	 * @param propertyName name of the property, never <code>null</code>
 	 * @param jsonPath the json document to retrieve properties from, never
 	 * <code>null</code>
@@ -377,6 +397,7 @@ public class JsonUtils {
 
 	/**
 	 * Retrieves the property values as list.
+	 *
 	 * @param propertyName name of the property, never <code>null</code>
 	 * @param json the json map to retrieve properties from, never <code>null</code>
 	 * @return the property values as list, may be empty but never <code>null</code>
@@ -393,11 +414,12 @@ public class JsonUtils {
 	/**
 	 * Collects the number of all returned features by iterating over all 'next' links and
 	 * summarizing the size of features in 'features' array property.
+	 *
 	 * @param jsonPath the initial collection, never <code>null</code>
 	 * @param maximumLimit the limit parameter value to use, if &lt;= 0 the parameter is
 	 * omitted
 	 * @return the number of all returned features
-	 * @throws URISyntaxException if the creation of a uri fails
+	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
 	public static int collectNumberOfAllReturnedFeatures(JsonPath jsonPath, int maximumLimit)
 			throws URISyntaxException {
@@ -449,6 +471,7 @@ public class JsonUtils {
 	/**
 	 * Finds the URL to the resource /collections/{collectionId}/items from the path
 	 * /collections/{collectionId}
+	 *
 	 * @param rootUri never <code>null</code>
 	 * @param collection the /collections/{collectionId} response, never <code>null</code>
 	 * @return the url to the resource /collections/{collectionId}/items or
@@ -462,6 +485,7 @@ public class JsonUtils {
 	/**
 	 * Finds the URL to the resource /collections/{collectionId}/items from the path
 	 * /collections
+	 *
 	 * @param rootUri never <code>null</code>
 	 * @param collection the collection object /collections response, never
 	 * <code>null</code>
@@ -476,6 +500,7 @@ public class JsonUtils {
 	/**
 	 * Finds the URL to the resource /collections/{collectionId}/items/{featureId} from
 	 * the path /collections and creates an valid url to this resource
+	 *
 	 * @param rootUri never <code>null</code>
 	 * @param collection the /collections/{collectionId} response, never <code>null</code>
 	 * @param featureId id of the feature, never <code>null</code>
@@ -490,6 +515,7 @@ public class JsonUtils {
 	/**
 	 * Finds the URL to the resource /collections/{collectionId}/items/{featureId} from
 	 * the path /collections and creates an valid url to this resource
+	 *
 	 * @param rootUri never <code>null</code>
 	 * @param collection the collection object /collections response, never
 	 * <code>null</code>
@@ -504,11 +530,12 @@ public class JsonUtils {
 
 	/**
 	 * Parse the geometry property as geometry.
+	 *
 	 * @param feature to parse, never <code>null</code>
 	 * @param crs the crs of the geometry, may be <code>null</code>
 	 * @return the parsed geometry, <code>null</code> if the feature has no geometry
 	 * property
-	 * @throws ParseException if the geometry could not be parsed
+	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
 	public static Geometry parseFeatureGeometry(Map<String, Object> feature, CoordinateSystem crs)
 			throws ParseException {

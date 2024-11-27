@@ -16,6 +16,8 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>AbstractFeaturesCrs class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractFeaturesCrs extends CommonFixture {
@@ -26,6 +28,11 @@ public class AbstractFeaturesCrs extends CommonFixture {
 
 	private Map<String, CoordinateSystem> collectionIdToDefaultCrs;
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
@@ -36,6 +43,12 @@ public class AbstractFeaturesCrs extends CommonFixture {
 			.getAttribute(SuiteAttribute.COLLECTION_DEFAULT_CRS_BY_ID.getName());
 	}
 
+	/**
+	 * <p>collectionIdAndJson.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionIdAndJson")
 	public Iterator<Object[]> collectionIdAndJson(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -52,6 +65,12 @@ public class AbstractFeaturesCrs extends CommonFixture {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>collectionIdAndJsonAndCrs.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionIdAndJsonAndCrs")
 	public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -75,6 +94,12 @@ public class AbstractFeaturesCrs extends CommonFixture {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>collectionIdAndJsonAndCrsAndDefaultCrs.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionIdAndJsonAndCrsAndDefaultCrs")
 	public Iterator<Object[]> collectionIdAndJsonAndCrsAndDefaultCrs(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();

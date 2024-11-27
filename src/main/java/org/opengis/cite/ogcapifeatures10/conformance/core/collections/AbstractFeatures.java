@@ -52,6 +52,8 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
+ * <p>AbstractFeatures class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractFeatures extends CommonDataFixture {
@@ -62,6 +64,12 @@ public class AbstractFeatures extends CommonDataFixture {
 
 	protected URI iut;
 
+	/**
+	 * <p>collectionPaths.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionPaths")
 	public Iterator<Object[]> collectionPaths(ITestContext testContext) {
 		List<TestPoint> testPointsForCollections = retrieveTestPointsForCollections(getApiModel(), iut,
@@ -73,6 +81,11 @@ public class AbstractFeatures extends CommonDataFixture {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.iut = (URI) testContext.getSuite().getAttribute(IUT.getName());
@@ -91,6 +104,7 @@ public class AbstractFeatures extends CommonDataFixture {
 	 * Test Method
 	 *   1. Validate that the type property is present and has a value of FeatureCollection
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	public void validateTypeProperty(CollectionResponseKey collection) {
@@ -206,6 +220,7 @@ public class AbstractFeatures extends CommonDataFixture {
 	 *
 	 * Test Method: Validate that the timeStamp value is set to the time when the response was generated.
 	 * </pre>
+	 *
 	 * @param collection the collection under test, never <code>null</code>
 	 */
 	public void validateTimeStamp(CollectionResponseKey collection) {
@@ -381,10 +396,22 @@ public class AbstractFeatures extends CommonDataFixture {
 
 	}
 
+	/**
+	 * <p>isRequired.</p>
+	 *
+	 * @param param a {@link com.reprezen.kaizen.oasparser.model3.Parameter} object
+	 * @return a boolean
+	 */
 	protected boolean isRequired(Parameter param) {
 		return param.getRequired() != null && param.getRequired();
 	}
 
+	/**
+	 * <p>isExplode.</p>
+	 *
+	 * @param param a {@link com.reprezen.kaizen.oasparser.model3.Parameter} object
+	 * @return a {@link java.lang.Boolean} object
+	 */
 	protected Boolean isExplode(Parameter param) {
 		return param.getExplode() != null && param.getExplode();
 	}

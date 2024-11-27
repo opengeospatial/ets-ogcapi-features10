@@ -15,6 +15,8 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>AbstractDiscoveryCollections class.</p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractDiscoveryCollections extends CommonDataFixture {
@@ -23,6 +25,11 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 
 	private List<Map<String, Object>> collections;
 
+	/**
+	 * <p>retrieveRequiredInformationFromTestContext.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
 	@BeforeClass
 	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
 		this.collectionsResponses = (Map<TestPoint, JsonPath>) testContext.getSuite()
@@ -31,6 +38,12 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 			.getAttribute(SuiteAttribute.COLLECTIONS.getName());
 	}
 
+	/**
+	 * <p>collectionsResponses.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionsResponses")
 	public Iterator<Object[]> collectionsResponses(ITestContext testContext) {
 		List<Object[]> collectionsData = new ArrayList<>();
@@ -40,6 +53,12 @@ public class AbstractDiscoveryCollections extends CommonDataFixture {
 		return collectionsData.iterator();
 	}
 
+	/**
+	 * <p>collectionItemUris.</p>
+	 *
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
 	@DataProvider(name = "collectionItemUris")
 	public Iterator<Object[]> collectionItemUris(ITestContext testContext) {
 		// First test point is used! This may be simplified.
