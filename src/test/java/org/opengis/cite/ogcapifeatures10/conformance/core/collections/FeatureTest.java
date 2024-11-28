@@ -36,86 +36,85 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeatureTest {
 
-    public static final String COLLECTION_NAME = "flurstueck";
+	public static final String COLLECTION_NAME = "flurstueck";
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeatureTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeatureTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        InputStream json = FeatureTest.class.getResourceAsStream( "../collections/collections.json" );
-        JsonPath collectionsResponse = new JsonPath( json );
-        List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
+		InputStream json = FeatureTest.class.getResourceAsStream("../collections/collections.json");
+		JsonPath collectionsResponse = new JsonPath(json);
+		List<Map<String, Object>> collections = collectionsResponse.getList("collections");
 
-        Map<String, String> featureIds = new HashMap<>();
-        featureIds.put( COLLECTION_NAME, "DENW19AL0000geMFFL" );
+		Map<String, String> featureIds = new HashMap<>();
+		featureIds.put(COLLECTION_NAME, "DENW19AL0000geMFFL");
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://localhost:8090" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-        when( suite.getAttribute( SuiteAttribute.FEATUREIDS.getName() ) ).thenReturn( featureIds );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-    }
+		URI landingPageUri = new URI("https://localhost:8090");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.COLLECTIONS.getName())).thenReturn(collections);
+		when(suite.getAttribute(SuiteAttribute.FEATUREIDS.getName())).thenReturn(featureIds);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testGetFeatureOperations() {
-        prepareJadler();
-        Feature getFeatureOperation = new Feature();
-        getFeatureOperation.initCommonFixture( testContext );
-        getFeatureOperation.retrieveRequiredInformationFromTestContext( testContext );
-        getFeatureOperation.requirementClasses( testContext );
+	@Test
+	public void testGetFeatureOperations() {
+		prepareJadler();
+		Feature getFeatureOperation = new Feature();
+		getFeatureOperation.initCommonFixture(testContext);
+		getFeatureOperation.retrieveRequiredInformationFromTestContext(testContext);
+		getFeatureOperation.requirementClasses(testContext);
 
-        Iterator<Object[]> collections = getFeatureOperation.collectionFeatureId( testContext );
-        Object[] collectionAndFeatureId = findCollectionById( COLLECTION_NAME, collections );
-        assertThat( collectionAndFeatureId, notNullValue() );
+		Iterator<Object[]> collections = getFeatureOperation.collectionFeatureId(testContext);
+		Object[] collectionAndFeatureId = findCollectionById(COLLECTION_NAME, collections);
+		assertThat(collectionAndFeatureId, notNullValue());
 
-        Map<String, Object> collection = (Map<String, Object>) collectionAndFeatureId[0];
-        assertThat( collection, notNullValue() );
+		Map<String, Object> collection = (Map<String, Object>) collectionAndFeatureId[0];
+		assertThat(collection, notNullValue());
 
-        String featureId = (String) collectionAndFeatureId[1];
-        assertThat( featureId, notNullValue() );
+		String featureId = (String) collectionAndFeatureId[1];
+		assertThat(featureId, notNullValue());
 
-        getFeatureOperation.featureOperation( collection, featureId );
-        getFeatureOperation.validateFeatureResponse( collection, featureId );
-    }
+		getFeatureOperation.featureOperation(collection, featureId);
+		getFeatureOperation.validateFeatureResponse(collection, featureId);
+	}
 
-    private void prepareJadler() {
-        InputStream collectionItemById = getClass().getResourceAsStream( "collectionItem1-flurstueck.json" );
-        onRequest().respond().withBody( collectionItemById );
-    }
+	private void prepareJadler() {
+		InputStream collectionItemById = getClass().getResourceAsStream("collectionItem1-flurstueck.json");
+		onRequest().respond().withBody(collectionItemById);
+	}
 
-    private Object[] findCollectionById( String collectionName, Iterator<Object[]> collections ) {
-        for ( Iterator<Object[]> it = collections; it.hasNext(); ) {
-            Object[] collection = it.next();
-            Map<String, Object> parameter = (Map<String, Object>) collection[0];
-            if ( collectionName.equals( parameter.get( "id" ) ) )
-                return collection;
-        }
-        return null;
-    }
+	private Object[] findCollectionById(String collectionName, Iterator<Object[]> collections) {
+		for (Iterator<Object[]> it = collections; it.hasNext();) {
+			Object[] collection = it.next();
+			Map<String, Object> parameter = (Map<String, Object>) collection[0];
+			if (collectionName.equals(parameter.get("id")))
+				return collection;
+		}
+		return null;
+	}
 
 }

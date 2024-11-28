@@ -24,26 +24,26 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionStorageCrs extends AbstractDiscoveryCollection {
 
-    /**
-     * Test: storageCrs property in the collection objects in the path /collections
-     *
-     * @param collectionId
-     *            id of the collection under test, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 3 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
-                        + "storageCrs property in the collection object in the path /collection", dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, JsonPath collection ) {
-        String storageCrs = collection.get( "storageCrs" );
-        if ( storageCrs == null ) {
-            throw new SkipException( String.format( "Collection with id '%s' does not specify a storageCrs",
-                                                    collectionId ) );
-        }
-        List<String> crs = JsonUtils.parseAsList( "crs", collection );
-        if ( !crs.contains( storageCrs ) ) {
-            throw new AssertionError( String.format( "Collection with id '%s' specifies the storageCrs '%s' which is not declared as crs property",
-                                                     collectionId, storageCrs ) );
-        }
-    }
+	/**
+	 * Test: storageCrs property in the collection objects in the path /collections
+	 * @param collectionId id of the collection under test, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 3 (Requirement /req/crs/fc-md-storageCrs-valid-value), "
+			+ "storageCrs property in the collection object in the path /collection",
+			dataProvider = "collectionIdAndJson", dependsOnGroups = "crs-conformance")
+	public void verifyCollectionCrsIdentifierOfCrsProperty(String collectionId, JsonPath collection) {
+		String storageCrs = collection.get("storageCrs");
+		if (storageCrs == null) {
+			throw new SkipException(
+					String.format("Collection with id '%s' does not specify a storageCrs", collectionId));
+		}
+		List<String> crs = JsonUtils.parseAsList("crs", collection);
+		if (!crs.contains(storageCrs)) {
+			throw new AssertionError(String.format(
+					"Collection with id '%s' specifies the storageCrs '%s' which is not declared as crs property",
+					collectionId, storageCrs));
+		}
+	}
+
 }

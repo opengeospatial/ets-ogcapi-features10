@@ -24,61 +24,66 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesCrsParameterDefaultTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
-    }
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
-        featuresDefaultCrsParameter.initCommonFixture( testContext );
+	@Test
+	public void test() {
+		prepareJadler();
+		FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
+		featuresDefaultCrsParameter.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featuresDefaultCrsParameter.verifyFeaturesCrsParameterDefault( "flurstueck", collection );
-    }
+		JsonPath collection = prepareCollection();
+		featuresDefaultCrsParameter.verifyFeaturesCrsParameterDefault("flurstueck", collection);
+	}
 
-    @Test(expected = AssertionError.class)
-    public void test_unexpectedHeader() {
-        prepareJadlerContentCrsHeaderUnexpected();
-        FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
-        featuresDefaultCrsParameter.initCommonFixture( testContext );
+	@Test(expected = AssertionError.class)
+	public void test_unexpectedHeader() {
+		prepareJadlerContentCrsHeaderUnexpected();
+		FeaturesCrsParameterDefault featuresDefaultCrsParameter = new FeaturesCrsParameterDefault();
+		featuresDefaultCrsParameter.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featuresDefaultCrsParameter.verifyFeaturesCrsParameterDefault( "flurstueck", collection );
-    }
+		JsonPath collection = prepareCollection();
+		featuresDefaultCrsParameter.verifyFeaturesCrsParameterDefault("flurstueck", collection);
+	}
 
-    private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesCrsParameterDefaultTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
-    }
+	private static JsonPath prepareCollection() {
+		return new JsonPath(FeaturesCrsParameterDefaultTest.class
+			.getResourceAsStream("../../../../core/collections/collection-flurstueck.json"));
+	}
 
-    private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( not( containsString( "crs=" ) ) ).respond().withHeader( "Content-Crs",
-                                                                                                                                                        "<" + DEFAULT_CRS_CODE
-                                                                                                                                                        + ">" ).withStatus( 200 );
-    }
+	private void prepareJadler() {
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingQueryString(not(containsString("crs=")))
+			.respond()
+			.withHeader("Content-Crs", "<" + DEFAULT_CRS_CODE + ">")
+			.withStatus(200);
+	}
 
-    private void prepareJadlerContentCrsHeaderUnexpected() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingQueryString( not( containsString( "crs=" ) ) ).respond().withHeader( "Content-Crs",
-                                                                                                                                                        "<" + "www.opengis.net/def/crs/EPSG/0/25832"
-                                                                                                                                                                       + ">" ).withStatus( 200 );
-    }
+	private void prepareJadlerContentCrsHeaderUnexpected() {
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingQueryString(not(containsString("crs=")))
+			.respond()
+			.withHeader("Content-Crs", "<" + "www.opengis.net/def/crs/EPSG/0/25832" + ">")
+			.withStatus(200);
+	}
+
 }

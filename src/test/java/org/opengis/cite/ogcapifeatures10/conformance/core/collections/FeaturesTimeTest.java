@@ -35,95 +35,100 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesTimeTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    private static TestPoint testPoint;
+	private static TestPoint testPoint;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesTimeTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeaturesTimeTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        InputStream json = FeaturesTimeTest.class.getResourceAsStream( "../collections/collections.json" );
-        JsonPath collectionsResponse = new JsonPath( json );
-        List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
+		InputStream json = FeaturesTimeTest.class.getResourceAsStream("../collections/collections.json");
+		JsonPath collectionsResponse = new JsonPath(json);
+		List<Map<String, Object>> collections = collectionsResponse.getList("collections");
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
-                                   Collections.emptyMap() );
+		testPoint = new TestPoint("http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
+				Collections.emptyMap());
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.COLLECTIONS.getName())).thenReturn(collections);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testParameterDefinition() {
-        prepareJadler();
-        FeaturesTime features = initFeaturesTime();
+	@Test
+	public void testParameterDefinition() {
+		prepareJadler();
+		FeaturesTime features = initFeaturesTime();
 
-        features.timeParameterDefinition( testPoint );
-    }
+		features.timeParameterDefinition(testPoint);
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        FeaturesTime features = initFeaturesTime();
+	@Test
+	public void test() {
+		prepareJadler();
+		FeaturesTime features = initFeaturesTime();
 
-        Map<String, Object> collection = prepareCollection();
-        String queryString = "2014-08-09";
-        Object begin = null;
-        Object end = null;
-        features.validateFeaturesWithDateTimeOperation( collection, queryString, begin, end );
-        features.validateFeaturesWithDateTimeResponse_TypeProperty( collection, queryString, begin, end );
-        features.validateFeaturesWithDateTimeResponse_FeaturesProperty( collection, queryString, begin, end );
-        features.validateFeaturesWithDateTimeResponse_Links( collection, queryString, begin, end );
-        // skipped (collection missing):
-        // features.validateFeaturesWithDateTimeResponse_TimeStamp( collection, queryString, begin, end );
-        // skipped (collection missing):
-        // features.validateFeaturesWithDateTimeResponse_NumberMatched( collection , queryString, begin, end );
-        // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberReturned( collection, queryString, begin, end );
-    }
+		Map<String, Object> collection = prepareCollection();
+		String queryString = "2014-08-09";
+		Object begin = null;
+		Object end = null;
+		features.validateFeaturesWithDateTimeOperation(collection, queryString, begin, end);
+		features.validateFeaturesWithDateTimeResponse_TypeProperty(collection, queryString, begin, end);
+		features.validateFeaturesWithDateTimeResponse_FeaturesProperty(collection, queryString, begin, end);
+		features.validateFeaturesWithDateTimeResponse_Links(collection, queryString, begin, end);
+		// skipped (collection missing):
+		// features.validateFeaturesWithDateTimeResponse_TimeStamp( collection,
+		// queryString, begin, end );
+		// skipped (collection missing):
+		// features.validateFeaturesWithDateTimeResponse_NumberMatched( collection ,
+		// queryString, begin, end );
+		// skipped (collection missing):
+		// features.validateFeaturesResponse_NumberReturned( collection, queryString,
+		// begin, end );
+	}
 
-    private FeaturesTime initFeaturesTime() {
-        FeaturesTime features = new FeaturesTime();
-        features.initCommonFixture( testContext );
-        features.retrieveRequiredInformationFromTestContext( testContext );
-        features.requirementClasses( testContext );
-        features.retrieveApiModel( testContext );
-        return features;
-    }
+	private FeaturesTime initFeaturesTime() {
+		FeaturesTime features = new FeaturesTime();
+		features.initCommonFixture(testContext);
+		features.retrieveRequiredInformationFromTestContext(testContext);
+		features.requirementClasses(testContext);
+		features.retrieveApiModel(testContext);
+		return features;
+	}
 
-    private static Map<String, Object> prepareCollection() {
-        return new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).get();
-    }
+	private static Map<String, Object> prepareCollection() {
+		return new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-flurstueck.json")).get();
+	}
 
-    private void prepareJadler() {
-        InputStream flurstueckItems = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameter( "datetime" ).respond().withBody( flurstueckItems );
-    }
+	private void prepareJadler() {
+		InputStream flurstueckItems = getClass().getResourceAsStream("collectionItems-flurstueck.json");
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingParameter("datetime")
+			.respond()
+			.withBody(flurstueckItems);
+	}
 
 }

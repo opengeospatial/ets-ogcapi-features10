@@ -14,7 +14,7 @@ import io.restassured.path.json.JsonPath;
 
 /**
  * Verifies objects in the paths /collections
- * 
+ *
  * <pre>
  * Abstract Test 1:  /conf/crs/crs-uri
  * Test Purpose: Verify that each CRS identifier is a valid value
@@ -32,103 +32,93 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionsCrsUri extends AbstractDiscoveryCollections {
 
-    /**
-     * Test: crs property in the collections object in the path /collections
-     * 
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "crs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsCrsIdentifierOfCrsProperty( TestPoint testPoint, JsonPath jsonPath ) {
-        List<String> crs = JsonUtils.parseAsList( "crs", jsonPath );
-        for ( String crsValue : crs ) {
-            if ( crsValue != null ) {
-                assertValidCrsIdentifier( new CoordinateSystem( crsValue ),
-                                          String.format( "Collections path %s contains invalid CRS identifier property 'crs': '%s'",
-                                                         testPoint.getPath(), crsValue ) );
-            }
-        }
-    }
+	/**
+	 * Test: crs property in the collections object in the path /collections
+	 * @param testPoint test point to test, never <code>null</code>
+	 * @param jsonPath the /collections JSON, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "crs property in the collections object in the path /collections", dataProvider = "collectionsResponses",
+			dependsOnGroups = "crs-conformance")
+	public void verifyCollectionsCrsIdentifierOfCrsProperty(TestPoint testPoint, JsonPath jsonPath) {
+		List<String> crs = JsonUtils.parseAsList("crs", jsonPath);
+		for (String crsValue : crs) {
+			if (crsValue != null) {
+				assertValidCrsIdentifier(new CoordinateSystem(crsValue),
+						String.format("Collections path %s contains invalid CRS identifier property 'crs': '%s'",
+								testPoint.getPath(), crsValue));
+			}
+		}
+	}
 
-    /**
-     * Test: storageCrs property in the collections object in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "storageCrs property in the collections object in the path /collections", dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsCrsIdentifierOfStorageCrs( TestPoint testPoint, JsonPath jsonPath ) {
-        String crs = JsonUtils.parseAsString( jsonPath.get( "storageCrs" ) );
-        if ( crs != null ) {
-            assertValidCrsIdentifier( new CoordinateSystem( crs ),
-                                      String.format( "Collections path %s contains invalid CRS identifier property 'storageCrs': '%s'",
-                                                     testPoint.getPath(), crs ) );
-        }
-    }
+	/**
+	 * Test: storageCrs property in the collections object in the path /collections
+	 * @param testPoint test point to test, never <code>null</code>
+	 * @param jsonPath the /collections JSON, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "storageCrs property in the collections object in the path /collections",
+			dataProvider = "collectionsResponses", dependsOnGroups = "crs-conformance")
+	public void verifyCollectionsCrsIdentifierOfStorageCrs(TestPoint testPoint, JsonPath jsonPath) {
+		String crs = JsonUtils.parseAsString(jsonPath.get("storageCrs"));
+		if (crs != null) {
+			assertValidCrsIdentifier(new CoordinateSystem(crs),
+					String.format("Collections path %s contains invalid CRS identifier property 'storageCrs': '%s'",
+							testPoint.getPath(), crs));
+		}
+	}
 
-    /**
-     * Test: crs property in the collection objects in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "crs property in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsCollectionCrsIdentifierOfCrsProperty( TestPoint testPoint, JsonPath jsonPath,
-                                                                       Map<String, Object> collection ) {
-        boolean collectionsHasCrsProperty = isCollectionsHasCrsProperty( jsonPath );
-        String collectionId = (String) collection.get( "id" );
-        List<String> crs = JsonUtils.parseAsList( "crs", collection );
-        for ( String crsValue : crs ) {
-            isValidCRs( testPoint, collectionsHasCrsProperty, collectionId, crsValue, "crs" );
-        }
-    }
+	/**
+	 * Test: crs property in the collection objects in the path /collections
+	 * @param testPoint test point to test, never <code>null</code>
+	 * @param jsonPath the /collections JSON, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "crs property in the collection objects in the path /collections", dataProvider = "collectionItemUris",
+			dependsOnGroups = "crs-conformance")
+	public void verifyCollectionsCollectionCrsIdentifierOfCrsProperty(TestPoint testPoint, JsonPath jsonPath,
+			Map<String, Object> collection) {
+		boolean collectionsHasCrsProperty = isCollectionsHasCrsProperty(jsonPath);
+		String collectionId = (String) collection.get("id");
+		List<String> crs = JsonUtils.parseAsList("crs", collection);
+		for (String crsValue : crs) {
+			isValidCRs(testPoint, collectionsHasCrsProperty, collectionId, crsValue, "crs");
+		}
+	}
 
-    /**
-     * Test: storageCrs property in the collection objects in the path /collections
-     *
-     * @param testPoint
-     *            test point to test, never <code>null</code>
-     * @param jsonPath
-     *            the /collections JSON, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "storageCrs property in the collection objects in the path /collections", dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
-    public void verifyCollectionsCollectionCrsIdentifierOfStorageCrs( TestPoint testPoint, JsonPath jsonPath,
-                                                                      Map<String, Object> collection ) {
-        boolean collectionsHasCrsProperty = isCollectionsHasCrsProperty( jsonPath );
-        String collectionId = (String) collection.get( "id" );
-        List<String> crs = JsonUtils.parseAsList( "storageCrs", collection );
-        for ( String crsValue : crs ) {
-            isValidCRs( testPoint, collectionsHasCrsProperty, collectionId, crsValue, "storageCrs" );
-        }
-    }
+	/**
+	 * Test: storageCrs property in the collection objects in the path /collections
+	 * @param testPoint test point to test, never <code>null</code>
+	 * @param jsonPath the /collections JSON, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "storageCrs property in the collection objects in the path /collections",
+			dataProvider = "collectionItemUris", dependsOnGroups = "crs-conformance")
+	public void verifyCollectionsCollectionCrsIdentifierOfStorageCrs(TestPoint testPoint, JsonPath jsonPath,
+			Map<String, Object> collection) {
+		boolean collectionsHasCrsProperty = isCollectionsHasCrsProperty(jsonPath);
+		String collectionId = (String) collection.get("id");
+		List<String> crs = JsonUtils.parseAsList("storageCrs", collection);
+		for (String crsValue : crs) {
+			isValidCRs(testPoint, collectionsHasCrsProperty, collectionId, crsValue, "storageCrs");
+		}
+	}
 
-    private boolean isCollectionsHasCrsProperty( JsonPath jsonPath ) {
-        List<String> collectionsCrs = jsonPath.getList( "crs" );
-        return collectionsCrs != null && !collectionsCrs.isEmpty();
-    }
+	private boolean isCollectionsHasCrsProperty(JsonPath jsonPath) {
+		List<String> collectionsCrs = jsonPath.getList("crs");
+		return collectionsCrs != null && !collectionsCrs.isEmpty();
+	}
 
-    private void isValidCRs( TestPoint testPoint, boolean collectionsHasCrsProperty, String collectionId,
-                             String crsValue, String propertyName ) {
-        if ( "#/crs".equals( crsValue ) && collectionsHasCrsProperty ) {
-            return;
-        }
-        assertValidCrsIdentifier( new CoordinateSystem( crsValue ),
-                                  String.format( "Collection with id '%s' at collections path %s contains invalid CRS identifier property '%s': '%s'",
-                                                 collectionId, testPoint.getPath(), propertyName, crsValue ) );
-    }
+	private void isValidCRs(TestPoint testPoint, boolean collectionsHasCrsProperty, String collectionId,
+			String crsValue, String propertyName) {
+		if ("#/crs".equals(crsValue) && collectionsHasCrsProperty) {
+			return;
+		}
+		assertValidCrsIdentifier(new CoordinateSystem(crsValue), String.format(
+				"Collection with id '%s' at collections path %s contains invalid CRS identifier property '%s': '%s'",
+				collectionId, testPoint.getPath(), propertyName, crsValue));
+	}
 
 }

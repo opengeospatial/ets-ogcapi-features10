@@ -26,90 +26,92 @@ import com.reprezen.kaizen.oasparser.model3.Parameter;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>
+ * FeaturesAssertions class.
+ * </p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class FeaturesAssertions {
 
-    static void assertIntegerGreaterOrEqualsZero( Object value, String propertyName ) {
-        if ( value instanceof Number )
-            assertIntegerGreaterOrEqualsZero( ( (Number) value ).intValue(), propertyName );
-        else if ( value instanceof String )
-            try {
-                int valueAsInt = Integer.parseInt( (String) value );
-                assertIntegerGreaterOrEqualsZero( valueAsInt, propertyName );
-            } catch ( NumberFormatException e ) {
-                String msg = "Expected property '%s' to be an integer, but was '%s'";
-                throw new AssertionError( String.format( msg, propertyName, value ) );
-            }
-    }
+	static void assertIntegerGreaterOrEqualsZero(Object value, String propertyName) {
+		if (value instanceof Number)
+			assertIntegerGreaterOrEqualsZero(((Number) value).intValue(), propertyName);
+		else if (value instanceof String)
+			try {
+				int valueAsInt = Integer.parseInt((String) value);
+				assertIntegerGreaterOrEqualsZero(valueAsInt, propertyName);
+			}
+			catch (NumberFormatException e) {
+				String msg = "Expected property '%s' to be an integer, but was '%s'";
+				throw new AssertionError(String.format(msg, propertyName, value));
+			}
+	}
 
-    static void assertIntegerGreaterOrEqualsZero( int value, String propertyName ) {
-        String msg = "Expected property '%s' to be an integer greater than or equals 0, but was '%s'";
-        assertTrue( value >= 0, String.format( msg, propertyName, value ) );
-    }
+	static void assertIntegerGreaterOrEqualsZero(int value, String propertyName) {
+		String msg = "Expected property '%s' to be an integer greater than or equals 0, but was '%s'";
+		assertTrue(value >= 0, String.format(msg, propertyName, value));
+	}
 
-    static void assertTimeStamp( String collectionName, JsonPath jsonPath, ZonedDateTime timeStampBeforeResponse,
-                                 ZonedDateTime timeStampAfterResponse, boolean skipIfNoTimeStamp ) {
-        String timeStamp = jsonPath.getString( "timeStamp" );
-        if ( timeStamp == null )
-            if ( skipIfNoTimeStamp )
-                throw new SkipException( "No server response timeStamp set for collection items request ( '" + collectionName + "')." );
-            else
-                return;
+	static void assertTimeStamp(String collectionName, JsonPath jsonPath, ZonedDateTime timeStampBeforeResponse,
+			ZonedDateTime timeStampAfterResponse, boolean skipIfNoTimeStamp) {
+		String timeStamp = jsonPath.getString("timeStamp");
+		if (timeStamp == null)
+			if (skipIfNoTimeStamp)
+				throw new SkipException(
+						"No server response timeStamp set for collection items request ( '" + collectionName + "').");
+			else
+				return;
 
-        ZonedDateTime date = parseAsDate( timeStamp );
-        assertNotNull(date, "Not valid timestamp.");
-    }
+		ZonedDateTime date = parseAsDate(timeStamp);
+		assertNotNull(date, "Not valid timestamp.");
+	}
 
-    static void assertNumberReturned( String collectionName, JsonPath jsonPath, boolean skipIfNoNumberReturned ) {
-        if ( !hasProperty( "numberReturned", jsonPath ) )
-            if ( skipIfNoNumberReturned )
-                throw new SkipException( "Property numberReturned is not set in collection items '" + collectionName
-                                         + "'" );
-            else
-                return;
+	static void assertNumberReturned(String collectionName, JsonPath jsonPath, boolean skipIfNoNumberReturned) {
+		if (!hasProperty("numberReturned", jsonPath))
+			if (skipIfNoNumberReturned)
+				throw new SkipException(
+						"Property numberReturned is not set in collection items '" + collectionName + "'");
+			else
+				return;
 
-        int numberReturned = jsonPath.getInt( "numberReturned" );
-        int numberOfFeatures = parseAsList( "features", jsonPath ).size();
-        assertEquals( numberReturned, numberOfFeatures,
-                      "Value of numberReturned (" + numberReturned
-                                                        + ") does not match the number of features in the response ("
-                                                        + numberOfFeatures + ")" );
-    }
+		int numberReturned = jsonPath.getInt("numberReturned");
+		int numberOfFeatures = parseAsList("features", jsonPath).size();
+		assertEquals(numberReturned, numberOfFeatures, "Value of numberReturned (" + numberReturned
+				+ ") does not match the number of features in the response (" + numberOfFeatures + ")");
+	}
 
-    static void assertNumberMatched( OpenApi3 apiModel, URI iut, String collectionName, JsonPath jsonPath,
-                                     boolean skipIfNoNumberMatched )
-                            throws URISyntaxException {
-        if ( !hasProperty( "numberMatched", jsonPath ) )
-            if ( skipIfNoNumberMatched )
-                throw new SkipException( "Property numberMatched is not set in collection items '" + collectionName
-                                         + "'" );
-            else
-                return;
+	static void assertNumberMatched(OpenApi3 apiModel, URI iut, String collectionName, JsonPath jsonPath,
+			boolean skipIfNoNumberMatched) throws URISyntaxException {
+		if (!hasProperty("numberMatched", jsonPath))
+			if (skipIfNoNumberMatched)
+				throw new SkipException(
+						"Property numberMatched is not set in collection items '" + collectionName + "'");
+			else
+				return;
 
-        int maximumLimit = -1;
+		int maximumLimit = -1;
 
-        List<TestPoint> testPoints = retrieveTestPointsForCollection( apiModel, iut, collectionName );
-        if ( !testPoints.isEmpty() ) {
-            TestPoint testPoint = testPoints.get( 0 );
-            Parameter limitParameter = OpenApiUtils.retrieveParameterByName( testPoint.getPath(), apiModel, "limit" );
-            if ( limitParameter != null && limitParameter.getSchema() != null ) {
-                Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
-                if(maximumLimitNumber != null) {
-                    maximumLimit = maximumLimitNumber.intValue();
-                }
-            }
-        }
-        int numberMatched = jsonPath.getInt( "numberMatched" );
-        if (numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
-            throw new SkipException(
-                    String.format("Number of matched features too large to check, was %d, test suite limit is %d.",
-                            numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
-        }
-        int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures( jsonPath, maximumLimit );
-        assertEquals( numberMatched, numberOfAllReturnedFeatures,
-                      "Value of numberReturned (" + numberMatched + ") does not match the number of features in all responses ("
-                                                                  + numberOfAllReturnedFeatures + ")" );
-    }
+		List<TestPoint> testPoints = retrieveTestPointsForCollection(apiModel, iut, collectionName);
+		if (!testPoints.isEmpty()) {
+			TestPoint testPoint = testPoints.get(0);
+			Parameter limitParameter = OpenApiUtils.retrieveParameterByName(testPoint.getPath(), apiModel, "limit");
+			if (limitParameter != null && limitParameter.getSchema() != null) {
+				Number maximumLimitNumber = limitParameter.getSchema().getMaximum();
+				if (maximumLimitNumber != null) {
+					maximumLimit = maximumLimitNumber.intValue();
+				}
+			}
+		}
+		int numberMatched = jsonPath.getInt("numberMatched");
+		if (numberMatched > OgcApiFeatures10.NUMBERMATCHED_LIMIT) {
+			throw new SkipException(
+					String.format("Number of matched features too large to check, was %d, test suite limit is %d.",
+							numberMatched, OgcApiFeatures10.NUMBERMATCHED_LIMIT));
+		}
+		int numberOfAllReturnedFeatures = collectNumberOfAllReturnedFeatures(jsonPath, maximumLimit);
+		assertEquals(numberMatched, numberOfAllReturnedFeatures, "Value of numberReturned (" + numberMatched
+				+ ") does not match the number of features in all responses (" + numberOfAllReturnedFeatures + ")");
+	}
 
 }

@@ -40,107 +40,129 @@ import io.restassured.path.json.JsonPath;
  */
 public class DiscoveryCollectionCrsUri {
 
-    private Map<String, List<CoordinateSystem>> collectionIdAndValidCrs = new HashMap<>();
+	private Map<String, List<CoordinateSystem>> collectionIdAndValidCrs = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
-    @DataProvider(
-            name = "collectionIdAndJsonAndCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) throws AssertionError {
-        List<Object[]> collectionsData = new ArrayList<>();
-        try {
-            Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
-                    .getAttribute(SuiteAttribute.COLLECTION_BY_ID.getName());
-            for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
-                List<CoordinateSystem> crs = parseCrs(collection.getValue());
-                int count = 0;
-                for (CoordinateSystem coordinateSystem : crs) {
-                    if (count >= OgcApiFeatures10.CRS_LIMIT) {
-                        break;
-                    }
-                    collectionsData.add(new Object[] { collection.getKey(), coordinateSystem });
-                    count++;
-                }
-            }
-        } catch (Exception e) {
-            collectionsData.add(new Object[] { null, null });
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionIdAndJsonAndCrs.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 * @throws java.lang.AssertionError if any.
+	 */
+	@SuppressWarnings("unchecked")
+	@DataProvider(name = "collectionIdAndJsonAndCrs")
+	public Iterator<Object[]> collectionIdAndJsonAndCrs(ITestContext testContext) throws AssertionError {
+		List<Object[]> collectionsData = new ArrayList<>();
+		try {
+			Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
+				.getAttribute(SuiteAttribute.COLLECTION_BY_ID.getName());
+			for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+				List<CoordinateSystem> crs = parseCrs(collection.getValue());
+				int count = 0;
+				for (CoordinateSystem coordinateSystem : crs) {
+					if (count >= OgcApiFeatures10.CRS_LIMIT) {
+						break;
+					}
+					collectionsData.add(new Object[] { collection.getKey(), coordinateSystem });
+					count++;
+				}
+			}
+		}
+		catch (Exception e) {
+			collectionsData.add(new Object[] { null, null });
+		}
+		return collectionsData.iterator();
+	}
 
-    @DataProvider(name = "collectionIdAndJsonAndStorageCrs")
-    public Iterator<Object[]> collectionIdAndJsonAndStorageCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        try {
-            Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTION_BY_ID.getName() );
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-                CoordinateSystem storageCrs = parseStorageCrs( collection.getValue() );
-                if ( storageCrs != null )
-                    collectionsData.add( new Object[] { collection.getKey(), storageCrs } );
-            }
-        } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null } );
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionIdAndJsonAndStorageCrs.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
+	@DataProvider(name = "collectionIdAndJsonAndStorageCrs")
+	public Iterator<Object[]> collectionIdAndJsonAndStorageCrs(ITestContext testContext) {
+		List<Object[]> collectionsData = new ArrayList<>();
+		try {
+			Map<String, JsonPath> collectionsResponses = (Map<String, JsonPath>) testContext.getSuite()
+				.getAttribute(SuiteAttribute.COLLECTION_BY_ID.getName());
+			for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+				CoordinateSystem storageCrs = parseStorageCrs(collection.getValue());
+				if (storageCrs != null)
+					collectionsData.add(new Object[] { collection.getKey(), storageCrs });
+			}
+		}
+		catch (Exception e) {
+			collectionsData.add(new Object[] { null, null });
+		}
+		return collectionsData.iterator();
+	}
 
-    @AfterClass
-    public void storeCollectionInTestContext( ITestContext testContext ) {
-        testContext.getSuite().setAttribute( SuiteAttribute.COLLECTION_CRS_BY_ID.getName(), collectionIdAndValidCrs );
-    }
+	/**
+	 * <p>
+	 * storeCollectionInTestContext.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
+	@AfterClass
+	public void storeCollectionInTestContext(ITestContext testContext) {
+		testContext.getSuite().setAttribute(SuiteAttribute.COLLECTION_CRS_BY_ID.getName(), collectionIdAndValidCrs);
+	}
 
-    /**
-     * Test: crs property in the collection objects in the path /collections
-     *
-     * @param collectionId
-     *            id of the collection under test, never <code>null</code>
-     * @param crs
-     *            the coordinate system, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "crs property in the collection object in the path /collection", dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
-    public void verifyCollectionCrsIdentifierOfCrsProperty( String collectionId, CoordinateSystem crs ) {
-        if((collectionId == null) & (crs == null)) {
-            throw new AssertionError("No crs information for collection available.");
-        }
-        addCrs( collectionId, crs );
-        assertValidCrsIdentifier( crs,
-                                  String.format( "Collection with id '%s' contains invalid CRS identifier property 'crs': '%s'",
-                                                 collectionId, crs ) );
-    }
+	/**
+	 * Test: crs property in the collection objects in the path /collections
+	 * @param collectionId id of the collection under test, never <code>null</code>
+	 * @param crs the coordinate system, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "crs property in the collection object in the path /collection",
+			dataProvider = "collectionIdAndJsonAndCrs", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
+	public void verifyCollectionCrsIdentifierOfCrsProperty(String collectionId, CoordinateSystem crs) {
+		if ((collectionId == null) & (crs == null)) {
+			throw new AssertionError("No crs information for collection available.");
+		}
+		addCrs(collectionId, crs);
+		assertValidCrsIdentifier(crs, String
+			.format("Collection with id '%s' contains invalid CRS identifier property 'crs': '%s'", collectionId, crs));
+	}
 
-    /**
-     * Test: storageCrs property in the collection objects in the path /collections
-     *
-     * @param collectionId
-     *            id of the collection under test, never <code>null</code>
-     * @param storageCrs
-     *            the storageCrs, never <code>null</code>
-     */
-    @Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
-                        + "storageCrs property in the collection object in the path /collection", dataProvider = "collectionIdAndJsonAndStorageCrs", dependsOnGroups = "crs-conformance", groups = "crs-discovery")
-    public void verifyCollectionCrsIdentifierOfStorageCrsProperty( String collectionId, CoordinateSystem storageCrs ) {
-        if((collectionId == null) & (storageCrs == null)) {
-            throw new AssertionError("No crs information for collection available.");
-        }
-        assertValidCrsIdentifier( storageCrs,
-                                  String.format( "Collection with id '%s' contains invalid CRS identifier property 'storageCrs': '%s'",
-                                                 collectionId, storageCrs ) );
-    }
+	/**
+	 * Test: storageCrs property in the collection objects in the path /collections
+	 * @param collectionId id of the collection under test, never <code>null</code>
+	 * @param storageCrs the storageCrs, never <code>null</code>
+	 */
+	@Test(description = "Implements A.1 Discovery, Abstract Test 1 (Requirement /req/crs/crs-uri, /req/crs/fc-md-crs-list A, /req/crs/fc-md-storageCrs, /req/crs/fc-md-crs-list-global), "
+			+ "storageCrs property in the collection object in the path /collection",
+			dataProvider = "collectionIdAndJsonAndStorageCrs", dependsOnGroups = "crs-conformance",
+			groups = "crs-discovery")
+	public void verifyCollectionCrsIdentifierOfStorageCrsProperty(String collectionId, CoordinateSystem storageCrs) {
+		if ((collectionId == null) & (storageCrs == null)) {
+			throw new AssertionError("No crs information for collection available.");
+		}
+		assertValidCrsIdentifier(storageCrs,
+				String.format("Collection with id '%s' contains invalid CRS identifier property 'storageCrs': '%s'",
+						collectionId, storageCrs));
+	}
 
-    private List<CoordinateSystem> parseCrs( JsonPath collection ) {
-        return JsonUtils.parseAsList( "crs",
-                                      collection ).stream().map( crsValue -> new CoordinateSystem( crsValue ) ).collect( Collectors.toList() );
-    }
+	private List<CoordinateSystem> parseCrs(JsonPath collection) {
+		return JsonUtils.parseAsList("crs", collection)
+			.stream()
+			.map(crsValue -> new CoordinateSystem(crsValue))
+			.collect(Collectors.toList());
+	}
 
-    private CoordinateSystem parseStorageCrs( JsonPath collection ) {
-        String storageCrs = JsonUtils.parseAsString( collection.get( "storageCrs" ) );
-        if ( storageCrs == null )
-            return null;
-        return new CoordinateSystem( storageCrs );
-    }
+	private CoordinateSystem parseStorageCrs(JsonPath collection) {
+		String storageCrs = JsonUtils.parseAsString(collection.get("storageCrs"));
+		if (storageCrs == null)
+			return null;
+		return new CoordinateSystem(storageCrs);
+	}
 
-    private void addCrs( String collectionId, CoordinateSystem coordinateSystem ) {
-        collectionIdAndValidCrs.putIfAbsent( collectionId, new ArrayList<>() );
-        collectionIdAndValidCrs.get( collectionId ).add( coordinateSystem );
-    }
+	private void addCrs(String collectionId, CoordinateSystem coordinateSystem) {
+		collectionIdAndValidCrs.putIfAbsent(collectionId, new ArrayList<>());
+		collectionIdAndValidCrs.get(collectionId).add(coordinateSystem);
+	}
+
 }

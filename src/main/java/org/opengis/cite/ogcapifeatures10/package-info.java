@@ -1,8 +1,9 @@
 /**
- * The root package includes supporting classes of general utility such as the 
- * main controller, listeners, and reporters.
+ * The root package includes supporting classes of general utility such as the main
+ * controller, listeners, and reporters.
  *
- * <p>Subsidiary packages correspond to distinct test groups such as conformance
- * classes.</p>
+ * <p>
+ * Subsidiary packages correspond to distinct test groups such as conformance classes.
+ * </p>
  */
-package  org.opengis.cite.ogcapifeatures10;
+package org.opengis.cite.ogcapifeatures10;

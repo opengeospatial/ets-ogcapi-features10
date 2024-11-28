@@ -24,34 +24,33 @@ import com.reprezen.kaizen.oasparser.model3.MediaType;
 @Ignore("Stable service is required")
 public class ConformanceIT {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+	}
 
-    @Test
-    public void testApiDefinition() {
-        Conformance conformanceOperation = new Conformance();
-        conformanceOperation.initCommonFixture( testContext );
-        TestPoint testPoint = new TestPoint( "https://www.ldproxy.nrw.de/kataster", "/conformance", mediaTypes() );
-        conformanceOperation.validateConformanceOperationAndResponse( testPoint );
-    }
+	@Test
+	public void testApiDefinition() {
+		Conformance conformanceOperation = new Conformance();
+		conformanceOperation.initCommonFixture(testContext);
+		TestPoint testPoint = new TestPoint("https://www.ldproxy.nrw.de/kataster", "/conformance", mediaTypes());
+		conformanceOperation.validateConformanceOperationAndResponse(testPoint);
+	}
 
-    private Map<String, MediaType> mediaTypes() {
-        Map<String, MediaType> mediaTypes = new HashMap<>();
-        mediaTypes.put( "application/json", Mockito.mock( MediaType.class ) );
-        mediaTypes.put( "text/html", Mockito.mock( MediaType.class ) );
-        return mediaTypes;
-    }
+	private Map<String, MediaType> mediaTypes() {
+		Map<String, MediaType> mediaTypes = new HashMap<>();
+		mediaTypes.put("application/json", Mockito.mock(MediaType.class));
+		mediaTypes.put("text/html", Mockito.mock(MediaType.class));
+		return mediaTypes;
+	}
 
 }

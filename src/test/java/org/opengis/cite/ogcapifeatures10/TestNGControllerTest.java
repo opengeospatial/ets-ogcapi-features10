@@ -16,54 +16,51 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * Verifies the results of executing a test run using the main controller (TestNGController).
+ * Verifies the results of executing a test run using the main controller
+ * (TestNGController).
  */
 public class TestNGControllerTest {
 
-    private static DocumentBuilder docBuilder;
+	private static DocumentBuilder docBuilder;
 
-    private Properties testRunProps;
+	private Properties testRunProps;
 
-    @BeforeClass
-    public static void initParser()
-                            throws ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware( true );
-        dbf.setValidating( false );
-        dbf.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
-        docBuilder = dbf.newDocumentBuilder();
-    }
+	@BeforeClass
+	public static void initParser() throws ParserConfigurationException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		dbf.setValidating(false);
+		dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		docBuilder = dbf.newDocumentBuilder();
+	}
 
-    @Before
-    public void loadDefaultTestRunProperties()
-                            throws IOException {
-        this.testRunProps = new Properties();
-        this.testRunProps.loadFromXML( getClass().getResourceAsStream( "/test-run-props.xml" ) );
-    }
+	@Before
+	public void loadDefaultTestRunProperties() throws IOException {
+		this.testRunProps = new Properties();
+		this.testRunProps.loadFromXML(getClass().getResourceAsStream("/test-run-props.xml"));
+	}
 
-    @Test
-    public void testValidateTestRunArgs()
-                            throws Exception {
-        URL testSubject = getClass().getResource( "landingPage.html" );
-        this.testRunProps.setProperty( TestRunArg.IUT.toString(), testSubject.toURI().toString() );
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream( 1024 );
-        this.testRunProps.storeToXML( outStream, "Integration test" );
-        Document testRunArgs = docBuilder.parse( new ByteArrayInputStream( outStream.toByteArray() ) );
+	@Test
+	public void testValidateTestRunArgs() throws Exception {
+		URL testSubject = getClass().getResource("landingPage.html");
+		this.testRunProps.setProperty(TestRunArg.IUT.toString(), testSubject.toURI().toString());
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream(1024);
+		this.testRunProps.storeToXML(outStream, "Integration test");
+		Document testRunArgs = docBuilder.parse(new ByteArrayInputStream(outStream.toByteArray()));
 
-        TestNGController controller = new TestNGController();
-        controller.validateTestRunArgs( testRunArgs );
-    }
+		TestNGController controller = new TestNGController();
+		controller.validateTestRunArgs(testRunArgs);
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateTestRunArgs_missingIUT()
-                            throws Exception {
-        this.testRunProps.remove( TestRunArg.IUT.toString() );
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream( 1024 );
-        this.testRunProps.storeToXML( outStream, "Integration test" );
-        Document testRunArgs = docBuilder.parse( new ByteArrayInputStream( outStream.toByteArray() ) );
+	@Test(expected = IllegalArgumentException.class)
+	public void testValidateTestRunArgs_missingIUT() throws Exception {
+		this.testRunProps.remove(TestRunArg.IUT.toString());
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream(1024);
+		this.testRunProps.storeToXML(outStream, "Integration test");
+		Document testRunArgs = docBuilder.parse(new ByteArrayInputStream(outStream.toByteArray()));
 
-        TestNGController controller = new TestNGController();
-        controller.validateTestRunArgs( testRunArgs );
-    }
+		TestNGController controller = new TestNGController();
+		controller.validateTestRunArgs(testRunArgs);
+	}
 
 }

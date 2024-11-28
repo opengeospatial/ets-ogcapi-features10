@@ -21,43 +21,44 @@ import org.testng.SkipException;
  */
 public class CrsRequirementClassPreconditionTest {
 
-    @Test
-    public void verifyConformanceClass_ImplementsCrs() {
-        CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
-        List<RequirementClass> allRequirementClasses = Arrays.asList( RequirementClass.values() );
-        requirementClassPrecondition.conformanceClasses( mockTestContext( allRequirementClasses ) );
-        requirementClassPrecondition.verifyConformanceClass();
-    }
+	@Test
+	public void verifyConformanceClass_ImplementsCrs() {
+		CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
+		List<RequirementClass> allRequirementClasses = Arrays.asList(RequirementClass.values());
+		requirementClassPrecondition.conformanceClasses(mockTestContext(allRequirementClasses));
+		requirementClassPrecondition.verifyConformanceClass();
+	}
 
-    @Test(expected = SkipException.class)
-    public void verifyConformanceClass_NotImplementsCrs() {
-        CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
-        List<RequirementClass> requirementClasses = Arrays.asList( CORE, OPENAPI30 );
-        requirementClassPrecondition.conformanceClasses( mockTestContext( requirementClasses ) );
-        requirementClassPrecondition.verifyConformanceClass();
-    }
+	@Test(expected = SkipException.class)
+	public void verifyConformanceClass_NotImplementsCrs() {
+		CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
+		List<RequirementClass> requirementClasses = Arrays.asList(CORE, OPENAPI30);
+		requirementClassPrecondition.conformanceClasses(mockTestContext(requirementClasses));
+		requirementClassPrecondition.verifyConformanceClass();
+	}
 
-    @Test(expected = SkipException.class)
-    public void verifyConformanceClass_Null() {
-        CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
-        requirementClassPrecondition.conformanceClasses( mockTestContext( null ) );
-        requirementClassPrecondition.verifyConformanceClass();
-    }
+	@Test(expected = SkipException.class)
+	public void verifyConformanceClass_Null() {
+		CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
+		requirementClassPrecondition.conformanceClasses(mockTestContext(null));
+		requirementClassPrecondition.verifyConformanceClass();
+	}
 
-    @Test(expected = SkipException.class)
-    public void verifyConformanceClass_Empty() {
-        CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
-        List<RequirementClass> requirementClasses = Collections.emptyList();
-        requirementClassPrecondition.conformanceClasses( mockTestContext( requirementClasses ) );
-        requirementClassPrecondition.verifyConformanceClass();
-    }
+	@Test(expected = SkipException.class)
+	public void verifyConformanceClass_Empty() {
+		CrsRequirementClassPrecondition requirementClassPrecondition = new CrsRequirementClassPrecondition();
+		List<RequirementClass> requirementClasses = Collections.emptyList();
+		requirementClassPrecondition.conformanceClasses(mockTestContext(requirementClasses));
+		requirementClassPrecondition.verifyConformanceClass();
+	}
 
-    private ITestContext mockTestContext( List<RequirementClass> requirementClasses ) {
-        ITestContext testContext = mock( ITestContext.class );
-        ISuite suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+	private ITestContext mockTestContext(List<RequirementClass> requirementClasses) {
+		ITestContext testContext = mock(ITestContext.class);
+		ISuite suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-        return testContext;
-    }
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+		return testContext;
+	}
+
 }

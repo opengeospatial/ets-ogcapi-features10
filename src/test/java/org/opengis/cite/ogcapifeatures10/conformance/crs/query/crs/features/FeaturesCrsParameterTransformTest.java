@@ -29,55 +29,62 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesCrsParameterTransformTest {
 
-    private static final CoordinateSystem EPSG_25832 = new CoordinateSystem( "http://www.opengis.net/def/crs/EPSG/0/25832" );
+	private static final CoordinateSystem EPSG_25832 = new CoordinateSystem(
+			"http://www.opengis.net/def/crs/EPSG/0/25832");
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
-    }
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void test()
-                            throws ParseException {
-        prepareJadler();
-        FeaturesCrsParameterTransform featuresCrsParameterTransform = new FeaturesCrsParameterTransform();
-        featuresCrsParameterTransform.initCommonFixture( testContext );
+	@Test
+	public void test() throws ParseException {
+		prepareJadler();
+		FeaturesCrsParameterTransform featuresCrsParameterTransform = new FeaturesCrsParameterTransform();
+		featuresCrsParameterTransform.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featuresCrsParameterTransform.verifyFeaturesCrsParameterTransformWithoutCrsParameter( "vineyards", collection );
-        featuresCrsParameterTransform.verifyFeaturesCrsParameterTransformWithCrsParameter( "vineyards", collection,
-                                                                                           EPSG_25832, DEFAULT_CRS );
-    }
+		JsonPath collection = prepareCollection();
+		featuresCrsParameterTransform.verifyFeaturesCrsParameterTransformWithoutCrsParameter("vineyards", collection);
+		featuresCrsParameterTransform.verifyFeaturesCrsParameterTransformWithCrsParameter("vineyards", collection,
+				EPSG_25832, DEFAULT_CRS);
+	}
 
-    private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesCrsParameterTransformTest.class.getResourceAsStream( "../../collection-vineyards.json" ) );
-    }
+	private static JsonPath prepareCollection() {
+		return new JsonPath(
+				FeaturesCrsParameterTransformTest.class.getResourceAsStream("../../collection-vineyards.json"));
+	}
 
-    private void prepareJadler() {
-        InputStream items = getClass().getResourceAsStream( "../../collectionItems-vineyards.json" );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( not( containsString( "crs=" ) ) ).respond().withBody( items ).withHeader( "Content-Crs",
-                                                                                                                                                                         DEFAULT_CRS.getAsHeaderValue() ).withStatus( 200 );
-        InputStream itemsIn25832 = getClass().getResourceAsStream( "../../collectionItems-vineyards-25832.json" );
-        onRequest().havingPath( endsWith( "collections/vineyards/items" ) ).havingQueryString( containsString( "crs="
-                                                                                                               + URLEncoder.encode( EPSG_25832.getCode() ) ) ).respond().withBody( itemsIn25832 ).withHeader( "Content-Crs",
-                                                                                                                                                                                                              EPSG_25832.getAsHeaderValue() ).withStatus( 200 );
-    }
+	private void prepareJadler() {
+		InputStream items = getClass().getResourceAsStream("../../collectionItems-vineyards.json");
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(not(containsString("crs=")))
+			.respond()
+			.withBody(items)
+			.withHeader("Content-Crs", DEFAULT_CRS.getAsHeaderValue())
+			.withStatus(200);
+		InputStream itemsIn25832 = getClass().getResourceAsStream("../../collectionItems-vineyards-25832.json");
+		onRequest().havingPath(endsWith("collections/vineyards/items"))
+			.havingQueryString(containsString("crs=" + URLEncoder.encode(EPSG_25832.getCode())))
+			.respond()
+			.withBody(itemsIn25832)
+			.withHeader("Content-Crs", EPSG_25832.getAsHeaderValue())
+			.withStatus(200);
+	}
 
 }

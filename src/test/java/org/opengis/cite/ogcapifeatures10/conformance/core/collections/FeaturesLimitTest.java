@@ -37,97 +37,101 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesLimitTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    private static TestPoint testPoint;
+	private static TestPoint testPoint;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesLimitTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeaturesLimitTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        InputStream json = FeaturesLimitTest.class.getResourceAsStream( "../collections/collections.json" );
-        JsonPath collectionsResponse = new JsonPath( json );
-        List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
+		InputStream json = FeaturesLimitTest.class.getResourceAsStream("../collections/collections.json");
+		JsonPath collectionsResponse = new JsonPath(json);
+		List<Map<String, Object>> collections = collectionsResponse.getList("collections");
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        testPoint = new TestPoint( "http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
-                                   Collections.emptyMap() );
+		testPoint = new TestPoint("http://localhost:8090/rest/services/kataster", "/collections/flurstueck/items",
+				Collections.emptyMap());
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.COLLECTIONS.getName())).thenReturn(collections);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void testParameterDefinition() {
-        prepareJadler();
-        FeaturesLimit features = initFeaturesLimit();
+	@Test
+	public void testParameterDefinition() {
+		prepareJadler();
+		FeaturesLimit features = initFeaturesLimit();
 
-        features.limitParameterDefinition( testPoint );
-    }
+		features.limitParameterDefinition(testPoint);
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        FeaturesLimit features = initFeaturesLimit();
+	@Test
+	public void test() {
+		prepareJadler();
+		FeaturesLimit features = initFeaturesLimit();
 
-        Map<String, Object> collection = prepareCollection();
-        features.validateFeaturesWithLimitOperation( collection, 10, 15 );
-        features.validateFeaturesWithLimitResponse_TypeProperty( collection, 10, 15 );
-        features.validateFeaturesWithLimitResponse_FeaturesProperty( collection, 10, 15 );
-        features.validateFeaturesWithLimitResponse_Links( collection, 10, 15 );
-        // skipped (collection missing):
-        // features.validateFeaturesWithLimitResponse_TimeStamp( collection, 10, 15 );
-        // skipped (collection missing):
-        // features.validateFeaturesWithLimitResponse_NumberMatched( collection , 10, 15 );
-        // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberReturned( collection, 10, 15 );
-    }
+		Map<String, Object> collection = prepareCollection();
+		features.validateFeaturesWithLimitOperation(collection, 10, 15);
+		features.validateFeaturesWithLimitResponse_TypeProperty(collection, 10, 15);
+		features.validateFeaturesWithLimitResponse_FeaturesProperty(collection, 10, 15);
+		features.validateFeaturesWithLimitResponse_Links(collection, 10, 15);
+		// skipped (collection missing):
+		// features.validateFeaturesWithLimitResponse_TimeStamp( collection, 10, 15 );
+		// skipped (collection missing):
+		// features.validateFeaturesWithLimitResponse_NumberMatched( collection , 10, 15
+		// );
+		// skipped (collection missing):
+		// features.validateFeaturesResponse_NumberReturned( collection, 10, 15 );
+	}
 
-    private FeaturesLimit initFeaturesLimit() {
-        FeaturesLimit features = new FeaturesLimit();
-        features.initCommonFixture( testContext );
-        features.retrieveRequiredInformationFromTestContext( testContext );
-        features.requirementClasses( testContext );
-        features.retrieveApiModel( testContext );
-        return features;
-    }
+	private FeaturesLimit initFeaturesLimit() {
+		FeaturesLimit features = new FeaturesLimit();
+		features.initCommonFixture(testContext);
+		features.retrieveRequiredInformationFromTestContext(testContext);
+		features.requirementClasses(testContext);
+		features.retrieveApiModel(testContext);
+		return features;
+	}
 
-    private static Map<String, Object> prepareCollection() {
-        return new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).get();
-    }
+	private static Map<String, Object> prepareCollection() {
+		return new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-flurstueck.json")).get();
+	}
 
-    private void prepareJadler() {
-        InputStream flurstueckItems = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).havingParameter( "limit",
-                                                                                              nullValue() ).respond().withBody( flurstueckItems );
+	private void prepareJadler() {
+		InputStream flurstueckItems = getClass().getResourceAsStream("collectionItems-flurstueck.json");
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.havingParameter("limit", nullValue())
+			.respond()
+			.withBody(flurstueckItems);
 
-        InputStream flurstueckItemsLimit = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( containsString( "collections/flurstueck/items" ) ).havingParameterEqualTo( "limit",
-                                                                                                           "10" ).respond().withBody( flurstueckItemsLimit );
-    }
+		InputStream flurstueckItemsLimit = getClass().getResourceAsStream("collectionItems-flurstueck.json");
+		onRequest().havingPath(containsString("collections/flurstueck/items"))
+			.havingParameterEqualTo("limit", "10")
+			.respond()
+			.withBody(flurstueckItemsLimit);
+	}
 
 }

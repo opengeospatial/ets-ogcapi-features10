@@ -26,59 +26,64 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeatureCrsParameterInvalidTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
-    }
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        FeatureCrsParameterInvalid featureInvalidCrsParameter = new FeatureCrsParameterInvalid();
-        featureInvalidCrsParameter.initCommonFixture( testContext );
+	@Test
+	public void test() {
+		prepareJadler();
+		FeatureCrsParameterInvalid featureInvalidCrsParameter = new FeatureCrsParameterInvalid();
+		featureInvalidCrsParameter.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featureInvalidCrsParameter.verifyFeatureCrsParameterInvalid( "flurstueck", collection, "testId" );
-    }
+		JsonPath collection = prepareCollection();
+		featureInvalidCrsParameter.verifyFeatureCrsParameterInvalid("flurstueck", collection, "testId");
+	}
 
-    @Test(expected = AssertionError.class)
-    public void test_unexpectedResponse() {
-        prepareJadlerResponseStatusCode200();
-        FeatureCrsParameterInvalid featureInvalidCrsParameter = new FeatureCrsParameterInvalid();
-        featureInvalidCrsParameter.initCommonFixture( testContext );
+	@Test(expected = AssertionError.class)
+	public void test_unexpectedResponse() {
+		prepareJadlerResponseStatusCode200();
+		FeatureCrsParameterInvalid featureInvalidCrsParameter = new FeatureCrsParameterInvalid();
+		featureInvalidCrsParameter.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featureInvalidCrsParameter.verifyFeatureCrsParameterInvalid( "flurstueck", collection, "testId" );
-    }
+		JsonPath collection = prepareCollection();
+		featureInvalidCrsParameter.verifyFeatureCrsParameterInvalid("flurstueck", collection, "testId");
+	}
 
-    private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesCrsParameterInvalidTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
-    }
+	private static JsonPath prepareCollection() {
+		return new JsonPath(FeaturesCrsParameterInvalidTest.class
+			.getResourceAsStream("../../../../core/collections/collection-flurstueck.json"));
+	}
 
-    private void prepareJadler() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
-                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 400 );
-    }
+	private void prepareJadler() {
+		onRequest().havingPath(endsWith("collections/flurstueck/items/testId"))
+			.havingQueryString(containsString("crs=" + URLEncoder.encode(UNSUPPORTED_CRS)))
+			.respond()
+			.withStatus(400);
+	}
 
-    private void prepareJadlerResponseStatusCode200() {
-        onRequest().havingPath( endsWith( "collections/flurstueck/items/testId" ) ).havingQueryString( containsString( "crs="
-                                                                                                                       + URLEncoder.encode( UNSUPPORTED_CRS ) ) ).respond().withStatus( 200 );
-    }
+	private void prepareJadlerResponseStatusCode200() {
+		onRequest().havingPath(endsWith("collections/flurstueck/items/testId"))
+			.havingQueryString(containsString("crs=" + URLEncoder.encode(UNSUPPORTED_CRS)))
+			.respond()
+			.withStatus(200);
+	}
+
 }

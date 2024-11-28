@@ -16,27 +16,25 @@ import org.testng.ITestContext;
  */
 public class GeneralHttpIT {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+	}
 
-    @Test
-    public void testGeneralHttp()
-                            throws Exception {
-        GeneralHttp generalHttp = new GeneralHttp();
-        generalHttp.initCommonFixture( testContext );
-        generalHttp.http();
-    }
+	@Test
+	public void testGeneralHttp() throws Exception {
+		GeneralHttp generalHttp = new GeneralHttp();
+		generalHttp.initCommonFixture(testContext);
+		generalHttp.http();
+	}
 
 }

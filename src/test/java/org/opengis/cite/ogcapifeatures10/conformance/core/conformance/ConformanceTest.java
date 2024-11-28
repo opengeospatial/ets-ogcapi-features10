@@ -22,31 +22,32 @@ import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
  */
 public class ConformanceTest {
 
-    @Test
-    public void testParseAndValidateRequirementClasses() {
-        Conformance conformanceOperationTest = new Conformance();
-        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes.json" );
-        JsonPath jsonPath = new JsonPath( json );
-        List<RequirementClass> requirementClasses = conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
+	@Test
+	public void testParseAndValidateRequirementClasses() {
+		Conformance conformanceOperationTest = new Conformance();
+		InputStream json = ConformanceTest.class.getResourceAsStream("req-classes.json");
+		JsonPath jsonPath = new JsonPath(json);
+		List<RequirementClass> requirementClasses = conformanceOperationTest
+			.parseAndValidateRequirementClasses(jsonPath);
 
-        assertThat( requirementClasses.size(), is( 5 ) );
-        assertThat( requirementClasses, hasItems( CORE, OPENAPI30, HTML, GEOJSON, GMLSF2 ) );
-    }
+		assertThat(requirementClasses.size(), is(5));
+		assertThat(requirementClasses, hasItems(CORE, OPENAPI30, HTML, GEOJSON, GMLSF2));
+	}
 
-    @Test(expected = AssertionError.class)
-    public void testParseAndValidateRequirementClasses_invalidConformsTo() {
-        Conformance conformanceOperationTest = new Conformance();
-        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidConformsTo.json" );
-        JsonPath jsonPath = new JsonPath( json );
-        conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
-    }
+	@Test(expected = AssertionError.class)
+	public void testParseAndValidateRequirementClasses_invalidConformsTo() {
+		Conformance conformanceOperationTest = new Conformance();
+		InputStream json = ConformanceTest.class.getResourceAsStream("req-classes_invalidConformsTo.json");
+		JsonPath jsonPath = new JsonPath(json);
+		conformanceOperationTest.parseAndValidateRequirementClasses(jsonPath);
+	}
 
-    @Test(expected = AssertionError.class)
-    public void testParseAndValidateRequirementClasses_invalidElementDataType() {
-        Conformance conformanceOperationTest = new Conformance();
-        InputStream json = ConformanceTest.class.getResourceAsStream( "req-classes_invalidElementDataType.json" );
-        JsonPath jsonPath = new JsonPath( json );
-        conformanceOperationTest.parseAndValidateRequirementClasses( jsonPath );
-    }
+	@Test(expected = AssertionError.class)
+	public void testParseAndValidateRequirementClasses_invalidElementDataType() {
+		Conformance conformanceOperationTest = new Conformance();
+		InputStream json = ConformanceTest.class.getResourceAsStream("req-classes_invalidElementDataType.json");
+		JsonPath jsonPath = new JsonPath(json);
+		conformanceOperationTest.parseAndValidateRequirementClasses(jsonPath);
+	}
 
 }

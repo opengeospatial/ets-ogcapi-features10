@@ -38,52 +38,66 @@ import io.restassured.response.Response;
  */
 public class BBoxCrsParameterDefault extends AbstractBBoxCrs {
 
-    @DataProvider(name = "collectionDefaultCrs")
-    public Iterator<Object[]> collectionDefaultCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-            String collectionId = collection.getKey();
-            JsonPath json = collection.getValue();
-            CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get( collectionId );
-            if ( defaultCrs != null ) {
-                collectionsData.add( new Object[] { collectionId, json, defaultCrs } );
-            }
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionDefaultCrs.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
+	@DataProvider(name = "collectionDefaultCrs")
+	public Iterator<Object[]> collectionDefaultCrs(ITestContext testContext) {
+		List<Object[]> collectionsData = new ArrayList<>();
+		for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+			String collectionId = collection.getKey();
+			JsonPath json = collection.getValue();
+			CoordinateSystem defaultCrs = collectionIdToDefaultCrs.get(collectionId);
+			if (defaultCrs != null) {
+				collectionsData.add(new Object[] { collectionId, json, defaultCrs });
+			}
+		}
+		return collectionsData.iterator();
+	}
 
-    /**
-     * @param collectionId
-     *            the id of the collection, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     * @param defaultCrs
-     *            the defaultCrs of the collection, never <code>null</code>
-     */
-    @Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 10 (Requirement /req/crs/fc-bbox-crs-default-value)", dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyBboxCrsParameterDefault( String collectionId, JsonPath collection, CoordinateSystem defaultCrs ) {
-        String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson( rootUri, collection );
-        if ( featuredUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
-        BBox bbox = parseSpatialExtent( collection.get() );
-        if ( bbox == null )
-            throw new SkipException( "Collection with id " + collectionId + " has no spatial extent" );
+	/**
+	 * <p>
+	 * verifyBboxCrsParameterDefault.
+	 * </p>
+	 * @param collectionId the id of the collection, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 * @param defaultCrs the defaultCrs of the collection, never <code>null</code>
+	 */
+	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 10 (Requirement /req/crs/fc-bbox-crs-default-value)",
+			dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
+	public void verifyBboxCrsParameterDefault(String collectionId, JsonPath collection, CoordinateSystem defaultCrs) {
+		String featuredUrl = JsonUtils.findFeaturesUrlForGeoJson(rootUri, collection);
+		if (featuredUrl == null)
+			throw new SkipException("Could not find url for collection with id " + collectionId
+					+ " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")");
+		BBox bbox = parseSpatialExtent(collection.get());
+		if (bbox == null)
+			throw new SkipException("Collection with id " + collectionId + " has no spatial extent");
 
-        GeometryTransformer geometryTransformer = new GeometryTransformer( bbox.getCrs(), defaultCrs );
-        BBox transformedBbox = geometryTransformer.transform( bbox );
-        String bboxParameterValue = transformedBbox.asQueryParameter();
+		GeometryTransformer geometryTransformer = new GeometryTransformer(bbox.getCrs(), defaultCrs);
+		BBox transformedBbox = geometryTransformer.transform(bbox);
+		String bboxParameterValue = transformedBbox.asQueryParameter();
 
-        Response responseWithBBox = init().baseUri( featuredUrl ).param( BBOX_CRS_PARAM,
-                                                                         defaultCrs.getCode() ).param( BBOX_PARAM,
-                                                                                                       bboxParameterValue ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
-        responseWithBBox.then().statusCode( 200 );
+		Response responseWithBBox = init().baseUri(featuredUrl)
+			.param(BBOX_CRS_PARAM, defaultCrs.getCode())
+			.param(BBOX_PARAM, bboxParameterValue)
+			.accept(GEOJSON_MIME_TYPE)
+			.when()
+			.request(Method.GET);
+		responseWithBBox.then().statusCode(200);
 
-        Response responseWithoutBBox = init().baseUri( featuredUrl ).param( BBOX_PARAM,
-                                                                            bboxParameterValue ).accept( GEOJSON_MIME_TYPE ).when().request( Method.GET );
-        responseWithoutBBox.then().statusCode( 200 );
+		Response responseWithoutBBox = init().baseUri(featuredUrl)
+			.param(BBOX_PARAM, bboxParameterValue)
+			.accept(GEOJSON_MIME_TYPE)
+			.when()
+			.request(Method.GET);
+		responseWithoutBBox.then().statusCode(200);
 
-        assertSameFeatures( responseWithBBox.jsonPath(), responseWithoutBBox.jsonPath() );
-    }
+		assertSameFeatures(responseWithBBox.jsonPath(), responseWithoutBBox.jsonPath());
+	}
 
 }
