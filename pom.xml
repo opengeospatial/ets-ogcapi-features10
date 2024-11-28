@@ -50,14 +50,14 @@
   <properties>
     <ets-code>ogcapi-features-1.0</ets-code>
     <spec-version>1.0</spec-version>
-    <docker.teamengine.version>5.4.1</docker.teamengine.version>
+    <docker.teamengine.version>5.7</docker.teamengine.version>
     <soapui.test.fail.ignore>false</soapui.test.fail.ignore>
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>
     <soapui.teamengine.password>ogctest</soapui.teamengine.password>
     <soapui.iut>https://ri.ldproxy.net/daraa</soapui.iut>
-    <soapui.tests.passed>383</soapui.tests.passed>
-    <soapui.tests.skipped>15</soapui.tests.skipped>
+    <soapui.tests.passed>382</soapui.tests.passed>
+    <soapui.tests.skipped>16</soapui.tests.skipped>
     <soapui.tests.failed>3</soapui.tests.failed>
   </properties>
 
@@ -65,6 +65,7 @@
     <dependency>
       <groupId>org.opengis.cite.teamengine</groupId>
       <artifactId>teamengine-spi</artifactId>
+      <version>5.7</version>
     </dependency>
     <dependency>
       <groupId>org.locationtech.jts</groupId>
