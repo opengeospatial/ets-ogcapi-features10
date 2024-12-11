@@ -11,20 +11,13 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <dependencySets>
     <dependencySet>
-      <outputDirectory>/</outputDirectory>
-      <unpack>false</unpack>
-      <scope>runtime</scope>
-      <useTransitiveDependencies>false</useTransitiveDependencies>
-    </dependencySet>
-    <dependencySet>
       <excludes>
         <exclude>org.opengis.cite.teamengine:teamengine-spi</exclude>
-        <exclude>com.beust:jcommander</exclude>
         <exclude>*:jersey-client</exclude>
         <exclude>*:jersey-server</exclude>
+        <exclude>*:jersey-common</exclude>
         <exclude>*:jersey-hk2</exclude>
         <exclude>jakarta.ws.rs:jakarta.ws.rs-api</exclude>
-        <exclude>org.testng:testng</exclude>
       </excludes>
       <outputDirectory>/</outputDirectory>
       <unpack>false</unpack>
