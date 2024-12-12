@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.opengis.cite</groupId>
     <artifactId>ets-common</artifactId>
-    <version>13</version>
+    <version>14-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -72,12 +72,10 @@
     <dependency>
       <groupId>org.locationtech.proj4j</groupId>
       <artifactId>proj4j</artifactId>
-      <version>1.1.3</version>
     </dependency>
     <dependency>
       <groupId>org.locationtech.jts.io</groupId>
       <artifactId>jts-io-common</artifactId>
-      <version>1.18.1</version>
     </dependency>
     <dependency>
       <groupId>io.rest-assured</groupId>
@@ -98,13 +96,11 @@
     <dependency>
       <groupId>net.jadler</groupId>
       <artifactId>jadler-core</artifactId>
-      <version>1.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>net.jadler</groupId>
       <artifactId>jadler-jetty</artifactId>
-      <version>1.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
