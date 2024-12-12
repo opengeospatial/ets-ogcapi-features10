@@ -17,6 +17,7 @@ import org.glassfish.jersey.apache.connector.ApacheConnectorProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.ClientResponse;
+import org.opengis.cite.ogcapifeatures10.ReusableEntityFilter;
 import org.w3c.dom.Document;
 
 import jakarta.ws.rs.client.Client;
@@ -40,6 +41,7 @@ public class ClientUtils {
 		config.property(ClientProperties.FOLLOW_REDIRECTS, true);
 		config.property(ClientProperties.CONNECT_TIMEOUT, 10000);
 		Client client = ClientBuilder.newClient(config);
+		client.register(new ReusableEntityFilter());
 		return client;
 	}
 
@@ -59,6 +61,7 @@ public class ClientUtils {
 		config.property(ClientProperties.PROXY_URI, proxy);
 		config.property(ClientProperties.FOLLOW_REDIRECTS, true);
 		Client client = ClientBuilder.newClient(config);
+		client.register(new ReusableEntityFilter());
 		return client;
 	}
 
