@@ -13,11 +13,11 @@
 
   <name>OGC API-Features 1.0 Conformance Test Suite</name>
   <description>Describe purpose of test suite.</description>
-  <url>http://opengeospatial.github.io/ets-ogcapi-features10/</url>
+  <url>https://opengeospatial.github.io/ets-ogcapi-features10/</url>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
-      <url>http://opensource.org/licenses/Apache-2.0</url>
+      <url>https://opensource.org/licenses/Apache-2.0</url>
     </license>
   </licenses>
 
