@@ -1,5 +1,15 @@
 = Release Notes OGC API - Features
 
+== 1.8 (2024-11-28)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/227[#227]: Several CRS tests are returning a Nullpointer Exception
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/241[#241]: OGC Validator API Feature : java null pointer exeption
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/245[#245]: Part 2 test error: UnknownAuthorityCodeException: EPSG:4327
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/247[#247]: Wrong result validating LineString crossing dateline-crossing bbox leading to failed test on certified implementation
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/251[#251]: All tests asserting a collection's crs identifiers shall consider the global crs property if included as a JSON pointer
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/252[#252]: Upgrade io.fabric8:docker-maven-plugin:0.28.0 -> 0.45.1
+- https://github.com/opengeospatial/ets-ogcapi-features10/pull/257[#257]: Update POM to use TE 5.7 and adjust results of SoapUI tests
+
 == 1.7.1 (2024-04-19)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/pull/236[#236]: Limit requested features to prevent too large responses
