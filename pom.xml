@@ -23,7 +23,7 @@
 
   <organization>
     <name>Open Geospatial Consortium</name>
-    <url>http://www.opengeospatial.org/</url>
+    <url>https://www.ogc.org/</url>
   </organization>
   <scm>
     <connection>scm:git:https://github.com/opengeospatial/ets-ogcapi-features10.git</connection>
@@ -49,8 +49,6 @@
   <properties>
     <ets-code>ogcapi-features-1.0</ets-code>
     <spec-version>1.0</spec-version>
-    <docker.teamengine.version>6.0-SNAPSHOT</docker.teamengine.version>
-    <soapui.test.fail.ignore>false</soapui.test.fail.ignore>
     <soapui.teamengine.endpoint>http://localhost:8081/teamengine</soapui.teamengine.endpoint>
     <soapui.teamengine.user>ogctest</soapui.teamengine.user>
     <soapui.teamengine.password>ogctest</soapui.teamengine.password>
@@ -143,22 +141,13 @@
               <mainClass>org.opengis.cite.ogcapifeatures10.TestNGController</mainClass>
             </manifest>
           </archive>
-          <descriptors>
-            <descriptor>${basedir}/src/assembly/deps.xml</descriptor>
-            <descriptor>${basedir}/src/assembly/ctl-scripts.xml</descriptor>
-            <descriptor>${basedir}/src/assembly/aio.xml</descriptor>
-          </descriptors>
         </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-scm-publish-plugin</artifactId>
       </plugin>
     </plugins>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -167,28 +156,6 @@
           <configuration>
             <images>
               <image>
-                <name>ogccite/${project.artifactId}</name>
-                <build>
-                  <dockerFileDir>${project.basedir}/src/docker</dockerFileDir>
-                  <tags>
-                    <tag>${project.version}-teamengine-${docker.teamengine.version}</tag>
-                  </tags>
-                  <assembly>
-                    <inline>
-                      <fileSets>
-                        <fileSet>
-                          <directory>${project.build.directory}</directory>
-                          <outputDirectory>.</outputDirectory>
-                          <includes>
-                            <include>dependency/*teamengine-*.war</include>
-                            <include>dependency/*teamengine-*.zip</include>
-                            <include>*ets-*.zip</include>
-                          </includes>
-                        </fileSet>
-                      </fileSets>
-                    </inline>
-                  </assembly>
-                </build>
                 <run>
                   <ports>
                     <port>8081:8080</port>
@@ -207,18 +174,9 @@
         <plugin>
           <groupId>com.smartbear.soapui</groupId>
           <artifactId>soapui-maven-plugin</artifactId>
-          <dependencies>
-            <dependency>
-              <groupId>com.jgoodies</groupId>
-              <artifactId>forms</artifactId>
-            </dependency>
-          </dependencies>
           <configuration>
             <projectFile>src/test/resources/soapui/ets-ogcapi-features10-soapui-project.xml</projectFile>
             <settingsFile>src/test/resources/soapui/ets-ogcapi-features10-soapui-settings.xml</settingsFile>
-            <outputFolder>${project.build.directory}/soapui</outputFolder>
-            <junitReport>true</junitReport>
-            <testFailIgnore>${soapui.test.fail.ignore}</testFailIgnore>
             <projectProperties>
               <value>teamengine.endpoint=${soapui.teamengine.endpoint}</value>
               <value>teamengine.user=${soapui.teamengine.user}</value>
@@ -241,14 +199,6 @@
         <plugins>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
           <plugin>
             <groupId>com.smartbear.soapui</groupId>
@@ -337,7 +287,7 @@
   <pluginRepositories>
     <pluginRepository>
       <id>smartbear-sweden-plugin-repository</id>
-      <url>http://www.soapui.org/repository/maven2/</url>
+      <url>https://www.soapui.org/repository/maven2/</url>
     </pluginRepository>
   </pluginRepositories>
 
