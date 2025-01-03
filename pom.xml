@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.opengis.cite</groupId>
     <artifactId>ets-common</artifactId>
-    <version>14-SNAPSHOT</version>
+    <version>14</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
