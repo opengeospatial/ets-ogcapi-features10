@@ -12,13 +12,12 @@ import org.junit.Test;
  */
 public class URIUtilsIT {
 
-    @Test
-    public void resolveHttpUriAsFile()
-                            throws IOException {
-        URI uriRef = URI.create( "http://www.w3schools.com/xml/note.xml" );
-        File file = URIUtils.dereferenceURI( uriRef );
-        Assert.assertNotNull( file );
-        Assert.assertTrue( "File should not be empty", file.length() > 0 );
-    }
+	@Test
+	public void resolveHttpUriAsFile() throws IOException {
+		URI uriRef = URI.create("http://www.w3schools.com/xml/note.xml");
+		File file = URIUtils.dereferenceURI(uriRef);
+		Assert.assertNotNull(file);
+		Assert.assertTrue("File should not be empty", file.length() > 0);
+	}
 
 }

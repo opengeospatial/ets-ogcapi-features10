@@ -15,39 +15,65 @@ import org.testng.annotations.DataProvider;
 import io.restassured.path.json.JsonPath;
 
 /**
+ * <p>
+ * AbstractDiscoveryCollections class.
+ * </p>
+ *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
 public class AbstractDiscoveryCollections extends CommonDataFixture {
 
-    private Map<TestPoint, JsonPath> collectionsResponses;
+	private Map<TestPoint, JsonPath> collectionsResponses;
 
-    private List<Map<String, Object>> collections;
+	private List<Map<String, Object>> collections;
 
-    @BeforeClass
-    public void retrieveRequiredInformationFromTestContext( ITestContext testContext ) {
-        this.collectionsResponses = (Map<TestPoint, JsonPath>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS_RESPONSE.getName() );
-        this.collections = (List<Map<String, Object>>) testContext.getSuite().getAttribute( SuiteAttribute.COLLECTIONS.getName() );
-    }
+	/**
+	 * <p>
+	 * retrieveRequiredInformationFromTestContext.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 */
+	@BeforeClass
+	public void retrieveRequiredInformationFromTestContext(ITestContext testContext) {
+		this.collectionsResponses = (Map<TestPoint, JsonPath>) testContext.getSuite()
+			.getAttribute(SuiteAttribute.COLLECTIONS_RESPONSE.getName());
+		this.collections = (List<Map<String, Object>>) testContext.getSuite()
+			.getAttribute(SuiteAttribute.COLLECTIONS.getName());
+	}
 
-    @DataProvider(name = "collectionsResponses")
-    public Iterator<Object[]> collectionsResponses( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map.Entry<TestPoint, JsonPath> collectionsResponse : collectionsResponses.entrySet() ) {
-            collectionsData.add( new Object[] { collectionsResponse.getKey(), collectionsResponse.getValue() } );
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionsResponses.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
+	@DataProvider(name = "collectionsResponses")
+	public Iterator<Object[]> collectionsResponses(ITestContext testContext) {
+		List<Object[]> collectionsData = new ArrayList<>();
+		for (Map.Entry<TestPoint, JsonPath> collectionsResponse : collectionsResponses.entrySet()) {
+			collectionsData.add(new Object[] { collectionsResponse.getKey(), collectionsResponse.getValue() });
+		}
+		return collectionsData.iterator();
+	}
 
-    @DataProvider(name = "collectionItemUris")
-    public Iterator<Object[]> collectionItemUris( ITestContext testContext ) {
-        // First test point is used! This may be simplified.
-        TestPoint testPoint = collectionsResponses.keySet().stream().findFirst().get();
-        JsonPath jsonPath = collectionsResponses.get( testPoint );
-        List<Object[]> collectionsData = new ArrayList<>();
-        for ( Map<String, Object> collection : collections ) {
-            collectionsData.add( new Object[] { testPoint, jsonPath, collection } );
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionItemUris.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
+	@DataProvider(name = "collectionItemUris")
+	public Iterator<Object[]> collectionItemUris(ITestContext testContext) {
+		// First test point is used! This may be simplified.
+		TestPoint testPoint = collectionsResponses.keySet().stream().findFirst().get();
+		JsonPath jsonPath = collectionsResponses.get(testPoint);
+		List<Object[]> collectionsData = new ArrayList<>();
+		for (Map<String, Object> collection : collections) {
+			collectionsData.add(new Object[] { testPoint, jsonPath, collection });
+		}
+		return collectionsData.iterator();
+	}
 
 }

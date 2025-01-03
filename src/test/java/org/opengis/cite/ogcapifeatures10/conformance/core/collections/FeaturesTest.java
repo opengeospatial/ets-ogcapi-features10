@@ -33,73 +33,72 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        OpenApi3Parser parser = new OpenApi3Parser();
-        URL openAppiDocument = FeaturesTest.class.getResource( "../../../openapi3/openapi.json" );
-        OpenApi3 apiModel = parser.parse( openAppiDocument, true );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		OpenApi3Parser parser = new OpenApi3Parser();
+		URL openAppiDocument = FeaturesTest.class.getResource("../../../openapi3/openapi.json");
+		OpenApi3 apiModel = parser.parse(openAppiDocument, true);
 
-        InputStream json = FeaturesTest.class.getResourceAsStream( "../collections/collections.json" );
-        JsonPath collectionsResponse = new JsonPath( json );
-        List<Map<String, Object>> collections = collectionsResponse.getList( "collections" );
+		InputStream json = FeaturesTest.class.getResourceAsStream("../collections/collections.json");
+		JsonPath collectionsResponse = new JsonPath(json);
+		List<Map<String, Object>> collections = collectionsResponse.getList("collections");
 
-        List<RequirementClass> requirementClasses = new ArrayList();
-        requirementClasses.add( RequirementClass.CORE );
+		List<RequirementClass> requirementClasses = new ArrayList();
+		requirementClasses.add(RequirementClass.CORE);
 
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( "https://www.ldproxy.nrw.de/kataster" );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-        when( suite.getAttribute( SuiteAttribute.API_MODEL.getName() ) ).thenReturn( apiModel );
-        when( suite.getAttribute( SuiteAttribute.COLLECTIONS.getName() ) ).thenReturn( collections );
-        when( suite.getAttribute( SuiteAttribute.REQUIREMENTCLASSES.getName() ) ).thenReturn( requirementClasses );
-    }
+		URI landingPageUri = new URI("https://www.ldproxy.nrw.de/kataster");
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+		when(suite.getAttribute(SuiteAttribute.API_MODEL.getName())).thenReturn(apiModel);
+		when(suite.getAttribute(SuiteAttribute.COLLECTIONS.getName())).thenReturn(collections);
+		when(suite.getAttribute(SuiteAttribute.REQUIREMENTCLASSES.getName())).thenReturn(requirementClasses);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        Features features = new Features();
-        features.initCommonFixture( testContext );
-        features.retrieveRequiredInformationFromTestContext( testContext );
-        features.requirementClasses( testContext );
+	@Test
+	public void test() {
+		prepareJadler();
+		Features features = new Features();
+		features.initCommonFixture(testContext);
+		features.retrieveRequiredInformationFromTestContext(testContext);
+		features.requirementClasses(testContext);
 
-        Map<String, Object> collection = prepareCollection();
-        features.validateFeaturesOperation( testContext, collection );
-        features.validateFeaturesResponse_TypeProperty( collection );
-        features.validateFeaturesResponse_FeaturesProperty( collection );
-        features.validateFeaturesResponse_Links( collection );
-        // skipped (collection missing):
-        // features.validateFeaturesResponse_TimeStamp( collection );
-        // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberMatched( collection );
-        // skipped (collection missing):
-        // features.validateFeaturesResponse_NumberReturned( collection );
-    }
+		Map<String, Object> collection = prepareCollection();
+		features.validateFeaturesOperation(testContext, collection);
+		features.validateFeaturesResponse_TypeProperty(collection);
+		features.validateFeaturesResponse_FeaturesProperty(collection);
+		features.validateFeaturesResponse_Links(collection);
+		// skipped (collection missing):
+		// features.validateFeaturesResponse_TimeStamp( collection );
+		// skipped (collection missing):
+		// features.validateFeaturesResponse_NumberMatched( collection );
+		// skipped (collection missing):
+		// features.validateFeaturesResponse_NumberReturned( collection );
+	}
 
-    private static Map<String, Object> prepareCollection() {
-        return new JsonPath( FeatureCollectionTest.class.getResourceAsStream( "collection-flurstueck.json" ) ).get();
-    }
+	private static Map<String, Object> prepareCollection() {
+		return new JsonPath(FeatureCollectionTest.class.getResourceAsStream("collection-flurstueck.json")).get();
+	}
 
-    private void prepareJadler() {
-        InputStream flurstueckItems = getClass().getResourceAsStream( "collectionItems-flurstueck.json" );
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).respond().withBody( flurstueckItems );
-    }
+	private void prepareJadler() {
+		InputStream flurstueckItems = getClass().getResourceAsStream("collectionItems-flurstueck.json");
+		onRequest().havingPath(endsWith("collections/flurstueck/items")).respond().withBody(flurstueckItems);
+	}
 
 }

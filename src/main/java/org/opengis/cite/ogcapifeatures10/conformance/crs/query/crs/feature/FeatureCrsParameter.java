@@ -46,59 +46,66 @@ import io.restassured.response.Response;
  */
 public class FeatureCrsParameter extends AbstractFeatureCrs {
 
-    @DataProvider(name = "collectionFeatureIdCrs")
-    public Iterator<Object[]> collectionFeatureIdCrs( ITestContext testContext ) {
-        List<Object[]> collectionsData = new ArrayList<>();
-        try {
-            for ( Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet() ) {
-                String collectionId = collection.getKey();
-                String featureId = collectionIdToFeatureId.get( collectionId );
-                JsonPath json = collection.getValue();
-                for ( CoordinateSystem crs : collectionIdToCrs.get( collectionId ) ) {
-                    collectionsData.add( new Object[] { collectionId, json, featureId, crs } );
-                }
-            }
-        } catch (Exception e) {
-            collectionsData.add( new Object[] { null, null, null, null } );
-        }
-        return collectionsData.iterator();
-    }
+	/**
+	 * <p>
+	 * collectionFeatureIdCrs.
+	 * </p>
+	 * @param testContext a {@link org.testng.ITestContext} object
+	 * @return a {@link java.util.Iterator} object
+	 */
+	@DataProvider(name = "collectionFeatureIdCrs")
+	public Iterator<Object[]> collectionFeatureIdCrs(ITestContext testContext) {
+		List<Object[]> collectionsData = new ArrayList<>();
+		try {
+			for (Map.Entry<String, JsonPath> collection : collectionsResponses.entrySet()) {
+				String collectionId = collection.getKey();
+				String featureId = collectionIdToFeatureId.get(collectionId);
+				JsonPath json = collection.getValue();
+				for (CoordinateSystem crs : collectionIdToCrs.get(collectionId)) {
+					collectionsData.add(new Object[] { collectionId, json, featureId, crs });
+				}
+			}
+		}
+		catch (Exception e) {
+			collectionsData.add(new Object[] { null, null, null, null });
+		}
+		return collectionsData.iterator();
+	}
 
-    /**
-     * Test: Content-Crs header in the path /collections/{collectionId}/items/{featureId}
-     *
-     * @param collectionId
-     *            id id of the collection, never <code>null</code>
-     * @param collection
-     *            the /collection object, never <code>null</code>
-     * @param featureId
-     *            id id of the feature, never <code>null</code>
-     * @param crs
-     *            the crs to test, never <code>null</code>
-     */
-    @Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-definition, /req/crs/fc-crs-valid-value B, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value, /req/crs/geojson), "
-                        + "Content-Crs header in the path /collections/{collectionId}/items/{featureId}", dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", priority = 1)
-    public void verifyFeatureCrsParameter( String collectionId, JsonPath collection, String featureId,
-                                           CoordinateSystem crs ) {
-        if((collectionId == null) & (collection == null) & (featureId == null) & (crs == null)) {
-            throw new AssertionError("No crs information for collection available.");
-        }
-        String featureUrl = findFeatureUrlForGeoJson( rootUri, collection, featureId );
-        if ( featureUrl == null )
-            throw new SkipException( "Could not find url for collection with id " + collectionId
-                                     + " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")" );
+	/**
+	 * Test: Content-Crs header in the path /collections/{collectionId}/items/{featureId}
+	 * @param collectionId id id of the collection, never <code>null</code>
+	 * @param collection the /collection object, never <code>null</code>
+	 * @param featureId id id of the feature, never <code>null</code>
+	 * @param crs the crs to test, never <code>null</code>
+	 */
+	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 1 (Requirement /req/crs/fc-crs-definition, /req/crs/fc-crs-valid-value B, /req/crs/ogc-crs-header, /req/crs/ogc-crs-header-value, /req/crs/geojson), "
+			+ "Content-Crs header in the path /collections/{collectionId}/items/{featureId}",
+			dataProvider = "collectionFeatureIdCrs", dependsOnGroups = "crs-conformance", priority = 1)
+	public void verifyFeatureCrsParameter(String collectionId, JsonPath collection, String featureId,
+			CoordinateSystem crs) {
+		if ((collectionId == null) & (collection == null) & (featureId == null) & (crs == null)) {
+			throw new AssertionError("No crs information for collection available.");
+		}
+		String featureUrl = findFeatureUrlForGeoJson(rootUri, collection, featureId);
+		if (featureUrl == null)
+			throw new SkipException("Could not find url for collection with id " + collectionId
+					+ " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")");
 
-        Response response = init().baseUri( featureUrl ).queryParam( CRS_PARAMETER,
-                                                                     crs.getCode() ).accept( GEOJSON_MIME_TYPE ).when().request( GET );
-        response.then().statusCode( 200 );
-        String actualHeader = response.getHeader( "Content-Crs" );
-        if ( actualHeader == null ) {
-            throw new AssertionError( String.format( "Feature response at '%s' does not provide the expected header 'Content-Crs'",
-                                                     featureUrl ) );
-        }
-        assertCrsHeader( actualHeader, crs,
-                         String.format( "Features response at '%s' does not provide expected 'Content-Crs' header, was: '%s', expected: '<%s>'",
-                                        featureUrl, actualHeader, crs ) );
-    }
+		Response response = init().baseUri(featureUrl)
+			.queryParam(CRS_PARAMETER, crs.getCode())
+			.accept(GEOJSON_MIME_TYPE)
+			.when()
+			.request(GET);
+		response.then().statusCode(200);
+		String actualHeader = response.getHeader("Content-Crs");
+		if (actualHeader == null) {
+			throw new AssertionError(String
+				.format("Feature response at '%s' does not provide the expected header 'Content-Crs'", featureUrl));
+		}
+		assertCrsHeader(actualHeader, crs, String.format(
+				"Features response at '%s' does not provide expected 'Content-Crs' header, was: '%s', expected: '<%s>'",
+				featureUrl, actualHeader, crs));
+	}
 
 }

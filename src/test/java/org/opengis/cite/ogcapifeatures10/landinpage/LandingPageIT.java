@@ -19,29 +19,28 @@ import org.testng.ITestContext;
 @Ignore("Stable service is required")
 public class LandingPageIT {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    private static final String SUT = "https://www.ldproxy.nrw.de/kataster";
+	private static final String SUT = "https://www.ldproxy.nrw.de/kataster";
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
 
-        URI landingPageUri = new URI( SUT );
-        when( suite.getAttribute( SuiteAttribute.IUT.getName() ) ).thenReturn( landingPageUri );
-    }
+		URI landingPageUri = new URI(SUT);
+		when(suite.getAttribute(SuiteAttribute.IUT.getName())).thenReturn(landingPageUri);
+	}
 
-    @Test
-    public void testLandingPage() {
-        LandingPage landingPage = new LandingPage();
-        landingPage.initCommonFixture( testContext );
-        landingPage.landingPageRetrieval();
-        landingPage.landingPageValidation();
-    }
+	@Test
+	public void testLandingPage() {
+		LandingPage landingPage = new LandingPage();
+		landingPage.initCommonFixture(testContext);
+		landingPage.landingPageRetrieval();
+		landingPage.landingPageValidation();
+	}
 
 }

@@ -24,47 +24,50 @@ import io.restassured.path.json.JsonPath;
  */
 public class FeaturesCrsParameterTest {
 
-    private static ITestContext testContext;
+	private static ITestContext testContext;
 
-    private static ISuite suite;
+	private static ISuite suite;
 
-    @BeforeClass
-    public static void initTestFixture()
-                            throws Exception {
-        testContext = mock( ITestContext.class );
-        suite = mock( ISuite.class );
-        when( testContext.getSuite() ).thenReturn( suite );
-    }
+	@BeforeClass
+	public static void initTestFixture() throws Exception {
+		testContext = mock(ITestContext.class);
+		suite = mock(ISuite.class);
+		when(testContext.getSuite()).thenReturn(suite);
+	}
 
-    @Before
-    public void setUp() {
-        initJadlerListeningOn( 8090 );
-    }
+	@Before
+	public void setUp() {
+		initJadlerListeningOn(8090);
+	}
 
-    @After
-    public void tearDown() {
-        closeJadler();
-    }
+	@After
+	public void tearDown() {
+		closeJadler();
+	}
 
-    @Test
-    public void test() {
-        prepareJadler();
-        FeaturesCrsParameter featuresValidCrsParameter = new FeaturesCrsParameter();
-        featuresValidCrsParameter.initCommonFixture( testContext );
+	@Test
+	public void test() {
+		prepareJadler();
+		FeaturesCrsParameter featuresValidCrsParameter = new FeaturesCrsParameter();
+		featuresValidCrsParameter.initCommonFixture(testContext);
 
-        JsonPath collection = prepareCollection();
-        featuresValidCrsParameter.verifyFeaturesCrsParameter( "flurstueck", collection, DEFAULT_CRS );
-    }
+		JsonPath collection = prepareCollection();
+		featuresValidCrsParameter.verifyFeaturesCrsParameter("flurstueck", collection, DEFAULT_CRS);
+	}
 
-    private static JsonPath prepareCollection() {
-        return new JsonPath( FeaturesCrsParameterTest.class.getResourceAsStream( "../../../../core/collections/collection-flurstueck.json" ) );
-    }
+	private static JsonPath prepareCollection() {
+		return new JsonPath(FeaturesCrsParameterTest.class
+			.getResourceAsStream("../../../../core/collections/collection-flurstueck.json"));
+	}
 
-    private void prepareJadler() {
-        InputStream flurstueckItems = getClass().getResourceAsStream( "../../../../core/collections/collectionItems-flurstueck.json" );
-        String expectedHeader = DEFAULT_CRS.getAsHeaderValue();
-        onRequest().havingPath( endsWith( "collections/flurstueck/items" ) ).respond().withBody( flurstueckItems ).withHeader( "Content-Crs",
-                                                                                                                               expectedHeader );
-    }
+	private void prepareJadler() {
+		InputStream flurstueckItems = getClass()
+			.getResourceAsStream("../../../../core/collections/collectionItems-flurstueck.json");
+		String expectedHeader = DEFAULT_CRS.getAsHeaderValue();
+		onRequest().havingPath(endsWith("collections/flurstueck/items"))
+			.respond()
+			.withBody(flurstueckItems)
+			.withHeader("Content-Crs", expectedHeader);
+	}
 
 }

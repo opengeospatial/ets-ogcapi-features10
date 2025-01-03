@@ -11,22 +11,13 @@
   <includeBaseDirectory>false</includeBaseDirectory>
   <dependencySets>
     <dependencySet>
-      <includes>
-        <include>com.sun.jersey:jersey-client</include>
-      </includes>
-      <outputDirectory>/</outputDirectory>
-      <unpack>false</unpack>
-      <scope>runtime</scope>
-      <useTransitiveDependencies>false</useTransitiveDependencies>
-    </dependencySet>
-    <dependencySet>
       <excludes>
         <exclude>org.opengis.cite.teamengine:teamengine-spi</exclude>
-        <exclude>com.sun.jersey:jersey-client</exclude>
-        <exclude>com.beust:jcommander</exclude>
-        <exclude>com.sun.jersey:jersey-core</exclude>
-        <exclude>javax.ws.rs:jsr311-api</exclude>
-        <exclude>org.testng:testng</exclude>
+        <exclude>*:jersey-client</exclude>
+        <exclude>*:jersey-server</exclude>
+        <exclude>*:jersey-common</exclude>
+        <exclude>*:jersey-hk2</exclude>
+        <exclude>jakarta.ws.rs:jakarta.ws.rs-api</exclude>
       </excludes>
       <outputDirectory>/</outputDirectory>
       <unpack>false</unpack>

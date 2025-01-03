@@ -17,22 +17,20 @@ import static org.junit.Assert.assertTrue;
  */
 public class XMLUtilsTest {
 
-    private static DocumentBuilder docBuilder;
+	private static DocumentBuilder docBuilder;
 
-    @BeforeClass
-    public static void setUpClass()
-                            throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware( true );
-        docBuilder = dbf.newDocumentBuilder();
-    }
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		dbf.setNamespaceAware(true);
+		docBuilder = dbf.newDocumentBuilder();
+	}
 
-    @Test
-    public void writeDocToString()
-                            throws SAXException, IOException {
-        Document doc = docBuilder.parse( this.getClass().getResourceAsStream( "../landingPage.xml" ) );
-        String content = XMLUtils.writeNodeToString( doc );
-        assertTrue( "String should start with '<LandingPage'", content.startsWith( "<LandingPage" ) );
-    }
+	@Test
+	public void writeDocToString() throws SAXException, IOException {
+		Document doc = docBuilder.parse(this.getClass().getResourceAsStream("../landingPage.xml"));
+		String content = XMLUtils.writeNodeToString(doc);
+		assertTrue("String should start with '<LandingPage'", content.startsWith("<LandingPage"));
+	}
 
 }
