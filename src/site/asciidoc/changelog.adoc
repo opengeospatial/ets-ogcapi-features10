@@ -1,5 +1,9 @@
 = Release Notes OGC API - Features
 
+== 1.9 (2025-01-03)
+
+- https://github.com/opengeospatial/ets-ogcapi-features10/issues/235[#235]: Migrate test suite to TEAM Engine 6 (Java 17)
+
 == 1.8 (2024-11-28)
 
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/227[#227]: Several CRS tests are returning a Nullpointer Exception
