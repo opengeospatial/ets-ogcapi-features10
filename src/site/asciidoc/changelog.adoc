@@ -2,6 +2,8 @@
 
 == 1.9 (2025-01-03)
 
+Attention: Java 17 and Tomcat 10.1 are required.
+
 - https://github.com/opengeospatial/ets-ogcapi-features10/issues/235[#235]: Migrate test suite to TEAM Engine 6 (Java 17)
 
 == 1.8 (2024-11-28)
