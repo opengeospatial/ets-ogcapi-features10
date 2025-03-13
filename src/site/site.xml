@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${project.name}" 
-  xmlns="http://maven.apache.org/DECORATION/1.7.0" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd">
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
 
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
     <version>2.0.1</version>
   </skin>
+
   <custom>
     <fluidoSkin>
       <sideBarEnabled>true</sideBarEnabled>
     </fluidoSkin>
   </custom>
 
-  <bannerLeft>
-    <name>${project.name}</name>
-    <src>./img/ogc-logo.png</src>
-    <href>http://cite.opengeospatial.org/</href>
+  <bannerLeft href="https://cite.opengeospatial.org/">
+    <image src="./img/ogc-logo.png"/>
   </bannerLeft>
+  <bannerRight name="${project.name}">
+  </bannerRight>
 
   <body>
     <links>
       <item name="Issues" href="https://github.com/opengeospatial/ets-ogcapi-features10/issues"/>
     </links>
-
     <menu name="Getting Started">
-      <item name="Overview" href="index.html" />
-      <item name="Release Notes" href="changelog.html" />
+      <item href="index.html" name="Overview"/>
+      <item href="relnotes.html" name="Release Notes"/>
     </menu>
-    <menu ref="reports" />
+    <menu ref="reports"/>
   </body>
-</project>
+</site>
