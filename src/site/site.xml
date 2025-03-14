@@ -26,7 +26,7 @@
     </links>
     <menu name="Getting Started">
       <item href="index.html" name="Overview"/>
-      <item href="relnotes.html" name="Release Notes"/>
+      <item href="changelog.html" name="Release Notes"/>
     </menu>
     <menu ref="reports"/>
   </body>
