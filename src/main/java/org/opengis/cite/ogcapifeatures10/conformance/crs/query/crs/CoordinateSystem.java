@@ -83,7 +83,7 @@ public class CoordinateSystem {
 			return String.format("EPSG:%s", srid);
 		}
 		throw new UnknownCrsException(String.format(
-				"CRS %s is not supported, only OGC URNs (starting with urn:ogc:def:crs:epsg) and OGC http-URIs (starting with http://www.opengis.net/def/crs/epsg) with EPSG auhority are supported.",
+				"CRS %s is not supported, only OGC URNs (starting with urn:ogc:def:crs:epsg) and OGC http-URIs (starting with http://www.opengis.net/def/crs/EPSG) with EPSG auhority are supported.",
 				code));
 	}
 
