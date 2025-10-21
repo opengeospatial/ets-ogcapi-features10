@@ -10,6 +10,7 @@ import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlFo
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseSpatialExtent;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
@@ -75,12 +76,14 @@ public class FeaturesBBox extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 14: /ats/core/fc-bbox-definition
+	 * Abstract Test 14: /ats/core/fc-bbox-definition (v1.0.0)
+	 * Abstract Test 18: /conf/core/fc-bbox-response (v1.0.1)
 	 * Test Purpose: Validate that the bounding box query parameters are constructed correctly.
 	 * Requirement: /req/core/fc-bbox-definition
 	 *
 	 * Test Method: Verify that the bbox query parameter complies with the following definition (using an OpenAPI Specification 3.0 fragment):
 	 *
+	 * v1.0.0:
 	 * name: bbox
 	 * in: query
 	 * required: false
@@ -93,15 +96,39 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * style: form
 	 * explode: false
 	 *
-	 * Use a bounding box with four numbers in all requests:
+	 * v1.0.1
+	 * name: bbox
+	 * in: query
+	 * required: false
+	 * schema:
+	 *   type: array
+	 *   oneOf:
+	 *   - minItems: 4
+	 *   - maxItems: 4
+	 *   - minItems: 6
+	 *   - maxItems: 6
+	 *   items:
+	 *     type: number
+	 * style: form
+	 * explode: false
+	 *
+	 * Use a bounding box with four numbers in all requests, if the collection has spatial geometries in 2D:
 	 *  * Lower left corner, WGS 84 longitude
 	 *  * Lower left corner, WGS 84 latitude
 	 *  * Upper right corner, WGS 84 longitude
 	 *  * Upper right corner, WGS 84 latitude
+	 *
+	 *  Use a bounding box with six numbers in all requests, if the collection has spatial geometries in 3D:
+	 *  * Lower left corner, WGS 84 longitude
+	 *  * Lower left corner, WGS 84 latitude
+	 *  * Minimum value, WGS 84 ellipsoidal height
+	 *  * Upper right corner, WGS 84 longitude
+	 *  * Upper right corner, WGS 84 latitude
+	 *  * Maximum value, WGS 84 ellipsoidal height
 	 * </pre>
 	 * @param testPoint the testPoint under test, never <code>null</code>
 	 */
-	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 14: (Requirement /req/core/fc-bbox-definition)",
+	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 14/18: (Requirement /req/core/fc-bbox-definition)",
 			dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void boundingBoxParameterDefinition(TestPoint testPoint) {
 		Parameter bbox = retrieveParameterByName(testPoint.getPath(), getApiModel(), "bbox");
@@ -122,13 +149,18 @@ public class FeaturesBBox extends AbstractFeatures {
 		assertNotNull(schema, "Expected schema for bbox parameter for collections path '" + testPoint.getPath());
 		assertEquals(schema.getType(), "array", String.format(msg, "schema -> type", "array", schema.getType()));
 
-		assertNotNull(schema.getMinItems(), String.format(msg, "schema -> minItems", "null", schema.getMinItems()));
-		assertEquals(schema.getMinItems().intValue(), 4,
-				String.format(msg, "schema -> minItems", "4", schema.getMinItems()));
-
-		assertNotNull(schema.getMaxItems(), String.format(msg, "schema -> maxItems", "null", schema.getMaxItems()));
-		assertEquals(schema.getMaxItems().intValue(), 6,
-				String.format(msg, "schema -> maxItems", "6", schema.getMaxItems()));
+		// v1.0.1 bbox contains oneOf element
+		List<Schema> oneOfSchemas = schema.getOneOfSchemas();
+		if (oneOfSchemas != null && oneOfSchemas.size() > 0) {
+			for (Schema oneOfSchema : oneOfSchemas) {
+				int minItems = getMinItems(oneOfSchema, msg);
+				checkMaxItems(oneOfSchema, msg, minItems);
+			}
+		}
+		else {
+			checkMinItems(schema, msg, 4);
+			checkMaxItems(schema, msg, 6);
+		}
 
 		String itemsType = schema.getItemsSchema().getType();
 		assertEquals(itemsType, "number", String.format(msg, "schema -> items -> type", "number", itemsType));
@@ -136,24 +168,25 @@ public class FeaturesBBox extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 13: /ats/core/fc-op
+	 * Abstract Test 13: /ats/core/fc-op (v1.0.0)
+	 * Abstract Test 17: /conf/core/fc-op (v1.0.1)
 	 * Test Purpose: Validate that features can be identified and extracted from a Collection using query parameters.
 	 * Requirement: /req/core/fc-op
 	 *
 	 * Test Method
 	 *   1. For every feature collection identified in Collections, issue an HTTP GET request to the URL /collections/{collectionId}/items where {collectionId} is the id property for a Collection described in the Collections content.
 	 *   2. Validate that a document was returned with a status code 200.
-	 *   3. Validate the contents of the returned document using test /ats/core/fc-response.
+	 *   3. Validate the contents of the returned document using test /ats/core/fc-response (v1.0.0), /conf/core/fc-response (v1.0.1).
 	 *
 	 * Repeat these tests using the following parameter tests:
 	 * Bounding Box:
-	 *   * Parameter /ats/core/fc-bbox-definition
-	 *   * Response /ats/core/fc-bbox-response
+	 *   * Parameter /ats/core/fc-bbox-definition (v1.0.0), /conf/core/fc-bbox-definition (v1.0.1)
+	 *   * Response /ats/core/fc-bbox-response (v1.0.0), /conf/core/fc-bbox-response (v1.0.1)
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 13: (Requirement /req/core/fc-op)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 13/17: (Requirement /req/core/fc-op)",
 			dataProvider = "collectionItemUrisWithBboxes", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxOperation(Map<String, Object> collection, BBox bbox) {
 		String collectionId = (String) collection.get("id");
@@ -176,20 +209,21 @@ public class FeaturesBBox extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 15: /ats/core/fc-bbox-response
+	 * Abstract Test 15: /ats/core/fc-bbox-response (v1.0.0)
+	 * Abstract Test 19: /conf/core/fc-bbox-response (v1.0.1)
 	 * Test Purpose: Validate that the bounding box query parameters are processed correctly.
 	 * Requirement: /req/core/fc-bbox-response
 	 *
 	 * Test Method
 	 *   1. Verify that only features that have a spatial geometry that intersects the bounding box are returned as part of the result set.
 	 *   2. Verify that the bbox parameter matched all features in the collection that were not associated with a spatial geometry (this is only applicable for datasets that include features without a spatial geometry).
-	 *   3.  Verify that the coordinate reference system of the geometries is WGS 84 longitude/latitude ("http://www.opengis.net/def/crs/OGC/1.3/CRS84" or "http://www.opengis.net/def/crs/OGC/0/CRS84h") since no parameter bbox-crs was specified in the request.
+	 *   3. Verify that the coordinate reference system of the geometries is WGS 84 longitude/latitude ("http://www.opengis.net/def/crs/OGC/1.3/CRS84" or "http://www.opengis.net/def/crs/OGC/0/CRS84h") since no parameter bbox-crs was specified in the request.
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 * @throws org.locationtech.jts.io.ParseException If the JSON cannot be parsed
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15: (Requirement /req/core/fc-bbox-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 15/19: (Requirement /req/core/fc-bbox-response)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse(Map<String, Object> collection, BBox bbox)
@@ -207,13 +241,13 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * Abstract Test 2, Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 2: /ats/core/crs84
-	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+	 * Abstract Test 2: /ats/core/crs84 (v1.0.0), /conf/core/crs84 (v1.0.1)
+	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 or CRS84h coordinate reference system unless otherwise requested by the client.
 	 * Requirement: /req/core/crs84
 	 *
 	 * Test Method
-	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
-	 *  2. Validate retrieved spatial data using the CRS84 reference system.
+	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 or CRS84h reference system.
+	 *  2. Validate retrieved spatial data using the CRS84 reference system (for 2D geometries) or the CRS84h reference system (for 3D geometries).
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
@@ -229,10 +263,11 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 1
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -242,7 +277,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 1 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse_TypeProperty(Map<String, Object> collection, BBox bbox) {
@@ -251,10 +286,11 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 2
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 2
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -264,7 +300,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 2 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse_FeaturesProperty(Map<String, Object> collection, BBox bbox) {
@@ -273,19 +309,23 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 4 (Abstract Test 23)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 4 (Abstract Test
+	 * 23/27)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links
+	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links (v1.0.0),
+	 *   /conf/core/fc-links (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 23: /ats/core/fc-links
+	 * Abstract Test 23 (v1.0.0): /ats/core/fc-links
+	 * Abstract Test 27 (v1.0.1): /conf/core/fc-links
 	 * Test Purpose: Validate that the required links are included in the Collections document.
 	 * Requirement: /req/core/fc-links, /req/core/fc-rel-type
 	 *
@@ -299,7 +339,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23/27 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse_Links(Map<String, Object> collection, BBox bbox) {
@@ -308,10 +348,12 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 5 (Abstract Test 24)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 5 (Abstract Test
+	 * 24/28)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -320,7 +362,8 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 24: /ats/core/fc-timeStamp
+	 * Abstract Test 24 (v1.0.0): /ats/core/fc-timeStamp
+	 * Abstract Test 28 (v1.0.1): /conf/core/fc-timeStamp
 	 * Test Purpose: Validate the timeStamp parameter returned with a Features response
 	 * Requirement: /req/core/fc-timeStamp
 	 *
@@ -329,7 +372,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24/28 (Requirement /req/core/fc-timeStamp)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse_TimeStamp(Map<String, Object> collection, BBox bbox) {
@@ -338,10 +381,12 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 6 (Abstract Test 25)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 6 (Abstract Test
+	 * 25/29)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -350,7 +395,8 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 25: /ats/core/fc-numberMatched
+	 * Abstract Test 25 (v1.0.0): /ats/core/fc-numberMatched
+	 * Abstract Test 29 (v1.0.1): /conf/core/fc-numberMatched
 	 * Test Purpose: Validate the numberMatched parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberMatched
 	 *
@@ -360,7 +406,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25/29 (Requirement /req/core/fc-numberMatched)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesWithBoundingBoxResponse_NumberMatched(Map<String, Object> collection, BBox bbox)
@@ -370,19 +416,23 @@ public class FeaturesBBox extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 7 (Abstract Test 26)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 7 (Abstract Test
+	 * 26/30)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned
+	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned (v1.0.0),
+	 *   /conf/core/fc-numberReturned (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 26: /ats/core/fc-numberReturned
+	 * Abstract Test 26 (v1.0.0): /ats/core/fc-numberReturned
+	 * Abstract Test 30 (v1.0.1): /conf/core/fc-numberReturned
 	 * Test Purpose: Validate the numberReturned parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberReturned
 	 *
@@ -391,7 +441,7 @@ public class FeaturesBBox extends AbstractFeatures {
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param bbox bbox parameter to request, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - BoundingBox, Abstract Test 22/26, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26/30 (Requirement /req/core/fc-numberReturned)",
 			dataProvider = "collectionItemUrisWithBboxes",
 			dependsOnMethods = "validateFeaturesWithBoundingBoxOperation", alwaysRun = true)
 	public void validateFeaturesResponse_NumberReturned(Map<String, Object> collection, BBox bbox) {
@@ -401,6 +451,26 @@ public class FeaturesBBox extends AbstractFeatures {
 
 	private CollectionIdWithBboxKey asKey(String collectionId, BBox bBox) {
 		return new CollectionIdWithBboxKey(collectionId, bBox);
+	}
+
+	private void checkMaxItems(Schema schema, String msg, int expectedValue) {
+		assertTrue(expectedValue == 4 || expectedValue == 6);
+		assertNotNull(schema.getMaxItems(), String.format(msg, "schema -> maxItems", "null", schema.getMaxItems()));
+		assertEquals(schema.getMaxItems().intValue(), expectedValue,
+				String.format(msg, "schema -> maxItems", "" + expectedValue, schema.getMaxItems()));
+
+	}
+
+	private void checkMinItems(Schema schema, String msg, int expectedValue) {
+		assertTrue(expectedValue == 4 || expectedValue == 6);
+		assertNotNull(schema.getMinItems(), String.format(msg, "schema -> minItems", "null", schema.getMinItems()));
+		assertEquals(schema.getMinItems().intValue(), expectedValue,
+				String.format(msg, "schema -> minItems", "" + expectedValue, schema.getMinItems()));
+	}
+
+	private int getMinItems(Schema schema, String msg) {
+		assertNotNull(schema.getMinItems(), String.format(msg, "schema -> minItems", "null", schema.getMinItems()));
+		return schema.getMinItems().intValue();
 	}
 
 	private class CollectionIdWithBboxKey extends CollectionResponseKey {

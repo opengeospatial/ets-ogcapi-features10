@@ -94,20 +94,21 @@ public class Feature extends CommonDataFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 27: /ats/core/f-op
+	 * Abstract Test 27: /ats/core/f-op (v1.0.0)
+	 * Abstract Test 31: /conf/core/f-op (v1.0.1)
 	 * Test Purpose: Validate that a feature can be retrieved from the expected location.
 	 * Requirement: /req/core/f-op
 	 *
 	 * Test Method
 	 *  1. For a sufficiently large subset of all features in a feature collection (path /collections/{collectionId}), issue an HTTP GET request to the URL /collections/{collectionId}/items/{featureId} where {collectionId} is the id property for the collection and {featureId} is the id property of the feature.
 	 *  2. Validate that a feature was returned with a status code 200
-	 *  3. Validate the contents of the returned feature using test /ats/core/f-success.
+	 *  3. Validate the contents of the returned feature using test /ats/core/f-success (v1.0.0), /conf/core/f-success (v1.0.1).
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param featureId the featureId to request, may be <code>null</code> (test will be
 	 * skipped)
 	 */
-	@Test(description = "Implements A.2.8. Feature, Abstract Test 27 (Requirement /req/core/f-op)",
+	@Test(description = "Implements A.2.8. Feature, Abstract Test 27/31 (Requirement /req/core/f-op)",
 			dataProvider = "collectionFeatureId", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void featureOperation(Map<String, Object> collection, String featureId) {
 		String collectionId = (String) collection.get("id");
@@ -131,17 +132,19 @@ public class Feature extends CommonDataFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 28: /ats/core/f-success
+	 * Abstract Test 28: /ats/core/f-success (v1.0.0)
+	 * Abstract Test32: /ats/core/f-success (v1.0.1)
 	 * Test Purpose: Validate that the Feature complies with the required structure and contents.
 	 * Requirement: /req/core/f-success
 	 *
 	 * Test Method
-	 *  1. Validate that the Feature includes all required link properties using /ats/core/f-links
+	 *  1. Validate that the Feature includes all required link properties using /ats/core/f-links (v1.0.0), /conf/core/f-links (v1.0.1)
 	 *  2. Validate the Feature for all supported media types using the resources and tests identified in Schema and Tests for Features
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 29: /ats/core/f-links
+	 * Abstract Test 29: /ats/core/f-links (v1.0.0)
+	 * Abstract Test 33: /conf/core/f-links (v1.0.1)
 	 * Test Purpose: Validate that the required links are included in a Feature.
 	 * Requirement: /req/core/f-links
 	 *
@@ -156,7 +159,7 @@ public class Feature extends CommonDataFixture {
 	 * @param featureId the featureId to request, may be <code>null</code> (test will be
 	 * skipped)
 	 */
-	@Test(description = "Implements A.2.8. Feature, Abstract Test 28 + 29 (Requirements /req/core/f-success, /req/core/f-links)",
+	@Test(description = "Implements A.2.8. Feature, Abstract Test 28/32 + 29/33 (Requirements /req/core/f-success, /req/core/f-links)",
 			dataProvider = "collectionFeatureId", dependsOnMethods = "featureOperation", alwaysRun = true)
 	public void validateFeatureResponse(Map<String, Object> collection, String featureId) {
 		String collectionId = (String) collection.get("id");

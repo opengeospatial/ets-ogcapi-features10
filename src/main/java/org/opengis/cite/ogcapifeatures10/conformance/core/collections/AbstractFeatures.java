@@ -98,10 +98,11 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 1
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -122,10 +123,11 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 2
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 2
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -145,19 +147,23 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 4 (Abstract Test 23)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 4 (Abstract Test
+	 * 23/27)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links
+	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links (v1.0.0),
+	 *   /conf/core/fc-links (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 23: /ats/core/fc-links
+	 * Abstract Test 23 (v1.0.0): /ats/core/fc-links
+	 * Abstract Test 27 (v1.0.1): /conf/core/fc-links
 	 * Test Purpose: Validate that the required links are included in the Collections document.
 	 * Requirement: /req/core/fc-links, /req/core/fc-rel-type
 	 *
@@ -205,10 +211,12 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 5 (Abstract Test 24)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 5 (Abstract Test
+	 * 24/28)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -217,7 +225,8 @@ public class AbstractFeatures extends CommonDataFixture {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 24: /ats/core/fc-timeStamp
+	 * Abstract Test 24 (v1.0.0): /ats/core/fc-timeStamp
+	 * Abstract Test 28 (v1.0.1): /conf/core/fc-timeStamp
 	 * Test Purpose: Validate the timeStamp parameter returned with a Features response
 	 * Requirement: /req/core/fc-timeStamp
 	 *
@@ -237,10 +246,12 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 6 (Abstract Test 25)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 6 (Abstract Test
+	 * 25/29)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -249,7 +260,8 @@ public class AbstractFeatures extends CommonDataFixture {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 25: /ats/core/fc-numberMatched
+	 * Abstract Test 25 (v1.0.0): /ats/core/fc-numberMatched
+	 * Abstract Test 29 (v1.0.1): /conf/core/fc-numberMatched
 	 * Test Purpose: Validate the numberMatched parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberMatched
 	 *
@@ -269,19 +281,23 @@ public class AbstractFeatures extends CommonDataFixture {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 7 (Abstract Test 26)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 7 (Abstract Test
+	 * 26/30)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned
+	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned (v1.0.0),
+	 *   /conf/core/fc-numberReturned (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 26: /ats/core/fc-numberReturned
+	 * Abstract Test 26 (v1.0.0): /ats/core/fc-numberReturned
+	 * Abstract Test 30 (v1.0.1): /conf/core/fc-numberReturned
 	 * Test Purpose: Validate the numberReturned parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberReturned
 	 *
@@ -303,13 +319,13 @@ public class AbstractFeatures extends CommonDataFixture {
 	 * Abstract Test 2, Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 2: /ats/core/crs84
-	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+	 * Abstract Test 2: /ats/core/crs84 (v1.0.0), /conf/core/crs84 (v1.0.1)
+	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 or CRS84h coordinate reference system unless otherwise requested by the client.
 	 * Requirement: /req/core/crs84
 	 *
 	 * Test Method
-	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
-	 *  2. Validate retrieved spatial data using the CRS84 reference system.
+	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 or CRS84h reference system.
+	 *  2. Validate retrieved spatial data using the CRS84 reference system (for 2D geometries) or the CRS84h reference system (for 3D geometries).
 	 * </pre>
 	 * @throws ParseException if the geometry could not be parsed
 	 * @param collection the collection under test, never <code>null</code>

@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -82,10 +83,24 @@ public class JsonUtils {
 		Object extent = collection.get("extent");
 		if (extent == null || !(extent instanceof Map))
 			return null;
-		Object spatial = ((Map<String, Object>) extent).get("temporal");
-		if (spatial == null || !(spatial instanceof List))
-			return null;
-		List<Object> coords = (List<Object>) spatial;
+		Object temporal = ((Map<String, Object>) extent).get("temporal");
+		List<Object> coords = null;
+		if (temporal == null || !(temporal instanceof List))
+			// v1.0.1, there is an child element named interval
+			if (temporal instanceof HashMap<?, ?>) {
+				Map<String, Object> map = (Map<String, Object>) temporal;
+				Object interval = map.get("interval");
+				coords = (List<Object>) interval;
+				if (coords.size() > 0 && coords.size() < 2) {
+					coords = (List<Object>) coords.get(0);
+				}
+			}
+			else {
+				return null;
+			}
+		else {
+			coords = (List<Object>) temporal;
+		}
 		if (coords.size() == 2) {
 			ZonedDateTime begin = parseAsDate((String) coords.get(0));
 			ZonedDateTime end = parseAsDate((String) coords.get(1));
@@ -265,6 +280,32 @@ public class JsonUtils {
 	}
 
 	/**
+	 * Parses the links of supported media types without 'href'property.
+	 * @param links list of links to search in, never <code>null</code>
+	 * @param mediaTypesToSupport List of supported media types, never <code>null</code>
+	 * @return the links without 'href'
+	 */
+	public static List<String> findSupportedEncodingLinksWithoutRel(List<Map<String, Object>> links,
+			List<String> mediaTypesToSupport) {
+		List<String> supportedEncodingLinksWithoutRel = new ArrayList<>();
+		for (Map<String, Object> link : links) {
+			String type = (String) link.get("type");
+			if (mediaTypesToSupport.contains(type)) {
+				String href = (String) link.get("href");
+				if (href != null) {
+					if (href.isEmpty()) {
+						supportedEncodingLinksWithoutRel.add(href);
+					}
+				}
+				else {
+					supportedEncodingLinksWithoutRel.add(href);
+				}
+			}
+		}
+		return supportedEncodingLinksWithoutRel;
+	}
+
+	/**
 	 * Parses the link with 'rel=self'.
 	 * @param links list of links to search in, never <code>null</code>
 	 * @param expectedRel the expected value of the property 'rel', never
@@ -283,6 +324,25 @@ public class JsonUtils {
 	}
 
 	/**
+	 * Parses the link with 'rel'=expectedRel.
+	 * @param links list of links to search in, never <code>null</code>
+	 * @param expectedRel the expected value of the property 'rel', never
+	 * <code>null</code>
+	 * @return the link to itself or <code>null</code> if no such link exists
+	 */
+	public static List<Map<String, Object>> findLinksByRel(List<Map<String, Object>> links, String expectedRel) {
+		if (links == null)
+			return null;
+		List<Map<String, Object>> resultLinks = new ArrayList<>();
+		for (Map<String, Object> link : links) {
+			Object rel = link.get("rel");
+			if (expectedRel.equals(rel))
+				resultLinks.add(link);
+		}
+		return resultLinks;
+	}
+
+	/**
 	 * Checks if the passed link contains 'rel' and 'type' properties.
 	 * @param link to check, never <code>null</code>
 	 * @return <code>true</code> if the link contains 'rel' and 'type' properties,
@@ -291,6 +351,20 @@ public class JsonUtils {
 	public static boolean linkIncludesRelAndType(Map<String, Object> link) {
 		Object rel = link.get("rel");
 		Object type = link.get("type");
+		if (rel != null && type != null)
+			return true;
+		return false;
+	}
+
+	/**
+	 * Checks if the passed link contains 'rel' and 'href' properties.
+	 * @param link to check, never <code>null</code>
+	 * @return <code>true</code> if the link contains 'rel' and 'href' properties,
+	 * <code>false</code> otherwise
+	 */
+	public static boolean linkIncludesRelAndHref(Map<String, Object> link) {
+		Object rel = link.get("rel");
+		Object type = link.get("href");
 		if (rel != null && type != null)
 			return true;
 		return false;
@@ -377,6 +451,20 @@ public class JsonUtils {
 		if (value == null)
 			return Collections.emptyList();
 		return jsonPath.getList(propertyName);
+	}
+
+	/**
+	 * Retrieves the property values as list.
+	 * @param propertyName name of the property, never <code>null</code>
+	 * @param json the json map to retrieve properties from, never <code>null</code>
+	 * <code>null</code>
+	 * @return the property values as list, may be empty but never <code>null</code>
+	 */
+	public static List<Map<String, Object>> parseAsListOfMaps(String propertyName, Map<String, Object> json) {
+		Object value = json.get(propertyName);
+		if (value == null)
+			return Collections.emptyList();
+		return (List<Map<String, Object>>) value;
 	}
 
 	/**
