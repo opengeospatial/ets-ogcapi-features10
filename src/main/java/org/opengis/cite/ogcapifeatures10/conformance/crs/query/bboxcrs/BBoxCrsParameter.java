@@ -26,11 +26,15 @@ import io.restassured.response.Response;
  * <pre>
  * Abstract Test 8: /conf/crs/bbox-crs-parameter
  * Test Purpose: Verify that the parameter bbox-crs has been implemented correctly
- * Requirement: /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action
+ * Requirement: /req/crs/fc-bbox-crs-definition, /req/crs/fc-bbox-crs-action
  *
  * Test Method
  * For every CRS identifier advertized by the Web API that is known to the test engine and for which the test engine can convert geometries between the CRS and the default CRS of the Web API ("known CRS") execute the following test. Skip the test for unknown CRSs.
- *  1. For each spatial feature collection collectionId and every GML or GeoJSON feature representation supported by the Web API, send a request with the parameters bbox and bbox-crs to /collections/{collectionId}/items for every known CRS. Use a bbox value in the spatial extent of the collection, converted to the known CRS. Send the same request, but with no bbox-crs parameter and a bbox value in the default CRS. Do not include a crs parameter in the requests. Verify that the responses include the same features.
+ *  1. For each spatial feature collection collectionId and every GML or GeoJSON feature representation supported by the Web API, send a request with the parameters bbox and bbox-crs to /collections/{collectionId}/items for every known CRS. Use a bbox value in the spatial extent of the collection, converted to the known CRS. Verify that the responses include the same features.
+ * 
+ * Note
+ * An earlier version of the test requested that the responses with different CRSs include the same features. However, an axis-aligned rectangle in one CRS may be a completely different shape in the other CRS, so the test can only verify that the request results are correct for each CRS.
+ *
  * </pre>
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
@@ -103,7 +107,7 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	 * @param collection the /collection object, never <code>null</code>
 	 * @param defaultCrs the defaultCrs of the collection, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)",
+	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/fc-bbox-crs-action)",
 			dataProvider = "collectionDefaultCrs", dependsOnGroups = "crs-conformance", priority = 1)
 	public void verifyBboxCrsParameterWithDefaultCrs(String collectionId, JsonPath collection,
 			CoordinateSystem defaultCrs) {
@@ -142,7 +146,7 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 	 * @param crs the crs to test, never <code>null</code>
 	 * @param defaultCrs the defaultCrs of the collection, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/bbox-crs-action)",
+	@Test(description = "Implements A.2.2 Query, Parameter bbox-crs, Abstract Test 8 (Requirement /req/crs/fc-bbox-crs-definition, /req/crs/fc-bbox-crs-action)",
 			dataProvider = "collectionCrsAndDefaultCrs", dependsOnGroups = "crs-conformance",
 			dependsOnMethods = "verifyBboxCrsParameterWithDefaultCrs", priority = 1)
 	public void verifyBboxCrsParameter(String collectionId, JsonPath collection, CoordinateSystem crs,
