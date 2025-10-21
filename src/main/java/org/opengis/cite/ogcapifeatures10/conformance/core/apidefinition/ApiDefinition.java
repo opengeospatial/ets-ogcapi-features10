@@ -95,20 +95,6 @@ public class ApiDefinition extends CommonFixture {
 		assertTrue(apiModel.isValid(), createValidationMsg(apiModel));
 
 		testContext.getSuite().setAttribute(API_MODEL.getName(), apiModel);
-
-		// OpenApi3 apiModel;
-		// try {
-		// apiModel = parser.parse(new String (Files.readAllBytes(new
-		// File("C:\\Users\\bpros\\Documents\\dev\\cite\\api.yaml").toPath()),Charset.forName("UTF-8"))
-		// , new URL("file:///C:\\Users\\bpros\\Documents\\dev\\cite\\api.json"), true);
-		//
-		// assertTrue(apiModel.isValid(), createValidationMsg(apiModel));
-		//
-		// testContext.getSuite().setAttribute(API_MODEL.getName(), apiModel);
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 	}
 
 	private String parseApiUrl(JsonPath jsonPath) {
