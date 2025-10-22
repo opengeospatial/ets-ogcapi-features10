@@ -82,8 +82,9 @@ public class FeaturesLimit extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 16: /ats/core/fc-limit-definition
-	 * Test Purpose: Validate that the bounding box query parameters are constructed corrrectly.
+	 * Abstract Test 16: /ats/core/fc-limit-definition (v1.0.0)
+	 * Abstract Test 20 : /conf/core/fc-limit-definition (v1.0.1)
+	 * Test Purpose: Validate that the bounding box query parameters are constructed correctly.
 	 * Requirement: /req/core/fc-limit-definition
 	 *
 	 * Test Method: Verify that the limit query parameter complies with the following definition (using an OpenAPI Specification 3.0 fragment):
@@ -100,7 +101,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * </pre>
 	 * @param testPoint the testPoint under test, never <code>null</code>
 	 */
-	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 16: (Requirement /req/core/fc-limit-definition)",
+	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 16/20: (Requirement /req/core/fc-limit-definition)",
 			dataProvider = "collectionPaths", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void limitParameterDefinition(TestPoint testPoint) {
 		Parameter limit = retrieveParameterByName(testPoint.getPath(), getApiModel(), "limit");
@@ -124,7 +125,8 @@ public class FeaturesLimit extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 13: /ats/core/fc-op
+	 * Abstract Test 13: /ats/core/fc-op (v1.0.0)
+	 * Abstract Test 17: /conf/core/fc-op (v1.0.1)
 	 * Test Purpose: Validate that features can be identified and extracted from a Collection using query parameters.
 	 * Requirement: /req/core/fc-op
 	 *
@@ -135,14 +137,14 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *
 	 * Repeat these tests using the following parameter tests:
 	 * Limit:
-	 *   * Parameter /ats/core/fc-limit-definition
-	 *   * Response /ats/core/fc-limit-response
+	 *   * Parameter /ats/core/fc-limit-definition (v1.0.0), /conf/core/fc-limit-definition (v1.0.1)
+	 *   * Response /ats/core/fc-limit-response (v1.0.0), /conf/core/fc-limit-response (v1.0.1)
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 13: (Requirement /req/core/fc-op)",
+	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 13/17: (Requirement /req/core/fc-op)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void validateFeaturesWithLimitOperation(Map<String, Object> collection, int limit, int max) {
 		String collectionId = (String) collection.get("id");
@@ -165,7 +167,8 @@ public class FeaturesLimit extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 17: /ats/core/fc-limit-response
+	 * Abstract Test 17: /ats/core/fc-limit-response (v1.0.0)
+	 * Abstract Test 21: /conf/core/fc-limit-response (v1.0.1)
 	 * Test Purpose: Validate that the limit query parameters are processed correctly.
 	 * Requirement: /req/core/fc-limit-response
 	 *
@@ -173,12 +176,13 @@ public class FeaturesLimit extends AbstractFeatures {
 	 *  1. Count the Features which are on the first level of the collection. Any nested objects contained within the explicitly requested items are not be counted.
 	 *  2. Verify that this count is not greater than the value specified by the limit parameter.
 	 *  3. If the API definition specifies a maximum value for limit parameter, verify that the count does not exceed this maximum value.
+	 *  4. If the API definition specifies a maximum value for limit parameter, submit another request with a limit value that is greater than the maximum and verify that the response is not an error and that the count does not exceed this maximum value.
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 17: (Requirement /req/core/fc-limit-response)",
+	@Test(description = "A.2.7. Features {root}/collections/{collectionId}/items - Limit, Abstract Test 17/21: (Requirement /req/core/fc-limit-response)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse(Map<String, Object> collection, int limit, int max) {
@@ -192,19 +196,34 @@ public class FeaturesLimit extends AbstractFeatures {
 		int expectedLimit = limit > max ? max : limit;
 		assertTrue(numberOfFeatures <= expectedLimit, "Number of features for collection with name " + collectionId
 				+ " is unexpected (was " + numberOfFeatures + "), expected are " + limit + " or less");
+		// Test Method 4:
+		String getFeaturesUrl = findFeaturesUrlForGeoJson(rootUri, collection);
+		if (getFeaturesUrl == null || getFeaturesUrl.isEmpty())
+			throw new SkipException("Could not find url for collection with id " + collectionId
+					+ " supporting GeoJson (type " + GEOJSON_MIME_TYPE + ")");
+		Response responseWithLimitGreaterMax = init().baseUri(getFeaturesUrl)
+			.accept(GEOJSON_MIME_TYPE)
+			.param("limit", limit++)
+			.when()
+			.request(GET);
+		responseWithLimitGreaterMax.then().statusCode(200);
+		JsonPath jsonPatheWithLimitGreaterMax = JsonPath.from(responseWithLimitGreaterMax.asInputStream());
+		numberOfFeatures = parseAsList("features", jsonPatheWithLimitGreaterMax).size();
+		assertTrue(numberOfFeatures <= expectedLimit, "Number of features for collection with name " + collectionId
+				+ " is unexpected (was " + numberOfFeatures + "), expected are " + limit + " or less");
 	}
 
 	/**
 	 * Abstract Test 2, Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 2: /ats/core/crs84
-	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+	 * Abstract Test 2: /ats/core/crs84 (v1.0.0), /conf/core/crs84 (v1.0.1)
+	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 or CRS84h coordinate reference system unless otherwise requested by the client.
 	 * Requirement: /req/core/crs84
 	 *
 	 * Test Method
-	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
-	 *  2. Validate retrieved spatial data using the CRS84 reference system.
+	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 or CRS84h reference system.
+	 *  2. Validate retrieved spatial data using the CRS84 reference system (for 2D geometries) or the CRS84h reference system (for 3D geometries).
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param limit limit parameter to request, never <code>null</code>
@@ -221,10 +240,11 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 1
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -235,7 +255,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 1 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse_TypeProperty(Map<String, Object> collection, int limit, int max) {
@@ -244,11 +264,11 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 2
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 2
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
-	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
@@ -258,7 +278,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 2 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse_FeaturesProperty(Map<String, Object> collection, int limit, int max) {
@@ -267,19 +287,23 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 4 (Abstract Test 23)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 4 (Abstract Test
+	 * 23/27)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links
+	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links (v1.0.0),
+	 *   /conf/core/fc-links (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 23: /ats/core/fc-links
+	 * Abstract Test 23 (v1.0.0): /ats/core/fc-links
+	 * Abstract Test 27 (v1.0.1): /conf/core/fc-links
 	 * Test Purpose: Validate that the required links are included in the Collections document.
 	 * Requirement: /req/core/fc-links, /req/core/fc-rel-type
 	 *
@@ -294,7 +318,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23/27 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse_Links(Map<String, Object> collection, int limit, int max) {
@@ -303,10 +327,12 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 5 (Abstract Test 24)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 5 (Abstract Test
+	 * 24/28)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -315,7 +341,8 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 24: /ats/core/fc-timeStamp
+	 * Abstract Test 24 (v1.0.0): /ats/core/fc-timeStamp
+	 * Abstract Test 28 (v1.0.1): /conf/core/fc-timeStamp
 	 * Test Purpose: Validate the timeStamp parameter returned with a Features response
 	 * Requirement: /req/core/fc-timeStamp
 	 *
@@ -325,7 +352,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24/28 (Requirement /req/core/fc-timeStamp)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse_TimeStamp(Map<String, Object> collection, int limit, int max) {
@@ -334,10 +361,12 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 6 (Abstract Test 25)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 6 (Abstract Test
+	 * 25/29)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -346,7 +375,8 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 25: /ats/core/fc-numberMatched
+	 * Abstract Test 25 (v1.0.0): /ats/core/fc-numberMatched
+	 * Abstract Test 29 (v1.0.1): /conf/core/fc-numberMatched
 	 * Test Purpose: Validate the numberMatched parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberMatched
 	 *
@@ -357,7 +387,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param max max limit defined by the service, never <code>null</code>
 	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25/29 (Requirement /req/core/fc-numberMatched)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesWithLimitResponse_NumberMatched(Map<String, Object> collection, int limit, int max)
@@ -367,19 +397,23 @@ public class FeaturesLimit extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 7 (Abstract Test 26)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 7 (Abstract Test
+	 * 26/30)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned
+	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned (v1.0.0),
+	 *   /conf/core/fc-numberReturned (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 26: /ats/core/fc-numberReturned
+	 * Abstract Test 26 (v1.0.0): /ats/core/fc-numberReturned
+	 * Abstract Test 30 (v1.0.1): /conf/core/fc-numberReturned
 	 * Test Purpose: Validate the numberReturned parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberReturned
 	 *
@@ -389,7 +423,7 @@ public class FeaturesLimit extends AbstractFeatures {
 	 * @param limit limit parameter to request, never <code>null</code>
 	 * @param max max limit defined by the service, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items, Limit, Abstract Test 22/26, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26/30 (Requirement /req/core/fc-numberReturned)",
 			dataProvider = "collectionItemUrisWithLimits", dependsOnMethods = "validateFeaturesWithLimitOperation",
 			alwaysRun = true)
 	public void validateFeaturesResponse_NumberReturned(Map<String, Object> collection, int limit, int max) {

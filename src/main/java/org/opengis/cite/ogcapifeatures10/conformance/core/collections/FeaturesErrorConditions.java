@@ -49,7 +49,8 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 13: /ats/core/fc-op
+	 * Abstract Test 13: /ats/core/fc-op (v1.0.0)
+	 * Abstract Test 17: /conf/core/fc-op (v1.0.1)
 	 * Test Purpose: Validate that features can be identified and extracted from a Collection using query parameters.
 	 * Requirement: /req/core/fc-op
 	 *
@@ -60,12 +61,13 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 *
 	 * Repeat these tests using the following parameter tests:
 	 * Error conditions:
-	 *  * Query Invalid /ats/core/query-param-invalid
-	 *  * Query Unknown /ats/core/query-param-unknown
+	 *  * Query Invalid /ats/core/query-param-invalid (v1.0.0), /conf/core/query-param-invalid (v1.0.1)
+	 *  * Query Unknown /ats/core/query-param-unknown (v1.0.0), /conf/core/query-param-unknown (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 20: /ats/core/query-param-invalid
+	 * Abstract Test 20: /ats/core/query-param-invalid (v1.0.0)
+	 * Abstract Test 24: /conf/core/query-param-invalid (v1.0.1)
 	 * Test Purpose: Validate that the API correctly deals with invalid query parameters.
 	 * Requirement: /req/core/query-param-invalid
 	 *
@@ -75,7 +77,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/20 (Requirement /req/core/query-param-invalid)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 20/24 (Requirement /req/core/query-param-invalid)",
 			groups = "featuresBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections",
 			alwaysRun = true)
 	public void validateFeaturesOperation_QueryParamInvalid(Map<String, Object> collection) {
@@ -96,7 +98,8 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 13: /ats/core/fc-op
+	 * Abstract Test 13: /ats/core/fc-op (v1.0.0)
+	 * Abstract Test 17: /conf/core/fc-op (v1.0.1)
 	 * Test Purpose: Validate that features can be identified and extracted from a Collection using query parameters.
 	 * Requirement: /req/core/fc-op
 	 *
@@ -107,12 +110,13 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 *
 	 * Repeat these tests using the following parameter tests:
 	 * Error conditions:
-	 *  * Query Invalid /ats/core/query-param-invalid
-	 *  * Query Unknown /ats/core/query-param-unknown
+	 *  * Query Invalid /ats/core/query-param-invalid (v1.0.0), /conf/core/query-param-invalid (v1.0.1)
+	 *  * Query Unknown /ats/core/query-param-unknown (v1.0.0), /conf/core/query-param-unknown (v1.01)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 21: /ats/core/query-param-unknown
+	 * Abstract Test 21: /ats/core/query-param-unknown (v1.0.0)
+	 * Abstract Test 25: /conf/core/query-param-unknown (v1.0.1)
 	 * Test Purpose: Validate that the API correctly deals with unknown query parameters.
 	 * Requirement: /req/core/query-param-unknown
 	 *
@@ -122,7 +126,7 @@ public class FeaturesErrorConditions extends AbstractFeatures {
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/21 (Requirement /req/core/query-param-unknown)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Error Conditions, Abstract Test 13/17 (Requirement /req/core/query-param-unknown)",
 			groups = "featuresBase", dataProvider = "collectionItemUris", dependsOnGroups = "collections",
 			alwaysRun = true)
 	public void validateFeaturesOperation_QueryParamUnknown(Map<String, Object> collection) {

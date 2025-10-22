@@ -76,11 +76,12 @@ public class FeatureCollection extends CommonDataFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 11: /ats/core/sfc-md-op
+	 * Abstract Test 11: /ats/core/sfc-md-op (v1.0.0)
+	 * Abstract Test 15: /conf/core/sfc-md-op (v 1.0.1)
 	 * Test Purpose: Validate that the Collection content can be retrieved from the expected location.
 	 * Requirement: /req/core/sfc-md-op
 	 *
-	 * Test Method: For every Feature Collection described in the Collections content, issue an HTTP GET request to the URL /collections/{collectionId} where {collectionId} is the id property for the collection. Validate that a Collection was returned with a status code 200. Validate the contents of the returned document using test /ats/core/sfc-md-success.
+	 * Test Method: For every Feature Collection described in the Collections content, issue an HTTP GET request to the URL /collections/{collectionId} where {collectionId} is the id property for the collection. Validate that a Collection was returned with a status code 200. Validate the contents of the returned document using test /ats/core/sfc-md-success (v1.0.0), /conf/core/sfc-md-success (v1.0.1).
 	 * </pre>
 	 * @param testContext never <code>null</code>
 	 * @param collection the collection to test, never <code>null</code>
@@ -106,15 +107,16 @@ public class FeatureCollection extends CommonDataFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 12: /ats/core/sfc-md-success
+	 * Abstract Test 12: /ats/core/sfc-md-success (v1.0.0)
+	 * Abstract Test 16: /conf/core/sfc-md-success (v1.0.1)
 	 * Test Purpose: Validate that the Collection content complies with the required structure and contents.
 	 * Requirement: /req/core/sfc-md-success
 	 *
-	 * Test Method: Verify that the content of the response is consistent with the content for this Feature Collection in the /collections response. That is, the values for id, title, description and extent are identical.
+	 * Test Method: Verify that the content of the response is consistent with the content for this Feature Collection in the /collections response. That is, the values for id, title, description, extent and itemType are identical and all links included for this feature collection in the /collections response are also included.
 	 * </pre>
 	 * @param collection the collection to test, never <code>null</code>
 	 */
-	@Test(description = "Implements A.2.6. Feature Collection {root}/collections/{collectionId}, Abstract Test 12 (Requirement /req/core/sfc-md-success)",
+	@Test(description = "Implements A.2.6. Feature Collection {root}/collections/{collectionId}, Abstract Test 12/16 (Requirement /req/core/sfc-md-success)",
 			groups = "collection", dataProvider = "collections",
 			dependsOnMethods = "validateFeatureCollectionMetadataOperation", alwaysRun = true)
 	public void validateFeatureCollectionMetadataResponse(Map<String, Object> collection) {

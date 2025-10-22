@@ -19,7 +19,7 @@ public class GeneralHttp extends CommonFixture {
 	 * <pre>
 	 * A.2.1.1. HTTP
 	 *
-	 * Abstract Test 1: /ats/core/http
+	 * Abstract Test 1: /ats/core/http (v1.0.0), /conf/core/http (v1.0.1)
 	 * Test Purpose: Validate that the resource paths advertised through the API conform with HTTP 1.1 and, where
 	 * appropriate, TLS.
 	 * Requirement: /req/core/http

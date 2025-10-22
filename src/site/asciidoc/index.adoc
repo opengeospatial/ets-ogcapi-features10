@@ -2,7 +2,7 @@
 
 == Scope
 
-This executable test suite (ETS) verifies that an OGC API - Features instance conforms to http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] (OGC 17-069r3), http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] (OGC 18-058) and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
+This executable test suite (ETS) verifies that an OGC API - Features instance conforms to http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] (OGC 17-069r3), http://docs.opengeospatial.org/is/17-069r4/17-069r4.html[OGC API - Features - Part 1: Core Corrigendum] (OGC 17-069r4), http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] (OGC 18-058), http://docs.opengeospatial.org/is/18-058r1/18-058r1.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference Corrigendum] (OGC 18-058r1)  and related standards. Conformance testing is a kind of "black box" testing that examines externally visible characteristics or behaviors of the SUT and is independent of any implementation details.
 
 Several conformance classes are defined in the principal specifications. The ones
 listed below are covered by this test suite:
@@ -10,14 +10,14 @@ listed below are covered by this test suite:
 * Core
     - The Core specifies requirements that all OGC API - Features instances have to fulfill.
 * Coordinate Reference Systems by Reference
-    - Optional conformance class to fulfill requirements of http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] specification.
+    - Optional conformance class to fulfill requirements of http://docs.opengeospatial.org/is/18-058/18-058.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference] and http://docs.opengeospatial.org/is/18-058r1/18-058r1.html[OGC API - Features - Part 2: Coordinate Reference Systems by Reference Corrigendum] specification.
 
 == Test requirements
 
 The documents listed below stipulate requirements that must be satisfied by a 
 conforming implementation.
 
-1. http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core]
+1. http://docs.opengeospatial.org/is/17-069r3/17-069r3.html[OGC API - Features - Part 1: Core] and http://docs.opengeospatial.org/is/17-069r4/17-069r4.html[OGC API - Features - Part 1: Core Corrigendum]
 
 There are some requirements the test suite expects to be satisfied by the service under test:
 

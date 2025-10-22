@@ -26,14 +26,14 @@ public class LandingPage extends CommonFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 3: /ats/core/root-op
+	 * Abstract Test 3: /ats/core/root-op (v1.0.0), /conf/core/root-op (v1.0.1)
 	 * Test Purpose: Validate that a landing page can be retrieved from the expected location.
 	 * Requirement: /req/core/root-op
 	 *
 	 * Test Method:
 	 *  1. Issue an HTTP GET request to the URL {root}/
 	 *  2. Validate that a document was returned with a status code 200
-	 *  3. Validate the contents of the returned document using test /ats/core/root-success.
+	 *  3. Validate the contents of the returned document using test /ats/core/root-success (v1.0.0), /conf/core/root-success (v1.0.1).
 	 * </pre>
 	 */
 	@Test(description = "Implements A.2.2. Landing Page {root}/, Abstract Test 3 (Requirement /req/core/root-op)",
@@ -46,7 +46,7 @@ public class LandingPage extends CommonFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 4: /ats/core/root-success
+	 * Abstract Test 4: /ats/core/root-success (v1.0.0), /conf/core/root-success (v1.0.1)
 	 * Test Purpose: Validate that the landing page complies with the require structure and contents.
 	 * Requirement: /req/core/root-success
 	 *

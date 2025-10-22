@@ -33,7 +33,7 @@ import io.restassured.response.Response;
  * <pre>
  * Abstract Test 7: /conf/crs/crs-parameter-transform
  * Test Purpose: Verify that the geometries are transformed
- * Requirement: /req/crs/crs-action
+ * Requirement: /req/crs/fc-crs-action
  *
  * Test Method
  * For every CRS identifier advertized by the Web API that is known to the test engine and for which the test engine can
@@ -91,7 +91,7 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 	 * @param featureId id id of the feature, never <code>null</code>
 	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
-	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
+	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/fc-crs-action), "
 			+ "Geometries in the path /collections/{collectionId}/items/{featureId}",
 			dataProvider = "collectionFeatureId", dependsOnGroups = "crs-conformance", priority = 1)
 	public void verifyFeatureCrsParameterTransformWithCrsParameter(String collectionId, JsonPath collection,
@@ -131,7 +131,7 @@ public class FeatureCrsParameterTransform extends AbstractFeatureCrs {
 	 * @param defaultCRS the defaultCRS of the collection, never <code>null</code>
 	 * @throws org.locationtech.jts.io.ParseException if the geometry could not be parsed
 	 */
-	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/crs-action), "
+	@Test(description = "Implements A.2.1 Query, Parameter crs, Abstract Test 7 (Requirement /req/crs/fc-crs-action), "
 			+ "Transformed geometries in the path /collections/{collectionId}/items/{featureId}",
 			dataProvider = "collectionFeatureIdCrsAndDefaultCrs", dependsOnGroups = "crs-conformance",
 			dependsOnMethods = "verifyFeatureCrsParameterTransformWithCrsParameter", priority = 1)

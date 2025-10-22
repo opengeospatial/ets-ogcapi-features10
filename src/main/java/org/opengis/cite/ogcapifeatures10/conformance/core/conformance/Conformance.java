@@ -76,7 +76,7 @@ public class Conformance extends CommonFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 7: /ats/core/conformance-op
+	 * Abstract Test 7: /ats/core/conformance-op (v1.0.0), /conf/core/conformance-op (v1.0.1)
 	 * Test Purpose: Validate that a Conformance Declaration can be retrieved from the expected location.
 	 * Requirement: /req/core/conformance-op
 	 *
@@ -84,11 +84,11 @@ public class Conformance extends CommonFixture {
 	 *  1. Construct a path for each "conformance" link on the landing page as well as for the {root}/conformance path.
 	 *  2. Issue an HTTP GET request on each path
 	 *  3. Validate that a document was returned with a status code 200
-	 *  4. Validate the contents of the returned document using test /ats/core/conformance-success.
+	 *  4. Validate the contents of the returned document using test /ats/core/conformance-success (v1.0.0), /conf/core/conformance-success (v1.0.1).
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 8: /ats/core/conformance-success
+	 * Abstract Test 8: /ats/core/conformance-success (v1.0.0), /conf/core/conformance-success (v1.0.1)
 	 * Test Purpose: Validate that the Conformance Declaration response complies with the required structure and contents.
 	 * Requirement: /req/core/conformance-success
 	 *
@@ -114,7 +114,8 @@ public class Conformance extends CommonFixture {
 	}
 
 	/**
-	 * Abstract Test 8: /ats/core/conformance-success
+	 * Abstract Test 8: /ats/core/conformance-success (v1.0.0),
+	 * /conf/core/conformance-success (v1.0.1)
 	 */
 	private void validateConformanceOperationResponse(String testPointUri, Response response) {
 		response.then().statusCode(200);

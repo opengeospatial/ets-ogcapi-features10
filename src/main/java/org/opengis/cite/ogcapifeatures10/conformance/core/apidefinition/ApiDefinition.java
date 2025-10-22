@@ -7,8 +7,12 @@ import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.OPEN_API_MIME_T
 import static org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute.API_MODEL;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.parseAsListOfMaps;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.CommonFixture;
@@ -49,7 +53,7 @@ public class ApiDefinition extends CommonFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 5: /ats/core/api-definition-op
+	 * Abstract Test 5: /ats/core/api-definition-op (v1.0.0), /conf/core/api-definition-op (v1.0.1)
 	 * Test Purpose: Validate that the API Definition document can be retrieved from the expected location.
 	 * Requirement: /req/core/api-definition-op
 	 *
@@ -58,7 +62,7 @@ public class ApiDefinition extends CommonFixture {
 	 *  1. Construct a path for each API Definition link on the landing page
 	 *  2. Issue a HTTP GET request on each path
 	 *  3. Validate that a document was returned with a status code 200
-	 *  4. Validate the contents of the returned document using test /ats/core/api-definition-success.
+	 *  4. Validate the contents of the returned document using test /ats/core/api-definition-success (v1.0.0), /conf/core/api-definition-success (v1.0.1).
 	 * </pre>
 	 */
 	@Test(description = "Implements A.2.3. API Definition Path {root}/api (link), Abstract Test 5 (Requirement /req/core/api-definition-op)",
@@ -73,7 +77,7 @@ public class ApiDefinition extends CommonFixture {
 
 	/**
 	 * <pre>
-	 * Abstract Test 6: /ats/core/api-definition-success
+	 * Abstract Test 6: /ats/core/api-definition-success (v1.0.0), /conf/core/api-definition-success (v1.0.1)
 	 * Test Purpose: Validate that the API Definition complies with the required structure and contents.
 	 * Requirement: /req/core/api-definition-success
 	 *

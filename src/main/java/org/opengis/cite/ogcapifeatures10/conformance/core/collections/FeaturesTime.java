@@ -120,7 +120,8 @@ public class FeaturesTime extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 13: /ats/core/fc-op
+	 * Abstract Test 13: /ats/core/fc-op (v1.0.0)
+	 * Abstract Test 17: /conf/core/fc-op (v1.0.1)
 	 * Test Purpose: Validate that features can be identified and extracted from a Collection using query parameters.
 	 * Requirement: /req/core/fc-op
 	 *
@@ -131,8 +132,8 @@ public class FeaturesTime extends AbstractFeatures {
 	 *
 	 * Repeat these tests using the following parameter tests:
 	 * DateTime:
-	 *   * Parameter /ats/core/fc-time-definition
-	 *   * Response /ats/core/fc-time-response
+	 *   * Parameter /ats/core/fc-time-definition (v1.0.0), /conf/core/fc-time-definition (v1.0.1)
+	 *   * Response /ats/core/fc-time-response (v1.0.0), /conf/core/fc-time-response (v1.0.1)
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
@@ -142,7 +143,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 13: (Requirement /req/core/fc-op)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 13/17: (Requirement /req/core/fc-op)",
 			dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void validateFeaturesWithDateTimeOperation(Map<String, Object> collection, String queryParameter,
 			Object begin, Object end) {
@@ -167,7 +168,8 @@ public class FeaturesTime extends AbstractFeatures {
 
 	/**
 	 * <pre>
-	 * Abstract Test 19: /ats/core/fc-time-response
+	 * Abstract Test 19: /ats/core/fc-time-response (v1.0.0)
+	 * Abstract Test 23: /ats/core/fc-time-response (v1.0.1)
 	 * Test Purpose: Validate that the dataTime query parameters are processed correctly.
 	 * Requirement: /req/core/fc-time-response
 	 *
@@ -184,7 +186,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 19: (Requirement /req/core/fc-time-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 19/23: (Requirement /req/core/fc-time-response)",
 			dataProvider = "collectionItemUrisWithDateTimes", dependsOnGroups = "featuresBase", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse(Map<String, Object> collection, String queryParameter,
 			Object begin, Object end) {
@@ -200,13 +202,13 @@ public class FeaturesTime extends AbstractFeatures {
 	 * Abstract Test 2, Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 2: /ats/core/crs84
-	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 spatial reference system unless otherwise requested by the client.
+	 * Abstract Test 2: /ats/core/crs84 (v1.0.0), /conf/core/crs84 (v1.0.1)
+	 * Test Purpose: Validate that all spatial geometries provided through the API are in the CRS84 or CRS84h coordinate reference system unless otherwise requested by the client.
 	 * Requirement: /req/core/crs84
 	 *
 	 * Test Method
-	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 reference system.
-	 *  2. Validate retrieved spatial data using the CRS84 reference system.
+	 *  1. Do not specify a coordinate reference system in any request. All spatial data should be in the CRS84 or CRS84h reference system.
+	 *  2. Validate retrieved spatial data using the CRS84 reference system (for 2D geometries) or the CRS84h reference system (for 3D geometries).
 	 * </pre>
 	 * @param collection the collection under test, never <code>null</code>
 	 * @param queryParameter time parameter as string to use as query parameter, never
@@ -227,10 +229,11 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 1
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 1
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -245,7 +248,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 1 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 1 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse_TypeProperty(Map<String, Object> collection, String queryParameter,
@@ -255,10 +258,11 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 2
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 2
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -273,7 +277,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 2 (Requirement /req/core/fc-response)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 2 (Requirement /req/core/fc-response)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse_FeaturesProperty(Map<String, Object> collection,
@@ -283,19 +287,23 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 4 (Abstract Test 23)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 4 (Abstract Test
+	 * 23/27)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links
+	 *   4. If the links property is present, validate that all entries comply with /ats/core/fc-links (v1.0.0),
+	 *   /conf/core/fc-links (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 23: /ats/core/fc-links
+	 * Abstract Test 23 (v1.0.0): /ats/core/fc-links
+	 * Abstract Test 27 (v1.0.1): /conf/core/fc-links
 	 * Test Purpose: Validate that the required links are included in the Collections document.
 	 * Requirement: /req/core/fc-links, /req/core/fc-rel-type
 	 *
@@ -314,7 +322,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 4 (Requirement /req/core/fc-response) - Abstract Test 23/27 (Requirement /req/core/fc-links, /req/core/fc-rel-type)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse_Links(Map<String, Object> collection, String queryParameter,
@@ -324,10 +332,12 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 5 (Abstract Test 24)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 5 (Abstract Test
+	 * 24/28)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -336,7 +346,8 @@ public class FeaturesTime extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 24: /ats/core/fc-timeStamp
+	 * Abstract Test 24 (v1.0.0): /ats/core/fc-timeStamp
+	 * Abstract Test 28 (v1.0.1): /conf/core/fc-timeStamp
 	 * Test Purpose: Validate the timeStamp parameter returned with a Features response
 	 * Requirement: /req/core/fc-timeStamp
 	 *
@@ -350,7 +361,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24 (Requirement /req/core/fc-timeStamp)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 5 (Requirement /req/core/fc-response) - Abstract Test 24/28 (Requirement /req/core/fc-timeStamp)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse_TimeStamp(Map<String, Object> collection, String queryParameter,
@@ -360,10 +371,12 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 6 (Abstract Test 25)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 6 (Abstract Test
+	 * 25/29)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
@@ -372,7 +385,8 @@ public class FeaturesTime extends AbstractFeatures {
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 25: /ats/core/fc-numberMatched
+	 * Abstract Test 25 (v1.0.0): /ats/core/fc-numberMatched
+	 * Abstract Test 29 (v1.0.1): /conf/core/fc-numberMatched
 	 * Test Purpose: Validate the numberMatched parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberMatched
 	 *
@@ -387,7 +401,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 * @throws java.net.URISyntaxException if the creation of a uri fails
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25 (Requirement /req/core/fc-numberMatched)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 6 (Requirement /req/core/fc-response) - Abstract Test 25/29 (Requirement /req/core/fc-numberMatched)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesWithDateTimeResponse_NumberMatched(Map<String, Object> collection,
@@ -397,19 +411,23 @@ public class FeaturesTime extends AbstractFeatures {
 	}
 
 	/**
-	 * Abstract Test 22, Test Method 7 (Abstract Test 26)
+	 * Abstract Test 22 (v1.0.0) Abstract Test 26 (v1.0.1), Test Method 7 (Abstract Test
+	 * 26/30)
 	 *
 	 * <pre>
-	 * Abstract Test 22: /ats/core/fc-response
+	 * Abstract Test 22: /ats/core/fc-response (v1.0.0)
+	 * Abstract Test 26: /conf/core/fc-response (v1.0.1)
 	 * Test Purpose: Validate that the Feature Collections complies with the require structure and contents.
 	 * Requirement: /req/core/fc-response
 	 *
 	 * Test Method
-	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned
+	 *   7. If the numberReturned property is present, validate that it complies with /ats/core/fc-numberReturned (v1.0.0),
+	 *   /conf/core/fc-numberReturned (v1.0.1)
 	 * </pre>
 	 *
 	 * <pre>
-	 * Abstract Test 26: /ats/core/fc-numberReturned
+	 * Abstract Test 26 (v1.0.0): /ats/core/fc-numberReturned
+	 * Abstract Test 30 (v1.0.1): /conf/core/fc-numberReturned
 	 * Test Purpose: Validate the numberReturned parameter returned with a Features response
 	 * Requirement: /req/core/fc-numberReturned
 	 *
@@ -423,7 +441,7 @@ public class FeaturesTime extends AbstractFeatures {
 	 * @param end a {@link java.time.ZonedDateTime} or {@link java.time.LocalDate}, the
 	 * end of the interval, never <code>null</code> if the request is an instant
 	 */
-	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26 (Requirement /req/core/fc-numberReturned)",
+	@Test(description = "Implements A.2.7. Features {root}/collections/{collectionId}/items - Datetime, Abstract Test 22/26, Test Method 7 (Requirement /req/core/fc-response) - Abstract Test 26/30 (Requirement /req/core/fc-numberReturned)",
 			dataProvider = "collectionItemUrisWithDateTimes",
 			dependsOnMethods = "validateFeaturesWithDateTimeOperation", alwaysRun = true)
 	public void validateFeaturesResponse_NumberReturned(Map<String, Object> collection, String queryParameter,
