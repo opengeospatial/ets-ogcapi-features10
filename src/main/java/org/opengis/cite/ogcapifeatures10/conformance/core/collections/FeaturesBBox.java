@@ -2,8 +2,6 @@ package org.opengis.cite.ogcapifeatures10.conformance.core.collections;
 
 import static io.restassured.http.Method.GET;
 import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertFalse;
-import static org.opengis.cite.ogcapifeatures10.EtsAssert.assertInCrs84;
-import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.DEFAULT_CRS;
 import static org.opengis.cite.ogcapifeatures10.OgcApiFeatures10.GEOJSON_MIME_TYPE;
 import static org.opengis.cite.ogcapifeatures10.openapi3.OpenApiUtils.retrieveParameterByName;
 import static org.opengis.cite.ogcapifeatures10.util.JsonUtils.findFeaturesUrlForGeoJson;
@@ -19,13 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.CollectionResponseKey;
-import org.opengis.cite.ogcapifeatures10.conformance.core.collections.AbstractFeatures.ResponseData;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
-import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
+import org.opengis.cite.ogcapifeatures10.util.BBox2D;
 import org.testng.ITestContext;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
@@ -34,7 +29,6 @@ import org.testng.annotations.Test;
 import com.reprezen.kaizen.oasparser.model3.Parameter;
 import com.reprezen.kaizen.oasparser.model3.Schema;
 
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 /**
@@ -60,14 +54,14 @@ public class FeaturesBBox extends AbstractFeatures {
 				collectionsWithBboxes.add(new Object[] { collection, extent });
 				// These should include test cases which cross the
 				// meridian,
-				collectionsWithBboxes.add(new Object[] { collection, new BBox(-1.5, 50.0, 1.5, 53.0) });
+				collectionsWithBboxes.add(new Object[] { collection, new BBox2D(-1.5, 50.0, 1.5, 53.0) });
 				// equator,
-				collectionsWithBboxes.add(new Object[] { collection, new BBox(-80.0, -5.0, -70.0, 5.0) });
+				collectionsWithBboxes.add(new Object[] { collection, new BBox2D(-80.0, -5.0, -70.0, 5.0) });
 				// 180 longitude,
-				collectionsWithBboxes.add(new Object[] { collection, new BBox(177.0, 65.0, -177.0, 70.0) });
+				collectionsWithBboxes.add(new Object[] { collection, new BBox2D(177.0, 65.0, -177.0, 70.0) });
 				// and polar regions.
-				collectionsWithBboxes.add(new Object[] { collection, new BBox(-180.0, 85.0, 180.0, 90.0) });
-				collectionsWithBboxes.add(new Object[] { collection, new BBox(-180.0, -90.0, 180.0, -85.0) });
+				collectionsWithBboxes.add(new Object[] { collection, new BBox2D(-180.0, 85.0, 180.0, 90.0) });
+				collectionsWithBboxes.add(new Object[] { collection, new BBox2D(-180.0, -90.0, 180.0, -85.0) });
 			}
 		}
 		return collectionsWithBboxes.iterator();

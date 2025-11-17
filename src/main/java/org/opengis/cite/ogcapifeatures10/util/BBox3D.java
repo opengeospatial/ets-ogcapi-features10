@@ -16,19 +16,11 @@ import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSys
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public abstract class BBox {
+public class BBox3D extends BBox {
 
-	protected static final String PATTERN = "###.0000000";
+	private final double minZ;
 
-	protected final double minX;
-
-	protected final double minY;
-
-	protected final double maxX;
-
-	protected final double maxY;
-
-	protected final CoordinateSystem crs;
+	private final double maxZ;
 
 	/**
 	 * <p>
@@ -36,79 +28,51 @@ public abstract class BBox {
 	 * </p>
 	 * @param minX Lower left corner, coordinate axis 1
 	 * @param minY Lower left corner, coordinate axis 2
+	 * @param minZ Minimum value, coordinate axis 3
 	 * @param maxX Upper right corner, coordinate axis 1
 	 * @param maxY Upper right corner, coordinate axis 2
-	 */
-	protected BBox(double minX, double minY, double maxX, double maxY) {
-		this(minX, minY, maxX, maxY, DEFAULT_CRS);
-	}
-
-	/**
-	 * <p>
-	 * Constructor for BBox.
-	 * </p>
-	 * @param minX Lower left corner, coordinate axis 1
-	 * @param minY Lower left corner, coordinate axis 2
-	 * @param maxX Upper right corner, coordinate axis 1
-	 * @param maxY Upper right corner, coordinate axis 2
+	 * @param maxZ Maximum value, coordinate axis 3
 	 * @param crs CRS of the bbox, may be <code>null</code>
 	 */
-	protected BBox(double minX, double minY, double maxX, double maxY, CoordinateSystem crs) {
-		this.minX = minX;
-		this.minY = minY;
-		this.maxX = maxX;
-		this.maxY = maxY;
-		this.crs = crs;
+	public BBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, CoordinateSystem crs) {
+		super(minX, minY, maxX, maxY, crs);
+		this.minZ = minZ;
+		this.maxZ = maxZ;
 	}
 
 	/**
 	 * <p>
-	 * Getter for the field <code>minX</code>.
+	 * Constructor for BBox.
 	 * </p>
-	 * @return Lower left corner, coordinate axis 1
+	 * @param minX Lower left corner, coordinate axis 1
+	 * @param minY Lower left corner, coordinate axis 2
+	 * @param minZ Minimum value, coordinate axis 3
+	 * @param maxX Upper right corner, coordinate axis 1
+	 * @param maxY Upper right corner, coordinate axis 2
+	 * @param maxZ Maximum value, coordinate axis 3
 	 */
-	public double getMinX() {
-		return minX;
+	public BBox3D(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+		this(minX, minY, minZ, maxX, maxY, maxZ, DEFAULT_CRS);
 	}
 
 	/**
 	 * <p>
-	 * Getter for the field <code>minY</code>.
+	 * Getter for the field <code>minZ</code>.
 	 * </p>
-	 * @return Lower left corner, coordinate axis 2
+	 * @return Minimum value, coordinate axis 3
 	 */
-	public double getMinY() {
-		return minY;
+	public double getMinZ() {
+		return minZ;
 	}
 
 	/**
 	 * <p>
-	 * Getter for the field <code>maxX</code>.
+	 * Getter for the field <code>maxZ</code>.
 	 * </p>
-	 * @return Upper right corner, coordinate axis 1
+	 * @return Maximum value, coordinate axis 3
 	 */
-	public double getMaxX() {
-		return maxX;
-	}
-
-	/**
-	 * <p>
-	 * Getter for the field <code>maxY</code>.
-	 * </p>
-	 * @return Upper right corner, coordinate axis 2
-	 */
-	public double getMaxY() {
-		return maxY;
-	}
-
-	/**
-	 * <p>
-	 * Getter for the field <code>crs</code>.
-	 * </p>
-	 * @return CRS of the bbox, never <code>null</code>
-	 */
-	public CoordinateSystem getCrs() {
-		return crs;
+	public double getMaxZ() {
+		return maxZ;
 	}
 
 	/**
@@ -122,8 +86,10 @@ public abstract class BBox {
 		DecimalFormat formatter = formatter();
 		sb.append(formatter.format(minX)).append(",");
 		sb.append(formatter.format(minY)).append(",");
+		sb.append(formatter.format(minZ)).append(",");
 		sb.append(formatter.format(maxX)).append(",");
-		sb.append(formatter.format(maxY));
+		sb.append(formatter.format(maxY)).append(",");
+		sb.append(formatter.format(maxZ));
 		return sb.toString();
 	}
 
@@ -140,15 +106,16 @@ public abstract class BBox {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		BBox bBox = (BBox) o;
+		BBox3D bBox = (BBox3D) o;
 		return Double.compare(bBox.minX, minX) == 0 && Double.compare(bBox.minY, minY) == 0
-				&& Double.compare(bBox.maxX, maxX) == 0 && Double.compare(bBox.maxY, maxY) == 0;
+				&& Double.compare(bBox.minZ, minZ) == 0 && Double.compare(bBox.maxX, maxX) == 0
+				&& Double.compare(bBox.maxY, maxY) == 0 && Double.compare(bBox.maxZ, maxZ) == 0;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
-		return Objects.hash(minX, minY, maxX, maxY);
+		return Objects.hash(minX, minY, minZ, maxX, maxY, maxZ);
 	}
 
 	private DecimalFormat formatter() {

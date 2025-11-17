@@ -23,6 +23,7 @@ import org.opengis.cite.ogcapifeatures10.conformance.RequirementClass;
 import org.opengis.cite.ogcapifeatures10.conformance.SuiteAttribute;
 import org.opengis.cite.ogcapifeatures10.openapi3.TestPoint;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
+import org.opengis.cite.ogcapifeatures10.util.BBox2D;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 
@@ -93,7 +94,7 @@ public class FeaturesBBoxTest {
 		FeaturesBBox features = initFeaturesBbox();
 
 		Map<String, Object> collection = prepareCollection();
-		BBox bbox = new BBox(5, 48, 9, 50);
+		BBox bbox = new BBox2D(5, 48, 9, 50);
 		features.validateFeaturesWithBoundingBoxOperation(collection, bbox);
 		features.validateFeaturesWithBoundingBoxResponse_TypeProperty(collection, bbox);
 		features.validateFeaturesWithBoundingBoxResponse_FeaturesProperty(collection, bbox);

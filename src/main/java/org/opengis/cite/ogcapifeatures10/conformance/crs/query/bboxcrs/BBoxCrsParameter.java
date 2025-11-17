@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSystem;
 import org.opengis.cite.ogcapifeatures10.util.BBox;
+import org.opengis.cite.ogcapifeatures10.util.BBox2D;
 import org.opengis.cite.ogcapifeatures10.util.GeometryTransformer;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
@@ -164,12 +165,12 @@ public class BBoxCrsParameter extends AbstractBBoxCrs {
 		// https://github.com/opengeospatial/ets-ogcapi-features10/issues/199
 		// Transforming the maximum extent in WGS 84 to another CRS can cause problems.
 		// In that case, we make the extent a bit smaller.
-		BBox maxExtent = new BBox(-180, -90, 180, 90);
+		BBox maxExtent = new BBox2D(-180, -90, 180, 90);
 
 		if (bbox.equals(maxExtent)) {
 			if (!(crs.getCode().equals("http://www.opengis.net/def/crs/EPSG/0/4326")
 					|| crs.getCode().equals("http://www.opengis.net/def/crs/OGC/1.3/CRS84"))) {
-				bbox = new BBox(-175, -85, 175, 85);
+				bbox = new BBox2D(-175, -85, 175, 85);
 			}
 		}
 

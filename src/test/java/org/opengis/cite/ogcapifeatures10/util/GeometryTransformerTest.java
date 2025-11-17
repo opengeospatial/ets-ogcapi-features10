@@ -70,7 +70,7 @@ public class GeometryTransformerTest {
 	@Test
 	public void test_transform_BBox() {
 		GeometryTransformer geometryTransformer = new GeometryTransformer(DEFAULT_CRS, EPSG_25832);
-		BBox bbox = new BBox(7.55, 51.82, 8.11, 52.14, DEFAULT_CRS);
+		BBox bbox = new BBox2D(7.55, 51.82, 8.11, 52.14, DEFAULT_CRS);
 		BBox transformedBbox = geometryTransformer.transform(bbox);
 		assertEquals(400060.46, transformedBbox.getMinX(), 0.01);
 		assertEquals(5742012.57, transformedBbox.getMinY(), 0.01);

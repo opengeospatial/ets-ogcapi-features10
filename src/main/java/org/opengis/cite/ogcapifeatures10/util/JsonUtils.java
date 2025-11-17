@@ -187,11 +187,17 @@ public class JsonUtils {
 			double minY = parseValueAsDouble(coords.get(1));
 			double maxX = parseValueAsDouble(coords.get(2));
 			double maxY = parseValueAsDouble(coords.get(3));
-			return new BBox(minX, minY, maxX, maxY, crs);
+			return new BBox2D(minX, minY, maxX, maxY, crs);
 		}
 		else if (coords.size() == 6) {
-			throw new IllegalArgumentException(
-					"BBox with " + coords.size() + " coordinates is currently not supported");
+			CoordinateSystem crs = parseCrs(spatial);
+			double minX = parseValueAsDouble(coords.get(0));
+			double minY = parseValueAsDouble(coords.get(1));
+			double minZ = parseValueAsDouble(coords.get(1));
+			double maxX = parseValueAsDouble(coords.get(2));
+			double maxY = parseValueAsDouble(coords.get(3));
+			double maxZ = parseValueAsDouble(coords.get(3));
+			return new BBox3D(minX, minY, minZ, maxX, maxY, maxZ, crs);
 		}
 		throw new IllegalArgumentException("BBox with " + coords.size() + " coordinates is invalid");
 	}
