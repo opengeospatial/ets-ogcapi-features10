@@ -190,8 +190,12 @@ public class JsonUtils {
 			return new BBox(minX, minY, maxX, maxY, crs);
 		}
 		else if (coords.size() == 6) {
-			throw new IllegalArgumentException(
-					"BBox with " + coords.size() + " coordinates is currently not supported");
+			CoordinateSystem crs = parseCrs(spatial);
+			double minX = parseValueAsDouble(coords.get(0));
+			double minY = parseValueAsDouble(coords.get(1));
+			double maxX = parseValueAsDouble(coords.get(2));
+			double maxY = parseValueAsDouble(coords.get(3));
+			return new BBox(minX, minY, maxX, maxY, crs);
 		}
 		throw new IllegalArgumentException("BBox with " + coords.size() + " coordinates is invalid");
 	}

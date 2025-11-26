@@ -122,13 +122,38 @@ public class FeaturesBBox extends AbstractFeatures {
 		assertNotNull(schema, "Expected schema for bbox parameter for collections path '" + testPoint.getPath());
 		assertEquals(schema.getType(), "array", String.format(msg, "schema -> type", "array", schema.getType()));
 
-		assertNotNull(schema.getMinItems(), String.format(msg, "schema -> minItems", "null", schema.getMinItems()));
-		assertEquals(schema.getMinItems().intValue(), 4,
-				String.format(msg, "schema -> minItems", "4", schema.getMinItems()));
+		if (schema.getOneOfSchemas() != null && schema.getOneOfSchemas().size() > 0) {
 
-		assertNotNull(schema.getMaxItems(), String.format(msg, "schema -> maxItems", "null", schema.getMaxItems()));
-		assertEquals(schema.getMaxItems().intValue(), 6,
-				String.format(msg, "schema -> maxItems", "6", schema.getMaxItems()));
+			for (Schema schema1 : schema.getOneOfSchemas()) {
+				assertNotNull(schema1.getMinItems(),
+						String.format(msg, "schema -> minItems", "null", schema1.getMinItems()));
+				int minItems = schema1.getMinItems().intValue();
+				if (minItems == 4) {
+					assertEquals(minItems, 4, String.format(msg, "schema -> minItems", "4", minItems));
+					assertNotNull(schema1.getMaxItems(),
+							String.format(msg, "schema -> maxItems", "null", schema1.getMaxItems()));
+					assertEquals(schema1.getMaxItems().intValue(), 4,
+							String.format(msg, "schema -> maxItems", "4", schema1.getMaxItems()));
+				}
+				else if (minItems == 6) {
+					assertEquals(minItems, 6, String.format(msg, "schema -> minItems", "6", minItems));
+					assertNotNull(schema1.getMaxItems(),
+							String.format(msg, "schema -> maxItems", "null", schema1.getMaxItems()));
+					assertEquals(schema1.getMaxItems().intValue(), 6,
+							String.format(msg, "schema -> maxItems", "6", schema1.getMaxItems()));
+				}
+			}
+
+		}
+		else {
+			assertNotNull(schema.getMinItems(), String.format(msg, "schema -> minItems", "null", schema.getMinItems()));
+			assertEquals(schema.getMinItems().intValue(), 4,
+					String.format(msg, "schema -> minItems", "4", schema.getMinItems()));
+
+			assertNotNull(schema.getMaxItems(), String.format(msg, "schema -> maxItems", "null", schema.getMaxItems()));
+			assertEquals(schema.getMaxItems().intValue(), 6,
+					String.format(msg, "schema -> maxItems", "6", schema.getMaxItems()));
+		}
 
 		String itemsType = schema.getItemsSchema().getType();
 		assertEquals(itemsType, "number", String.format(msg, "schema -> items -> type", "number", itemsType));
