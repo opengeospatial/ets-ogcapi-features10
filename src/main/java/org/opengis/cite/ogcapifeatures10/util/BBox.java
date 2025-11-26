@@ -16,19 +16,19 @@ import org.opengis.cite.ogcapifeatures10.conformance.crs.query.crs.CoordinateSys
  *
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
  */
-public abstract class BBox {
+public class BBox {
 
-	protected static final String PATTERN = "###.0000000";
+	private static final String PATTERN = "###.0000000";
 
-	protected final double minX;
+	private final double minX;
 
-	protected final double minY;
+	private final double minY;
 
-	protected final double maxX;
+	private final double maxX;
 
-	protected final double maxY;
+	private final double maxY;
 
-	protected final CoordinateSystem crs;
+	private final CoordinateSystem crs;
 
 	/**
 	 * <p>
@@ -39,7 +39,7 @@ public abstract class BBox {
 	 * @param maxX Upper right corner, coordinate axis 1
 	 * @param maxY Upper right corner, coordinate axis 2
 	 */
-	protected BBox(double minX, double minY, double maxX, double maxY) {
+	public BBox(double minX, double minY, double maxX, double maxY) {
 		this(minX, minY, maxX, maxY, DEFAULT_CRS);
 	}
 
@@ -53,7 +53,7 @@ public abstract class BBox {
 	 * @param maxY Upper right corner, coordinate axis 2
 	 * @param crs CRS of the bbox, may be <code>null</code>
 	 */
-	protected BBox(double minX, double minY, double maxX, double maxY, CoordinateSystem crs) {
+	public BBox(double minX, double minY, double maxX, double maxY, CoordinateSystem crs) {
 		this.minX = minX;
 		this.minY = minY;
 		this.maxX = maxX;

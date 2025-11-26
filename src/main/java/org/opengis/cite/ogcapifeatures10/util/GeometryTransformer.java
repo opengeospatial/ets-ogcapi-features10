@@ -70,7 +70,7 @@ public class GeometryTransformer {
 		Coordinate max = new Coordinate(bbox.getMaxX(), bbox.getMaxY());
 		Coordinate transformedMin = transform(min);
 		Coordinate transformedMax = transform(max);
-		return new BBox2D(transformedMin.x, transformedMin.y, transformedMax.x, transformedMax.y, targetCrs);
+		return new BBox(transformedMin.x, transformedMin.y, transformedMax.x, transformedMax.y, targetCrs);
 	}
 
 	/**

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.opengis.cite.ogcapifeatures10.util.BBox;
-import org.opengis.cite.ogcapifeatures10.util.BBox2D;
 import org.opengis.cite.ogcapifeatures10.util.JsonUtils;
 import org.testng.ITestContext;
 import org.testng.SkipException;
@@ -35,7 +34,7 @@ import io.restassured.response.Response;
  */
 public class BBoxCrsParameterInvalid extends AbstractBBoxCrs {
 
-	private static final BBox invalidBBox = new BBox2D(5, 49, 6, 50);
+	private static final BBox invalidBBox = new BBox(5, 49, 6, 50);
 
 	/**
 	 * <p>
