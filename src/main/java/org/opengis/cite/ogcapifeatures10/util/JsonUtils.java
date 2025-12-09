@@ -190,6 +190,8 @@ public class JsonUtils {
 			return new BBox(minX, minY, maxX, maxY, crs);
 		}
 		else if (coords.size() == 6) {
+			//see https://github.com/opengeospatial/ets-ogcapi-features10/issues/237
+			//just use x and y coordinates for now 
 			CoordinateSystem crs = parseCrs(spatial);
 			double minX = parseValueAsDouble(coords.get(0));
 			double minY = parseValueAsDouble(coords.get(1));
